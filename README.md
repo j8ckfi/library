@@ -1,12 +1,12 @@
 # j8ckfi/library
 
-> Sprawling, agent-navigable knowledge graph of cutting-edge machine learning research, SOTA methods, primary literature, and executable training recipes (2025–2026).
+> Sprawling, agent-navigable knowledge graph of cutting-edge machine learning research, SOTA methods, primary literature, and executable training recipes (As-of: 2026-08-26).
 
 ---
 
 ## 1. Overview
 
-`j8ckfi/library` is designed for autonomous training agents and ML engineers. When tasked with *"train model X to do Y"*, agents can query this graph to identify current, date-stamped SOTA methods, read empirical validation claims, trace arXiv papers, and pull runnable PyTorch/JAX recipes in a few hops.
+`j8ckfi/library` is a machine-readable knowledge graph and zero-dependency CLI engine designed for autonomous training agents and ML engineers. When tasked with *"train model X to do Y"*, agents query this graph to identify current, date-stamped SOTA methods, read empirical validation claims, trace arXiv papers, and pull runnable PyTorch/JAX recipes in a few hops.
 
 ```
 +---------------+        has_sota_method       +-----------------+
@@ -24,90 +24,74 @@
 
 ---
 
-## 2. Fast Navigation for Training Agents
+## 2. Agent Routing Cheat-Sheet (2026-08-26 SOTA Index)
 
-### CLI Quickstart
+```
+task: pretrain dense 7B     -> muon-scalable  (+ soap-muon-scale if big batch / extra mem)
+task: pretrain MoE          -> deepseek-v3 arch, muonclip-kimi-k2 opt; read kimi-k3 if 2026-frontier
+task: open data recipe      -> olmo-2-curriculum
+task: instruct SFT          -> tulu3-rlvr (SFT stage)
+task: general alignment     -> tulu3-rlvr (SFT->DPO->RLVR)
+task: math/code RL, dense   -> dapo + dr-grpo
+task: math/code RL, MoE     -> gspo + dr-grpo
+task: process supervision   -> verigate (not un-gated PRM)
+task: LoRA 24GB             -> qlora; quality: dora or delora
+task: full-param, 24GB      -> galore
+task: tiny on-device LLM    -> bitnet-b158 (from-scratch) else qlora+GGUF
+task: distill student       -> on-policy-distillation
+task: SNN audio/event       -> silif
+task: SAE / circuits        -> sasa
+task: neural video train    -> dcvcrt
+task: continuous control    -> td-mpc2, then dream-mpc planner
+```
+
+---
+
+## 3. SOTA Method Map (What You Actually Pick Today)
+
+| Task / Domain | Default SOTA Method | Key Paper / Reference | Code / Repo |
+| :--- | :--- | :--- | :--- |
+| **Dense 7B Pretraining** | **Scalable Muon** (`method:muon-scalable`) | Moonshot AI `arXiv:2502.16982` | `https://github.com/MoonshotAI/Moonlight` |
+| **Large-Batch Pretraining**| **KL-SOAP** (`method:soap-muon-scale`) | NVIDIA `arXiv:2607.20548` | `https://github.com/NVIDIA-NeMo/Emerging-Optimizers` |
+| **Frontier MoE Pretrain** | **Kimi-K3** / **DeepSeek-V3** | `arXiv:2607.24653` / `2412.19437` | `https://github.com/MoonshotAI/Kimi-K3` |
+| **Open Data Recipe** | **OLMo 2 Curriculum** | AI2 `arXiv:2501.00656` | `https://github.com/allenai/OLMo` |
+| **Instruct / Chat SFT** | **Tülu-3 Stack** (`method:tulu3-rlvr`) | AI2 `arXiv:2411.15124` | `https://github.com/allenai/open-instruct` |
+| **Dense Math/Code RL** | **DAPO** + **Dr. GRPO** | `arXiv:2503.14476` / `2503.20783` | `https://github.com/BytedTsinghua-SIA/DAPO` |
+| **MoE Reasoning RL** | **GSPO** + **Dr. GRPO** | `arXiv:2507.18071` / `2503.20783` | Hugging Face TRL & Qwen Stacks |
+| **Process Supervision** | **VeriGate** (Gated PRM) | `arXiv:2605.30451` | Gated verification protocol |
+| **1-GPU 24GB Fine-Tuning** | **QLoRA** / **DoRA** / **DeLoRA** | `arXiv:2305.14314` / `2402.09353` / `2503.18225` | `https://github.com/NVlabs/DoRA` |
+| **Full-Param 24GB Train** | **GaLore** (`method:galore`) | `arXiv:2403.03507` | `https://github.com/jiaweizzhao/GaLore` |
+| **Student Distillation** | **On-Policy Distillation** (GKD) | `arXiv:2306.13649` / Thinking Machines | `https://github.com/huggingface/trl` |
+| **Extreme 1-Bit LLM** | **BitNet b1.58** | `arXiv:2504.12285` (arch `2402.17764`) | `https://github.com/microsoft/BitNet` |
+| **Spiking Neural Net** | **SiLIF / C-SiLIF** (`method:silif`) | `arXiv:2506.06374` | `https://github.com/Maxtimer97/SSM-inspired-LIF` |
+| **Circuits & SAEs** | **SASA** (`method:sasa`) | `arXiv:2606.06333` | `https://github.com/arshandalili/sasa` |
+| **Neural Video Codec** | **DCVC-RT** (`method:dcvcrt`) | `arXiv:2502.20762` | `https://github.com/microsoft/DCVC` |
+| **Continuous Control RL** | **TD-MPC2** / **Dream-MPC** | `arXiv:2310.16828` / `2605.04568` | `https://github.com/nicklashansen/tdmpc2` |
+
+---
+
+## 4. Fast Navigation CLI
+
 ```bash
-# 1. Look up SOTA method, paper, and runnable code recipe for a task
-python -m library sota "llm pretraining"
+# 1. Look up SOTA method, claims, paper, and recipe for any task
+python -m library sota "pretrain dense 7B"
 
-# 2. Search for methods across domains
-python -m library query "matrix optimizer" --type method
+# 2. Search graph nodes
+python -m library query "muon scalable" --type method
 
-# 3. Inspect a node's full details and code
-python -m library show "method:muon-optimizer"
+# 3. View node metadata and full prose
+python -m library show "method:dapo"
 
-# 4. View connected edges
-python -m library walk "method:grpo"
+# 4. Inspect incoming and outgoing graph edges
+python -m library walk "method:muon-scalable"
 
-# 5. Check graph integrity
+# 5. Find shortest traversal path between concepts
+python -m library path --from "task:pretrain-dense-7b" --to "recipe:muon-pretraining"
+
+# 6. Validate graph schema and referential integrity
 python -m library validate
 ```
 
-For agent integration instructions and autonomous workflow steps, see [AGENTS.md](AGENTS.md).
-
----
-
-## 3. Seeded Method Families (2025–2026 SOTA)
-
-| Domain | Task | SOTA Method | Key Paper / Reference | Recipe |
-| :--- | :--- | :--- | :--- | :--- |
-| **Pretraining** | LLM Matrix Optimization | **Muon Optimizer** | Jordan et al. (2024–2025) `arXiv:2502.16738` | `recipe:muon-pretraining` |
-| **Pretraining** | Linear Attention Architecture | **Mamba-2 (SSD)** | Dao & Gu (2024–2025) `arXiv:2405.21060` | `recipe:mamba2-training` |
-| **Post-Training** | Reasoning RL Alignment | **GRPO** | DeepSeek-AI (2024–2025) `arXiv:2402.03300` | `recipe:grpo-trl-training` |
-| **Post-Training** | Direct Preference Alignment | **SimPO** | Meng et al. (2024–2025) `arXiv:2405.14734` | `recipe:simpo-alignment` |
-| **Efficient Training** | Low-Rank Adaptation | **DoRA** | Liu et al. (2024–2025) `arXiv:2402.09353` | `recipe:dora-finetuning` |
-| **Efficient Training** | Quantized 4-bit PEFT | **QLoRA** | Dettmers et al. (2023–2025) `arXiv:2305.14314` | `recipe:qlora-peft` |
-| **Extreme Compression**| 1-bit Ternary Pretraining | **BitNet b1.58** | Wang et al. (2024–2025) `arXiv:2402.17764` | `recipe:bitnet-b158` |
-| **SNNs** | Direct Spiking Training | **Surrogate Gradient SNN** | Fang et al. (SpikingJelly / IEEE TPAMI) | `recipe:spikingjelly-snn` |
-| **Interpretability** | Sparse Feature Dictionary | **Gated SAEs** | Rajamanoharan et al. (2024–2025) `arXiv:2404.16014` | `recipe:gated-sae-training` |
-| **Video Compression** | Neural Video Codec | **DCVC-DC** | Li et al. (IEEE TPAMI / CVPR) `arXiv:2403.11180` | `recipe:dcvc-video-codec` |
-| **Control / Servos** | Visual Robot Motor Control | **Diffusion Policy** | Chi et al. (2023–2025) `arXiv:2303.04137` | `recipe:diffusion-policy-servo` |
-
----
-
-## 4. Repository Structure
-
-```
-├── AGENTS.md               # Operating instructions and protocol for AI agents
-├── README.md               # One-screen library reference and quickstart
-├── pyproject.toml          # Package definition and dependencies
-├── schema/
-│   └── schema.json         # JSON Schema for task, method, paper, and recipe nodes
-├── docs/
-│   ├── ontology.md         # Schema rules, edge semantics, and supersession protocol
-│   └── ingestion-guide.md  # 5-minute guide for adding new papers and methods
-├── templates/              # Markdown templates for new nodes
-│   ├── task.md
-│   ├── method.md
-│   ├── paper.md
-│   └── recipe.md
-├── library/                # Core Python package (zero heavy dependencies)
-│   ├── __init__.py
-│   ├── __main__.py
-│   ├── graph.py            # Node, Edge, and KnowledgeGraph in-memory index
-│   ├── loader.py           # Markdown frontmatter parser and edge compiler
-│   ├── validator.py        # Schema validation, ref checking, cycle detection
-│   ├── query.py            # Search and SOTA ranking query engine
-│   ├── traverse.py         # Neighborhood inspection and pathfinding
-│   ├── exporter.py         # JSON and JSONL graph exporter
-│   ├── ingest.py           # Node scaffolding helper
-│   └── cli.py              # `python -m library` CLI
-└── graph/                  # Sprawling knowledge graph
-    ├── tasks/              # Problem statements and SOTA resolutions
-    ├── methods/            # Algorithms, architectures, and optimizers
-    ├── papers/             # Literature summaries and arXiv citations
-    └── recipes/            # Runnable PyTorch/JAX code recipes
-```
-
----
-
-## 5. Adding New Papers
-
-To ingest a new paper in 5 minutes:
-```bash
-python -m library new paper <paper-slug> --title "Paper Title"
-python -m library new method <method-slug> --title "Method Name"
-python -m library new recipe <recipe-slug> --title "Recipe Title"
-```
-Populate YAML frontmatter and markdown sections according to [docs/ingestion-guide.md](docs/ingestion-guide.md), then validate with `python -m library validate`.
+For complete operating instructions for AI agents, see [AGENTS.md](AGENTS.md).
+For schema rules and supersession protocol, see [docs/ontology.md](docs/ontology.md).
+For adding new research in 5 minutes, see [docs/ingestion-guide.md](docs/ingestion-guide.md).

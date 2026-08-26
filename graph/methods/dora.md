@@ -8,7 +8,9 @@ sota_for:
   - task:parameter-efficient-fine-tuning
 supersedes:
   - method:lora
+superseded_by: method:delora
 papers:
+  - paper:dora
   - paper:dora-paper
 recipes:
   - recipe:dora-finetuning

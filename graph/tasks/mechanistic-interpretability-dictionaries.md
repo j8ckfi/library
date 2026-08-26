@@ -5,13 +5,14 @@ title: "Mechanistic Interpretability & Sparse Feature Dictionaries"
 domain: "interpretability"
 summary: "Extracting monosemantic, interpretable circuit features from transformer residual streams via sparse autoencoders."
 current_sota:
-  - method: method:gated-sae
-    as_of: "2024-04"
-    benchmark: "Gemma-2 / Claude Residual Stream Decomposition"
-    metric: "L0 sparsity vs reconstruction loss tradeoff"
-    value: "Pareto optimal over Standard SAE"
-    notes: "Decouples feature detection gating from magnitude estimation, eliminating shrinkage bias."
+  - method: method:sasa
+    as_of: "2026-08-26"
+    benchmark: "Gemma / LLaMA Circuit Decomposition"
+    metric: "subspace feature interpretability"
+    value: "Pareto superior to 1D vector SAEs"
+    notes: "Subspace Sparse Autoencoders (SASA) over vanilla vector SAEs."
 methods:
+  - method:sasa
   - method:gated-sae
   - method:standard-sae
 tags:

@@ -5,14 +5,16 @@ title: "Large Language Model Pretraining Optimization"
 domain: "pretraining"
 summary: "Optimization of transformer and non-transformer language model weights from scratch using first- and second-order momentum and orthogonalized matrix updates."
 current_sota:
-  - method: method:muon-optimizer
-    as_of: "2025-02"
-    benchmark: "FineWeb-Edu NanoGPT (1.5B tokens)"
-    metric: "validation loss"
-    value: 3.21
-    notes: "Achieves target validation loss in ~50% fewer steps compared to tuned AdamW baselines."
+  - method: method:muon-scalable
+    as_of: "2026-08-26"
+    benchmark: "Moonlight 7B Pretraining / FineWeb"
+    metric: "token efficiency"
+    value: "~2x token efficiency vs AdamW"
+    notes: "Muon with Moonlight scale-up fixes (weight decay + update-RMS matching). KL-SOAP if large batch and memory allows."
 methods:
-  - method:muon-optimizer
+  - method:muon-scalable
+  - method:muon
+  - method:soap-muon-scale
   - method:adamw-optimizer
 tags:
   - pretraining

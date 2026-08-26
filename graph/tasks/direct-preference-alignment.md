@@ -5,13 +5,14 @@ title: "Direct Preference Alignment & Offline Post-Training"
 domain: "post-training"
 summary: "Offline instruction tuning and preference alignment without online policy rollouts or separate reference model inference."
 current_sota:
-  - method: method:simpo
-    as_of: "2024-05"
+  - method: method:tulu3-rlvr
+    as_of: "2026-08-26"
     benchmark: "AlpacaEval 2 / Arena-Hard"
     metric: "length-controlled win rate"
-    value: 44.7
-    notes: "Length-normalized margin objective outperforming DPO and KTO without reference model memory overhead."
+    value: "Tülu-3 Open Stack"
+    notes: "Tülu-3 on-policy DPO + RLVR supersedes standalone offline DPO."
 methods:
+  - method:tulu3-rlvr
   - method:simpo
   - method:dpo
 tags:

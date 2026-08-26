@@ -3,10 +3,10 @@ id: method:dcvc-dc
 type: method
 title: "DCVC-DC (Deep Contextual Video Compression with Dual Context)"
 category: "codec"
-status: sota
-sota_for:
-  - task:learned-video-compression
+status: active
+sota_for: []
 supersedes: []
+superseded_by: method:dcvcrt
 papers:
   - paper:dcvc-dc-paper
 recipes:

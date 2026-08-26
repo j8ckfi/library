@@ -3,10 +3,10 @@ id: method:surrogate-gradient-snn
 type: method
 title: "Surrogate Gradient Direct SNN Training"
 category: "spiking"
-status: sota
-sota_for:
-  - task:spiking-neural-networks-training
+status: active
+sota_for: []
 supersedes: []
+superseded_by: method:silif
 papers:
   - paper:spikingjelly-paper
 recipes:

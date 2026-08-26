@@ -3,11 +3,11 @@ id: method:muon-optimizer
 type: method
 title: "Muon Optimizer (Momentum Orthogonalized by Newton-Schulz)"
 category: "optimizer"
-status: sota
-sota_for:
-  - task:llm-pretraining-optimization
+status: active
+sota_for: []
 supersedes:
   - method:adamw-optimizer
+superseded_by: method:muon-scalable
 papers:
   - paper:muon-optimizer-paper
 recipes:

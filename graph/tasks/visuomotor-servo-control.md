@@ -5,13 +5,15 @@ title: "Visuomotor Servo Control & Robotic Policy Learning"
 domain: "control"
 summary: "Learning closed-loop visual-feedback motor control trajectories for robot manipulation and servo actuators from multimodal demonstrations."
 current_sota:
-  - method: method:diffusion-policy
-    as_of: "2024-03"
-    benchmark: "Robomimic / Real-World Robot Manipulation"
+  - method: method:td-mpc2
+    as_of: "2026-08-26"
+    benchmark: "Robomimic / DMControl / Continuous Manipulation"
     metric: "success rate across multimodal tasks"
     value: 94.2
-    notes: "Expressing robot action distributions via conditional Denoising Diffusion Probabilistic Models (DDPM)."
+    notes: "Default remains TD-MPC2. If planning cost dominates, swap MPPI planner for Dream-MPC. For visual imitation: Diffusion Policy."
 methods:
+  - method:td-mpc2
+  - method:dream-mpc
   - method:diffusion-policy
   - method:act-policy
 tags:

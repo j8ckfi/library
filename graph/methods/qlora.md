@@ -8,6 +8,7 @@ sota_for:
   - task:parameter-efficient-fine-tuning
 supersedes: []
 papers:
+  - paper:qlora
   - paper:qlora-paper
 recipes:
   - recipe:qlora-peft

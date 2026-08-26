@@ -3,11 +3,11 @@ id: method:gated-sae
 type: method
 title: "Gated Sparse Autoencoders (Gated SAE)"
 category: "circuits"
-status: sota
-sota_for:
-  - task:mechanistic-interpretability-dictionaries
+status: active
+sota_for: []
 supersedes:
   - method:standard-sae
+superseded_by: method:sasa
 papers:
   - paper:gated-sae-paper
 recipes:

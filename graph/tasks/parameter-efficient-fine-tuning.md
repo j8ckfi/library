@@ -5,16 +5,18 @@ title: "Parameter-Efficient Fine-Tuning (PEFT) & Low-Rank Adaptation"
 domain: "efficiency"
 summary: "Adapting large base models to downstream domain tasks with minimal trainable parameter updates and negligible compute overhead."
 current_sota:
-  - method: method:dora
-    as_of: "2024-02"
-    benchmark: "LLaMA-7B/13B Commonsense Reasoning (8 tasks)"
-    metric: "mean accuracy"
-    value: 78.7
-    notes: "Weight-Decomposed Low-Rank Adaptation decoupling directional updates from magnitude updates."
+  - method: method:qlora
+    as_of: "2026-08-26"
+    benchmark: "Single GPU PEFT / MMLU"
+    metric: "memory reduction & performance retention"
+    value: "24GB 1-GPU SOTA Default"
+    notes: "Default is QLoRA (NF4 + LoRA). Quality bump: DoRA or DeLoRA (bounded Frobenius update, robust to long/LR runs). Full-rank alternative: GaLore."
 methods:
-  - method:dora
-  - method:lora
   - method:qlora
+  - method:delora
+  - method:dora
+  - method:galore
+  - method:lora
 tags:
   - efficiency
   - peft

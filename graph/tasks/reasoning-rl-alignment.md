@@ -5,13 +5,16 @@ title: "Reinforcement Learning & Reasoning Post-Training"
 domain: "post-training"
 summary: "Aligning foundation language models with rule-based verifiers and group-relative policy optimization for long-horizon mathematical and code reasoning."
 current_sota:
-  - method: method:grpo
-    as_of: "2025-01"
+  - method: method:dapo
+    as_of: "2026-08-26"
     benchmark: "AIME 2024 / MATH-500"
     metric: "pass@1 accuracy"
-    value: 79.8
-    notes: "Enables large-scale RL reasoning without separate critic/value networks by baseline-normalizing reward groups."
+    value: "SOTA for Dense Long-CoT"
+    notes: "DAPO for dense long-CoT; GSPO for MoE policies. De-bias with Dr. GRPO."
 methods:
+  - method:dapo
+  - method:gspo
+  - method:dr-grpo
   - method:grpo
   - method:ppo-rlhf
 tags:

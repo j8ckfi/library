@@ -33,7 +33,7 @@ class ValidationResult:
         return [issue for issue in self.issues if issue.level == "WARNING"]
 
 
-DATE_PATTERN = re.compile(r"^\d{4}-(0[1-9]|1[0-2])$")
+DATE_PATTERN = re.compile(r"^\d{4}-(0[1-9]|1[0-2])(-(0[1-9]|[12]\d|3[01]))?$")
 ID_PATTERN = re.compile(r"^(task|method|paper|recipe):[a-zA-Z0-9._-]+$")
 
 

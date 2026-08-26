@@ -8,6 +8,7 @@ sota_for:
   - task:1bit-extreme-quantization
 supersedes: []
 papers:
+  - paper:bitnet-b158
   - paper:bitnet-b158-paper
 recipes:
   - recipe:bitnet-b158

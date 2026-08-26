@@ -5,13 +5,14 @@ title: "Learned Neural Video Compression"
 domain: "video"
 summary: "End-to-end rate-distortion neural video codecs utilizing learned optical flow, conditional inter-frame contexts, and cross-channel entropy models."
 current_sota:
-  - method: method:dcvc-dc
-    as_of: "2024-03"
-    benchmark: "UVG / MCL-JCV / HEVC Class B"
-    metric: "BD-Rate reduction vs H.266/VVC"
-    value: "-28.4% BD-Rate (PSNR)"
-    notes: "Deep Contextual Video Compression with Dual Context (temporal + channel) entropy coding."
+  - method: method:dcvcrt
+    as_of: "2026-08-26"
+    benchmark: "UVG / Real-Time Video Streaming"
+    metric: "real-time decoding FPS & BD-Rate"
+    value: ">60 FPS real-time decoding with VVC-parity compression"
+    notes: "DCVC-RT (Real-Time DCVC). Must long-sequence finetune or PSNR collapses."
 methods:
+  - method:dcvcrt
   - method:dcvc-dc
 tags:
   - video

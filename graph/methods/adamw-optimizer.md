@@ -4,7 +4,7 @@ type: method
 title: "AdamW Optimizer (Decoupled Weight Decay Adam)"
 category: "optimizer"
 status: active
-superseded_by: method:muon-optimizer
+superseded_by: method:muon
 sota_for: []
 supersedes: []
 papers:

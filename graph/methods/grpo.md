@@ -3,12 +3,14 @@ id: method:grpo
 type: method
 title: "GRPO (Group Relative Policy Optimization)"
 category: "rl-alignment"
-status: sota
-sota_for:
-  - task:reasoning-rl-alignment
+status: active
+sota_for: []
 supersedes:
   - method:ppo-rlhf
+superseded_by: method:dapo
 papers:
+  - paper:grpo
+  - paper:deepseek-r1
   - paper:deepseek-math-paper
   - paper:deepseek-r1-paper
 recipes:

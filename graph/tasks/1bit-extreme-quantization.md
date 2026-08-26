@@ -6,11 +6,11 @@ domain: "compression"
 summary: "Training ultra-low-bitwidth (-1, 0, 1) foundation models from scratch with native integer-addition matrix kernels."
 current_sota:
   - method: method:bitnet-b158
-    as_of: "2024-02"
+    as_of: "2026-08-26"
     benchmark: "Zero-shot CommonSense & Perplexity (3B / 7B scales)"
     metric: "perplexity / energy ratio"
     value: "Parity with FP16 at 4x energy savings"
-    notes: "BitLinear layer with absmax quantization constraining weights to {-1, 0, +1}."
+    notes: "If pretraining: train BitNet b1.58 from scratch and infer with bitnet.cpp kernels. Do not PTQ all the way to 1.58-bit."
 methods:
   - method:bitnet-b158
 tags:

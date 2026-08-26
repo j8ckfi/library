@@ -5,13 +5,14 @@ title: "Direct Training of Deep Spiking Neural Networks"
 domain: "snn"
 summary: "Gradient-based end-to-end direct training of deep leaky integrate-and-fire (LIF) neuromorphic networks via surrogate gradient backpropagation."
 current_sota:
-  - method: method:surrogate-gradient-snn
-    as_of: "2024-06"
-    benchmark: "Neuromorphic DVS-Gesture / ImageNet-1k"
-    metric: "top-1 accuracy"
-    value: 81.3
-    notes: "Direct backpropagation through time using smooth surrogate threshold derivatives in SpikingJelly."
+  - method: method:silif
+    as_of: "2026-08-26"
+    benchmark: "Neuromorphic Audio & Event Benchmarks"
+    metric: "top-1 accuracy & temporal modeling"
+    value: "SOTA for Spiking Neural Networks"
+    notes: "SSM-inspired Leaky Integrate-and-Fire (SiLIF / C-SiLIF) trained with surrogate-gradient BPTT."
 methods:
+  - method:silif
   - method:surrogate-gradient-snn
 tags:
   - snn

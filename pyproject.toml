@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ml-library"
+version = "0.1.0"
+description = "Agent-navigable knowledge graph of cutting-edge ML papers and methods"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "pyyaml>=6.0.0",
+]
+
+[project.scripts]
+library = "library.cli:main"

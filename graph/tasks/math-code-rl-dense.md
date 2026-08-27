@@ -13,6 +13,7 @@ current_sota:
     notes: "CISPO via MiniMax-M1 (2506.13585) + ScaleRL (2510.13786)."
 methods:
   - method:cispo
+  - method:bpco
   - method:dapo
   - method:sspo
   - method:minpro

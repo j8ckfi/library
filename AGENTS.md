@@ -41,6 +41,10 @@ task: SNN sequence/SSM             -> longspike (2606.12895); train with a2sg (2
 task: continuous control           -> efficienttdmpc (2605.16692) family; dream-mpc (2605.04568) gradient planner
 task: neural video GPU             -> dcvc-uf (2606.04410)
 task: neural video deploy          -> mlvc (2606.28027)
+task: distill a reasoner (OPD+RLVR)-> opdvr (2608.24696)
+task: token-level advantages (1/p) -> bpco (2608.23566)
+task: posttrain diffusion          -> diffusion-opsd (2608.24646)
+task: video MLLM RL                -> orarl (2608.20492)
 task: SAE dictionary               -> sasa (2606.06333) KEEP
 task: SAE circuits                 -> circuitsteer (2608.05732)
 task: SAE effect geometry          -> fega (2607.24645)
@@ -63,6 +67,10 @@ task: SAE effect geometry          -> fega (2607.24645)
 11. **Neural video compression**: For GPU neural video, use **DCVC-UF** (`method:dcvc-uf`, `paper:dcvc-uf` `arXiv:2606.04410`). For deployable edge/mobile neural video, use **MLVC** (`method:mlvc`, `paper:mlvc` `arXiv:2606.28027`). DCVC-RT (`method:dcvcrt`) stays as 2025 realtime reference.
 12. **Mechanistic interpretability & SAEs**: Dictionary default is **SASA** (`method:sasa`, `paper:sasa` `arXiv:2606.06333`) KEEP. For SAE circuits and steering, use **CircuitSteer** (`method:circuitsteer`, `paper:circuitsteer` `arXiv:2608.05732`). For SAE effect geometry, use **FEGA** (`method:fega`, `paper:fega` `arXiv:2607.24645`).
 13. **Train an MoE on NVL72 / systems megakernel**: Use **Mixture-of-Kittens** (`method:mixture-of-kittens`, `paper:mixture-of-kittens`, `recipe:mixture-of-kittens`) for fused dispatch + SwiGLU + combine on Blackwell GB200/GB300 NVL72 racks.
+14. **Distill a reasoner with verifiable reward (OPD + RLVR)**: Use **OPDVR** (`method:opdvr`, `paper:opdvr` `arXiv:2608.24696`) for zero-extra-hyperparameter ReLU correctness gating.
+15. **Token-level advantages from 1 sample/prompt**: Use **BPCO** (`method:bpco`, `paper:bpco` `arXiv:2608.23566`) actor-critic optimization with DPPO, bounded value head, MC targets, and length-adaptive GAE.
+16. **Diffusion post-training & reward alignment**: Use **DiffusionOPSD** (`method:diffusion-opsd`, `paper:diffusion-opsd` `arXiv:2608.24646`) for on-policy self-distillation with bounded intermediate clean-output targets.
+17. **Video MLLM reinforcement learning**: Use **OraRL** (`method:orarl`, `paper:orarl` `arXiv:2608.20492`) for annotation-as-rollout with decoupled baseline and sign-balanced pruning without CoT overhead.
 
 ---
 

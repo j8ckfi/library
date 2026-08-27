@@ -47,6 +47,10 @@ task: SNN sequence/SSM             -> longspike (2606.12895); train with a2sg (2
 task: continuous control           -> efficienttdmpc (2605.16692) family; dream-mpc (2605.04568) gradient planner
 task: neural video GPU             -> dcvc-uf (2606.04410)
 task: neural video deploy          -> mlvc (2606.28027)
+task: distill a reasoner (OPD+RLVR)-> opdvr (2608.24696)
+task: token-level advantages (1/p) -> bpco (2608.23566)
+task: posttrain diffusion          -> diffusion-opsd (2608.24646)
+task: video MLLM RL                -> orarl (2608.20492)
 task: SAE dictionary               -> sasa (2606.06333) KEEP
 task: SAE circuits                 -> circuitsteer (2608.05732)
 task: SAE effect geometry          -> fega (2607.24645)
@@ -81,6 +85,10 @@ task: SAE effect geometry          -> fega (2607.24645)
 | **SAE Dictionary** | **SASA** (`method:sasa`) KEEP | `arXiv:2606.06333` | `https://github.com/arshandalili/sasa` |
 | **SAE Circuits** | **CircuitSteer** (`method:circuitsteer`) | `arXiv:2608.05732` | `https://github.com/mehrshad-sdtn/CircuitSteer` |
 | **SAE Effect Geometry** | **FEGA** (`method:fega`) | `arXiv:2607.24645` | `https://github.com/UKPLab/FEGA` |
+| **Distill Reasoner (OPD+RLVR)** | **OPDVR** (`method:opdvr`) | `arXiv:2608.24696` | `https://github.com/LeapLabTHU/OPDVR` |
+| **Token-Level Critic (1/prompt)** | **BPCO** (`method:bpco`) | `arXiv:2608.23566` | `https://github.com/QPHutu/golden_critic` |
+| **Posttrain Diffusion** | **DiffusionOPSD** (`method:diffusion-opsd`) | `arXiv:2608.24646` | `https://github.com/worldbench/DiffusionOPSD` |
+| **Video MLLM RL** | **OraRL** (`method:orarl`) | `arXiv:2608.20492` | `https://github.com/HVision-NKU/OraRL` |
 
 ---
 

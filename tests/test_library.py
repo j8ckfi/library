@@ -127,6 +127,9 @@ class TestQueryEngine(unittest.TestCase):
         video = self.engine.sota("task:learned-video-compression")
         self.assertTrue(any(p["method"].id in ("method:dcvc-uf", "method:mlvc") for p in video))
 
+        nvl72_moe = self.engine.sota("task:train-moe-nvl72")
+        self.assertTrue(any(p["method"].id == "method:mixture-of-kittens" for p in nvl72_moe))
+
 
 class TestGraphTraversalAndPaths(unittest.TestCase):
     def setUp(self):

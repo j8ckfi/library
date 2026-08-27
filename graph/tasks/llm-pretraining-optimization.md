@@ -22,6 +22,7 @@ methods:
   - method:sf-normuon
   - method:newton-muon
   - method:attnres
+  - method:mhc
   - method:adamw-optimizer
 tags:
   - pretraining

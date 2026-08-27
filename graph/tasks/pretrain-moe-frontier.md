@@ -23,6 +23,7 @@ methods:
   - method:deepseek-v3
   - method:nemotron-3-ultra
   - method:nemotron-3-super-latentmoe
+  - method:mixture-of-kittens
   - method:apertus
   - method:glm-5
   - method:muonclip-kimi-k2
@@ -40,3 +41,4 @@ Training sparse Mixture-of-Experts models enables scaling parameter capacity int
 ## SOTA Recommendation (as of 2026-08-26)
 - **Architecture**: **DeepSeek-V4** (`method:deepseek-v4`, 2606.19348) + **Kimi-K3** (`method:kimi-k3`, 2607.24653).
 - **Optimizer**: **MuonClip** (`paper:muonclip-kimi-k2`) / **Muon2** (`method:muon2`).
+- **NVL72 Systems Megakernel**: **Mixture-of-Kittens** (`method:mixture-of-kittens`, `task:train-moe-nvl72`).

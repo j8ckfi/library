@@ -24,6 +24,7 @@ Use this quick-routing table as of **2026-08-26**:
 task: pretrain dense 7B optimizer  -> muon2 (2604.09967) + kl-soap (2607.20548) if memory allows
 task: open data recipe             -> olmo-3 / dolma-3 (2512.13961)
 task: pretrain MoE architecture    -> deepseek-v4 (2606.19348) + kimi-k3 (2607.24653)
+task: train MoE on NVL72        -> mixture-of-kittens (MoK megakernel, 1070 tok/s/GPU on GB300 NVL72)
 task: instruct SFT                 -> olmo-3 dolci (2512.13961); industrial alt nemotron-cascade-2 (2603.19220)
 task: math/code RL, dense          -> cispo (minimax-m1 2506.13585 + scalerl 2510.13786)
 task: math/code RL, MoE/VL         -> sapo (2511.20347); gspo only if Qwen3.5-Omni Talker
@@ -61,6 +62,7 @@ task: SAE effect geometry          -> fega (2607.24645)
 10. **Learned control / world-model RL**: Use **EfficientTDMPC** (`method:efficienttdmpc`, `paper:efficienttdmpc` `arXiv:2605.16692`) family; **Dream-MPC** (`method:dream-mpc`, `paper:dream-mpc` `arXiv:2605.04568`, ICML 2026) gradient planner.
 11. **Neural video compression**: For GPU neural video, use **DCVC-UF** (`method:dcvc-uf`, `paper:dcvc-uf` `arXiv:2606.04410`). For deployable edge/mobile neural video, use **MLVC** (`method:mlvc`, `paper:mlvc` `arXiv:2606.28027`). DCVC-RT (`method:dcvcrt`) stays as 2025 realtime reference.
 12. **Mechanistic interpretability & SAEs**: Dictionary default is **SASA** (`method:sasa`, `paper:sasa` `arXiv:2606.06333`) KEEP. For SAE circuits and steering, use **CircuitSteer** (`method:circuitsteer`, `paper:circuitsteer` `arXiv:2608.05732`). For SAE effect geometry, use **FEGA** (`method:fega`, `paper:fega` `arXiv:2607.24645`).
+13. **Train an MoE on NVL72 / systems megakernel**: Use **Mixture-of-Kittens** (`method:mixture-of-kittens`, `paper:mixture-of-kittens`, `recipe:mixture-of-kittens`) for fused dispatch + SwiGLU + combine on Blackwell GB200/GB300 NVL72 racks.
 
 ---
 

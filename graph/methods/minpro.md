@@ -1,7 +1,7 @@
 ---
 id: method:minpro
 type: method
-title: "MinPRO (Minimal Policy Relative Optimization)"
+title: "MinPRO (Minimum Prefix Ratio Policy Optimization)"
 category: "rl-alignment"
 status: active
 papers:
@@ -9,23 +9,28 @@ papers:
 recipes:
   - recipe:minpro
 claims:
-  - benchmark: "Math & Code Reasoning"
-    metric: "sample efficiency & memory"
-    value: "Eliminates critic network overhead"
-    baseline: "PPO"
-    date: "2026-08-26"
+  - benchmark: "Dense & MoE Math Reasoning Benchmarks"
+    metric: "training stability & accuracy"
+    value: "Stabilizes off-policy policy optimization via minimum prefix ratio"
+    baseline: "PPO / GRPO"
+    date: "2026-01-22"
     verified: true
-    notes: "Minimalist relative policy formulation."
+    notes: "Non-cumulative surrogate replacing unstable cumulative prefix importance ratios with the minimum token-level ratio in the preceding prefix."
 tags:
   - post-training
   - rl-alignment
+  - reasoning
+  - importance-sampling
   - minpro
 ---
 
-# MinPRO (Minimal Policy Relative Optimization)
+# MinPRO (Minimum Prefix Ratio Policy Optimization)
 
 ## Method Overview
-MinPRO simplifies relative policy optimization by computing direct relative advantages without auxiliary critic networks or learned reward baselines.
+MinPRO stabilizes policy optimization under off-policy trajectory rollouts:
+1. **Prefix Importance Ratio**: Identifies the theoretical necessity of prefix importance weighting over naive token-level importance sampling.
+2. **Minimum Prefix Surrogate**: Replaces the numerically unstable cumulative product of prefix ratios with a non-cumulative surrogate—the minimum token-level ratio within the preceding prefix.
+3. **Dense & MoE Scalability**: Delivers robust policy updates across both dense and Mixture-of-Experts (MoE) reasoning models without exponential variance blowup.
 
 ## When to Use
-- Memory-constrained reasoning RL where allocating VRAM for a critic model is prohibitive.
+- Policy optimization runs with off-policy data or large batch sampling where token-level importance sampling destabilizes training.

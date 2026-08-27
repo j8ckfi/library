@@ -1,7 +1,7 @@
 ---
 id: recipe:sspo
 type: recipe
-title: "SSPO Long-Horizon RL Recipe"
+title: "SSPO Soft Sequence Policy Optimization Recipe"
 method: method:sspo
 task: task:math-code-rl-dense
 target_hardware: "8x NVIDIA H100 80GB"
@@ -12,9 +12,10 @@ pip_dependencies:
 tags:
   - recipe
   - rl-alignment
+  - sspo
 ---
 
-# SSPO Long-Horizon RL Recipe
+# SSPO Soft Sequence Policy Optimization Recipe
 
 ```python
 import torch

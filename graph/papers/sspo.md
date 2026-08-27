@@ -1,30 +1,37 @@
 ---
 id: paper:sspo
 type: paper
-title: "SSPO: Stabilized Sequence Policy Optimization for Long-Horizon Reasoning"
+title: "Soft Sequence Policy Optimization"
 authors:
-  - "SSPO Research Authors"
+  - "Svetlana Glazyrina"
+  - "Maksim Kryzhanovskiy"
+  - "Roman Ischenko"
 year: 2026
 month: 2
 arxiv_id: "2602.19327"
 url: "https://arxiv.org/abs/2602.19327"
 methods:
   - method:sspo
-cites: []
+cites:
+  - paper:gspo
+  - paper:sapo
+  - paper:grpo
 tags:
   - post-training
   - rl-alignment
+  - reasoning
   - sspo
 ---
 
-# SSPO: Stabilized Sequence Policy Optimization for Long-Horizon Reasoning
+# Soft Sequence Policy Optimization
 
 ## Abstract Summary
-SSPO develops variance-reduced sequence-level advantage estimates to stabilize policy updates on extreme-length reasoning rollouts exceeding 16k tokens.
+Soft Sequence Policy Optimization (SSPO) introduces an off-policy reinforcement learning objective within the GRPO family that unifies sequence-level coherence and token-level soft gating. By evaluating the geometric mean of token-level soft gates (defaulting to an arctan log-ratio function) inside sequence-level importance weights, SSPO mitigates variance and stabilizes policy updates, yielding consistent improvements over GRPO, GSPO, and SAPO on mathematical and coding reasoning tasks.
 
 ## Key Contributions
-1. **Variance Reduction**: Sequence-level clipping prevents runaway gradient norms on long traces.
-2. **Long-Horizon Stability**: Maintains exploration entropy across extended reasoning chains.
+1. **Soft Sequence Objective**: Formulates sequence-level importance weights incorporating the geometric mean of token-level soft gates.
+2. **Smooth Gating Function**: Employs an arctan transformation on token log-ratios to replace hard truncation thresholds with smooth bounds.
+3. **Empirical Reasoning Gains**: Outperforms standard GRPO, GSPO, and SAPO baselines on complex reasoning tasks across math and code domains.
 
 ## Open Source Repository
 - Implementation: `none found`

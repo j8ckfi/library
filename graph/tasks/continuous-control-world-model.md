@@ -5,21 +5,31 @@ title: "Continuous Control & Learned World-Model RL"
 domain: "control"
 summary: "Sample-efficient model-based reinforcement learning and continuous servo control via learned latent world models and trajectory optimization."
 current_sota:
-  - method: method:td-mpc2
+  - method: method:efficienttdmpc
     as_of: "2026-08-26"
     benchmark: "DMControl 100 / ManiSkill / Humanoid"
-    metric: "sample efficiency & asymptotic score"
-    value: "SOTA Model-Based RL Default"
-    notes: "Default is TD-MPC2. If planning latency dominates, swap MPPI planner for Dream-MPC."
+    metric: "sample efficiency & planning latency"
+    value: "Default SOTA Continuous Control"
+    notes: "EfficientTDMPC (2605.16692) family; Dream-MPC (2605.04568) gradient planner."
+  - method: method:dream-mpc
+    as_of: "2026-08-26"
+    benchmark: "High-Speed Robot Control Benchmarks"
+    metric: "planning latency"
+    value: "SOTA Gradient Planner"
+    notes: "Dream-MPC (2605.04568) ICML 2026 gradient planner."
 methods:
-  - method:td-mpc2
+  - method:efficienttdmpc
   - method:dream-mpc
+  - method:td-mpc2
+  - method:grasp
+  - method:td-jepa
+  - method:latent-geometry
   - method:diffusion-policy
 tags:
   - control
   - robotics
   - world-models
-  - model-based-rl
+  - efficienttdmpc
 ---
 
 # Continuous Control & Learned World-Model RL
@@ -28,5 +38,5 @@ tags:
 Controlling continuous robotic and servo systems with high sample efficiency directly from proprioceptive and visual state observations.
 
 ## SOTA Recommendation (as of 2026-08-26)
-- **Default Baseline**: **TD-MPC2** (`method:td-mpc2`).
-- **High-Speed Planning**: If online planning compute dominates runtime, swap the MPPI sampling planner for **Dream-MPC** (`method:dream-mpc`).
+- **Primary Method**: **EfficientTDMPC** (`method:efficienttdmpc`, 2605.16692) family.
+- **Gradient Planner**: **Dream-MPC** (`method:dream-mpc`, 2605.04568) gradient planner.

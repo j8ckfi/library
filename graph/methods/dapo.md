@@ -3,9 +3,9 @@ id: method:dapo
 type: method
 title: "DAPO (Dense Advantage Policy Optimization)"
 category: "rl-alignment"
-status: sota
-sota_for:
-  - task:math-code-rl-dense
+status: active
+superseded_by: method:cispo
+sota_for: []
 supersedes:
   - method:grpo
 papers:
@@ -30,14 +30,7 @@ tags:
 # DAPO (Dense Advantage Policy Optimization)
 
 ## Method Overview
-DAPO (Dense Advantage Policy Optimization) optimizes long-CoT reasoning rollouts in dense models through four key mechanisms:
-1. **Clip-Higher**: Asymmetric policy clipping preventing collapse on high-reward exploration rollouts.
-2. **Dynamic Sampling**: Dynamically modulates group rollout sizes based on prompt difficulty.
-3. **Token-Level Loss**: Weighting gradient updates by token positions to avoid penalizing early reasoning steps.
-4. **Overlong Trace Shaping**: Suppresses degenerate rambling traces without killing valid reasoning chains.
-
-## When to Use
-- Default reinforcement learning optimizer for dense long-CoT reasoning models.
+DAPO (Dense Advantage Policy Optimization) optimizes long-CoT reasoning rollouts in dense models. Remains in the graph as a key systems reference.
 
 ## Supersession
-- Supersedes vanilla `method:grpo` for dense long-CoT reasoning.
+- Superseded by `method:cispo` as the dense RL default.

@@ -5,29 +5,40 @@ title: "Direct Training of Deep Spiking Neural Networks"
 domain: "snn"
 summary: "Gradient-based end-to-end direct training of deep leaky integrate-and-fire (LIF) neuromorphic networks via surrogate gradient backpropagation."
 current_sota:
-  - method: method:silif
+  - method: method:longspike
     as_of: "2026-08-26"
-    benchmark: "Neuromorphic Audio & Event Benchmarks"
+    benchmark: "Neuromorphic Long Sequence & Audio Benchmarks"
     metric: "top-1 accuracy & temporal modeling"
-    value: "SOTA for Spiking Neural Networks"
-    notes: "SSM-inspired Leaky Integrate-and-Fire (SiLIF / C-SiLIF) trained with surrogate-gradient BPTT."
+    value: "Default SOTA for SNN sequence / SSM"
+    notes: "LongSpike (2606.12895); train with A2SG (2606.11236); SiLIF stays as speech-neuron cite."
+  - method: method:a2sg
+    as_of: "2026-08-26"
+    benchmark: "Deep SNN Backpropagation Suite"
+    metric: "training stability"
+    value: "Recommended SNN training surrogate gradient method"
+    notes: "A2SG (2606.11236) for surrogate gradient backprop."
 methods:
+  - method:longspike
+  - method:a2sg
   - method:silif
+  - method:ngn
+  - method:neuronspark
+  - method:bispikclm
+  - method:sdllm
   - method:surrogate-gradient-snn
 tags:
   - snn
   - neuromorphic
-  - event-driven
+  - longspike
+  - a2sg
 ---
 
 # Direct Training of Deep Spiking Neural Networks
 
 ## Problem Definition
-Spiking Neural Networks (SNNs) process temporal event streams via discrete all-or-none spike activations \(\{0, 1\}\), offering orders of magnitude lower dynamic energy consumption on event-driven neuromorphic hardware. However, the step-activation threshold function has a Dirac delta derivative (zero almost everywhere, undefined at threshold), preventing standard backpropagation.
+Spiking Neural Networks (SNNs) process temporal event streams via discrete all-or-none spike activations.
 
-## Evaluation Protocol & Benchmarks
-- **Standard Benchmarks**: Neuromorphic event datasets (DVS-CIFAR10, DVS-Gesture, N-ImageNet) and static vision benchmarks (ImageNet-1k, CIFAR-100).
-- **Efficiency Metrics**: Synaptic operations per sample, simulated spike count per timestep, and temporal latency.
-
-## SOTA Landscape
-Modern deep SNNs are trained end-to-end using **Surrogate Gradient Learning**, which replaces non-differentiable Heaviside step gradients during the backward pass with smooth continuous functions (e.g. Arctan, Sigmoid, or FastSigmoid), enabling direct training of deep ResNet and Transformer-like spiking architectures.
+## SOTA Recommendation (as of 2026-08-26)
+- **SNN Sequence / SSM**: **LongSpike** (`method:longspike`, 2606.12895).
+- **Training Method**: Train with **A2SG** (`method:a2sg`, 2606.11236) adaptive surrogate gradients.
+- **Speech-Neuron Reference**: **SiLIF** (`method:silif`) stays as speech-neuron citation.

@@ -3,9 +3,9 @@ id: method:silif
 type: method
 title: "SiLIF / C-SiLIF (SSM-Inspired Leaky Integrate-and-Fire)"
 category: "spiking"
-status: sota
-sota_for:
-  - task:spiking-neural-networks-training
+status: active
+superseded_by: method:longspike
+sota_for: []
 supersedes:
   - method:surrogate-gradient-snn
 papers:
@@ -15,11 +15,11 @@ recipes:
 claims:
   - benchmark: "Neuromorphic Audio & Event Vision Benchmarks"
     metric: "temporal task accuracy & spike sparsity"
-    value: "SOTA for Spiking Neural Networks"
+    value: "Speech-Neuron Reference Baseline"
     baseline: "Adaptive LIF (AdLIF)"
     date: "2025-06"
     verified: true
-    notes: "SSM-inspired Leaky Integrate-and-Fire dynamics with surrogate gradient BPTT."
+    notes: "SSM-inspired Leaky Integrate-and-Fire dynamics. Maintained as speech-neuron citation."
 tags:
   - snn
   - neuromorphic
@@ -30,10 +30,7 @@ tags:
 # SiLIF / C-SiLIF (SSM-Inspired Leaky Integrate-and-Fire)
 
 ## Method Overview
-SiLIF (State-Space Model-inspired Leaky Integrate-and-Fire) integrates continuous-time linear state-space formulations with spiking thresholds, yielding highly expressive multi-scale temporal dynamics while maintaining discrete spike communication.
-
-## When to Use
-- Spiking neural networks for audio processing, event cameras, and temporal neuromorphic streams.
+SiLIF integrates continuous-time linear state-space formulations with spiking thresholds. Retained in the graph as a primary speech-neuron citation.
 
 ## Supersession
-- Supersedes classical Adaptive LIF (AdLIF) and standard LIF models.
+- Superseded by `method:longspike` (2606.12895) as the default SSM-SNN architecture.

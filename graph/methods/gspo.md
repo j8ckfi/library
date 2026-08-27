@@ -3,9 +3,9 @@ id: method:gspo
 type: method
 title: "GSPO (Group Sequence Policy Optimization)"
 category: "rl-alignment"
-status: sota
-sota_for:
-  - task:math-code-rl-moe
+status: active
+superseded_by: method:sapo
+sota_for: []
 supersedes:
   - method:grpo
 papers:
@@ -30,10 +30,7 @@ tags:
 # GSPO (Group Sequence Policy Optimization)
 
 ## Method Overview
-GSPO replaces token-level importance sampling (IS) with a sequence-level importance sampling ratio. In sparse MoE models, token-level routing probabilities change rapidly across gradient steps, causing extreme variance and divergence in token-level IS ratios. GSPO stabilizes policy gradient updates across dynamically routed architectures.
-
-## When to Use
-- Default reinforcement learning optimizer when policy is a Mixture-of-Experts (e.g. Qwen3 / DeepSeek MoE).
+GSPO replaces token-level importance sampling (IS) with a sequence-level importance sampling ratio. Maintained for Qwen3 / Qwen3.5-Omni Talker lineage.
 
 ## Supersession
-- Supersedes token-level IS methods (like vanilla GRPO) when training MoE policies.
+- Superseded by `method:sapo` for Qwen MoE/VL reasoning alignment.

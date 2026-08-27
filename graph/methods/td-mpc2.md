@@ -3,9 +3,9 @@ id: method:td-mpc2
 type: method
 title: "TD-MPC2 (Temporal Difference Model Predictive Control 2)"
 category: "servo-control"
-status: sota
-sota_for:
-  - task:continuous-control-world-model
+status: active
+superseded_by: method:efficienttdmpc
+sota_for: []
 supersedes: []
 papers:
   - paper:td-mpc2
@@ -14,7 +14,7 @@ recipes:
 claims:
   - benchmark: "DMControl 100 & ManiSkill Continuous Benchmarks"
     metric: "sample efficiency & multi-task success"
-    value: "State of the art in model-based RL"
+    value: "Historical Model-Based RL Baseline"
     baseline: "DreamerV3 / SAC"
     date: "2023-10"
     verified: true
@@ -29,7 +29,7 @@ tags:
 # TD-MPC2 (Temporal Difference Model Predictive Control 2)
 
 ## Method Overview
-TD-MPC2 trains a task-oriented latent world model without pixel-level decoding. It combines short-horizon trajectory rollouts generated via Model Predictive Path Integral (MPPI) sampling with terminal Value/Q-function estimates trained by Temporal Difference learning.
+TD-MPC2 trains a task-oriented latent world model without pixel-level decoding.
 
-## When to Use
-- Default framework for continuous servo control and multi-task model-based RL.
+## Supersession
+- Superseded by `method:efficienttdmpc` (2605.16692) as the continuous control default.

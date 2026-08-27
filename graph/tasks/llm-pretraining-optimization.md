@@ -5,16 +5,23 @@ title: "Large Language Model Pretraining Optimization"
 domain: "pretraining"
 summary: "Optimization of transformer and non-transformer language model weights from scratch using first- and second-order momentum and orthogonalized matrix updates."
 current_sota:
-  - method: method:muon-scalable
+  - method: method:muon2
     as_of: "2026-08-26"
     benchmark: "Moonlight 7B Pretraining / FineWeb"
     metric: "token efficiency"
     value: "~2x token efficiency vs AdamW"
-    notes: "Muon with Moonlight scale-up fixes (weight decay + update-RMS matching). KL-SOAP if large batch and memory allows."
+    notes: "Muon2 (2604.09967) + KL-SOAP (2607.20548) if memory allows."
 methods:
+  - method:muon2
+  - method:soap-muon-scale
   - method:muon-scalable
   - method:muon
-  - method:soap-muon-scale
+  - method:mona
+  - method:htmuon
+  - method:variance-adaptive-muon
+  - method:sf-normuon
+  - method:newton-muon
+  - method:attnres
   - method:adamw-optimizer
 tags:
   - pretraining
@@ -25,15 +32,8 @@ tags:
 # Large Language Model Pretraining Optimization
 
 ## Problem Definition
-Pretraining modern neural network models (typically autoregressive language models) involves minimizing cross-entropy loss over hundreds of billions or trillions of tokens. The primary challenge is maximizing parameter update efficiency per unit of GPU compute (FLOPS) and wall-clock time while maintaining training stability at scale.
+Pretraining modern neural network models involves minimizing cross-entropy loss over hundreds of billions or trillions of tokens with maximal parameter update efficiency.
 
-## Evaluation Protocol & Benchmarks
-- **Standard Benchmarks**:
-  - Training loss and validation cross-entropy on held-out splits of FineWeb, FineWeb-Edu, RedPajama, or C4.
-  - Downstream zero-shot accuracy evaluations (e.g. ARC, HellaSwag, MMLU, GSM8k) evaluated at iso-FLOP and iso-step checkpoints.
-- **Evaluation Hazards**:
-  - Learning rate schedule truncation artifacts (e.g. testing loss before cosine decay completion).
-  - Comparing optimizers with unequal hyperparameter tuning budgets (momentum, weight decay, warmup).
-
-## SOTA Landscape
-For over a decade, Adam and AdamW served as the default standard for deep learning optimization. Starting in late 2024 and 2025, matrix-orthogonalizing momentum optimizers such as **Muon** (Momentum Orthogonalized by Newton-Schulz) have demonstrated substantial speedups (up to 2x step-efficiency) over AdamW on 2D matrix weights in transformer backbones.
+## SOTA Landscape (as of 2026-08-26)
+- **Default Optimizer**: **Muon2** (`method:muon2`, 2604.09967).
+- **Large-Batch / High-Memory**: **KL-SOAP** (`method:soap-muon-scale`, 2607.20548).

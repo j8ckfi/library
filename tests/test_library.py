@@ -21,8 +21,8 @@ class TestKnowledgeGraphLoaderAndValidation(unittest.TestCase):
         self.graph = load_graph(self.workspace_graph_path)
 
     def test_seeded_graph_is_not_empty(self):
-        self.assertGreater(len(self.graph.nodes), 20)
-        self.assertGreater(len(self.graph.edges), 30)
+        self.assertGreater(len(self.graph.nodes), 50)
+        self.assertGreater(len(self.graph.edges), 100)
 
     def test_node_types_present(self):
         tasks = self.graph.get_nodes_by_type("task")
@@ -30,10 +30,10 @@ class TestKnowledgeGraphLoaderAndValidation(unittest.TestCase):
         papers = self.graph.get_nodes_by_type("paper")
         recipes = self.graph.get_nodes_by_type("recipe")
 
-        self.assertGreaterEqual(len(tasks), 8)
-        self.assertGreaterEqual(len(methods), 10)
-        self.assertGreaterEqual(len(papers), 10)
-        self.assertGreaterEqual(len(recipes), 8)
+        self.assertGreaterEqual(len(tasks), 15)
+        self.assertGreaterEqual(len(methods), 30)
+        self.assertGreaterEqual(len(papers), 40)
+        self.assertGreaterEqual(len(recipes), 30)
 
     def test_seeded_graph_validation_passes(self):
         res = validate_graph(self.graph)
@@ -42,7 +42,7 @@ class TestKnowledgeGraphLoaderAndValidation(unittest.TestCase):
 
     def test_all_sota_methods_have_papers_and_recipes(self):
         sota_methods = [n for n in self.graph.get_nodes_by_type("method") if n.status == "sota"]
-        self.assertGreaterEqual(len(sota_methods), 8)
+        self.assertGreaterEqual(len(sota_methods), 15)
 
         for m in sota_methods:
             # Check papers
@@ -68,10 +68,10 @@ class TestQueryEngine(unittest.TestCase):
         self.engine = QueryEngine(self.graph)
 
     def test_query_keyword_search(self):
-        results = self.engine.query("Muon optimizer", top_k=3)
+        results = self.engine.query("Muon2 optimizer", top_k=3)
         self.assertTrue(len(results) > 0)
         node_ids = [r.node.id for r in results]
-        self.assertTrue(any("muon" in nid for nid in node_ids))
+        self.assertTrue(any("muon2" in nid for nid in node_ids))
 
     def test_query_sota_filtering(self):
         results = self.engine.query("alignment", sota_only=True)
@@ -79,19 +79,53 @@ class TestQueryEngine(unittest.TestCase):
             self.assertTrue(r.node.is_sota)
 
     def test_sota_path_resolution(self):
-        paths = self.engine.sota("task:llm-pretraining-optimization")
+        paths = self.engine.sota("task:pretrain-dense-7b")
         self.assertTrue(len(paths) > 0)
         p = paths[0]
-        self.assertEqual(p["task"].id, "task:llm-pretraining-optimization")
-        self.assertTrue(p["method"].id in ("method:muon-scalable", "method:muon", "method:muon-optimizer"))
-        self.assertTrue(any("muon" in paper.id for paper in p["papers"]))
-        self.assertTrue(any(recipe.id == "recipe:muon-pretraining" for recipe in p["recipes"]))
+        self.assertEqual(p["task"].id, "task:pretrain-dense-7b")
+        self.assertTrue(p["method"].id in ("method:muon2", "method:soap-muon-scale"))
+        self.assertTrue(any("muon" in paper.id or "soap" in paper.id for paper in p["papers"]))
 
     def test_sota_reasoning_rl(self):
         paths = self.engine.sota("reasoning")
         self.assertTrue(len(paths) > 0)
         method_ids = [p["method"].id for p in paths]
-        self.assertTrue(any(m in method_ids for m in ("method:dapo", "method:dr-grpo", "method:gspo", "method:grpo")))
+        self.assertTrue(any(m in method_ids for m in ("method:cispo", "method:sapo", "method:verigate", "method:dapo")))
+
+    def test_first_hop_sota_routing(self):
+        # Verify new first-hop SOTA routing resolves correctly
+        dense_opt = self.engine.sota("task:pretrain-dense-7b")
+        self.assertTrue(any(p["method"].id == "method:muon2" for p in dense_opt))
+
+        open_data = self.engine.sota("task:open-data-recipe")
+        self.assertTrue(any(p["method"].id == "method:olmo-3" for p in open_data))
+
+        moe_arch = self.engine.sota("task:pretrain-moe-frontier")
+        self.assertTrue(any(p["method"].id == "method:deepseek-v4" for p in moe_arch))
+
+        instruct = self.engine.sota("task:instruct-sft-alignment")
+        self.assertTrue(any(p["method"].id in ("method:olmo-3", "method:nemotron-cascade-2") for p in instruct))
+
+        dense_rl = self.engine.sota("task:math-code-rl-dense")
+        self.assertTrue(any(p["method"].id == "method:cispo" for p in dense_rl))
+
+        moe_rl = self.engine.sota("task:math-code-rl-moe")
+        self.assertTrue(any(p["method"].id == "method:sapo" for p in moe_rl))
+
+        async_rl = self.engine.sota("task:agentic-async-rl")
+        self.assertTrue(any(p["method"].id == "method:sao" for p in async_rl))
+
+        distill = self.engine.sota("task:student-distillation")
+        self.assertTrue(any(p["method"].id == "method:opd" for p in distill))
+
+        snn = self.engine.sota("task:spiking-neural-networks-training")
+        self.assertTrue(any(p["method"].id == "method:longspike" for p in snn))
+
+        control = self.engine.sota("task:continuous-control-world-model")
+        self.assertTrue(any(p["method"].id == "method:efficienttdmpc" for p in control))
+
+        video = self.engine.sota("task:learned-video-compression")
+        self.assertTrue(any(p["method"].id in ("method:dcvc-uf", "method:mlvc") for p in video))
 
 
 class TestGraphTraversalAndPaths(unittest.TestCase):
@@ -99,20 +133,20 @@ class TestGraphTraversalAndPaths(unittest.TestCase):
         self.graph = load_graph(Path("graph"))
 
     def test_describe_neighborhood(self):
-        info = describe_node_neighborhood(self.graph, "method:muon-scalable")
+        info = describe_node_neighborhood(self.graph, "method:muon2")
         self.assertIsNotNone(info)
         outgoing_targets = [e["target_id"] for e in info["outgoing"]]
         self.assertIn("task:pretrain-dense-7b", outgoing_targets)
-        self.assertIn("paper:muon-scalable", outgoing_targets)
-        self.assertIn("recipe:muon-pretraining", outgoing_targets)
+        self.assertIn("paper:muon2", outgoing_targets)
+        self.assertIn("recipe:muon2-pretraining", outgoing_targets)
 
     def test_shortest_path(self):
-        steps = find_shortest_path(self.graph, "task:pretrain-dense-7b", "recipe:muon-pretraining")
+        steps = find_shortest_path(self.graph, "task:pretrain-dense-7b", "recipe:muon2-pretraining")
         self.assertIsNotNone(steps)
         self.assertGreaterEqual(len(steps), 2)
         node_ids = [s["id"] for s in steps]
         self.assertEqual(node_ids[0], "task:pretrain-dense-7b")
-        self.assertEqual(node_ids[-1], "recipe:muon-pretraining")
+        self.assertEqual(node_ids[-1], "recipe:muon2-pretraining")
 
 
 class TestExporterAndIngest(unittest.TestCase):

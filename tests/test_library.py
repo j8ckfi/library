@@ -130,6 +130,18 @@ class TestQueryEngine(unittest.TestCase):
         nvl72_moe = self.engine.sota("task:train-moe-nvl72")
         self.assertTrue(any(p["method"].id == "method:mixture-of-kittens" for p in nvl72_moe))
 
+        opdvr_res = self.engine.sota("task:distill-reasoner-verifier")
+        self.assertTrue(any(p["method"].id == "method:opdvr" for p in opdvr_res))
+
+        bpco_res = self.engine.sota("task:token-level-critic-rl")
+        self.assertTrue(any(p["method"].id == "method:bpco" for p in bpco_res))
+
+        diff_res = self.engine.sota("task:posttrain-diffusion")
+        self.assertTrue(any(p["method"].id == "method:diffusion-opsd" for p in diff_res))
+
+        orarl_res = self.engine.sota("task:rl-video-mllm")
+        self.assertTrue(any(p["method"].id == "method:orarl" for p in orarl_res))
+
 
 class TestGraphTraversalAndPaths(unittest.TestCase):
     def setUp(self):

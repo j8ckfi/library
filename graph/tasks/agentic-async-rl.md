@@ -13,6 +13,7 @@ current_sota:
     notes: "SAO (2607.07508) decouples environment tool execution from policy optimization with importance-corrected replay buffers."
 methods:
   - method:sao
+  - method:bpco
   - method:dr-grpo
   - method:grpo
 tags:

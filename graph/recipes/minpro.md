@@ -1,7 +1,7 @@
 ---
 id: recipe:minpro
 type: recipe
-title: "MinPRO Training Recipe"
+title: "MinPRO Minimum Prefix Ratio Training Recipe"
 method: method:minpro
 task: task:math-code-rl-dense
 target_hardware: "4x NVIDIA H100 80GB"
@@ -12,9 +12,10 @@ pip_dependencies:
 tags:
   - recipe
   - rl-alignment
+  - minpro
 ---
 
-# MinPRO Training Recipe
+# MinPRO Minimum Prefix Ratio Training Recipe
 
 ```python
 import torch

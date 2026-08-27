@@ -20,6 +20,7 @@ current_sota:
 methods:
   - method:cispo
   - method:sapo
+  - method:opdvr
   - method:dapo
   - method:gspo
   - method:cppo

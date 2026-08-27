@@ -13,6 +13,7 @@ current_sota:
     notes: "OPD 2604.13016 + MOPD (Cascade-2 / Kimi-K3 / GLM-5)."
 methods:
   - method:opd
+  - method:opdvr
   - method:tropd
   - method:stable-opd
   - method:opd2

@@ -3,7 +3,8 @@ id: method:deepseek-v3
 type: method
 title: "DeepSeek-V3 MoE Architecture"
 category: "architecture"
-status: active
+status: superseded
+superseded_by: method:deepseek-v4
 sota_for: []
 supersedes: []
 papers:
@@ -26,10 +27,7 @@ tags:
 # DeepSeek-V3 MoE Architecture
 
 ## Method Overview
-DeepSeek-V3 establishes the standard open-weights architecture for large sparse Mixture-of-Experts models:
-1. **Multi-Head Latent Attention (MLA)**: Compresses key-value activations into low-dimensional latent vectors to minimize KV-cache footprint.
-2. **DeepSeekMoE**: 256 fine-grained routed experts + 1 shared expert with load-balancing loss without auxiliary loss degradation.
-3. **Multi-Token Prediction (MTP)**: Predicts multiple future tokens simultaneously during training.
+DeepSeek-V3 established the open-weights architecture for large sparse Mixture-of-Experts models.
 
 ## Supersession
-- Superseded for 2026-frontier designs by `method:kimi-k3`.
+- Superseded by `method:deepseek-v4` as the canonical architecture template.

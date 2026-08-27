@@ -3,9 +3,9 @@ id: method:muon-scalable
 type: method
 title: "Scalable Muon (Moonlight)"
 category: "optimizer"
-status: sota
-sota_for:
-  - task:pretrain-dense-7b
+status: superseded
+superseded_by: method:muon2
+sota_for: []
 supersedes:
   - method:muon
 papers:
@@ -33,10 +33,5 @@ Moonlight's Scalable Muon introduces two essential fixes enabling Muon to scale 
 1. **Decoupled Weight Decay**: Proper matrix-level weight decay.
 2. **Per-Parameter Update-RMS Matching**: Calibrates the spectral update norm across layers of varying aspect ratios.
 
-## When to Use
-- Default optimizer when training ~7B dense language models from scratch.
-- ~2x more token-efficient than AdamW under empirical scaling laws.
-
 ## Supersession
-- Supersedes raw `method:muon` defaults at LLM scale.
-- Superseded at trillion-token MoE scale by `method:muonclip-kimi-k2`.
+- Superseded by `method:muon2` as the primary pretraining optimizer implementation.

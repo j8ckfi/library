@@ -9,25 +9,43 @@ current_sota:
     as_of: "2026-08-26"
     benchmark: "Gemma / LLaMA Circuit Decomposition"
     metric: "subspace feature interpretability"
-    value: "Pareto superior to 1D vector SAEs"
-    notes: "Subspace Sparse Autoencoders (SASA) over vanilla vector SAEs."
+    value: "Default SOTA SAE Dictionary"
+    notes: "SASA (2606.06333) KEEP."
+  - method: method:circuitsteer
+    as_of: "2026-08-26"
+    benchmark: "Transformer Circuit Steering"
+    metric: "causal steering specificity"
+    value: "Default SOTA SAE Circuits"
+    notes: "CircuitSteer (2608.05732)."
+  - method: method:fega
+    as_of: "2026-08-26"
+    benchmark: "SAE Effect Geometry & Feature Interaction"
+    metric: "geometric fidelity"
+    value: "Default SOTA SAE Effect Geometry"
+    notes: "FEGA (2607.24645)."
 methods:
   - method:sasa
+  - method:circuitsteer
+  - method:fega
+  - method:circuitlasso
+  - method:hsae
+  - method:sae-causal-audit
   - method:gated-sae
   - method:standard-sae
 tags:
   - interpretability
   - mechanistic
   - sparse-autoencoders
+  - sasa
+  - circuits
 ---
 
 # Mechanistic Interpretability & Sparse Feature Dictionaries
 
 ## Problem Definition
-Deep neural network activations suffer from superposition, where linear representations represent more features than there are orthogonal dimensions in the activation space. Mechanistic interpretability leverages overcomplete Sparse Autoencoders (SAEs) to unroll dense residual stream representations into sparse dictionaries of monosemantic concepts.
+Unrolling dense residual stream representations into sparse dictionaries of monosemantic concepts and causal circuits.
 
-## Evaluation Protocol & Benchmarks
-- **Standard Metrics**: Reconstruction fidelity (Mean Squared Error / Fraction of Variance Unexplained), \(L_0\) activation sparsity (mean active features per token), downstream CE loss recovery, and automated interpretability scoring.
-
-## SOTA Landscape
-Standard TopK and \(L_1\)-penalized SAEs suffer from shrinkage bias, where \(L_1\) regularization systematically suppresses the magnitudes of true feature activations. **Gated SAEs** solve this by splitting the autoencoder into a gating network for feature selection and a separate linear path for magnitude estimation.
+## SOTA Recommendation (as of 2026-08-26)
+- **SAE Dictionary**: **SASA** (`method:sasa`, 2606.06333) KEEP.
+- **SAE Circuits**: **CircuitSteer** (`method:circuitsteer`, 2608.05732).
+- **SAE Effect Geometry**: **FEGA** (`method:fega`, 2607.24645).

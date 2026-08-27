@@ -5,28 +5,30 @@ title: "Mathematical and Code RL Reasoning (MoE Policies)"
 domain: "post-training"
 summary: "Reinforcement learning for large-scale sparse Mixture-of-Experts (MoE) reasoning models."
 current_sota:
-  - method: method:gspo
+  - method: method:sapo
     as_of: "2026-08-26"
-    benchmark: "Qwen3 / MATH-500 / AIME MoE RL"
+    benchmark: "Qwen3 MoE / MATH-500 MoE RL"
     metric: "pass@1 accuracy & MoE routing stability"
-    value: "SOTA for MoE RL"
-    notes: "GSPO uses sequence-level importance sampling ratio to stabilize RL updates when routing is non-stationary."
+    value: "Default SOTA for MoE/VL RL"
+    notes: "SAPO (2511.20347); GSPO only if Qwen3.5-Omni Talker."
 methods:
+  - method:sapo
   - method:gspo
+  - method:qwen35-omni
   - method:dr-grpo
   - method:grpo
 tags:
   - post-training
   - reasoning
   - moe
-  - gspo
+  - sapo
 ---
 
 # Mathematical and Code RL Reasoning (MoE Policies)
 
 ## Problem Definition
-Training sparse Mixture-of-Experts policies with reinforcement learning where token-level routing decisions introduce extreme non-stationarity in importance sampling ratios.
+Training sparse Mixture-of-Experts policies with reinforcement learning where dynamic expert routing introduces variance in token-level importance weights.
 
 ## SOTA Recommendation (as of 2026-08-26)
-- **Primary Method**: **GSPO** (`method:gspo`) with sequence-level importance sampling (IS) ratio (Qwen3 recipe).
-- **De-biasing**: Combine with **Dr. GRPO** (`method:dr-grpo`) fixes.
+- **Primary Method**: **SAPO** (`method:sapo`, 2511.20347, ms-swift `loss_type=sapo`).
+- **Omni / Talker**: **GSPO** (`method:gspo`) only if training Qwen3.5-Omni Talker (`paper:qwen35-omni`).

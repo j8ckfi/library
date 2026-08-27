@@ -21,60 +21,68 @@ When you are asked to **"train model X to do Y"**, **do not rely on outdated pre
 Use this quick-routing table as of **2026-08-26**:
 
 ```
-task: pretrain dense 7B     -> muon-scalable  (+ soap-muon-scale if big batch / extra mem)
-task: pretrain MoE          -> deepseek-v3 arch, muonclip-kimi-k2 opt; read kimi-k3 if 2026-frontier
-task: open data recipe      -> olmo-2-curriculum
-task: instruct SFT          -> tulu3-rlvr (SFT stage)
-task: general alignment     -> tulu3-rlvr (SFT->DPO->RLVR)
-task: math/code RL, dense   -> dapo + dr-grpo
-task: math/code RL, MoE     -> gspo + dr-grpo
-task: process supervision   -> verigate (not un-gated PRM)
-task: LoRA 24GB             -> qlora; quality: dora or delora
-task: full-param, 24GB      -> galore
-task: tiny on-device LLM    -> bitnet-b158 (from-scratch) else qlora+GGUF
-task: distill student       -> on-policy-distillation
-task: SNN audio/event       -> silif
-task: SAE / circuits        -> sasa
-task: neural video train    -> dcvcrt
-task: continuous control    -> td-mpc2, then dream-mpc planner
+task: pretrain dense 7B optimizer  -> muon2 (2604.09967) + kl-soap (2607.20548) if memory allows
+task: open data recipe             -> olmo-3 / dolma-3 (2512.13961)
+task: pretrain MoE architecture    -> deepseek-v4 (2606.19348) + kimi-k3 (2607.24653)
+task: instruct SFT                 -> olmo-3 dolci (2512.13961); industrial alt nemotron-cascade-2 (2603.19220)
+task: math/code RL, dense          -> cispo (minimax-m1 2506.13585 + scalerl 2510.13786)
+task: math/code RL, MoE/VL         -> sapo (2511.20347); gspo only if Qwen3.5-Omni Talker
+task: agentic async RL             -> sao (2607.07508)
+task: all-zero verifier groups     -> verigate (2605.30451)
+task: LoRA quality 24GB            -> vanilla LoRA + rsLoRA + LR sweep (2602.04998, 2601.22708) NOT DoRA
+task: LoRA must 4-bit              -> aqlora-q (2608.23816) or autoqra (2602.22268)
+task: full-param mem pretrain      -> scale (2506.16659) not galore
+task: native 1.58-bit pretrain     -> sparse-bitnet (2603.05168); keep 2B4T as dense cite
+task: ternary an existing SOTA LLM -> scaleq-1.58 (2608.01078)
+task: FP4 hardware train           -> quartet-ii nvfp4 (2601.22813) / mxfp4 (2605.09825) / kimi-k3 QAT
+task: distill student              -> opd 2604.13016 + mopd (cascade-2 / kimi-k3 / glm-5)
+task: SNN sequence/SSM             -> longspike (2606.12895); train with a2sg (2606.11236); silif stays as speech-neuron cite
+task: continuous control           -> efficienttdmpc (2605.16692) family; dream-mpc (2605.04568) gradient planner
+task: neural video GPU             -> dcvc-uf (2606.04410)
+task: neural video deploy          -> mlvc (2606.28027)
+task: SAE dictionary               -> sasa (2606.06333) KEEP
+task: SAE circuits                 -> circuitsteer (2608.05732)
+task: SAE effect geometry          -> fega (2607.24645)
 ```
 
 ---
 
 ## 3. SOTA Map (What You Actually Pick Today — 2026-08-26)
 
-1. **Train a ~7B dense LM from scratch**: Use **Muon** (`method:muon-scalable`) with Moonshot's two scale-up fixes: weight decay + per-parameter update-RMS matching. Keep embeddings / `lm_head` on AdamW. If GPU memory is not the bottleneck and you can pay SOAP's extra state, NVIDIA's Jul-2026 Megatron study recommends **KL-SOAP** (`method:soap-muon-scale`) over Muon at large batch (up to ~100M tokens). Architecture: dense Llama-like is still the open default. Data: two-stage OLMo-2 curriculum (`paper:olmo-2-curriculum`). Do not Chinchilla-copy an AdamW token budget—Muon is ~2x more token-efficient in Moonshot's scaling laws.
-2. **SFT a chat / instruct model**: **Tülu-3 stack** (`method:tulu3-rlvr`): curated SFT → on-policy DPO → **RLVR** (verifiable rewards, no learned RM). Code: `allenai/open-instruct`. Prefer decontaminated, skill-specific mixes over "just ShareGPT." If you only have a weekend and a 24 GB card, skip to QLoRA/DoRA on a strong instruct checkpoint instead of training a base.
-3. **RL a reasoner (math/code, verifiable)**: Start from a base or light-SFT checkpoint (R1-Zero path is real). Optimizer: **DAPO** (`method:dapo`) for dense long-CoT (clip-higher, dynamic sampling, token-level loss, overlong shaping). Switch to **GSPO** (`method:gspo`) if the policy is MoE (Qwen3 recipe; sequence-level IS ratio). Apply **Dr. GRPO**'s de-bias (`method:dr-grpo`, drop length and std-normalization) so incorrect traces don't get rewarded for being long. Reward = unit-test / math verifier / boxed-answer match. A learned process-reward model is *optional* and dangerous; if you add one, gate it behind a verifier (**VeriGate**-style `paper:verigate`) so PRM noise cannot override a trusted outcome check.
-4. **LoRA a local model on one GPU**: Default is still **QLoRA** (`method:qlora`, NF4 + LoRA, bitsandbytes / transformers / PEFT). Quality bump: **DoRA** (`method:dora`, magnitude/direction split) or **DeLoRA** (`method:delora`, bounded Frobenius update, more robust to LR / long runs). Merge adapters before serving. Full-rank-but-cheap alternative for pretrain/finetune memory: **GaLore** (`method:galore`).
-5. **Distill a small local student from a strong teacher**: Do **on-policy distillation** (`method:on-policy-distillation`, GKD / Thinking Machines 2025 recipe), not offline SFT on teacher traces. Sample from the *student*, score tokens with teacher log-probs (reverse or mixed KL).
-6. **Extreme compression / on-device**: If you control pretraining: train **BitNet b1.58** (`method:bitnet-b158`) from scratch. Infer with `bitnet.cpp` kernels. Do not post-train-quantize all the way to 1.58-bit and expect BitNet-native quality.
-7. **Train a spiking net (audio / event)**: Use **SiLIF / C-SiLIF** (`method:silif`). Train with surrogate-gradient BPTT, not conversion.
-8. **Learned control / world-model RL**: Default remains **TD-MPC2** (`method:td-mpc2`). If planning cost dominates, swap the MPPI planner for **Dream-MPC** (`method:dream-mpc`). Dream-MPC code: `none found`—do not invent a GitHub URL.
-9. **Honorable extra**: Video compression training is **DCVC-RT** (`method:dcvcrt`); 2026 successor **MLVC** (`paper:mlvc`). Interpretability training is **SASA** (`method:sasa`, subspace SAEs) over vanilla vector SAEs.
+1. **Train a ~7B dense LM from scratch**: Use **Muon2** (`method:muon2`, `paper:muon2` `arXiv:2604.09967`) with **KL-SOAP** (`method:soap-muon-scale`, `paper:soap-muon-scale` `arXiv:2607.20548`) if GPU memory allows. Keep embeddings / `lm_head` on AdamW. Data: **OLMo-3 / Dolma-3** open data recipe (`method:olmo-3`, `paper:olmo-3` `arXiv:2512.13961`).
+2. **Pretrain an MoE architecture**: Use **DeepSeek-V4** (`method:deepseek-v4`, `paper:deepseek-v4` `arXiv:2606.19348`) with **Kimi-K3** (`method:kimi-k3`, `paper:kimi-k3` `arXiv:2607.24653`) as co-default.
+3. **SFT a chat / instruct model**: **OLMo-3 Dolci stack** (`method:olmo-3`, `paper:olmo-3` `arXiv:2512.13961`); industrial alternative **Nemotron-Cascade 2** (`method:nemotron-cascade-2`, `paper:nemotron-cascade-2` `arXiv:2603.19220`).
+4. **RL a reasoner (math/code, verifiable)**: For dense models, use **CISPO** (`method:cispo`, MiniMax-M1 `paper:minimax-m1` `arXiv:2506.13585` + ScaleRL `paper:scalerl` `arXiv:2510.13786`). For MoE and Vision-Language models, use **SAPO** (`method:sapo`, `paper:sapo` `arXiv:2511.20347`, ms-swift `loss_type=sapo`); use **GSPO** (`method:gspo`) only for Qwen3.5-Omni Talker (`paper:qwen35-omni` `arXiv:2604.15804`). Gate process supervision with **VeriGate** (`method:verigate`, `paper:verigate` `arXiv:2605.30451`).
+5. **Agentic async RL**: Use **SAO** (`method:sao`, `paper:sao` `arXiv:2607.07508`) for asynchronous environment and tool-use reinforcement learning.
+6. **LoRA a local model on 24GB**: Quality default is **Vanilla LoRA + rsLoRA + LR sweep** (`method:lr-matters-lora`, `paper:lr-matters-lora` `arXiv:2602.04998`, `paper:lora-unified-study` `arXiv:2601.22708`) — NOT DoRA. If memory must fit on a 4-bit stack, use **AQLoRA-Q** (`method:aqlora-q`, `paper:aqlora` `arXiv:2608.23816`) or **AutoQRA** (`method:autoqra`, `paper:autoqra` `arXiv:2602.22268`). For memory-efficient full-parameter pretraining, use **SCALE** (`method:scale`, `paper:scale` `arXiv:2506.16659`, ICML 2026) — not GaLore.
+7. **Extreme compression / on-device**: For native 1.58-bit pretraining from scratch, use **Sparse-BitNet** (`method:sparse-bitnet`, `paper:sparse-bitnet` `arXiv:2603.05168`); keep 2B4T (`paper:bitnet-b158`) as dense citation. For post-training ternarization of existing pre-trained LLMs, use **ScaleQ-1.58** (`method:scaleq-158`, `paper:scaleq-158` `arXiv:2608.01078`). For native FP4 hardware training, use **Quartet-II NVFP4** (`method:quartet-ii`, `paper:quartet-ii` `arXiv:2601.22813`) or **MXFP4** (`method:mxfp4-mi355x`, `paper:mxfp4-mi355x` `arXiv:2605.09825`) / Kimi-K3 QAT.
+8. **Distill a student from a teacher**: Use **OPD** (`method:opd`, `paper:opd` `arXiv:2604.13016`) + **MOPD** (Cascade-2 / Kimi-K3 / GLM-5).
+9. **Train a spiking neural net (SNN)**: Use **LongSpike** (`method:longspike`, `paper:longspike` `arXiv:2606.12895`) for SSM-SNN sequence modeling; train with **A2SG** (`method:a2sg`, `paper:a2sg` `arXiv:2606.11236`) adaptive surrogate gradients. SiLIF (`method:silif`) stays as speech-neuron citation.
+10. **Learned control / world-model RL**: Use **EfficientTDMPC** (`method:efficienttdmpc`, `paper:efficienttdmpc` `arXiv:2605.16692`) family; **Dream-MPC** (`method:dream-mpc`, `paper:dream-mpc` `arXiv:2605.04568`, ICML 2026) gradient planner.
+11. **Neural video compression**: For GPU neural video, use **DCVC-UF** (`method:dcvc-uf`, `paper:dcvc-uf` `arXiv:2606.04410`). For deployable edge/mobile neural video, use **MLVC** (`method:mlvc`, `paper:mlvc` `arXiv:2606.28027`). DCVC-RT (`method:dcvcrt`) stays as 2025 realtime reference.
+12. **Mechanistic interpretability & SAEs**: Dictionary default is **SASA** (`method:sasa`, `paper:sasa` `arXiv:2606.06333`) KEEP. For SAE circuits and steering, use **CircuitSteer** (`method:circuitsteer`, `paper:circuitsteer` `arXiv:2608.05732`). For SAE effect geometry, use **FEGA** (`method:fega`, `paper:fega` `arXiv:2607.24645`).
 
 ---
 
 ## 4. Supersedes Edges & Lineage
 
 The knowledge graph encodes the following explicit supersession relationships:
-- `muon` supersedes `adamw-optimizer` for hidden matrices.
-- `muon-scalable` supersedes raw `muon` defaults at LLM scale.
-- `muonclip-kimi-k2` supersedes `muon-scalable` at trillion scale.
-- `kimi-k3` supersedes `deepseek-v3` architecture for 2026-frontier deployments.
-- `soap` supersedes `shampoo`.
-- `soap-muon-scale` supersedes original small-scale `soap`.
-- `dapo` supersedes vanilla `grpo` for dense long-CoT.
-- `gspo` supersedes token-level IS (`grpo`) when policy is MoE.
-- `dr-grpo` supersedes unpatched `grpo` length/std normalization.
-- `tulu3-rlvr` supersedes RM-only `ppo-rlhf` as the open path.
-- `on-policy-distillation` supersedes offline teacher-CoT SFT.
-- `dora` supersedes vanilla `lora` as quality default.
-- `delora` supersedes `dora` for long/LR-sensitive runs.
-- `silif` supersedes `surrogate-gradient-snn` / `AdLIF`.
-- `sasa` supersedes `gated-sae` and `standard-sae` vector SAEs.
-- `dcvcrt` supersedes `dcvc-dc` for real-time video coding.
-- `bitnet-b158` supersedes PTQ-to-1-bit as a quality path.
+- `muon2` supersedes `muon` and `muon-scalable` (2502.16982) as what to implement.
+- `olmo-3` supersedes `olmo-2` (2501.00656) and `tulu3-rlvr` (2411.15124) for open instruct and data recipes.
+- `deepseek-v4` supersedes `deepseek-v3` as architecture template; `kimi-k3` remains co-default.
+- `cispo` supersedes `dapo` as dense RL default (`dapo` stays as systems paper).
+- `sapo` supersedes `gspo` as Qwen MoE/VL algorithm.
+- `sao` supersedes `group-GRPO` / `grpo` for agentic async RL.
+- `opd` (2604.13016) supersedes `on-policy-distillation` / `gkd` as the distill cite.
+- `aqlora-q` supersedes `qlora` as speed/recipe default on 4-bit stack.
+- `lr-matters-lora` (2602.04998) supersedes `dora` and `delora` as quality default.
+- `scale` (2506.16659) supersedes `galore` for mem-efficient pretrain.
+- `sparse-bitnet` (2603.05168) supersedes `bitnet-b158` as the 2026 BitNet line (keep 2B4T as downloadable dense cite).
+- `longspike` (2606.12895) supersedes `silif` as SSM-SNN default (`silif` stays speech-neuron).
+- `efficienttdmpc` (2605.16692) supersedes `td-mpc2`.
+- `dcvc-uf` (2606.04410) supersedes `dcvcrt` as GPU NVC; `mlvc` (2606.28027) supersedes `dcvcrt` as deployable NVC.
+- `a2sg` (2606.11236) supersedes static `surrogate-gradient-snn`.
+- `sasa` (2606.06333) supersedes `gated-sae` and `standard-sae` vector SAEs.
 
 ---
 
@@ -94,11 +102,11 @@ Canonical query paths:
 1. Query Task: task:math-code-rl-dense
    │
    ▼
-2. Resolve SOTA Method: method:dapo (Dense Advantage Policy Optimization)
+2. Resolve SOTA Method: method:cispo (Clipped Importance Sampling Policy Optimization)
    │
-   ├──► 3. Inspect Literature: paper:dapo / paper:dr-grpo
+   ├──► 3. Inspect Literature: paper:minimax-m1 / paper:scalerl
    │
-   └──► 4. Load Runnable Code: recipe:grpo-trl-training
+   └──► 4. Load Runnable Code: recipe:cispo
 ```
 
 ---
@@ -122,11 +130,11 @@ python -m library sota "task:parameter-efficient-fine-tuning" --json
 ### 6.2 Searching the Graph
 ```bash
 # Keyword query across all nodes
-python -m library query "muon scalable"
+python -m library query "muon2"
 
 # Filter by node type or domain
 python -m library query "quantization" --type method
-python -m library query "silif" --domain snn
+python -m library query "longspike" --domain snn
 
 # Filter only active SOTA nodes
 python -m library query "distillation" --sota-only --json
@@ -135,13 +143,13 @@ python -m library query "distillation" --sota-only --json
 ### 6.3 Reading Node Content & Walking Neighbors
 ```bash
 # Display node markdown body and metadata
-python -m library show "method:dapo"
+python -m library show "method:cispo"
 
 # Inspect connected edges (papers, tasks, recipes, supersedes)
-python -m library walk "method:muon-scalable"
+python -m library walk "method:muon2"
 
 # Find path between any two graph nodes
-python -m library path --from "task:pretrain-dense-7b" --to "recipe:muon-pretraining"
+python -m library path --from "task:pretrain-dense-7b" --to "recipe:muon2-pretraining"
 ```
 
 ---

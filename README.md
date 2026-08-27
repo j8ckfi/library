@@ -27,22 +27,28 @@
 ## 2. Agent Routing Cheat-Sheet (2026-08-26 SOTA Index)
 
 ```
-task: pretrain dense 7B     -> muon-scalable  (+ soap-muon-scale if big batch / extra mem)
-task: pretrain MoE          -> deepseek-v3 arch, muonclip-kimi-k2 opt; read kimi-k3 if 2026-frontier
-task: open data recipe      -> olmo-2-curriculum
-task: instruct SFT          -> tulu3-rlvr (SFT stage)
-task: general alignment     -> tulu3-rlvr (SFT->DPO->RLVR)
-task: math/code RL, dense   -> dapo + dr-grpo
-task: math/code RL, MoE     -> gspo + dr-grpo
-task: process supervision   -> verigate (not un-gated PRM)
-task: LoRA 24GB             -> qlora; quality: dora or delora
-task: full-param, 24GB      -> galore
-task: tiny on-device LLM    -> bitnet-b158 (from-scratch) else qlora+GGUF
-task: distill student       -> on-policy-distillation
-task: SNN audio/event       -> silif
-task: SAE / circuits        -> sasa
-task: neural video train    -> dcvcrt
-task: continuous control    -> td-mpc2, then dream-mpc planner
+task: pretrain dense 7B optimizer  -> muon2 (2604.09967) + kl-soap (2607.20548) if memory allows
+task: open data recipe             -> olmo-3 / dolma-3 (2512.13961)
+task: pretrain MoE architecture    -> deepseek-v4 (2606.19348) + kimi-k3 (2607.24653)
+task: instruct SFT                 -> olmo-3 dolci (2512.13961); industrial alt nemotron-cascade-2 (2603.19220)
+task: math/code RL, dense          -> cispo (minimax-m1 2506.13585 + scalerl 2510.13786)
+task: math/code RL, MoE/VL         -> sapo (2511.20347); gspo only if Qwen3.5-Omni Talker
+task: agentic async RL             -> sao (2607.07508)
+task: all-zero verifier groups     -> verigate (2605.30451)
+task: LoRA quality 24GB            -> vanilla LoRA + rsLoRA + LR sweep (2602.04998, 2601.22708) NOT DoRA
+task: LoRA must 4-bit              -> aqlora-q (2608.23816) or autoqra (2602.22268)
+task: full-param mem pretrain      -> scale (2506.16659) not galore
+task: native 1.58-bit pretrain     -> sparse-bitnet (2603.05168); keep 2B4T as dense cite
+task: ternary an existing SOTA LLM -> scaleq-1.58 (2608.01078)
+task: FP4 hardware train           -> quartet-ii nvfp4 (2601.22813) / mxfp4 (2605.09825) / kimi-k3 QAT
+task: distill student              -> opd 2604.13016 + mopd (cascade-2 / kimi-k3 / glm-5)
+task: SNN sequence/SSM             -> longspike (2606.12895); train with a2sg (2606.11236); silif stays as speech-neuron cite
+task: continuous control           -> efficienttdmpc (2605.16692) family; dream-mpc (2605.04568) gradient planner
+task: neural video GPU             -> dcvc-uf (2606.04410)
+task: neural video deploy          -> mlvc (2606.28027)
+task: SAE dictionary               -> sasa (2606.06333) KEEP
+task: SAE circuits                 -> circuitsteer (2608.05732)
+task: SAE effect geometry          -> fega (2607.24645)
 ```
 
 ---
@@ -51,22 +57,28 @@ task: continuous control    -> td-mpc2, then dream-mpc planner
 
 | Task / Domain | Default SOTA Method | Key Paper / Reference | Code / Repo |
 | :--- | :--- | :--- | :--- |
-| **Dense 7B Pretraining** | **Scalable Muon** (`method:muon-scalable`) | Moonshot AI `arXiv:2502.16982` | `https://github.com/MoonshotAI/Moonlight` |
-| **Large-Batch Pretraining**| **KL-SOAP** (`method:soap-muon-scale`) | NVIDIA `arXiv:2607.20548` | `https://github.com/NVIDIA-NeMo/Emerging-Optimizers` |
-| **Frontier MoE Pretrain** | **Kimi-K3** / **DeepSeek-V3** | `arXiv:2607.24653` / `2412.19437` | `https://github.com/MoonshotAI/Kimi-K3` |
-| **Open Data Recipe** | **OLMo 2 Curriculum** | AI2 `arXiv:2501.00656` | `https://github.com/allenai/OLMo` |
-| **Instruct / Chat SFT** | **Tülu-3 Stack** (`method:tulu3-rlvr`) | AI2 `arXiv:2411.15124` | `https://github.com/allenai/open-instruct` |
-| **Dense Math/Code RL** | **DAPO** + **Dr. GRPO** | `arXiv:2503.14476` / `2503.20783` | `https://github.com/BytedTsinghua-SIA/DAPO` |
-| **MoE Reasoning RL** | **GSPO** + **Dr. GRPO** | `arXiv:2507.18071` / `2503.20783` | Hugging Face TRL & Qwen Stacks |
-| **Process Supervision** | **VeriGate** (Gated PRM) | `arXiv:2605.30451` | Gated verification protocol |
-| **1-GPU 24GB Fine-Tuning** | **QLoRA** / **DoRA** / **DeLoRA** | `arXiv:2305.14314` / `2402.09353` / `2503.18225` | `https://github.com/NVlabs/DoRA` |
-| **Full-Param 24GB Train** | **GaLore** (`method:galore`) | `arXiv:2403.03507` | `https://github.com/jiaweizzhao/GaLore` |
-| **Student Distillation** | **On-Policy Distillation** (GKD) | `arXiv:2306.13649` / Thinking Machines | `https://github.com/huggingface/trl` |
-| **Extreme 1-Bit LLM** | **BitNet b1.58** | `arXiv:2504.12285` (arch `2402.17764`) | `https://github.com/microsoft/BitNet` |
-| **Spiking Neural Net** | **SiLIF / C-SiLIF** (`method:silif`) | `arXiv:2506.06374` | `https://github.com/Maxtimer97/SSM-inspired-LIF` |
-| **Circuits & SAEs** | **SASA** (`method:sasa`) | `arXiv:2606.06333` | `https://github.com/arshandalili/sasa` |
-| **Neural Video Codec** | **DCVC-RT** (`method:dcvcrt`) | `arXiv:2502.20762` | `https://github.com/microsoft/DCVC` |
-| **Continuous Control RL** | **TD-MPC2** / **Dream-MPC** | `arXiv:2310.16828` / `2605.04568` | `https://github.com/nicklashansen/tdmpc2` |
+| **Dense 7B Pretrain Optimizer** | **Muon2** (`method:muon2`) + **KL-SOAP** | `arXiv:2604.09967` / `2607.20548` | `none found` / `https://github.com/NVIDIA-NeMo/Emerging-Optimizers` |
+| **Open Data Recipe** | **OLMo-3 / Dolma-3** (`method:olmo-3`) | AI2 `arXiv:2512.13961` | `https://github.com/allenai/OLMo-core` / `https://github.com/allenai/dolma3` |
+| **Pretrain MoE Architecture** | **DeepSeek-V4** + **Kimi-K3** | `arXiv:2606.19348` / `2607.24653` | `none found` / `https://github.com/MoonshotAI/Kimi-K3` |
+| **Instruct SFT** | **OLMo-3 Dolci** / **Nemotron-Cascade 2** | `arXiv:2512.13961` / `2603.19220` | `https://github.com/allenai/OLMo-core` / `none found` |
+| **Dense Math/Code RL** | **CISPO** (`method:cispo`) | `arXiv:2506.13585` / `2510.13786` | `https://github.com/MiniMax-AI/MiniMax-M1` |
+| **MoE/VL Math/Code RL** | **SAPO** (`method:sapo`) | `arXiv:2511.20347` | ms-swift `loss_type=sapo` |
+| **Agentic Async RL** | **SAO** (`method:sao`) | `arXiv:2607.07508` | `none found` |
+| **All-Zero Verifier Groups** | **VeriGate** (`method:verigate`) | `arXiv:2605.30451` | `none found` |
+| **LoRA Quality 24GB** | **Vanilla LoRA + rsLoRA + LR sweep** | `arXiv:2602.04998` / `2601.22708` | `https://github.com/yuang-lee/lr-matters-lora` |
+| **LoRA Must 4-Bit** | **AQLoRA-Q** / **AutoQRA** | `arXiv:2608.23816` / `2602.22268` | `https://github.com/Romyull-Islam/AQLoRA` / `none found` |
+| **Full-Param Mem Pretrain** | **SCALE** (`method:scale`) | ICML 2026 `arXiv:2506.16659` | `none found` |
+| **Native 1.58-Bit Pretrain** | **Sparse-BitNet** (`method:sparse-bitnet`) | `arXiv:2603.05168` | `https://github.com/AAzdi/Sparse-BitNet` |
+| **Ternary Existing SOTA LLM**| **ScaleQ-1.58** (`method:scaleq-158`) | `arXiv:2608.01078` | `https://github.com/IntelChina-AI/BitTern` (claimed) |
+| **FP4 Hardware Train** | **Quartet-II NVFP4** / **MXFP4** | `arXiv:2601.22813` / `2605.09825` | `https://github.com/IST-DASLab/Quartet-II` / `none found` |
+| **Distill Student** | **OPD** (`method:opd`) + MOPD | `arXiv:2604.13016` | `https://github.com/thunlp/OPD` |
+| **SNN Sequence / SSM** | **LongSpike** (`method:longspike`) | `arXiv:2606.12895` / `2606.11236` | `https://github.com/xinruihe389-commits/LongSpike` / `https://github.com/KIST-NCL/A2SG.git` |
+| **Continuous Control** | **EfficientTDMPC** / **Dream-MPC** | `arXiv:2605.16692` / `2605.04568` | `none found` (BMPC) / `none found` (ICML 2026) |
+| **Neural Video GPU** | **DCVC-UF** (`method:dcvc-uf`) | `arXiv:2606.04410` | `https://github.com/microsoft/DCVC` |
+| **Neural Video Deploy** | **MLVC** (`method:mlvc`) | `arXiv:2606.28027` | `https://github.com/microsoft/mlvc` |
+| **SAE Dictionary** | **SASA** (`method:sasa`) KEEP | `arXiv:2606.06333` | `https://github.com/arshandalili/sasa` |
+| **SAE Circuits** | **CircuitSteer** (`method:circuitsteer`) | `arXiv:2608.05732` | `https://github.com/mehrshad-sdtn/CircuitSteer` |
+| **SAE Effect Geometry** | **FEGA** (`method:fega`) | `arXiv:2607.24645` | `https://github.com/UKPLab/FEGA` |
 
 ---
 
@@ -77,16 +89,16 @@ task: continuous control    -> td-mpc2, then dream-mpc planner
 python -m library sota "pretrain dense 7B"
 
 # 2. Search graph nodes
-python -m library query "muon scalable" --type method
+python -m library query "muon2" --type method
 
 # 3. View node metadata and full prose
-python -m library show "method:dapo"
+python -m library show "method:cispo"
 
 # 4. Inspect incoming and outgoing graph edges
-python -m library walk "method:muon-scalable"
+python -m library walk "method:muon2"
 
 # 5. Find shortest traversal path between concepts
-python -m library path --from "task:pretrain-dense-7b" --to "recipe:muon-pretraining"
+python -m library path --from "task:pretrain-dense-7b" --to "recipe:muon2-pretraining"
 
 # 6. Validate graph schema and referential integrity
 python -m library validate

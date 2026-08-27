@@ -3,9 +3,9 @@ id: method:delora
 type: method
 title: "DeLoRA (Decoupled Low-Rank Adaptation)"
 category: "peft"
-status: sota
-sota_for:
-  - task:parameter-efficient-fine-tuning
+status: superseded
+superseded_by: method:lr-matters-lora
+sota_for: []
 supersedes:
   - method:dora
 papers:
@@ -29,7 +29,7 @@ tags:
 # DeLoRA (Decoupled Low-Rank Adaptation)
 
 ## Method Overview
-DeLoRA bounds the Frobenius norm of low-rank adapter updates, decoupling parameter updates across layers to ensure robust training stability across wide learning rate sweeps and extended multi-epoch fine-tuning runs.
+DeLoRA bounds the Frobenius norm of low-rank adapter updates.
 
 ## Supersession
-- Supersedes `method:dora` for long, learning-rate-sensitive training runs.
+- Superseded by `method:lr-matters-lora` (2602.04998) as quality default.

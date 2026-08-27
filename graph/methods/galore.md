@@ -3,9 +3,9 @@ id: method:galore
 type: method
 title: "GaLore (Gradient Low-Rank Projection)"
 category: "optimizer"
-status: sota
-sota_for:
-  - task:parameter-efficient-fine-tuning
+status: superseded
+superseded_by: method:scale
+sota_for: []
 supersedes: []
 papers:
   - paper:galore
@@ -29,7 +29,7 @@ tags:
 # GaLore (Gradient Low-Rank Projection)
 
 ## Method Overview
-GaLore (Gradient Low-Rank Projection) projects weight gradient matrices \(G \in \mathbb{R}^{m \times n}\) into compact low-rank subspaces \(P^T G Q\) via periodic SVD updates. This allows tracking low-memory optimizer states in the projected space while maintaining full-rank parameter trajectory updates.
+GaLore projects weight gradient matrices into compact low-rank subspaces via periodic SVD updates.
 
-## When to Use
-- Full-parameter pretraining or fine-tuning of 7B models on a single 24GB consumer GPU.
+## Supersession
+- Superseded by `method:scale` (2506.16659, ICML 2026) for memory-efficient full-parameter pretraining.

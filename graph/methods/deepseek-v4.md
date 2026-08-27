@@ -35,6 +35,10 @@ DeepSeek-V4 establishes the state-of-the-art sparse Mixture-of-Experts architect
 1. **Multi-Head Latent Attention (MLA)**: Low-rank key-value projection compression reducing KV cache footprint during generation.
 2. **Fine-Grained Expert Routing**: Expanded expert pool with auxiliary-loss-free load balancing.
 3. **Multi-Token Prediction**: Speculative prediction heads trained natively to accelerate inference throughput.
+4. **Manifold-Constrained Hyper-Connections (mHC)**: Residual stream expanded to \(n \times d\) (\(n=4\)) with doubly stochastic Sinkhorn projection (`method:mhc`).
+
+## Systems & Megakernel Training
+- Distributed pretraining on Blackwell NVL72 clusters is accelerated using **Mixture-of-Kittens** (`method:mixture-of-kittens`), fusing dispatch, SwiGLU FFN, and combine into a single deterministic megakernel.
 
 ## When to Use
 - Default SOTA architecture template for pretraining large-scale sparse MoE models. Co-default with Kimi-K3 for frontier deployments.

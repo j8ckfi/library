@@ -32,7 +32,7 @@ tags:
 Kimi-K3 represents the mid-2026 frontier architecture departure from DeepSeek-V3 Multi-Head Latent Attention (MLA), optimizing memory-bandwidth bounds during ultra-long context training and inference.
 
 ## When to Use
-- Frontier MoE model design in 2026+.
+- Frontier MoE model design in 2026+. Pretraining on Blackwell NVL72 clusters is powered by the **Mixture-of-Kittens** (`method:mixture-of-kittens`) megakernel.
 
 ## Supersession
 - Supersedes `method:deepseek-v3` architecture for 2026 frontier deployments.

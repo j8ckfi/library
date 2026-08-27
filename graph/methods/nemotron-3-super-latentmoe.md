@@ -29,4 +29,4 @@ tags:
 Nemotron-3 Super introduces Latent MoE routing, compressing token representations into low-rank latent vectors before dispatching across inter-node network fabrics, resolving all-to-all bandwidth bottlenecks.
 
 ## When to Use
-- Pretraining MoE models on clusters with constrained inter-node interconnect bandwidth.
+- Pretraining MoE models on clusters with constrained inter-node interconnect bandwidth, complementing fused megakernel systems like **Mixture-of-Kittens** (`method:mixture-of-kittens`).

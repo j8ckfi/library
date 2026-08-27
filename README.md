@@ -30,6 +30,7 @@
 task: pretrain dense 7B optimizer  -> muon2 (2604.09967) + kl-soap (2607.20548) if memory allows
 task: open data recipe             -> olmo-3 / dolma-3 (2512.13961)
 task: pretrain MoE architecture    -> deepseek-v4 (2606.19348) + kimi-k3 (2607.24653)
+task: train MoE on NVL72        -> mixture-of-kittens (MoK megakernel, 1070 tok/s/GPU on GB300 NVL72)
 task: instruct SFT                 -> olmo-3 dolci (2512.13961); industrial alt nemotron-cascade-2 (2603.19220)
 task: math/code RL, dense          -> cispo (minimax-m1 2506.13585 + scalerl 2510.13786)
 task: math/code RL, MoE/VL         -> sapo (2511.20347); gspo only if Qwen3.5-Omni Talker
@@ -60,6 +61,7 @@ task: SAE effect geometry          -> fega (2607.24645)
 | **Dense 7B Pretrain Optimizer** | **Muon2** (`method:muon2`) + **KL-SOAP** | `arXiv:2604.09967` / `2607.20548` | `none found` / `https://github.com/NVIDIA-NeMo/Emerging-Optimizers` |
 | **Open Data Recipe** | **OLMo-3 / Dolma-3** (`method:olmo-3`) | AI2 `arXiv:2512.13961` | `https://github.com/allenai/OLMo-core` / `https://github.com/allenai/dolma3` |
 | **Pretrain MoE Architecture** | **DeepSeek-V4** + **Kimi-K3** | `arXiv:2606.19348` / `2607.24653` | `none found` / `https://github.com/MoonshotAI/Kimi-K3` |
+| **Train MoE on NVL72** | **Mixture-of-Kittens** (`method:mixture-of-kittens`) | Cursor Research Aug 2026 | `https://github.com/cursor/mixture-of-kittens` |
 | **Instruct SFT** | **OLMo-3 Dolci** / **Nemotron-Cascade 2** | `arXiv:2512.13961` / `2603.19220` | `https://github.com/allenai/OLMo-core` / `none found` |
 | **Dense Math/Code RL** | **CISPO** (`method:cispo`) | `arXiv:2506.13585` / `2510.13786` | `https://github.com/MiniMax-AI/MiniMax-M1` |
 | **MoE/VL Math/Code RL** | **SAPO** (`method:sapo`) | `arXiv:2511.20347` | ms-swift `loss_type=sapo` |

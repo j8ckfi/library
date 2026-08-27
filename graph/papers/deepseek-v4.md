@@ -12,6 +12,7 @@ methods:
   - method:deepseek-v4
 cites:
   - paper:deepseek-v3
+  - paper:mhc
 tags:
   - architecture
   - moe
@@ -28,6 +29,7 @@ DeepSeek-V4 establishes the mid-2026 state-of-the-art sparse Mixture-of-Experts 
 1. **Next-Generation MLA**: Enhanced latent projection compression for reduced KV cache footprint.
 2. **Fine-Grained Expert Routing**: Expanded expert pool with auxiliary-loss-free load balancing.
 3. **Multi-Token Prediction**: Speculative multi-token generation heads integrated natively into pretraining.
+4. **Manifold-Constrained Hyper-Connections (mHC)**: Residual stream expanded to \(n \times d\) (\(n=4\)) with Sinkhorn doubly-stochastic projection preserving identity mapping.
 
 ## Open Source Repository
 - Implementation: `none found`

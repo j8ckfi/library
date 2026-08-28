@@ -11,8 +11,15 @@ current_sota:
     metric: "held-out reward score & GPU-hours"
     value: "Best in 19/20 reward-matched settings; 40-63% GPU-hr reduction"
     notes: "DiffusionOPSD (2608.24646) converts image-level rewards into bounded intermediate clean-output targets."
+  - method: method:self-opd
+    as_of: "2026-08-28"
+    benchmark: "Flow Matching Visual Alignment (Single & Mixed Reward Benchmarks)"
+    metric: "reward score and multi-objective Pareto front"
+    value: "Outperforms Flow-GRPO, Flow-OPD, and DiffusionNFT without external task-specific teachers"
+    notes: "Self-OPD (2608.26872) provides teacher-free per-step pull-push distillation for flow matching multi-objective alignment."
 methods:
   - method:diffusion-opsd
+  - method:self-opd
 tags:
   - diffusion
   - post-training
@@ -25,5 +32,6 @@ tags:
 ## Problem Definition
 Aligning generative diffusion and flow models with downstream reward functions (aesthetic quality, text-image alignment, human preference ratings). Endpoint rewards create a structural mismatch because feedback is only observed on decoded final images, while the model operates across multi-step denoising trajectories.
 
-## SOTA Recommendation (as of 2026-08-27)
-- **Primary Method**: **DiffusionOPSD** (`method:diffusion-opsd`, `paper:diffusion-opsd` `arXiv:2608.24646`) for on-policy self-distillation with bounded intermediate clean-output targets.
+## SOTA Recommendation (as of 2026-08-28)
+- **Primary Method (Reward/Self-Distill with Behavior Policy)**: **DiffusionOPSD** (`method:diffusion-opsd`, `paper:diffusion-opsd` `arXiv:2608.24646`) for on-policy self-distillation with bounded intermediate clean-output targets.
+- **Teacher-Free Flow Matching / Multi-Objective Alignment**: **Self-OPD** (`method:self-opd`, `paper:self-opd` `arXiv:2608.26872`) for stochastic SDE branching vs deterministic self-reference and reward-level multi-objective fusion without task-specific teachers.

@@ -2,7 +2,7 @@
 id: task:template-task
 type: task
 title: "Task Title"
-domain: "pretraining" # pretraining | post-training | efficiency | compression | snn | interpretability | video | control
+domain: "pretraining" # pretraining | post-training | efficiency | compression | snn | interpretability | video | control | scientific-ml
 summary: "High-level summary of the optimization or capability challenge."
 current_sota:
   - method: method:example-method

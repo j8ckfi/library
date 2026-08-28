@@ -151,6 +151,24 @@ class TestQueryEngine(unittest.TestCase):
         mopd_res = self.engine.sota("task:student-distillation")
         self.assertTrue(any(p["method"].id in ("method:opd", "method:open-mopd") for p in mopd_res))
 
+        grid_pde = self.engine.sota("task:operator-grid-pde")
+        self.assertTrue(any(p["method"].id in ("method:cvit", "method:poseidon") for p in grid_pde))
+
+        industrial_mesh = self.engine.sota("task:operator-industrial-mesh")
+        self.assertTrue(any(p["method"].id == "method:transolver-3" for p in industrial_mesh))
+
+        foundation_op = self.engine.sota("task:operator-foundation")
+        self.assertTrue(any(p["method"].id in ("method:poseidon", "method:unisolver") for p in foundation_op))
+
+        pi_op = self.engine.sota("task:operator-physics-informed")
+        self.assertTrue(any(p["method"].id == "method:pi-cvit" for p in pi_op))
+
+        fourier_adapt = self.engine.sota("task:operator-fourier-adapt")
+        self.assertTrue(any(p["method"].id == "method:f-adapter" for p in fourier_adapt))
+
+        weather_op = self.engine.sota("task:operator-weather")
+        self.assertTrue(any(p["method"].id == "method:fourcastnet-3" for p in weather_op))
+
 
 class TestGraphTraversalAndPaths(unittest.TestCase):
     def setUp(self):

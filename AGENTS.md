@@ -50,6 +50,12 @@ task: unlabeled math reasoner posttrain (no GT) -> u-opsd (2608.06296)
 task: SAE dictionary               -> sasa (2606.06333) KEEP
 task: SAE circuits                 -> circuitsteer (2608.05732)
 task: SAE effect geometry          -> fega (2607.24645)
+task: operator, regular-grid PDE     -> cvit / poseidon-finetune; fno is baseline only
+task: operator, industrial CAD mesh  -> transolver-3 (2602.04940); alts ab-upt / geotransolver / domino
+task: operator, pretrained foundation-> poseidon (2405.19101) or unisolver (2405.17527); fine-tune when PDE family shifts
+task: operator, physics-informed     -> pi-cvit (2606.06164) + SOAP; not a 2021 PINN
+task: operator, Fourier LoRA/adapt   -> f-adapter (2509.23173) NOT vanilla LoRA
+task: operator, weather/climate      -> fourcastnet-3 (2507.12144) (forecast cousin, not CAE)
 ```
 
 ---
@@ -75,6 +81,12 @@ task: SAE effect geometry          -> fega (2607.24645)
 17. **Video MLLM reinforcement learning**: Use **OraRL** (`method:orarl`, `paper:orarl` `arXiv:2608.20492`) for annotation-as-rollout with decoupled baseline and sign-balanced pruning without CoT overhead.
 18. **Label-free test-time reasoning (TTT)**: Use **TTPO** (`method:ttpo`, `paper:ttpo` `arXiv:2608.27448`) for asymmetric test-time policy optimization (agreeing rollout OPSD + disagreeing rollout Grouped RL).
 19. **Unlabeled math reasoner post-training (no GT)**: Use **u-OPSD** (`method:u-opsd`, `paper:u-opsd` `arXiv:2608.06296`) for unsupervised on-policy self-distillation via rollout consensus pseudo-solutions and disagreement targeting.
+20. **Neural operators for regular-grid PDEs**: Use **CViT** (`method:cvit`, `paper:cvit` `arXiv:2405.13998`, ICLR 2025) Continuous Vision Transformer; alternatively **Poseidon** (`method:poseidon`, `paper:poseidon` `arXiv:2405.19101`) fine-tuned for the target PDE family. FNO (`method:fno`) remains a classical baseline.
+21. **Neural operators for industrial CAD meshes & 3D CFD**: Use **Transolver-3** (`method:transolver-3`, `paper:transolver-3` `arXiv:2602.04940`, ICML 2026) for >160M cell geometries (DrivAerML / AhmedML / NASA-CRM). Industrial alternatives: **AB-UPT** (`method:ab-upt`, `paper:ab-upt` `arXiv:2502.09692`), **GeoTransolver** (`method:geotransolver`, `paper:geotransolver` `arXiv:2512.20399`), and **DoMINO** (`method:domino`, `paper:domino` `arXiv:2501.13350`). GAOT (`method:gaot`) is active but not industrial default (lost on DrivAerML surface pressure 34.00 vs 3.71). Honest gaps: shocks, long chaotic rollouts, out-of-family geometry, stationary-aero-mostly.
+22. **Pretrained foundation neural operators**: Use **Poseidon** (`method:poseidon`, `paper:poseidon` `arXiv:2405.19101`) scOT SwinV2 foundation model or **Unisolver** (`method:unisolver`, `paper:unisolver` `arXiv:2405.17527`, ICML 2025) PDE-conditional transformer. Fine-tune when PDE family shifts.
+23. **Physics-informed neural operators (little/no labeled data)**: Use **PI-CViT** (`method:pi-cvit`, `paper:pi-cvit` `arXiv:2606.06164`) with GradNorm balancing, causal temporal weighting, and SOAP second-order optimizer — not a 2021 PINN / PINO.
+24. **Parameter-efficient fine-tuning for Fourier operators**: Use **F-Adapter** (`method:f-adapter`, `paper:f-adapter` `arXiv:2509.23173`, NeurIPS 2025) with ~2% trainable parameters. Hard rule: do NOT use vanilla LoRA on Fourier latent operators due to depth-amplified spectral error floors.
+25. **Global weather & climate forecasting neural operators**: Use **FourCastNet 3** (`method:fourcastnet-3`, `paper:fourcastnet-3` `arXiv:2507.12144`) spherical convolutional neural operator with calibrated probabilistic ensembles (weather forecasting engine, not CAD mesh CAE).
 
 ---
 
@@ -97,6 +109,9 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `dcvc-uf` (2606.04410) supersedes `dcvcrt` as GPU NVC; `mlvc` (2606.28027) supersedes `dcvcrt` as deployable NVC.
 - `a2sg` (2606.11236) supersedes static `surrogate-gradient-snn`.
 - `sasa` (2606.06333) supersedes `gated-sae` and `standard-sae` vector SAEs.
+- `transolver-3` (2602.04940) supersedes `transolver` (2402.02366) and `transolver-pp` (2502.02414) as the industrial mesh default (`transolver` and `transolver-pp` stay active).
+- `pi-cvit` (2606.06164) supersedes `pino` (2111.03794) as physics-informed operator default.
+- `fourcastnet-3` (2507.12144) supersedes `sfno` (2306.03838) as spherical weather operator default.
 
 ---
 

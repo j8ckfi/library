@@ -40,7 +40,7 @@ Represents an ML objective, optimization problem, or capability benchmark.
 id: task:<slug>
 type: task
 title: "<Human Readable Title>"
-domain: "<pretraining|post-training|efficiency|compression|snn|interpretability|video|control>"
+domain: "<pretraining|post-training|efficiency|compression|snn|interpretability|video|control|scientific-ml>"
 summary: "<1-2 sentence problem description>"
 current_sota:
   - method: method:<method-slug>
@@ -66,7 +66,7 @@ Represents an algorithm, architecture, loss function, or training technique.
 id: method:<slug>
 type: method
 title: "<Method Name>"
-category: "<optimizer|architecture|rl-alignment|quantization|peft|spiking|circuits|codec|servo-control>"
+category: "<optimizer|architecture|rl-alignment|quantization|peft|spiking|circuits|codec|servo-control|neural-operator>"
 status: "<sota|active|superseded|niche|experimental>"
 sota_for:
   - task:<task-slug>

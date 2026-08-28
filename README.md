@@ -56,6 +56,12 @@ task: unlabeled math reasoner posttrain (no GT) -> u-opsd (2608.06296)
 task: SAE dictionary               -> sasa (2606.06333) KEEP
 task: SAE circuits                 -> circuitsteer (2608.05732)
 task: SAE effect geometry          -> fega (2607.24645)
+task: operator, regular-grid PDE     -> cvit / poseidon-finetune; fno is baseline only
+task: operator, industrial CAD mesh  -> transolver-3 (2602.04940); alts ab-upt / geotransolver / domino
+task: operator, pretrained foundation-> poseidon (2405.19101) or unisolver (2405.17527); fine-tune when PDE family shifts
+task: operator, physics-informed     -> pi-cvit (2606.06164) + SOAP; not a 2021 PINN
+task: operator, Fourier LoRA/adapt   -> f-adapter (2509.23173) NOT vanilla LoRA
+task: operator, weather/climate      -> fourcastnet-3 (2507.12144) (forecast cousin, not CAE)
 ```
 
 ---
@@ -93,6 +99,12 @@ task: SAE effect geometry          -> fega (2607.24645)
 | **Video MLLM RL** | **OraRL** (`method:orarl`) | `arXiv:2608.20492` | `https://github.com/HVision-NKU/OraRL` |
 | **Label-Free Test-Time Reasoning** | **TTPO** (`method:ttpo`) | `arXiv:2608.27448` | `https://github.com/ZJU-REAL/TTPO` |
 | **Unlabeled Reasoner Posttrain** | **u-OPSD** (`method:u-opsd`) | `arXiv:2608.06296` | `https://github.com/williamium3000/u-opsd` |
+| **Operator, Regular-Grid PDE** | **CViT** (`method:cvit`) / **Poseidon** (fine-tune) | `arXiv:2405.13998` / `2405.19101` | `https://github.com/PredictiveIntelligenceLab/cvit` / `https://github.com/camlab-ethz/poseidon` |
+| **Operator, Industrial CAD Mesh** | **Transolver-3** (`method:transolver-3`) | `arXiv:2602.04940` | `https://github.com/thuml/Transolver-3` |
+| **Operator, Pretrained Foundation** | **Poseidon** (`method:poseidon`) / **Unisolver** (`method:unisolver`) | `arXiv:2405.19101` / `2405.17527` | `https://github.com/camlab-ethz/poseidon` / `https://github.com/thuml/Unisolver` |
+| **Operator, Physics-Informed** | **PI-CViT** (`method:pi-cvit`) + SOAP | `arXiv:2606.06164` | `https://github.com/NanxiiChen/PI-CViT` |
+| **Operator, Fourier PEFT/Adapt** | **F-Adapter** (`method:f-adapter`) | `arXiv:2509.23173` | `https://github.com/fogradio/F-Adapter` |
+| **Operator, Weather/Climate** | **FourCastNet 3** (`method:fourcastnet-3`) | `arXiv:2507.12144` | `none found` (NVIDIA Earth-2) |
 
 ---
 

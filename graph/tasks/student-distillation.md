@@ -9,10 +9,17 @@ current_sota:
     as_of: "2026-08-26"
     benchmark: "GSM8k / HumanEval / MT-Bench Student Evaluation"
     metric: "task accuracy vs teacher parity"
-    value: "Default SOTA for student distillation"
-    notes: "OPD 2604.13016 + MOPD (Cascade-2 / Kimi-K3 / GLM-5)."
+    value: "Default SOTA for single-teacher student distillation"
+    notes: "OPD 2604.13016 generalized divergence matching on student rollouts."
+  - method: method:open-mopd
+    as_of: "2026-08-28"
+    benchmark: "Multi-Teacher Capability Integration (SmolLM3-3B Benchmark)"
+    metric: "oracle ensemble headroom recovery"
+    value: "83.4% headroom recovery in a single deployable student"
+    notes: "Open-MOPD (2608.19098) fixes multi-teacher imbalance with token-share balancing and gap-aware dynamic budgeting."
 methods:
   - method:opd
+  - method:open-mopd
   - method:opdvr
   - method:tropd
   - method:stable-opd
@@ -32,5 +39,6 @@ tags:
 ## Problem Definition
 Training small local students (1B–8B) from large teacher models (70B–405B) with generalized on-policy divergence matching.
 
-## SOTA Recommendation (as of 2026-08-26)
-- **Primary Method**: **OPD** (`method:opd`, 2604.13016) + **MOPD** (Cascade-2 / Kimi-K3 / GLM-5).
+## SOTA Recommendation (as of 2026-08-28)
+- **Single-Teacher Distillation Default**: **OPD** (`method:opd`, `paper:opd` `arXiv:2604.13016`).
+- **Multi-Teacher Student Distillation Default**: **Open-MOPD** (`method:open-mopd`, `paper:open-mopd` `arXiv:2608.19098`) for token-share balancing, gap-aware dynamic budget allocation, and student reward refresh across specialized teacher models.

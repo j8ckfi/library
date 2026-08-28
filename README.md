@@ -1,6 +1,6 @@
 # j8ckfi/library
 
-> Sprawling, agent-navigable knowledge graph of cutting-edge machine learning research, SOTA methods, primary literature, and executable training recipes (As-of: 2026-08-26).
+> Sprawling, agent-navigable knowledge graph of cutting-edge machine learning research, SOTA methods, primary literature, and executable training recipes (As-of: 2026-08-28).
 
 ---
 
@@ -24,7 +24,7 @@
 
 ---
 
-## 2. Agent Routing Cheat-Sheet (2026-08-26 SOTA Index)
+## 2. Agent Routing Cheat-Sheet (2026-08-28 SOTA Index)
 
 ```
 task: pretrain dense 7B optimizer  -> muon2 (2604.09967) + kl-soap (2607.20548) if memory allows
@@ -42,15 +42,17 @@ task: full-param mem pretrain      -> scale (2506.16659) not galore
 task: native 1.58-bit pretrain     -> sparse-bitnet (2603.05168); keep 2B4T as dense cite
 task: ternary an existing SOTA LLM -> scaleq-1.58 (2608.01078)
 task: FP4 hardware train           -> quartet-ii nvfp4 (2601.22813) / mxfp4 (2605.09825) / kimi-k3 QAT
-task: distill student              -> opd 2604.13016 + mopd (cascade-2 / kimi-k3 / glm-5)
+task: distill student              -> opd 2604.13016 (single-teacher) / open-mopd 2608.19098 (multi-teacher)
 task: SNN sequence/SSM             -> longspike (2606.12895); train with a2sg (2606.11236); silif stays as speech-neuron cite
 task: continuous control           -> efficienttdmpc (2605.16692) family; dream-mpc (2605.04568) gradient planner
 task: neural video GPU             -> dcvc-uf (2606.04410)
 task: neural video deploy          -> mlvc (2606.28027)
 task: distill a reasoner (OPD+RLVR)-> opdvr (2608.24696)
 task: token-level advantages (1/p) -> bpco (2608.23566)
-task: posttrain diffusion          -> diffusion-opsd (2608.24646)
+task: posttrain diffusion          -> diffusion-opsd (2608.24646); no task-specific teacher (flow) -> self-opd (2608.26872)
 task: video MLLM RL                -> orarl (2608.20492)
+task: label-free TTT / no-GT test-time reasoner -> ttpo (2608.27448)
+task: unlabeled math reasoner posttrain (no GT) -> u-opsd (2608.06296)
 task: SAE dictionary               -> sasa (2606.06333) KEEP
 task: SAE circuits                 -> circuitsteer (2608.05732)
 task: SAE effect geometry          -> fega (2607.24645)
@@ -77,7 +79,7 @@ task: SAE effect geometry          -> fega (2607.24645)
 | **Native 1.58-Bit Pretrain** | **Sparse-BitNet** (`method:sparse-bitnet`) | `arXiv:2603.05168` | `https://github.com/AAzdi/Sparse-BitNet` |
 | **Ternary Existing SOTA LLM**| **ScaleQ-1.58** (`method:scaleq-158`) | `arXiv:2608.01078` | `https://github.com/IntelChina-AI/BitTern` (claimed) |
 | **FP4 Hardware Train** | **Quartet-II NVFP4** / **MXFP4** | `arXiv:2601.22813` / `2605.09825` | `https://github.com/IST-DASLab/Quartet-II` / `none found` |
-| **Distill Student** | **OPD** (`method:opd`) + MOPD | `arXiv:2604.13016` | `https://github.com/thunlp/OPD` |
+| **Distill Student** | **OPD** (`method:opd`) (single) / **Open-MOPD** (`method:open-mopd`) (multi) | `arXiv:2604.13016` / `2608.19098` | `https://github.com/thunlp/OPD` / `https://github.com/BytedTsinghua-SIA/Open-MOPD` |
 | **SNN Sequence / SSM** | **LongSpike** (`method:longspike`) | `arXiv:2606.12895` / `2606.11236` | `https://github.com/xinruihe389-commits/LongSpike` / `https://github.com/KIST-NCL/A2SG.git` |
 | **Continuous Control** | **EfficientTDMPC** / **Dream-MPC** | `arXiv:2605.16692` / `2605.04568` | `none found` (BMPC) / `none found` (ICML 2026) |
 | **Neural Video GPU** | **DCVC-UF** (`method:dcvc-uf`) | `arXiv:2606.04410` | `https://github.com/microsoft/DCVC` |
@@ -87,8 +89,10 @@ task: SAE effect geometry          -> fega (2607.24645)
 | **SAE Effect Geometry** | **FEGA** (`method:fega`) | `arXiv:2607.24645` | `https://github.com/UKPLab/FEGA` |
 | **Distill Reasoner (OPD+RLVR)** | **OPDVR** (`method:opdvr`) | `arXiv:2608.24696` | `https://github.com/LeapLabTHU/OPDVR` |
 | **Token-Level Critic (1/prompt)** | **BPCO** (`method:bpco`) | `arXiv:2608.23566` | `https://github.com/QPHutu/golden_critic` |
-| **Posttrain Diffusion** | **DiffusionOPSD** (`method:diffusion-opsd`) | `arXiv:2608.24646` | `https://github.com/worldbench/DiffusionOPSD` |
+| **Posttrain Diffusion** | **DiffusionOPSD** (`method:diffusion-opsd`) / **Self-OPD** (`method:self-opd`) | `arXiv:2608.24646` / `2608.26872` | `https://github.com/worldbench/DiffusionOPSD` / `https://github.com/Shiy-Zhang/Self-OPD` |
 | **Video MLLM RL** | **OraRL** (`method:orarl`) | `arXiv:2608.20492` | `https://github.com/HVision-NKU/OraRL` |
+| **Label-Free Test-Time Reasoning** | **TTPO** (`method:ttpo`) | `arXiv:2608.27448` | `https://github.com/ZJU-REAL/TTPO` |
+| **Unlabeled Reasoner Posttrain** | **u-OPSD** (`method:u-opsd`) | `arXiv:2608.06296` | `https://github.com/williamium3000/u-opsd` |
 
 ---
 

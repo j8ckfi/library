@@ -137,10 +137,19 @@ class TestQueryEngine(unittest.TestCase):
         self.assertTrue(any(p["method"].id == "method:bpco" for p in bpco_res))
 
         diff_res = self.engine.sota("task:posttrain-diffusion")
-        self.assertTrue(any(p["method"].id == "method:diffusion-opsd" for p in diff_res))
+        self.assertTrue(any(p["method"].id in ("method:diffusion-opsd", "method:self-opd") for p in diff_res))
 
         orarl_res = self.engine.sota("task:rl-video-mllm")
         self.assertTrue(any(p["method"].id == "method:orarl" for p in orarl_res))
+
+        ttpo_res = self.engine.sota("task:label-free-test-time-reasoner")
+        self.assertTrue(any(p["method"].id == "method:ttpo" for p in ttpo_res))
+
+        u_opsd_res = self.engine.sota("task:label-free-reasoner-posttrain")
+        self.assertTrue(any(p["method"].id == "method:u-opsd" for p in u_opsd_res))
+
+        mopd_res = self.engine.sota("task:student-distillation")
+        self.assertTrue(any(p["method"].id in ("method:opd", "method:open-mopd") for p in mopd_res))
 
 
 class TestGraphTraversalAndPaths(unittest.TestCase):

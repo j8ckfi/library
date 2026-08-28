@@ -1,7 +1,7 @@
 ---
 id: paper:dapo
 type: paper
-title: "DAPO: Dynamic Advantage Policy Optimization for Dense Long-CoT Reasoning"
+title: "DAPO: An Open-Source LLM Reinforcement Learning System at Scale"
 authors:
   - "Bytedance & Tsinghua SIA"
 year: 2025
@@ -18,10 +18,10 @@ tags:
   - dapo
 ---
 
-# DAPO: Dynamic Advantage Policy Optimization for Dense Long-CoT Reasoning
+# DAPO: An Open-Source LLM Reinforcement Learning System at Scale
 
 ## Abstract Summary
-DAPO introduces clip-higher updates, dynamic group sampling, token-level advantage loss, and overlong trace shaping, resolving exploration and variance challenges in dense long-CoT reasoning models.
+DAPO (Decoupled Clip and Dynamic sAmpling Policy Optimization) introduces clip-higher updates (asymmetric \(\epsilon\)), dynamic group sampling of mixed-reward groups, token-level advantage loss, and overlong trace shaping, resolving exploration and variance challenges in large-scale LLM reasoning reinforcement learning.
 
 ## Open Source Repository
 - Implementation: `https://github.com/BytedTsinghua-SIA/DAPO`

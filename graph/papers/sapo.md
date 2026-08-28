@@ -1,7 +1,7 @@
 ---
 id: paper:sapo
 type: paper
-title: "SAPO: Sequence-Level Advantage Policy Optimization for MoE Reasoning"
+title: "SAPO: Soft Adaptive Policy Optimization for MoE Reasoning"
 authors:
   - "SAPO Research Authors"
 year: 2025
@@ -20,14 +20,14 @@ tags:
   - sapo
 ---
 
-# SAPO: Sequence-Level Advantage Policy Optimization for MoE Reasoning
+# SAPO: Soft Adaptive Policy Optimization for MoE Reasoning
 
 ## Abstract Summary
-SAPO introduces sequence-level advantage normalization and importance sampling for Mixture-of-Experts (MoE) and Vision-Language (VL) reasoning policies, resolving the routing non-stationarity of token-level RL algorithms.
+SAPO (Soft Adaptive Policy Optimization) introduces soft token-adaptive gating via a sigmoid function instead of rigid hard clipping for Mixture-of-Experts (MoE) and Vision-Language (VL) reasoning policies, preventing optimization collapse and routing degradation.
 
 ## Key Contributions
-1. **Sequence Advantage Normalization**: Stabilizes policy gradients across dynamically routed MoE layers.
-2. **MoE/VL SOTA**: Preferred default for Qwen-MoE and multimodal reasoning alignment.
+1. **Sigmoid Soft Gating**: Replaces hard clip boundaries with smooth, token-adaptive sigmoid bounds.
+2. **MoE/VL SOTA**: Preferred default for Qwen-MoE and multimodal reasoning alignment (ms-swift `loss_type=sapo`).
 
 ## Open Source Implementation
 - Implementation: `ms-swift loss_type=sapo`

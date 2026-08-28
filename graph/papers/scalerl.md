@@ -1,7 +1,7 @@
 ---
 id: paper:scalerl
 type: paper
-title: "ScaleRL: Scalable Dense Policy Optimization with CISPO"
+title: "The Art of Scaling Reinforcement Learning Compute for LLMs"
 authors:
   - "ScaleRL Research Authors"
 year: 2025
@@ -19,14 +19,14 @@ tags:
   - scalerl
 ---
 
-# ScaleRL: Scalable Dense Policy Optimization with CISPO
+# The Art of Scaling Reinforcement Learning Compute for LLMs
 
 ## Abstract Summary
-ScaleRL provides comprehensive theoretical and empirical analyses of Clipped Importance Sampling Policy Optimization (CISPO) across dense policy architectures, validating its stability and sample efficiency over DAPO and PPO.
+ScaleRL packages Clipped IS-weight Policy Optimization (CISPO) into an empirical scaling recipe for large language models, demonstrating superior asymptote performance over DAPO and GSPO on reasoning tasks.
 
 ## Key Contributions
-1. **Theoretical Foundations**: Proves monotonic improvement bounds for clipped importance sampling in autoregressive domains.
-2. **Asynchronous Scaling**: Validates stability under delayed gradient updates and high concurrency.
+1. **RL Scaling Recipe**: Integrates PipelineRL-8, forced length interrupt, prompt-average loss, batch-level advantage normalization, FP32 logits, zero-variance filtering, and filtering prompts with pass \(\ge 0.9\).
+2. **Empirical Asymptote**: Validates CISPO stability and sample efficiency over DAPO and GSPO under scaled compute.
 
 ## Open Source Repository
 - Implementation: `none found`

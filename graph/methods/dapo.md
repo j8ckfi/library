@@ -1,7 +1,7 @@
 ---
 id: method:dapo
 type: method
-title: "DAPO (Dense Advantage Policy Optimization)"
+title: "DAPO (Decoupled Clip and Dynamic sAmpling Policy Optimization)"
 category: "rl-alignment"
 status: active
 superseded_by: method:cispo
@@ -27,10 +27,10 @@ tags:
   - long-cot
 ---
 
-# DAPO (Dense Advantage Policy Optimization)
+# DAPO (Decoupled Clip and Dynamic sAmpling Policy Optimization)
 
 ## Method Overview
-DAPO (Dense Advantage Policy Optimization) optimizes long-CoT reasoning rollouts in dense models. Remains in the graph as a key systems reference.
+DAPO (Decoupled Clip and Dynamic sAmpling Policy Optimization) optimizes long-CoT reasoning rollouts in dense models via Clip-Higher (asymmetric clipping parameter \(\epsilon\)), dynamic sampling of mixed-reward groups, token-level advantage loss, and overlong trace shaping. Remains in the graph as a key systems reference.
 
 ## Supersession
 - Superseded by `method:cispo` as the dense RL default.

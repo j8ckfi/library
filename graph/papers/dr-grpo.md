@@ -1,7 +1,7 @@
 ---
 id: paper:dr-grpo
 type: paper
-title: "Understanding and De-biasing Group Relative Policy Optimization"
+title: "Understanding R1-Zero-Like Training: A Critical Perspective"
 authors:
   - "SAIL & Singapore Research"
 year: 2025
@@ -18,10 +18,10 @@ tags:
   - de-biasing
 ---
 
-# Understanding and De-biasing Group Relative Policy Optimization
+# Understanding R1-Zero-Like Training: A Critical Perspective
 
 ## Abstract Summary
-Dr. GRPO analyzes R1-Zero training dynamics and identifies that length-normalization and small-sample standard-deviation scaling introduce severe biases, causing models to favor unnecessarily verbose outputs.
+Dr. GRPO analyzes R1-Zero-like training dynamics and identifies that length-normalization (1/|o|) and sample standard-deviation scaling introduce severe biases, causing models to favor unnecessarily verbose outputs. Removing these normalizations recovers stable, de-biased group advantage estimation.
 
 ## Open Source Repository
 - Implementation: `https://github.com/sail-sg/understand-r1-zero`

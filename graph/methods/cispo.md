@@ -1,7 +1,7 @@
 ---
 id: method:cispo
 type: method
-title: "CISPO (Clipped Importance Sampling Policy Optimization)"
+title: "CISPO (Clipped IS-weight Policy Optimization)"
 category: "rl-alignment"
 status: sota
 sota_for:
@@ -30,12 +30,16 @@ tags:
   - sota
 ---
 
-# CISPO (Clipped Importance Sampling Policy Optimization)
+# CISPO (Clipped IS-weight Policy Optimization)
 
 ## Method Overview
-CISPO (Clipped Importance Sampling Policy Optimization) establishes the state-of-the-art reinforcement learning standard for dense reasoning models:
-1. **Clipped Importance Sampling**: Stabilizes policy ratio trajectories during long-horizon exploration.
+CISPO (Clipped IS-weight Policy Optimization) establishes the state-of-the-art reinforcement learning standard for dense reasoning models:
+1. **Clipped IS-Weight Formulation**: Clips \(\text{sg}(\text{clip}(\rho))\) directly on the importance sampling weight (with stop-gradient) rather than standard PPO-surrogate objective clipping, ensuring every token (including rare forks) receives a non-zero gradient.
 2. **Dense Reasoning Alignment**: Maximizes verifiable pass@1 accuracy across competitive math and programming benchmarks.
+
+## Implementation & Frameworks
+- Repository: `https://github.com/MiniMax-AI/MiniMax-M1`
+- Supported in NeMo-RL and ms-swift via `loss_type=cispo`.
 
 ## When to Use
 - Default SOTA optimizer for dense model math and code reasoning RL.

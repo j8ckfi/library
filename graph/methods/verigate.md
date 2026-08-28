@@ -1,7 +1,7 @@
 ---
 id: method:verigate
 type: method
-title: "VeriGate (Gated Process Supervision)"
+title: "VeriGate (Verifier-Gated Step-Level Supervision for GRPO)"
 category: "rl-alignment"
 status: sota
 sota_for:
@@ -26,12 +26,15 @@ tags:
   - sota
 ---
 
-# VeriGate (Gated Process Supervision)
+# VeriGate (Verifier-Gated Step-Level Supervision for GRPO)
 
 ## Method Overview
-VeriGate implements gated process supervision for mathematical and logical reasoning:
-1. **Verifier Gating**: Process Reward Model (PRM) scores are gated behind deterministic outcome verification, ensuring PRMs cannot reward incorrect reasoning traces.
-2. **All-Zero Group Handling**: Robust advantage estimation when all candidate rollouts in a verification group fail.
+VeriGate implements verifier-gated step-level supervision for GRPO in mathematical and logical reasoning:
+1. **Verifier Gating**: Process Reward Model (PRM) step-level supervision is selectively applied only on all-zero verifier groups (where all sampled rollouts fail the outcome verifier), while mixed-reward groups remain under standard outcome GRPO.
+2. **Reward Hacking Prevention**: Prevents noisy PRMs from overriding ground-truth outcome verification while supplying rich gradient signal when no positive outcome rollout exists.
+
+## Implementation & Repository
+- Repository: `https://github.com/umd-huang-lab/VeriGate`
 
 ## When to Use
 - Default SOTA method for process supervision and all-zero verifier group optimization.

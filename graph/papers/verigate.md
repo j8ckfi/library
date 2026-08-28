@@ -1,7 +1,7 @@
 ---
 id: paper:verigate
 type: paper
-title: "VeriGate: Gated Process Supervision for Mathematical Reasoning"
+title: "VeriGate: Verifier-Gated Step-Level Supervision for GRPO"
 authors:
   - "VeriGate Research Authors"
 year: 2026
@@ -18,14 +18,14 @@ tags:
   - process-supervision
 ---
 
-# VeriGate: Gated Process Supervision for Mathematical Reasoning
+# VeriGate: Verifier-Gated Step-Level Supervision for GRPO
 
 ## Abstract Summary
-VeriGate demonstrates that un-gated Process Reward Models (PRMs) introduce severe reward hacking, proving that process supervision must be strictly gated behind trusted deterministic outcome verifiers.
+VeriGate demonstrates that un-gated Process Reward Models (PRMs) introduce severe reward hacking, proposing verifier-gated step-level supervision for GRPO where PRM guidance is activated only on all-zero verifier groups while mixed-reward groups use standard outcome GRPO.
 
 ## Key Contributions
-1. **Gated Process Supervision**: Verifier gating mechanism preventing noisy PRM rewards from overriding ground-truth outcome checks.
-2. **All-Zero Group Handling**: Robust policy gradient formulation when all candidate rollouts in a verifier group fail.
+1. **Verifier-Gated Step Supervision**: Applies PRM step-level guidance exclusively when all rollouts fail verification, preserving outcome-level GRPO for mixed groups.
+2. **Mitigating Reward Hacking**: Eliminates reward gaming from noisy intermediate PRM steps.
 
 ## Open Source Repository
-- Implementation: `none found`
+- Implementation: `https://github.com/umd-huang-lab/VeriGate`

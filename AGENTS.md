@@ -116,7 +116,7 @@ Canonical query paths:
 1. Query Task: task:math-code-rl-dense
    │
    ▼
-2. Resolve SOTA Method: method:cispo (Clipped Importance Sampling Policy Optimization)
+2. Resolve SOTA Method: method:cispo (Clipped IS-weight Policy Optimization)
    │
    ├──► 3. Inspect Literature: paper:minimax-m1 / paper:scalerl
    │

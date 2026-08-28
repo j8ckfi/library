@@ -1,7 +1,7 @@
 ---
 id: paper:sao
 type: paper
-title: "SAO: Synchronous-Asynchronous Policy Optimization for Agentic RL"
+title: "Single-Rollout Asynchronous Optimization for Agentic Reinforcement Learning"
 authors:
   - "SAO Research Authors"
 year: 2026
@@ -21,14 +21,15 @@ tags:
   - sao
 ---
 
-# SAO: Synchronous-Asynchronous Policy Optimization for Agentic RL
+# Single-Rollout Asynchronous Optimization for Agentic Reinforcement Learning
 
 ## Abstract Summary
-SAO (Synchronous-Asynchronous Policy Optimization) addresses the challenge of multi-turn agentic environments where tool calls, bash execution, and environment latencies cause severe straggler bottlenecks under synchronous group RL (like GRPO).
+SAO (Single-Rollout Asynchronous Optimization) addresses the challenge of multi-turn agentic environments (tool calls, bash execution, software engineering sandboxes) where variable environment latency causes severe straggler bottlenecks under synchronous group RL (like GRPO).
 
 ## Key Contributions
-1. **Async Rollout Buffering**: Decouples environment interaction from policy gradient updates with importance-corrected off-policy weights.
-2. **Agentic SOTA**: Default state-of-the-art optimizer for asynchronous agent and tool-use reinforcement learning.
+1. **Single-Rollout Asynchronous Framework**: Uses 1 rollout per prompt combined with a value model, eliminating synchronous rollout barriers.
+2. **Double-Sided Token Clipping**: Employs double-sided token-level clipping bounds to ensure update stability under asynchronous off-policy drift.
+3. **Agentic SOTA**: Default state-of-the-art optimizer for asynchronous agent and tool-use reinforcement learning (utilized on GLM-5.2).
 
 ## Open Source Repository
 - Implementation: `none found`

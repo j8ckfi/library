@@ -35,3 +35,6 @@ Soft Sequence Policy Optimization (SSPO) introduces an off-policy reinforcement 
 
 ## Open Source Repository
 - Implementation: `none found`
+
+## Disambiguation
+- Note: Soft Sequence SSPO (`arXiv:2602.19327`, Soft Sequence Policy Optimization) is distinct from subsentence SSPO (`arXiv:2511.04256`).

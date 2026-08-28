@@ -1,7 +1,7 @@
 ---
 id: method:sao
 type: method
-title: "SAO (Synchronous-Asynchronous Policy Optimization)"
+title: "SAO (Single-Rollout Asynchronous Optimization)"
 category: "rl-alignment"
 status: sota
 sota_for:
@@ -30,12 +30,13 @@ tags:
   - sota
 ---
 
-# SAO (Synchronous-Asynchronous Policy Optimization)
+# SAO (Single-Rollout Asynchronous Optimization)
 
 ## Method Overview
-SAO (Synchronous-Asynchronous Policy Optimization) solves the straggler bottleneck in multi-turn agent environments (tool calls, code sandboxes, external APIs):
-1. **Asynchronous Trajectory Buffering**: Rollout workers run decoupled from the policy gradient optimization loop.
-2. **Off-Policy Importance Correction**: Applies variance-bounded importance weights to utilize slightly off-policy asynchronous rollouts safely.
+SAO (Single-Rollout Asynchronous Optimization) solves the straggler bottleneck in multi-turn agent environments (tool calls, code sandboxes, SWE benchmarks):
+1. **Single Rollout per Prompt**: Uses 1 rollout per prompt coupled with a learned value model, avoiding costly multi-sample synchronization under variable execution latency.
+2. **Double-Sided Token Clipping**: Applies symmetric token-level clipping bounds for stable asynchronous updates.
+3. **Agentic Async Scale**: Successfully adopted in large-scale agentic training (e.g. GLM-5.2). Does not replace dense math/code optimizers like CISPO.
 
 ## When to Use
 - Default SOTA optimizer for agentic async RL and tool-calling environments.

@@ -1,7 +1,7 @@
 ---
 id: paper:tulu3-rlvr
 type: paper
-title: "Tülu 3: Pushing Frontiers in Open Post-Training with RLVR"
+title: "Tülu 3: Pushing Frontiers in Open Language Model Post-Training"
 authors:
   - "Allen Institute for AI (AI2)"
 year: 2024
@@ -18,7 +18,7 @@ tags:
   - tulu3
 ---
 
-# Tülu 3: Pushing Frontiers in Open Post-Training with RLVR
+# Tülu 3: Pushing Frontiers in Open Language Model Post-Training
 
 ## Abstract Summary
 Tülu 3 presents a complete, fully reproducible post-training stack for instruction models, combining curated SFT, on-policy DPO, and Reinforcement Learning with Verifiable Rewards (RLVR) to match closed proprietary baselines.

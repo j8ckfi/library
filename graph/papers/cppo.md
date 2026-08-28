@@ -40,3 +40,6 @@ Standard PPO-style token-level trust regions treat all token positions uniformly
 
 ## Open Source Repository
 - Project Page: `https://hunyuan-cppo.github.io/`
+
+## Disambiguation
+- Note: Hunyuan CPPO (`arXiv:2606.10968`, Cumulative Prefix-divergence Policy Optimization) is distinct from Completion-Pruning CPPO (`arXiv:2503.22342`).

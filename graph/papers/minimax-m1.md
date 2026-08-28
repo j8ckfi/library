@@ -1,7 +1,7 @@
 ---
 id: paper:minimax-m1
 type: paper
-title: "MiniMax-M1: Scaling Dense Reinforcement Learning for Mathematical Reasoning"
+title: "MiniMax-M1: Scaling Test-Time Compute Efficiently with Lightning Attention"
 authors:
   - "MiniMax AI Team"
 year: 2025
@@ -20,13 +20,13 @@ tags:
   - minimax
 ---
 
-# MiniMax-M1: Scaling Dense Reinforcement Learning for Mathematical Reasoning
+# MiniMax-M1: Scaling Test-Time Compute Efficiently with Lightning Attention
 
 ## Abstract Summary
-MiniMax-M1 presents large-scale dense policy optimization using Clipped Importance Sampling Policy Optimization (CISPO), achieving breakthrough performance on competitive mathematics and coding benchmarks.
+MiniMax-M1 presents large-scale dense policy optimization using Clipped IS-weight Policy Optimization (CISPO), achieving breakthrough performance on competitive mathematics and coding benchmarks.
 
 ## Key Contributions
-1. **CISPO Algorithm**: Clipped importance sampling ratio formulation preventing policy degradation on long-horizon reasoning.
+1. **CISPO Algorithm (§3.1)**: Clipped IS-weight policy optimization clips \(\text{sg}(\text{clip}(\rho))\) on the importance sampling weights, guaranteeing valid gradient signals across all tokens and rare branches.
 2. **Dense Scaling Laws**: Demonstrates steady reasoning accuracy gains scaling dense models with verifiable RL.
 
 ## Open Source Repository

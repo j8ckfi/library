@@ -33,3 +33,6 @@ SSPO (Soft Sequence Policy Optimization) is an off-policy objective in the GRPO 
 
 ## When to Use
 - Off-policy reinforcement learning for math and code reasoning requiring smooth sequence-level importance weighting without abrupt hard clipping.
+
+## Disambiguation
+- Note: Soft Sequence SSPO (`arXiv:2602.19327`, Soft Sequence Policy Optimization) is distinct from subsentence SSPO (`arXiv:2511.04256`).

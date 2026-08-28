@@ -34,3 +34,6 @@ CPPO (Cumulative Prefix-divergence Policy Optimization) replaces position-agnost
 
 ## When to Use
 - LLM reinforcement learning where uniform token-level trust regions allow cascading prefix divergence or over-constrain later tokens.
+
+## Disambiguation
+- Note: Hunyuan CPPO (`arXiv:2606.10968`, Cumulative Prefix-divergence Policy Optimization) is distinct from Completion-Pruning CPPO (`arXiv:2503.22342`).

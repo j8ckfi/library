@@ -72,7 +72,7 @@ task: SAE effect geometry          -> fega (2607.24645)
 | **Dense Math/Code RL** | **CISPO** (`method:cispo`) | `arXiv:2506.13585` / `2510.13786` | `https://github.com/MiniMax-AI/MiniMax-M1` |
 | **MoE/VL Math/Code RL** | **SAPO** (`method:sapo`) | `arXiv:2511.20347` | ms-swift `loss_type=sapo` |
 | **Agentic Async RL** | **SAO** (`method:sao`) | `arXiv:2607.07508` | `none found` |
-| **All-Zero Verifier Groups** | **VeriGate** (`method:verigate`) | `arXiv:2605.30451` | `none found` |
+| **All-Zero Verifier Groups** | **VeriGate** (`method:verigate`) | `arXiv:2605.30451` | `https://github.com/umd-huang-lab/VeriGate` |
 | **LoRA Quality 24GB** | **Vanilla LoRA + rsLoRA + LR sweep** | `arXiv:2602.04998` / `2601.22708` | `https://github.com/yuang-lee/lr-matters-lora` |
 | **LoRA Must 4-Bit** | **AQLoRA-Q** / **AutoQRA** | `arXiv:2608.23816` / `2602.22268` | `https://github.com/Romyull-Islam/AQLoRA` / `none found` |
 | **Full-Param Mem Pretrain** | **SCALE** (`method:scale`) | ICML 2026 `arXiv:2506.16659` | `none found` |

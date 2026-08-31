@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Amp orb setup for j8ckfi/library.
+#
+# This repository is a pure-Python knowledge-graph CLI:
+#   - runtime: python3 (>=3.9) + pyyaml (from pyproject.toml)
+#   - tests:   python3 -m unittest discover -s tests (unittest-based, pytest optional)
+#
+# Setup is idempotent: on a warm snapshot it only runs cheap availability checks
+# and graph validation, no downloads. Aim: < 2 min cold, seconds warm.
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$repo_root"
+
+step() {
+  local name="$1" start end
+  shift
+  start=$(date +%s)
+  "$@"
+  end=$(date +%s)
+  printf '[setup] %s done in %ds\n' "$name" "$((end - start))"
+}
+
+# --- 1. Python 3 toolchain ---------------------------------------------------
+# The orb base template ships Python 3.11 at /usr/local, so this normally
+# no-ops. Only touch apt-get when a tool is actually missing.
+if ! command -v python3 >/dev/null 2>&1 || ! python3 -m pip --version >/dev/null 2>&1; then
+  step "apt-get python3 toolchain" bash -c '
+    set -euo pipefail
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update -qq
+    apt-get install -y -qq python3 python3-pip
+  '
+fi
+
+# --- 2. Python dependencies --------------------------------------------------
+# Install pyyaml (the only runtime dependency) and the `library` console
+# script via an editable install, plus pytest for convenience. Skipped when
+# the snapshot already has them.
+if ! python3 -c 'import yaml' >/dev/null 2>&1 \
+   || ! python3 -m pip show ml-library >/dev/null 2>&1 \
+   || ! python3 -c 'import pytest' >/dev/null 2>&1; then
+  step "pip install -e . + pytest" python3 -m pip install --quiet --no-input -e . pytest
+fi
+
+# --- 3. Verify ---------------------------------------------------------------
+# Fast end-to-end sanity checks: CLI loads the graph and the test suite runs.
+step "library validate" python3 -m library validate
+step "unit tests" python3 -m unittest discover -s tests -q
+
+printf '[setup] done in repo %s\n' "$repo_root"

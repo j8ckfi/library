@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Amp orb resume for j8ckfi/library.
+#
+# Runs after initial activation and on every orb wake. There are no backing
+# services or thread-scoped credentials in this repo, so resume only verifies
+# that the Python environment survived the pause/snapshot and repairs it if it
+# did not. Must finish well within Amp's 10-second window.
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Cheap repair path: reinstall only when the importable environment is broken.
+# Normally a no-op check taking well under a second.
+if ! python3 -c 'import yaml' >/dev/null 2>&1; then
+  python3 -m pip install --quiet --no-input -e "$repo_root" >&2
+fi
+
+python3 -c 'import library' >/dev/null 2>&1 || {
+  echo "library package not importable from $repo_root" >&2
+  exit 1
+}

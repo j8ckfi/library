@@ -8,4 +8,5 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+.amp/
 .DS_Store

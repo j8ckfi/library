@@ -186,6 +186,43 @@ class TestQueryEngine(unittest.TestCase):
         factory = self.engine.sota("task:industrial-model-building")
         self.assertTrue(any(p["method"].id == "method:poolside-model-factory" for p in factory))
 
+        directed_sssp = self.engine.sota("task:directed-sssp-nonneg")
+        self.assertTrue(any(p["method"].id == "method:bmssp" for p in directed_sssp))
+        self.assertFalse(any(
+            p["method"].id in ("method:muon2", "method:cispo", "method:olmo-3", "method:dijkstra")
+            for p in directed_sssp
+        ))
+
+        keyword_sssp = self.engine.sota("directed sssp")
+        self.assertTrue(any(p["method"].id == "method:bmssp" for p in keyword_sssp))
+
+    def test_bmssp_isolated_from_training_sota(self):
+        training_tasks = (
+            "task:pretrain-dense-7b",
+            "task:pretrain-moe-frontier",
+            "task:math-code-rl-dense",
+            "task:instruct-sft-alignment",
+            "task:open-data-recipe",
+            "task:parameter-efficient-fine-tuning",
+        )
+        for task_id in training_tasks:
+            task = self.graph.get_node(task_id)
+            self.assertIsNotNone(task, f"missing {task_id}")
+            sota_ids = [entry["method"] for entry in task.metadata.get("current_sota", [])]
+            self.assertNotIn("method:bmssp", sota_ids)
+            self.assertNotIn("method:bmssp", task.metadata.get("methods", []))
+
+        sssp_task = self.graph.get_node("task:directed-sssp-nonneg")
+        self.assertEqual(sssp_task.domain, "algorithms")
+        bmssp = self.graph.get_node("method:bmssp")
+        self.assertEqual(bmssp.metadata.get("category"), "graph-algorithms")
+        self.assertEqual(bmssp.status, "sota")
+        self.assertEqual(bmssp.metadata.get("sota_for"), ["task:directed-sssp-nonneg"])
+        dijkstra = self.graph.get_node("method:dijkstra")
+        self.assertEqual(dijkstra.status, "superseded")
+        self.assertEqual(dijkstra.metadata.get("superseded_by"), "method:bmssp")
+        self.assertEqual(dijkstra.metadata.get("sota_for"), [])
+
 
 class TestGraphTraversalAndPaths(unittest.TestCase):
     def setUp(self):
@@ -206,6 +243,14 @@ class TestGraphTraversalAndPaths(unittest.TestCase):
         node_ids = [s["id"] for s in steps]
         self.assertEqual(node_ids[0], "task:pretrain-dense-7b")
         self.assertEqual(node_ids[-1], "recipe:muon2-pretraining")
+
+    def test_shortest_path_directed_sssp(self):
+        steps = find_shortest_path(self.graph, "task:directed-sssp-nonneg", "recipe:bmssp-python")
+        self.assertIsNotNone(steps)
+        self.assertGreaterEqual(len(steps), 2)
+        node_ids = [s["id"] for s in steps]
+        self.assertEqual(node_ids[0], "task:directed-sssp-nonneg")
+        self.assertEqual(node_ids[-1], "recipe:bmssp-python")
 
 
 class TestExporterAndIngest(unittest.TestCase):

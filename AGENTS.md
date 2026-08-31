@@ -61,6 +61,7 @@ task: operator, physics-informed     -> pi-cvit (2606.06164) + SOAP; not a 2021 
 task: operator, Fourier LoRA/adapt   -> f-adapter (2509.23173) NOT vanilla LoRA
 task: operator, weather/climate      -> fourcastnet-3 (2507.12144) (forecast cousin, not CAE)
 task: industrial model-building / factory -> poolside-model-factory (Laguna 2605.27605). Process default, not a train-kernel default. Small lab: configs-as-code + Dagster lineage + streamed mixes; skip custom scheduler. CISPO/Muon stay the train defaults. [2026-08-31]
+task: directed SSSP distances, sparse, comparison-addition -> BMSSP; need vertex order or typical n -> Dijkstra
 ```
 
 ---
@@ -97,6 +98,7 @@ task: industrial model-building / factory -> poolside-model-factory (Laguna 2605
 28. **Data-free self-evolution (verifiable and unverifiable)**: Use **J-Zero** (`method:j-zero`, `paper:j-zero` `arXiv:2608.26582`) for Challenger-Solver-Judge co-evolution from zero external data. Judge co-adapts from loop-structure preference pairs (role-asymmetry and subtask-amplification), not from its own scores. Does **not** replace `method:u-opsd` (unlabeled existing math problems), `method:ttpo` (test-time), or `method:cispo` / `method:sapo` / `method:sao` (labeled/agentic RL). GRPO here is the inner self-play optimizer, not the library's math/code RLVR default.
 29. **Budget ~1.5-2B dense pretrain on consumer GPUs**: Use **Puro-2B** (`method:puro-2b`, `paper:puro-2b` `arXiv:2608.27370`) for Qwen3-1.7B-arch ~2B from scratch on RTX 5090 (blockwise FP8, MuonH, CMA, Kaiyuan-Spark). Does **not** replace `method:muon2` + KL-SOAP as the 7B optimizer default, `method:olmo-3` as the open 7B/instruct data recipe, or `method:quartet-ii` as NVFP4. FP8 here is blockwise E4M3/MXFP8, not NVFP4.
 30. **Math/code RLVR for Pass@K / coverage / no-backward**: Use **ES-reasoning** (`method:es-reasoning`, `paper:es-reasoning` `arXiv:2608.27351`) one-point z-scored ES. Default when labels exist and the goal is Pass@1 remains **CISPO**. This is not a GRPO revival.
+31. **Directed SSSP distances (sparse, comparison-addition)**: Use **BMSSP** (`method:bmssp`, `paper:sorting-barrier-sssp` `arXiv:2504.17033`) for \(O(m\log^{2/3}n)\) distances, not vertex order. Need the distance order or typical \(n\) → **Dijkstra** (`method:dijkstra`). Not an ML training method; do not use for train-dense, MoE, CISPO, Muon, or OLMo.
 
 ---
 
@@ -126,6 +128,7 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `j-zero` (2608.26582) is the first-hop for data-free self-evolution covering unverifiable domains. It does not supersede `u-opsd`, `ttpo`, `cispo`, `sapo`, or `sao`. R-Zero / G-Zero are paper baselines, not graph nodes.
 - `puro-2b` (2608.27370) is the first-hop for ~1.5-2B consumer-GPU / tight-budget dense pretrain. It does not supersede `muon2`, `olmo-3`, or `quartet-ii`. MuonH is a documented Muon/Muon2-family variant; Muon2's `sota_for` is unchanged.
 - `es-reasoning` (2608.27351) is the first-hop for Pass@K / reasoning coverage / no-backward RLVR. It does not supersede `cispo`. GRPO stays retired.
+- `bmssp` (2504.17033) supersedes `dijkstra` for directed SSSP *distances* in the comparison-addition model on sparse graphs; Dijkstra remains the practical default and is optimal if the vertex distance *order* is required.
 
 ---
 

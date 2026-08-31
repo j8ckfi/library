@@ -32,3 +32,4 @@ Constructing transparent, reproducible, and open multi-trillion token pretrainin
 ## SOTA Recommendation (as of 2026-08-26)
 - **Primary Data Recipe**: **OLMo-3 / Dolma-3** (`method:olmo-3`, 2512.13961).
 - **Dynamic Mixing**: **DeMix** (`method:demix`, 2602.00747), **CausalMix** (`method:causalmix`, 2607.01104), **OP-Mix** (`method:op-mix`, 2605.15220).
+- **Not a 7B substitute**: Consumer-GPU ~2B pretrain with a proxy-guided mix is `method:puro-2b`, not a replacement for Dolma-3.

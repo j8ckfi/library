@@ -44,5 +44,9 @@ CISPO (Clipped IS-weight Policy Optimization) establishes the state-of-the-art r
 ## When to Use
 - Default SOTA optimizer for dense model math and code reasoning RL.
 
+## Relation to Existing SOTA
+- Remains the dense math/code RLVR default for Pass@1 when labels exist. GRPO inside `method:j-zero` is that method's inner self-play optimizer, not a change to this default.
+- For Pass@K / reasoning coverage or a no-backward memory budget, use `method:es-reasoning` on `task:passk-reasoning-coverage`. That is not a GRPO revival and does not replace CISPO.
+
 ## Supersession
 - Supersedes `method:dapo` as the dense RL default (DAPO remains as a systems reference).

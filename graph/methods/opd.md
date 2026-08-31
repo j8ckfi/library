@@ -38,5 +38,8 @@ OPD (On-Policy Distillation) is the state-of-the-art framework for distilling la
 ## When to Use
 - Default SOTA method for distilling reasoning and conversational capabilities into small student models.
 
+## Relation to Existing SOTA
+- Remains the single-teacher student-distillation default. For a privileged same-model teacher that sees the gold solution, use `method:vista` instead of vanilla OPSD; that does not replace OPD.
+
 ## Supersession
 - Supersedes `method:on-policy-distillation` (GKD baseline) as the primary distillation reference.

@@ -18,15 +18,17 @@ When you are asked to **"train model X to do Y"**, **do not rely on outdated pre
 
 ## 2. Agent Routing Cheat-Sheet (First-Hop SOTA Index)
 
-Use this quick-routing table as of **2026-08-28**:
+Use this quick-routing table as of **2026-08-31**:
 
 ```
 task: pretrain dense 7B optimizer  -> muon2 (2604.09967) + kl-soap (2607.20548) if memory allows
+task: budget ~1.5-2B dense pretrain on consumer GPUs -> puro-2b (2608.27370); NOT olmo-3 7B, NOT muon2+kl-soap
 task: open data recipe             -> olmo-3 / dolma-3 (2512.13961)
 task: pretrain MoE architecture    -> deepseek-v4 (2606.19348) + kimi-k3 (2607.24653)
 task: train MoE on NVL72        -> mixture-of-kittens (MoK megakernel, 1070 tok/s/GPU on GB300 NVL72)
 task: instruct SFT                 -> olmo-3 dolci (2512.13961); industrial alt nemotron-cascade-2 (2603.19220)
 task: math/code RL, dense          -> cispo (minimax-m1 2506.13585 + scalerl 2510.13786)
+task: math/code RL, Pass@K / coverage / no-backward -> es-reasoning (2608.27351); Pass@1 default remains cispo
 task: math/code RL, MoE/VL         -> sapo (2511.20347); gspo only if Qwen3.5-Omni Talker
 task: agentic async RL             -> sao (2607.07508)
 task: all-zero verifier groups     -> verigate (2605.30451)
@@ -47,6 +49,8 @@ task: posttrain diffusion          -> diffusion-opsd (2608.24646); no task-speci
 task: video MLLM RL                -> orarl (2608.20492)
 task: label-free TTT / no-GT test-time reasoner -> ttpo (2608.27448)
 task: unlabeled math reasoner posttrain (no GT) -> u-opsd (2608.06296)
+task: privileged-teacher OPSD / gold-solution self-distillation -> vista (2608.28306)
+task: data-free self-evolution incl. unverifiable -> j-zero (2608.26582)
 task: SAE dictionary               -> sasa (2606.06333) KEEP
 task: SAE circuits                 -> circuitsteer (2608.05732)
 task: SAE effect geometry          -> fega (2607.24645)
@@ -61,7 +65,7 @@ task: industrial model-building / factory -> poolside-model-factory (Laguna 2605
 
 ---
 
-## 3. SOTA Map (What You Actually Pick Today — 2026-08-28)
+## 3. SOTA Map (What You Actually Pick Today — 2026-08-31)
 
 1. **Train a ~7B dense LM from scratch**: Use **Muon2** (`method:muon2`, `paper:muon2` `arXiv:2604.09967`) with **KL-SOAP** (`method:soap-muon-scale`, `paper:soap-muon-scale` `arXiv:2607.20548`) if GPU memory allows. Keep embeddings / `lm_head` on AdamW. Data: **OLMo-3 / Dolma-3** open data recipe (`method:olmo-3`, `paper:olmo-3` `arXiv:2512.13961`).
 2. **Pretrain an MoE architecture**: Use **DeepSeek-V4** (`method:deepseek-v4`, `paper:deepseek-v4` `arXiv:2606.19348`) with **Kimi-K3** (`method:kimi-k3`, `paper:kimi-k3` `arXiv:2607.24653`) as co-default.
@@ -89,6 +93,10 @@ task: industrial model-building / factory -> poolside-model-factory (Laguna 2605
 24. **Parameter-efficient fine-tuning for Fourier operators**: Use **F-Adapter** (`method:f-adapter`, `paper:f-adapter` `arXiv:2509.23173`, NeurIPS 2025) with ~2% trainable parameters. Hard rule: do NOT use vanilla LoRA on Fourier latent operators due to depth-amplified spectral error floors.
 25. **Global weather & climate forecasting neural operators**: Use **FourCastNet 3** (`method:fourcastnet-3`, `paper:fourcastnet-3` `arXiv:2507.12144`) spherical convolutional neural operator with calibrated probabilistic ensembles (weather forecasting engine, not CAD mesh CAE).
 26. **Industrial model-building / factory process**: Use **Poolside Model Factory** (`method:poolside-model-factory`, `paper:laguna-m1-xs2` `arXiv:2605.27605`). Process default, not a train-kernel default. Small lab: experiments-as-code + Dagster lineage + streamed mixes; skip custom FoundationDB scheduler / NCCL P2P / AutoMixer swarms / Titan megakernel. CISPO and Muon stay the train defaults (Laguna ran those on the factory stack).
+27. **Privileged-teacher OPSD / gold-solution self-distillation**: Use **VISTA** (`method:vista`, `paper:vista` `arXiv:2608.28306`) when a same-size teacher is privileged with a gold reference solution and a deterministic outcome verifier. Keeps the OPSD student update and adapts the teacher on verified rollouts at top-k teacher-first KL positions. Does **not** replace `method:opd` (single-teacher student distillation), `method:open-mopd` (multi-teacher), `method:opdvr` (OPD+RLVR), `method:cispo` (dense RLVR), or `method:u-opsd` (unlabeled/no-GT).
+28. **Data-free self-evolution (verifiable and unverifiable)**: Use **J-Zero** (`method:j-zero`, `paper:j-zero` `arXiv:2608.26582`) for Challenger-Solver-Judge co-evolution from zero external data. Judge co-adapts from loop-structure preference pairs (role-asymmetry and subtask-amplification), not from its own scores. Does **not** replace `method:u-opsd` (unlabeled existing math problems), `method:ttpo` (test-time), or `method:cispo` / `method:sapo` / `method:sao` (labeled/agentic RL). GRPO here is the inner self-play optimizer, not the library's math/code RLVR default.
+29. **Budget ~1.5-2B dense pretrain on consumer GPUs**: Use **Puro-2B** (`method:puro-2b`, `paper:puro-2b` `arXiv:2608.27370`) for Qwen3-1.7B-arch ~2B from scratch on RTX 5090 (blockwise FP8, MuonH, CMA, Kaiyuan-Spark). Does **not** replace `method:muon2` + KL-SOAP as the 7B optimizer default, `method:olmo-3` as the open 7B/instruct data recipe, or `method:quartet-ii` as NVFP4. FP8 here is blockwise E4M3/MXFP8, not NVFP4.
+30. **Math/code RLVR for Pass@K / coverage / no-backward**: Use **ES-reasoning** (`method:es-reasoning`, `paper:es-reasoning` `arXiv:2608.27351`) one-point z-scored ES. Default when labels exist and the goal is Pass@1 remains **CISPO**. This is not a GRPO revival.
 
 ---
 
@@ -114,6 +122,10 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `transolver-3` (2602.04940) supersedes `transolver` (2402.02366) and `transolver-pp` (2502.02414) as the industrial mesh default (`transolver` and `transolver-pp` stay active).
 - `pi-cvit` (2606.06164) supersedes `pino` (2111.03794) as physics-informed operator default.
 - `fourcastnet-3` (2507.12144) supersedes `sfno` (2306.03838) as spherical weather operator default.
+- `vista` (2608.28306) improves vanilla OPSD (Zhao et al. 2601.18734) in the privileged-teacher setting (same-size teacher that sees the gold solution). VISTA does not supersede `opd`, `open-mopd`, `opdvr`, `cispo`, or `u-opsd`.
+- `j-zero` (2608.26582) is the first-hop for data-free self-evolution covering unverifiable domains. It does not supersede `u-opsd`, `ttpo`, `cispo`, `sapo`, or `sao`. R-Zero / G-Zero are paper baselines, not graph nodes.
+- `puro-2b` (2608.27370) is the first-hop for ~1.5-2B consumer-GPU / tight-budget dense pretrain. It does not supersede `muon2`, `olmo-3`, or `quartet-ii`. MuonH is a documented Muon/Muon2-family variant; Muon2's `sota_for` is unchanged.
+- `es-reasoning` (2608.27351) is the first-hop for Pass@K / reasoning coverage / no-backward RLVR. It does not supersede `cispo`. GRPO stays retired.
 
 ---
 

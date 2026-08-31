@@ -34,3 +34,6 @@ Quartet-II implements hardware-aware NVFP4 (4-bit floating point) training for d
 
 ## When to Use
 - Default SOTA method for native FP4 hardware training on modern GPU accelerators.
+
+## Relation to Existing SOTA
+- Puro-2B's blockwise E4M3 / MXFP8 pretrain (`method:puro-2b`) is not NVFP4 and does not replace Quartet-II.

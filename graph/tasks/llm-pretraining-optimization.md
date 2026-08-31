@@ -24,6 +24,7 @@ methods:
   - method:attnres
   - method:mhc
   - method:adamw-optimizer
+  - method:puro-2b
 tags:
   - pretraining
   - optimizer
@@ -38,3 +39,4 @@ Pretraining modern neural network models involves minimizing cross-entropy loss 
 ## SOTA Landscape (as of 2026-08-26)
 - **Default Optimizer**: **Muon2** (`method:muon2`, 2604.09967).
 - **Large-Batch / High-Memory**: **KL-SOAP** (`method:soap-muon-scale`, 2607.20548).
+- **Consumer ~2B MuonH wrapper**: Documented on `method:muon2`; used by `method:puro-2b`. Does not change this 7B default.

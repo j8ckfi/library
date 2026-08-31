@@ -37,3 +37,4 @@ Training a ~7B dense language model from scratch requires optimizing billions of
 ## SOTA Recommendation (as of 2026-08-26)
 - **Primary Optimizer**: **Muon2** (`method:muon2`, 2604.09967) + **KL-SOAP** (`method:soap-muon-scale`, 2607.20548) if GPU memory allows. Keep embeddings and `lm_head` on AdamW.
 - **Data Recipe**: **OLMo-3 / Dolma-3** (`paper:olmo-3`, 2512.13961).
+- **Not this scale**: ~1.5-2B on consumer GPUs / tight budget is `method:puro-2b` (`task:budget-consumer-pretrain`), not this 7B default.

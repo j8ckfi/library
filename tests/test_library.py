@@ -96,6 +96,10 @@ class TestQueryEngine(unittest.TestCase):
         # Verify new first-hop SOTA routing resolves correctly
         dense_opt = self.engine.sota("task:pretrain-dense-7b")
         self.assertTrue(any(p["method"].id == "method:muon2" for p in dense_opt))
+        self.assertFalse(any(p["method"].id == "method:puro-2b" for p in dense_opt))
+
+        budget_pretrain = self.engine.sota("task:budget-consumer-pretrain")
+        self.assertTrue(any(p["method"].id == "method:puro-2b" for p in budget_pretrain))
 
         open_data = self.engine.sota("task:open-data-recipe")
         self.assertTrue(any(p["method"].id == "method:olmo-3" for p in open_data))
@@ -108,6 +112,10 @@ class TestQueryEngine(unittest.TestCase):
 
         dense_rl = self.engine.sota("task:math-code-rl-dense")
         self.assertTrue(any(p["method"].id == "method:cispo" for p in dense_rl))
+        self.assertFalse(any(p["method"].id == "method:es-reasoning" for p in dense_rl))
+
+        es_coverage = self.engine.sota("task:passk-reasoning-coverage")
+        self.assertTrue(any(p["method"].id == "method:es-reasoning" for p in es_coverage))
 
         moe_rl = self.engine.sota("task:math-code-rl-moe")
         self.assertTrue(any(p["method"].id == "method:sapo" for p in moe_rl))
@@ -147,6 +155,12 @@ class TestQueryEngine(unittest.TestCase):
 
         u_opsd_res = self.engine.sota("task:label-free-reasoner-posttrain")
         self.assertTrue(any(p["method"].id == "method:u-opsd" for p in u_opsd_res))
+
+        vista_res = self.engine.sota("task:privileged-teacher-opsd")
+        self.assertTrue(any(p["method"].id == "method:vista" for p in vista_res))
+
+        j_zero_res = self.engine.sota("task:data-free-self-evolution")
+        self.assertTrue(any(p["method"].id == "method:j-zero" for p in j_zero_res))
 
         mopd_res = self.engine.sota("task:student-distillation")
         self.assertTrue(any(p["method"].id in ("method:opd", "method:open-mopd") for p in mopd_res))

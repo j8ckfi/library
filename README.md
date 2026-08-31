@@ -62,6 +62,7 @@ task: operator, pretrained foundation-> poseidon (2405.19101) or unisolver (2405
 task: operator, physics-informed     -> pi-cvit (2606.06164) + SOAP; not a 2021 PINN
 task: operator, Fourier LoRA/adapt   -> f-adapter (2509.23173) NOT vanilla LoRA
 task: operator, weather/climate      -> fourcastnet-3 (2507.12144) (forecast cousin, not CAE)
+task: industrial model-building / factory -> poolside-model-factory (Laguna 2605.27605). Process default, not a train-kernel default. Small lab: configs-as-code + Dagster lineage + streamed mixes; skip custom scheduler. CISPO/Muon stay the train defaults. [2026-08-31]
 ```
 
 ---
@@ -105,6 +106,7 @@ task: operator, weather/climate      -> fourcastnet-3 (2507.12144) (forecast cou
 | **Operator, Physics-Informed** | **PI-CViT** (`method:pi-cvit`) + SOAP | `arXiv:2606.06164` | `https://github.com/NanxiiChen/PI-CViT` |
 | **Operator, Fourier PEFT/Adapt** | **F-Adapter** (`method:f-adapter`) | `arXiv:2509.23173` | `https://github.com/fogradio/F-Adapter` |
 | **Operator, Weather/Climate** | **FourCastNet 3** (`method:fourcastnet-3`) | `arXiv:2507.12144` | `none found` (NVIDIA Earth-2) |
+| **Industrial Model-Building / Factory** | **Poolside Model Factory** (`method:poolside-model-factory`) | Laguna `arXiv:2605.27605` | `https://github.com/pytorch/torchtitan` (Titan seed; factory internals closed). Process default, not a train kernel. CISPO/Muon unchanged. |
 
 ---
 

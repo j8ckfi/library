@@ -21,11 +21,17 @@ different constraints:
 1. **Open end to end.** Every component must be open-source or open-specified.
    The *output* of the factory (configs, lineage graphs, data cards, weights)
    is as much a product as the weights themselves.
-2. **Heterogeneous hardware.** Laguna ran on one homogeneous ~10k H200 fleet.
-   An open factory must assume donor clusters, spot capacity, mixed
-   vendor/network topologies, and preemption as the normal case.
-3. **Small-lab first.** The scale-down path from `recipe:small-lab-model-factory`
-   is the default path, not a degraded one. Cluster machinery is opt-in.
+2. **Scale-invariant by construction.** The process is one architecture from
+   one GPU to federation — the same config graph, lineage rules, and component
+   interfaces at every size. Scaling changes **bindings** (which backend fills
+   each role), never the shape of the pipeline. There is no "small lab
+   edition" and no "cluster mode": there is one factory with swappable
+   capacity backends.
+3. **Hardware-agnostic.** No dependency on any specific fleet: not Poolside's
+   homogeneous H200 pod, and not donor clusters either. Capacity is whatever
+   the operator has — one workstation, an owned cluster, rented capacity, or a
+   federation of all three — and preemption, mixed vendors, and mixed
+   interconnects are the normal case at every scale, not an edge case.
 
 Train kernels do not change: Muon2 / KL-SOAP, OLMo-3 data recipe, CISPO/SAPO,
 DeepSeek-V4/Kimi-K3 remain the library defaults. The factory is the shelf they
@@ -46,23 +52,26 @@ sit on.
 
 ## 3. Component mapping (Poolside closed → open equivalent)
 
-| Poolside machine | Role | Open equivalent | Maturity / gap |
-| :--- | :--- | :--- | :--- |
-| Dagster control plane | DAG, configs, run IDs | **Dagster** (already Apache-2.0) | Ready. No change. |
-| Iceberg / Spark assets | Versioned table format + ingest | **Apache Iceberg + Spark/DuckDB**; small lab: Parquet + content-addressed store (lakeFS/DVC) | Ready |
-| **Blender** | gRPC weighted streaming mix, mid-run remix, sidecar prefetch | Hugging Face `datatrove` / Dolma toolkit streaming, or the `stream_mix` recipe pattern | **Gap**: no open impl of *mid-run mix change with lineage intact*. Highest-value open contribution. |
-| **Titan** (trainer) | Distributed train kernel | **TorchTitan** (public seed) or OLMo-core; distributed Muon from NVIDIA-NeMo/Emerging-Optimizers | Mostly ready; patch load is the cost |
-| **Atlas** (infer) | vLLM-based serving sharing model defs | **vLLM / SGLang** consuming the same model defs | Ready |
-| **Hive** synth | Declarative synthetic pipelines as config | **distilabel** / Dolma synth-style config; needs an open `SynthConfig` schema convention | Partial |
-| **AutoMixer** | Proxy-swarm mix search | Skippable; open labs use small-proxy LR/data sweeps | Skip until cluster-scale |
-| **Saucer / code-exec** | Sandboxed code exec for RL rewards, synth, evals | Self-hosted sandbox (Firecracker/gVisor/E2B-style), or per-lab CI runners | Partial; the 1M-repo scale is not needed |
-| **Podium** | Dataset/model viewer, lab-wide vibe check | **Zeno** / Lantern-style viewers over the lake + W&B/MLflow | Partial |
-| GPU↔GPU weight transfer | Trainer→infer NCCL P2P for online RL | verl/LMCache-style colocated or P2P weight sync in vLLM | Partial; skip until split-pool RL |
-| FoundationDB scheduler | Per-job eviction, topology, placement | **Volcano / Kueue** on vanilla Kubernetes (single org); Slurm for donor HPC | Ready; do not build custom |
+| Poolside machine | Role | Open equivalent | Bindings (small → large) | Gap |
+| :--- | :--- | :--- | :--- | :--- |
+| Dagster control plane | DAG, configs, run IDs | **Dagster** (already Apache-2.0) | local Dagster → Dagster+K8s executor → multi-tenant Dagster | none |
+| Iceberg / Spark assets | Versioned table format + ingest | **Apache Iceberg** catalog | content-addressed Parquet → DuckDB → Iceberg + Spark | Ready |
+| **Blender** | Weighted streaming mix, mid-run remix, sidecar prefetch | `datatrove` / Dolma streaming, or the `stream_mix` recipe pattern | single-process generator → sharded stream services → distributed mix plane | **Gap**: no open impl of *mid-run mix change with lineage intact* at any scale. Highest-value open contribution. |
+| **Titan** (trainer) | Distributed train kernel | **TorchTitan** (public seed) or OLMo-core; distributed Muon from NVIDIA-NeMo/Emerging-Optimizers | DDP → FSDP → FSDP+TP/EP/PP (same codebase, config only) | patch load is the cost |
+| **Atlas** (infer) | Serving sharing model defs | **vLLM / SGLang** | single-GPU serve → replica pool → split-pool RL | Ready |
+| **Hive** synth | Declarative synthetic pipelines as config | **distilabel** / Dolma synth-style config | local synth → job-pool synth → federated synth farms | Needs an open `SynthConfig` schema convention |
+| **AutoMixer** | Proxy-swarm mix search | Small-proxy sweeps | 1 proxy on 1 GPU → 60-proxy swarm (same config schema, more proxies) | Schema needed; swarm optional, never required |
+| **Saucer / code-exec** | Sandboxed code exec for RL rewards, synth, evals | Firecracker/gVisor/E2B-style sandbox, or per-lab CI runners | 1 local sandbox → sandbox fleet → multi-org exec farm | Partial |
+| **Podium** | Dataset/model viewer, lab-wide vibe check | **Zeno** / Lantern-style viewers over the lake + W&B/MLflow | single-user UI → shared instance | Partial |
+| GPU↔GPU weight transfer | Trainer→infer weight sync for online RL | verl/LMCache-style colocated or P2P sync in vLLM | colocated (shared GPU) → P2P (split pools) | Partial |
+| Scheduler / placement | Per-job eviction, topology, placement | **Volcano / Kueue** on Kubernetes; Slurm for HPC; plain OS scheduling below that | OS scheduler → K8s+Kueue → federation allocator | Ready; do not build custom — plug one in per binding |
 
 The named-machine pattern carries over (each component is a *role*), but every
 role must be filled by an Apache/MIT-licensed implementation or a thin glue
-layer over one.
+layer over one. Critically, **the role interfaces — not the backends — are the
+contract**: a lab scales by rebinding a role, and every backend binding is the
+same architecture at a different capacity, so nothing is ever rewritten to
+scale up or down.
 
 ## 4. Architecture (open)
 
@@ -83,27 +92,38 @@ flowchart TD
     PUB --> SERVE["vLLM/SGLang<br/>(shared model defs)"]
     SERVE --> RL["Open RL loop<br/>sandboxed code-exec rewards"]
     RL -.-> CFG
-    SCH["K8s + Volcano/Kueue<br/>(heterogeneity- and preemption-tolerant)"] -.-> TRAIN
+    SCH["Pluggable scheduler binding<br/>(OS → K8s/Kueue/Volcano/Slurm → federation)<br/>preemption-tolerant at every binding"] -.-> TRAIN
 ```
 
-Differences from the Poolside picture: the scheduler is off-the-shelf and must
-tolerate preemption (no FoundationDB topology store); the lineage graph is a
-published artifact, not an internal one; and promotion gates include license
-and data-provenance checks, because openness is a release requirement.
+Differences from the Poolside picture: capacity backends are **bindings, not
+modes** — the same config graph runs on one GPU or a federation; the scheduler
+is off-the-shelf and preemption-tolerant at every scale (no FoundationDB
+topology store); the lineage graph is a published artifact, not an internal
+one; and promotion gates include license and data-provenance checks, because
+openness is a release requirement.
 
-## 5. Tiers
+## 5. Scaling model (bindings, not tiers)
 
-- **Tier 1 — single workstation / 1–8 GPUs.** Dagster or plain Python configs,
-  content-addressed parquet, `stream_mix`, TorchTitan/OLMo-core, vLLM,
-  eval-on-checkpoint. This is `recipe:small-lab-model-factory` as written.
-- **Tier 2 — 8–512 GPUs, single org.** Add: Kubernetes + Volcano/Kueue,
-  Iceberg catalog, checkpoint-level eval gating, open code-exec pool for RL.
-  Still no AutoMixer, no custom scheduler.
-- **Tier 3 — federated / community cluster (512+).** Multi-org contributor
-  model: published lineage, preemption-tolerant scheduling, split
-  trainer/infer pools with open P2P weight sync. This tier is where the open
-  factory must *outperform* copying Poolside's stack, because nobody donates a
-  homogeneous 10k-GPU pod.
+There are no "small lab" and "cluster" editions. There is one factory; each
+role has a **small → large binding ladder**, and moving between rungs is a
+config change against the same pipeline:
+
+- **Control plane binding:** local Dagster → Dagster on Kubernetes →
+  multi-tenant Dagster. The run-ID/lineage contract is identical.
+- **Data plane binding:** content-addressed Parquet → DuckDB → Iceberg + Spark.
+  Same asset schema; the catalog is the only thing that changes.
+- **Mix binding:** single-process `stream_mix` → sharded stream services →
+  distributed mix plane. Same `BlendConfig`-shaped config throughout; mid-run
+  remix must work on rung 1 as well as rung 3.
+- **Compute binding:** DDP → FSDP → FSDP+TP/EP/PP in one trainer codebase
+  (TorchTitan/OLMo-core path), same model defs to vLLM/SGLang at the other end.
+- **Capacity binding:** owned hardware, rented capacity, or federation — the
+  scheduler binding abstracts this; nothing in a config may name a fleet.
+
+The scaling test for the design: the *same committed config* must describe a
+1-GPU ablation and a multi-thousand-GPU run, differing only in resource and
+backend bindings. If a rung requires editing pipeline code, the abstraction
+failed.
 
 ## 6. Claims an open implementation would have to demonstrate
 
@@ -114,8 +134,11 @@ method, it needs date-stamped, benchmark-grounded results:
    (Poolside's baseline claim: five weeks, Laguna XS.2, cluster-scale).
 2. **Lineage completeness**: any token/checkpoint/eval traces both ways.
 3. **Promotion cost**: a research win lands as a config flag.
-4. **Preemption survival**: training resumes across donor-cluster preemption
-   without manual repair (the open-native requirement Poolside never had).
+4. **Capacity elasticity**: the same config graph runs from 1 GPU to a
+   multi-thousand-GPU fleet with only backend/resource rebindings (the
+   scaling test in §5 passes), and training survives preemption and capacity
+   changes without manual repair — the requirement Poolside's homogeneous
+   owned fleet never had to meet.
 
 ## 7. Gotchas
 
@@ -126,15 +149,24 @@ method, it needs date-stamped, benchmark-grounded results:
 - Do not fork trainer and infer to "move faster": the shared-definitions
   property is the whole point.
 - Mid-run remix is the one genuinely open engineering gap. Ship it before
-  claiming feature parity.
+  claiming feature parity — at every scale, not just large fleets.
+- Do not build "small lab" or "cluster" editions, and do not let marketing
+  language ("tiny lab SOP", "enterprise mode") creep into the design. A scale
+  fork is a design failure: if a rung of any binding ladder requires editing
+  pipeline code, the abstraction is broken. The one-architecture test in §5 is
+  the guardrail.
+- Do not hardcode any fleet assumption in configs or docs (not H200 pods, not
+  donor clusters). Capacity is a scheduler-binding concern only.
 
 ## 8. Ingestion plan for the library (when this graduates)
 
 1. `python -m library new method open-model-factory --title "Open Model Factory"` —
    `status: active`, `sota_for` empty (Poolside factory remains the measured
    process SOTA), `complements: method:poolside-model-factory`.
-2. `python -m library new recipe open-factory-small-lab --title "Open Model Factory SOP"` —
-   extends `recipe:small-lab-model-factory` with the component mapping table.
+2. `python -m library new recipe open-model-factory-sop --title "Open Model Factory SOP"` —
+   extends `recipe:small-lab-model-factory` with the binding-ladder model;
+   the recipe should be written against the role interfaces, not against a
+   hardware size.
 3. Update `graph/tasks/industrial-model-building.md` `methods:` list; leave
    `current_sota` pointing at `method:poolside-model-factory` until a public
    run reproduces the cycle-time claim.

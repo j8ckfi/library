@@ -169,6 +169,9 @@ class TestQueryEngine(unittest.TestCase):
         weather_op = self.engine.sota("task:operator-weather")
         self.assertTrue(any(p["method"].id == "method:fourcastnet-3" for p in weather_op))
 
+        factory = self.engine.sota("task:industrial-model-building")
+        self.assertTrue(any(p["method"].id == "method:poolside-model-factory" for p in factory))
+
 
 class TestGraphTraversalAndPaths(unittest.TestCase):
     def setUp(self):
@@ -220,6 +223,86 @@ class TestExporterAndIngest(unittest.TestCase):
         self.assertIsNotNone(node)
         self.assertEqual(node.id, "task:custom-eval-task")
         self.assertEqual(node.type, "task")
+
+
+class TestModelFactorySystemsShelf(unittest.TestCase):
+    """Industrial Model Factory is a process shelf, orthogonal to train-kernel SOTA."""
+
+    def setUp(self):
+        self.graph = load_graph(Path("graph"))
+        self.engine = QueryEngine(self.graph)
+
+    def test_systems_domain_is_recognized(self):
+        domains = {n.domain for n in self.graph.get_nodes_by_type("task")}
+        self.assertIn("systems", domains)
+
+    def test_industrial_model_building_domain_and_sota(self):
+        task = self.graph.get_node("task:industrial-model-building")
+        self.assertIsNotNone(task)
+        self.assertEqual(task.type, "task")
+        self.assertEqual(task.domain, "systems")
+        paths = self.engine.sota("task:industrial-model-building")
+        self.assertTrue(len(paths) > 0)
+        self.assertTrue(any(p["method"].id == "method:poolside-model-factory" for p in paths))
+
+    def test_poolside_factory_is_training_systems_sota_for_process_task_only(self):
+        method = self.graph.get_node("method:poolside-model-factory")
+        self.assertIsNotNone(method)
+        self.assertEqual(method.get("category"), "training-systems")
+        self.assertEqual(method.status, "sota")
+        self.assertEqual(method.get("sota_for"), ["task:industrial-model-building"])
+        self.assertEqual(method.get("supersedes") or [], [])
+
+    def test_pretrain_dense_7b_sota_remains_muon2_and_kl_soap(self):
+        paths = self.engine.sota("task:pretrain-dense-7b")
+        method_ids = [p["method"].id for p in paths]
+        self.assertTrue(any(m in method_ids for m in ("method:muon2", "method:soap-muon-scale")))
+        self.assertNotIn("method:poolside-model-factory", method_ids)
+
+    def test_factory_does_not_retarget_train_kernel_sota(self):
+        dense_rl = self.engine.sota("task:math-code-rl-dense")
+        self.assertTrue(any(p["method"].id == "method:cispo" for p in dense_rl))
+        self.assertFalse(any(p["method"].id == "method:poolside-model-factory" for p in dense_rl))
+
+        open_data = self.engine.sota("task:open-data-recipe")
+        self.assertTrue(any(p["method"].id == "method:olmo-3" for p in open_data))
+        self.assertFalse(any(p["method"].id in ("method:poolside-model-factory", "method:automixer") for p in open_data))
+
+        moe_arch = self.engine.sota("task:pretrain-moe-frontier")
+        moe_ids = [p["method"].id for p in moe_arch]
+        self.assertTrue(any(m in moe_ids for m in ("method:deepseek-v4", "method:kimi-k3")))
+        self.assertNotIn("method:poolside-model-factory", moe_ids)
+
+    def test_automixer_is_active_component_not_data_recipe_sota(self):
+        automixer = self.graph.get_node("method:automixer")
+        self.assertIsNotNone(automixer)
+        self.assertEqual(automixer.status, "active")
+        self.assertNotIn("task:open-data-recipe", automixer.get("sota_for") or [])
+        self.assertNotIn("method:olmo-3", automixer.get("supersedes") or [])
+        olmo = self.graph.get_node("method:olmo-3")
+        self.assertNotEqual(olmo.get("superseded_by"), "method:automixer")
+
+    def test_blender_and_hive_are_active_factory_components(self):
+        blender = self.graph.get_node("method:blender-streaming")
+        hive = self.graph.get_node("method:hive-synth")
+        self.assertIsNotNone(blender)
+        self.assertIsNotNone(hive)
+        self.assertEqual(blender.status, "active")
+        self.assertEqual(hive.status, "active")
+        self.assertEqual(blender.get("category"), "training-systems")
+        self.assertEqual(hive.get("category"), "training-systems")
+
+    def test_small_lab_recipe_implements_factory_not_internal_packages(self):
+        recipe = self.graph.get_node("recipe:small-lab-model-factory")
+        self.assertIsNotNone(recipe)
+        self.assertEqual(recipe.get("method"), "method:poolside-model-factory")
+        self.assertEqual(recipe.get("task"), "task:industrial-model-building")
+        deps = " ".join(recipe.get("pip_dependencies") or [])
+        self.assertIn("dagster", deps.lower())
+        body = recipe.body.lower()
+        self.assertNotIn("poolside-titan", body)
+        self.assertNotIn("poolside-atlas", body)
+        self.assertNotIn("poolside-hive", body)
 
 
 if __name__ == "__main__":

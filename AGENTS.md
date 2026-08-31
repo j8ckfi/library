@@ -56,6 +56,7 @@ task: operator, pretrained foundation-> poseidon (2405.19101) or unisolver (2405
 task: operator, physics-informed     -> pi-cvit (2606.06164) + SOAP; not a 2021 PINN
 task: operator, Fourier LoRA/adapt   -> f-adapter (2509.23173) NOT vanilla LoRA
 task: operator, weather/climate      -> fourcastnet-3 (2507.12144) (forecast cousin, not CAE)
+task: industrial model-building / factory -> poolside-model-factory (Laguna 2605.27605). Process default, not a train-kernel default. Small lab: configs-as-code + Dagster lineage + streamed mixes; skip custom scheduler. CISPO/Muon stay the train defaults. [2026-08-31]
 ```
 
 ---
@@ -87,6 +88,7 @@ task: operator, weather/climate      -> fourcastnet-3 (2507.12144) (forecast cou
 23. **Physics-informed neural operators (little/no labeled data)**: Use **PI-CViT** (`method:pi-cvit`, `paper:pi-cvit` `arXiv:2606.06164`) with GradNorm balancing, causal temporal weighting, and SOAP second-order optimizer — not a 2021 PINN / PINO.
 24. **Parameter-efficient fine-tuning for Fourier operators**: Use **F-Adapter** (`method:f-adapter`, `paper:f-adapter` `arXiv:2509.23173`, NeurIPS 2025) with ~2% trainable parameters. Hard rule: do NOT use vanilla LoRA on Fourier latent operators due to depth-amplified spectral error floors.
 25. **Global weather & climate forecasting neural operators**: Use **FourCastNet 3** (`method:fourcastnet-3`, `paper:fourcastnet-3` `arXiv:2507.12144`) spherical convolutional neural operator with calibrated probabilistic ensembles (weather forecasting engine, not CAD mesh CAE).
+26. **Industrial model-building / factory process**: Use **Poolside Model Factory** (`method:poolside-model-factory`, `paper:laguna-m1-xs2` `arXiv:2605.27605`). Process default, not a train-kernel default. Small lab: experiments-as-code + Dagster lineage + streamed mixes; skip custom FoundationDB scheduler / NCCL P2P / AutoMixer swarms / Titan megakernel. CISPO and Muon stay the train defaults (Laguna ran those on the factory stack).
 
 ---
 

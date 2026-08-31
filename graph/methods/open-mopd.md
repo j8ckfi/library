@@ -40,4 +40,4 @@ Open-MOPD is the state-of-the-art framework for consolidating multiple domain-sp
 - When standard multi-task or multi-teacher distillation leads to catastrophic forgetting or degradation on concise response tasks.
 
 ## Relation to Existing SOTA
-- Co-exists with `method:opd` under `task:student-distillation`: `method:opd` is the single-teacher default; `method:open-mopd` is the multi-teacher distillation default as of 2026-08-28.
+- Co-exists with `method:opd` under `task:student-distillation`: `method:opd` is the single-teacher default; `method:open-mopd` is the multi-teacher distillation default as of 2026-08-28. Privileged same-model gold-solution OPSD is `method:vista` and does not replace Open-MOPD.

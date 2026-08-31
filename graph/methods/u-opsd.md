@@ -42,4 +42,5 @@ Unsupervised On-Policy Self-Distillation (u-OPSD) enables genuine self-distillat
 - Especially effective for non-thinking reasoning modes and compact models (4B–8B).
 
 ## Relation to Existing SOTA
-- When ground truth or rule-based verifiers are available, prefer `method:opdvr` (for verifiable distillation) or `method:cispo` (for RLVR). In purely unlabeled regimes, `method:u-opsd` is the date-stamped SOTA.
+- When ground truth or rule-based verifiers are available, prefer `method:opdvr` (for verifiable distillation) or `method:cispo` (for RLVR). In purely unlabeled regimes (existing problems, no Challenger), `method:u-opsd` is the date-stamped SOTA.
+- For data-free self-evolution covering unverifiable/open-ended domains with a Challenger–Solver–Judge loop, use `method:j-zero`. For privileged-teacher OPSD with gold solutions, use `method:vista`.

@@ -40,3 +40,4 @@ Muon2 is a second-generation matrix orthogonalization momentum optimizer designe
 
 ## Gotchas & Failure Modes
 - Embedding tables, 1D vectors, and normalization scale factors should be optimized with standard AdamW rather than matrix orthogonalization.
+- **MuonH** (Muon + hyperball; used in `method:puro-2b`) wraps scale-invariant 2D attn/MLP matrices, projects each back to $R=\|W_0\|_F$ after the step, and runs Hyperball LR at $10\times$ the AdamW base. It is a documented Muon/Muon2-family variant for consumer-GPU ~2B pretrain. It does **not** change this method's `sota_for`: dense ~7B still uses Muon2 (+ KL-SOAP if memory allows).

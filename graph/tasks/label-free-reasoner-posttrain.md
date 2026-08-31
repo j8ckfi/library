@@ -14,6 +14,7 @@ current_sota:
 methods:
   - method:u-opsd
   - method:ttpo
+  - method:j-zero
   - method:opdvr
   - method:cispo
 tags:
@@ -31,3 +32,4 @@ Training and aligning multi-step reasoning capabilities on vast corpora of unlab
 ## SOTA Recommendation (as of 2026-08-28)
 - **Primary Method**: **u-OPSD** (`method:u-opsd`, `paper:u-opsd` `arXiv:2608.06296`) for unsupervised on-policy self-distillation.
 - **When Labels/Verifiers Exist**: Prefer `method:opdvr` (for distillation with verifiers) or `method:cispo` (for train-time RL with labels).
+- **Data-free self-evolution (no existing problem corpus, including unverifiable domains)**: Use `method:j-zero`. u-OPSD remains the default for unlabeled existing math problems (no Challenger; consensus pseudo-solutions).

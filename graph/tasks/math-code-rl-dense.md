@@ -13,6 +13,7 @@ current_sota:
     notes: "CISPO via MiniMax-M1 (2506.13585) + ScaleRL (2510.13786)."
 methods:
   - method:cispo
+  - method:es-reasoning
   - method:bpco
   - method:dapo
   - method:sspo
@@ -33,5 +34,6 @@ tags:
 Training dense language models to generate long chains of thought (CoT) and verifiable solutions for competitive math and coding problems.
 
 ## SOTA Recommendation (as of 2026-08-26)
-- **Primary Method**: **CISPO** (`method:cispo`, MiniMax-M1 2506.13585 + ScaleRL 2510.13786).
-- **Systems Reference**: DAPO stays as systems paper reference.
+- **Primary Method (Pass@1 labeled RLVR)**: **CISPO** (`method:cispo`, MiniMax-M1 2506.13585 + ScaleRL 2510.13786).
+- **Systems Reference**: DAPO stays as systems paper reference. GRPO stays retired.
+- **Related alternative (Pass@K / coverage / no-backward)**: `method:es-reasoning` (`arXiv:2608.27351`). Do not swap CISPO for ES or revive GRPO when the goal is Pass@1.

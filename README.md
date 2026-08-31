@@ -1,6 +1,6 @@
 # j8ckfi/library
 
-> Sprawling, agent-navigable knowledge graph of cutting-edge machine learning research, SOTA methods, primary literature, and executable training recipes (As-of: 2026-08-28).
+> Sprawling, agent-navigable knowledge graph of cutting-edge machine learning research, SOTA methods, primary literature, and executable training recipes (As-of: 2026-08-31).
 
 ---
 
@@ -24,15 +24,17 @@
 
 ---
 
-## 2. Agent Routing Cheat-Sheet (2026-08-28 SOTA Index)
+## 2. Agent Routing Cheat-Sheet (2026-08-31 SOTA Index)
 
 ```
 task: pretrain dense 7B optimizer  -> muon2 (2604.09967) + kl-soap (2607.20548) if memory allows
+task: budget ~1.5-2B dense pretrain on consumer GPUs -> puro-2b (2608.27370); NOT olmo-3 7B, NOT muon2+kl-soap
 task: open data recipe             -> olmo-3 / dolma-3 (2512.13961)
 task: pretrain MoE architecture    -> deepseek-v4 (2606.19348) + kimi-k3 (2607.24653)
 task: train MoE on NVL72        -> mixture-of-kittens (MoK megakernel, 1070 tok/s/GPU on GB300 NVL72)
 task: instruct SFT                 -> olmo-3 dolci (2512.13961); industrial alt nemotron-cascade-2 (2603.19220)
 task: math/code RL, dense          -> cispo (minimax-m1 2506.13585 + scalerl 2510.13786)
+task: math/code RL, Pass@K / coverage / no-backward -> es-reasoning (2608.27351); Pass@1 default remains cispo
 task: math/code RL, MoE/VL         -> sapo (2511.20347); gspo only if Qwen3.5-Omni Talker
 task: agentic async RL             -> sao (2607.07508)
 task: all-zero verifier groups     -> verigate (2605.30451)
@@ -53,6 +55,8 @@ task: posttrain diffusion          -> diffusion-opsd (2608.24646); no task-speci
 task: video MLLM RL                -> orarl (2608.20492)
 task: label-free TTT / no-GT test-time reasoner -> ttpo (2608.27448)
 task: unlabeled math reasoner posttrain (no GT) -> u-opsd (2608.06296)
+task: privileged-teacher OPSD / gold-solution self-distillation -> vista (2608.28306)
+task: data-free self-evolution incl. unverifiable -> j-zero (2608.26582)
 task: SAE dictionary               -> sasa (2606.06333) KEEP
 task: SAE circuits                 -> circuitsteer (2608.05732)
 task: SAE effect geometry          -> fega (2607.24645)
@@ -72,11 +76,13 @@ task: industrial model-building / factory -> poolside-model-factory (Laguna 2605
 | Task / Domain | Default SOTA Method | Key Paper / Reference | Code / Repo |
 | :--- | :--- | :--- | :--- |
 | **Dense 7B Pretrain Optimizer** | **Muon2** (`method:muon2`) + **KL-SOAP** | `arXiv:2604.09967` / `2607.20548` | `none found` / `https://github.com/NVIDIA-NeMo/Emerging-Optimizers` |
+| **Budget ~1.5-2B Consumer Pretrain** | **Puro-2B** (`method:puro-2b`) | `arXiv:2608.27370` | `https://github.com/thu-pacman/Puro-Megatron` |
 | **Open Data Recipe** | **OLMo-3 / Dolma-3** (`method:olmo-3`) | AI2 `arXiv:2512.13961` | `https://github.com/allenai/OLMo-core` / `https://github.com/allenai/dolma3` |
 | **Pretrain MoE Architecture** | **DeepSeek-V4** + **Kimi-K3** | `arXiv:2606.19348` / `2607.24653` | `none found` / `https://github.com/MoonshotAI/Kimi-K3` |
 | **Train MoE on NVL72** | **Mixture-of-Kittens** (`method:mixture-of-kittens`) | Cursor Research Aug 2026 | `https://github.com/cursor/mixture-of-kittens` |
 | **Instruct SFT** | **OLMo-3 Dolci** / **Nemotron-Cascade 2** | `arXiv:2512.13961` / `2603.19220` | `https://github.com/allenai/OLMo-core` / `none found` |
 | **Dense Math/Code RL** | **CISPO** (`method:cispo`) | `arXiv:2506.13585` / `2510.13786` | `https://github.com/MiniMax-AI/MiniMax-M1` |
+| **Pass@K / Coverage / No-Backward RL** | **ES-reasoning** (`method:es-reasoning`) | `arXiv:2608.27351` | `https://github.com/yunpengba7/understanding-es` |
 | **MoE/VL Math/Code RL** | **SAPO** (`method:sapo`) | `arXiv:2511.20347` | ms-swift `loss_type=sapo` |
 | **Agentic Async RL** | **SAO** (`method:sao`) | `arXiv:2607.07508` | `none found` |
 | **All-Zero Verifier Groups** | **VeriGate** (`method:verigate`) | `arXiv:2605.30451` | `https://github.com/umd-huang-lab/VeriGate` |
@@ -100,6 +106,8 @@ task: industrial model-building / factory -> poolside-model-factory (Laguna 2605
 | **Video MLLM RL** | **OraRL** (`method:orarl`) | `arXiv:2608.20492` | `https://github.com/HVision-NKU/OraRL` |
 | **Label-Free Test-Time Reasoning** | **TTPO** (`method:ttpo`) | `arXiv:2608.27448` | `https://github.com/ZJU-REAL/TTPO` |
 | **Unlabeled Reasoner Posttrain** | **u-OPSD** (`method:u-opsd`) | `arXiv:2608.06296` | `https://github.com/williamium3000/u-opsd` |
+| **Privileged-Teacher OPSD** | **VISTA** (`method:vista`) | `arXiv:2608.28306` | `none found` |
+| **Data-Free Self-Evolution** | **J-Zero** (`method:j-zero`) | `arXiv:2608.26582` | `https://github.com/GyoukChu/J-Zero` |
 | **Operator, Regular-Grid PDE** | **CViT** (`method:cvit`) / **Poseidon** (fine-tune) | `arXiv:2405.13998` / `2405.19101` | `https://github.com/PredictiveIntelligenceLab/cvit` / `https://github.com/camlab-ethz/poseidon` |
 | **Operator, Industrial CAD Mesh** | **Transolver-3** (`method:transolver-3`) | `arXiv:2602.04940` | `https://github.com/thuml/Transolver-3` |
 | **Operator, Pretrained Foundation** | **Poseidon** (`method:poseidon`) / **Unisolver** (`method:unisolver`) | `arXiv:2405.19101` / `2405.17527` | `https://github.com/camlab-ethz/poseidon` / `https://github.com/thuml/Unisolver` |

@@ -21,6 +21,7 @@ methods:
   - method:opd
   - method:open-mopd
   - method:opdvr
+  - method:vista
   - method:tropd
   - method:stable-opd
   - method:opd2
@@ -42,3 +43,4 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 ## SOTA Recommendation (as of 2026-08-28)
 - **Single-Teacher Distillation Default**: **OPD** (`method:opd`, `paper:opd` `arXiv:2604.13016`).
 - **Multi-Teacher Student Distillation Default**: **Open-MOPD** (`method:open-mopd`, `paper:open-mopd` `arXiv:2608.19098`) for token-share balancing, gap-aware dynamic budget allocation, and student reward refresh across specialized teacher models.
+- **Related alternative**: Use `method:vista` instead when the teacher is a privileged same-model copy that sees the gold solution (not a larger frozen teacher). OPD remains the student-distillation default.

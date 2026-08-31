@@ -140,8 +140,12 @@ python -m library path --from "task:pretrain-dense-7b" --to "recipe:muon2-pretra
 
 # 6. Validate graph schema and referential integrity
 python -m library validate
+
+# 7. Remote, no-clone usage: the whole graph as ONE file (CI keeps it fresh)
+gh api repos/j8ckfi/library/contents/dist/graph.json
 ```
 
 For complete operating instructions for AI agents, see [AGENTS.md](AGENTS.md).
+For the system-level design (abstraction tower, agent contracts, CLI ergonomics roadmap), see [docs/system-design.md](docs/system-design.md).
 For schema rules and supersession protocol, see [docs/ontology.md](docs/ontology.md).
 For adding new research in 5 minutes, see [docs/ingestion-guide.md](docs/ingestion-guide.md).

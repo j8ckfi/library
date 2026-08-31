@@ -234,3 +234,51 @@ In this library, **SOTA is not a vibe or marketing label**. A method is labeled 
    python -m library validate
    ```
    Every PR must pass validation with 0 errors.
+
+5. **Write the receipt**: append a one-paragraph audit entry to `graph/CHANGELOG.md` (format in
+   [docs/ingestion-guide.md](docs/ingestion-guide.md) §5). A supersession that updates the new method but
+   not the old method and its parent task is an **incomplete write** — do not commit it.
+
+---
+
+## 9. Agent Decision Protocol
+
+This section is the operating protocol for any agent driving this library. The full system design — the
+abstraction tower, the contracts behind these rules, and the CLI ergonomics roadmap — is in
+[docs/system-design.md](docs/system-design.md). Schema extensions (routing guards, evidence levels,
+staleness) are in [docs/ontology.md](docs/ontology.md) §4.1.1.
+
+### 9.1 Decision loop
+
+```
+1. ROUTE    user request -> task:<slug>. Try the cheat-sheet (§2) first; if no hit or the request
+            plausibly sits near a task boundary, check that task's `scope`, `out_of_scope`, and
+            `redirects` before resolving. Follow `redirects` mechanically — they encode hard-won
+            negative knowledge ("not this scale", "NOT DoRA").
+2. RESOLVE  `python -m library sota <task>` -> method + claims + papers + recipes.
+3. VERIFY   weight each claim by evidence (verified + evidence_level) and freshness
+            (as_of / last_reviewed). If a task's current_sota is older than 4 months, say so in your
+            answer and re-check literature before committing an expensive plan.
+4. EXECUTE  `python -m library show recipe:<slug>`; check `target_hardware` and `pip_dependencies`
+            against the user's actual budget before promising anything.
+5. WRITE    if you discovered something the graph lacks: ingest per §8, appending a receipt to
+            `graph/CHANGELOG.md`. Ingestion includes the supersession check (§8 step 3).
+```
+
+### 9.2 Token discipline
+
+- **Remote first**: if you are working against the GitHub remote (no local clone), fetch the compiled
+  graph in one call — `gh api repos/j8ckfi/library/contents/dist/graph.json` (CI keeps it fresh) — and
+  fall back to per-node `contents/` fetches only for files you will act on.
+- Prefer `sota` over `query` (one call returns the whole resolution path); prefer `query --json` for
+  scripted filtering; use `show` only on the specific nodes you will act on; use `walk`/`path` only when
+  `sota`/`query` leave a genuine traversal question open.
+- Never re-derive what a single `validate` can tell you; run it after every write and before reporting
+  graph changes.
+
+### 9.3 Trust calibration
+
+- `verified: true` + comparator baseline is the only basis for a default recommendation.
+- `evidence_level` ranks claims: `peer-reviewed` > `preprint` > `unofficial-repro` > `self-reported`.
+- A `current_sota[].as_of` older than ~4 months means **stale**: the routing may still be right, but the
+  rank order deserves a literature re-check before you stake a training run on it.

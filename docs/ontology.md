@@ -164,6 +164,49 @@ A method is designated `status: sota` if and only if:
 1. It holds verifiable, date-stamped Pareto-optimal performance (loss, throughput, accuracy, sample efficiency) on standard benchmarks against explicit baselines.
 2. The claim contains a date (`YYYY-MM`), baseline comparator, metric, and verification status.
 
+### 4.1.1 Ergonomic Schema Extensions (v1.1 — backward-compatible, optional)
+
+These fields implement the routing, evidence, and decay contracts defined in
+[system-design.md](system-design.md). All are **optional** and add no new required fields, so existing
+nodes remain valid. They exist to move the highest-value knowledge (routing guards, scope boundaries,
+evidence quality, review freshness) out of prose and into machine-queryable structure.
+
+**Task node extensions:**
+```yaml
+scope: "<one sentence: what problems this task node owns>"
+out_of_scope:
+  - "<near-miss problem that looks like this task but is not>"
+redirects:
+  - when: "<condition, e.g. 'budget is ~2B on consumer GPUs'>"
+    to: "task:<other-task-slug>"
+last_reviewed: "YYYY-MM-DD"   # last time a agent re-verified current_sota against literature
+```
+
+**Method node extensions:**
+```yaml
+do_not_use_for:
+  - when: "<condition>"
+    reason: "<why this method is the wrong pick here>"
+    use_instead: "method:<better-method-slug> | task:<redirect-slug>"
+assumptions:
+  - "<precondition on hardware scale, data regime, or model family>"
+last_reviewed: "YYYY-MM-DD"
+```
+
+**Claim extensions (inside `claims:` items):**
+```yaml
+evidence_level: "peer-reviewed"   # peer-reviewed | preprint | self-reported | unofficial-repro
+source_url: "https://..."          # where the number actually lives
+```
+
+**Semantics:**
+- `redirects` are routing guards: an agent whose user request matches `when` must go to `to` instead of
+  treating this task as resolved. `out_of_scope` is the prose complement for fuzzy matching.
+- `do_not_use_for` is load-bearing negative knowledge ("NOT DoRA", "not this scale") and must be rendered
+  by decision-shaped outputs (`sota`/`decide`) alongside the positive recommendation.
+- `last_reviewed` + `current_sota[].as_of` power the staleness budget (§4.3).
+- `evidence_level`/`source_url` upgrade the verified bit into a trust gradient (§4.4).
+
 ### 4.2 Supersession Workflow
 When a new paper/method establishes superior Pareto performance over an existing method:
 1. Create new `paper:<new-slug>`, `method:<new-slug>`, and `recipe:<new-slug>`.
@@ -176,4 +219,40 @@ When a new paper/method establishes superior Pareto performance over an existing
    - Add `superseded_by: method:<new-slug>`.
 4. In `task:<task-slug>` frontmatter:
    - Update `current_sota` list with the new method, metric values, and current `as_of: "YYYY-MM"`.
-5. Run `python -m library validate` to confirm reference integrity and absence of cycles.
+   - Update `task.last_reviewed` to today.
+5. Append a receipt to `graph/CHANGELOG.md` (see [ingestion-guide.md](ingestion-guide.md) §5).
+6. Run `python -m library validate` to confirm reference integrity, absence of cycles, and the §4.5
+   supersession post-conditions. Steps 2–4 form **one transaction**: a supersession that updates the new
+   method but not the old method or the parent task is an incomplete write and must not be committed.
+
+### 4.3 Staleness Budget
+
+A recommendation's truth decays. Mechanical rule:
+
+- A task whose `current_sota[].as_of` is older than **4 months** (relative to today's date) is **stale**.
+  Its recommendation must be re-verified against current literature before an agent acts on it.
+- `task.last_reviewed` records when a routing/SOTA re-check last happened; `method.last_reviewed` when the
+  method's claims were last re-checked. Both default to the claim date when absent.
+- The roadmap command `library stale --max-age-days N` (see [system-design.md §8](system-design.md)) turns
+  this into a prioritized maintenance queue and a CI-able exit code.
+
+### 4.4 Evidence Trust Gradient
+
+`verified: true/false` is the floor, not the ceiling. When `evidence_level` is present, weight decisions as:
+`peer-reviewed` > `preprint` > `unofficial-repro` > `self-reported`. A `status: sota` method must carry at
+least one claim with `verified: true` and an explicit comparator baseline. Self-reported-only claims must
+set `verified: false` and say so in decision output — never silently.
+
+### 4.5 Validator Rule Targets (post-conditions, not prose suggestions)
+
+The following checks are the mechanical definition of the workflows above. Until implemented in
+`library/validator.py`, they are review checklist items; once implemented they are hard errors/warnings:
+
+| Level | Rule |
+| :--- | :--- |
+| ERROR | A `status: superseded` method appears in any task's `current_sota` or `methods` list |
+| ERROR | `superseded_by` set without a matching `supersedes` edge on the new method (one-way supersession) |
+| ERROR | `redirects[].to` and `do_not_use_for[].use_instead` references must resolve to existing nodes |
+| ERROR | `evidence_level` must be one of the four enumerated values |
+| WARNING | Any task's `current_sota[].as_of` older than the 4-month staleness budget |
+| WARNING | `graph/INDEX.md` out of sync with graph state (once `library index` exists) |

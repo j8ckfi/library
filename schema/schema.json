@@ -17,6 +17,11 @@
         "baseline": { "type": "string" },
         "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}(-[0-9]{2})?$" },
         "verified": { "type": "boolean" },
+        "evidence_level": {
+          "type": "string",
+          "enum": ["peer-reviewed", "preprint", "self-reported", "unofficial-repro"]
+        },
+        "source_url": { "type": "string" },
         "notes": { "type": "string" }
       }
     },
@@ -41,6 +46,20 @@
         "title": { "type": "string" },
         "domain": { "type": "string" },
         "summary": { "type": "string" },
+        "scope": { "type": "string" },
+        "out_of_scope": { "type": "array", "items": { "type": "string" } },
+        "redirects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["when", "to"],
+            "properties": {
+              "when": { "type": "string" },
+              "to": { "type": "string", "pattern": "^(task|method):" }
+            }
+          }
+        },
+        "last_reviewed": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
         "current_sota": {
           "type": "array",
           "items": { "$ref": "#/definitions/task_sota_entry" }
@@ -79,6 +98,20 @@
           "type": "string",
           "pattern": "^method:"
         },
+        "do_not_use_for": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["when", "reason"],
+            "properties": {
+              "when": { "type": "string" },
+              "reason": { "type": "string" },
+              "use_instead": { "type": "string", "pattern": "^(method|task):" }
+            }
+          }
+        },
+        "assumptions": { "type": "array", "items": { "type": "string" } },
+        "last_reviewed": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
         "papers": {
           "type": "array",
           "items": { "type": "string", "pattern": "^paper:" }

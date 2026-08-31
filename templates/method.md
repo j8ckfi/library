@@ -8,6 +8,13 @@ sota_for:
   - task:template-task
 supersedes: []
 # superseded_by: method:newer-method # Uncomment if status is superseded
+do_not_use_for: []
+# - when: "condition where this method is the wrong pick"
+#   reason: "why"
+#   use_instead: "method:better-method"
+assumptions: []
+# - "Precondition on hardware scale, data regime, or model family"
+last_reviewed: "2026-01-01"
 papers:
   - paper:template-paper
 recipes:
@@ -19,6 +26,8 @@ claims:
     baseline: "AdamW (88.1)"
     date: "2026-01"
     verified: true
+    evidence_level: "preprint" # peer-reviewed | preprint | self-reported | unofficial-repro
+    source_url: "https://arxiv.org/abs/XXXX.XXXXX"
     notes: "Verified under standard baseline training run."
 tags:
   - optimizer
@@ -33,6 +42,10 @@ Explain the core algorithmic mechanism, mathematical equations, and operational 
 ## When to Use
 - Context 1: When targeting high throughput on large matrix parameters...
 - Context 2: When memory constraints prevent full precision optimizer states...
+
+## When NOT to Use
+Mirror `do_not_use_for` guards here in prose (agents fuzzy-match prose; validators check YAML).
+- Condition: what the reader is actually trying to do -> point to method:<better> or task:<redirect>.
 
 ## Gotchas & Failure Modes
 - Known stability challenges and hyperparameter sensitivity.

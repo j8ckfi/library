@@ -1,0 +1,52 @@
+name: export
+
+# Keeps the committed compiled export (dist/graph.json) in sync with the graph.
+# Remote agents fetch ONE file instead of walking the tree:
+#   gh api repos/j8ckfi/library/contents/dist/graph.json
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "graph/**"
+      - "library/**"
+      - ".github/workflows/export.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: export-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install pyyaml
+
+      - name: Validate graph
+        run: python -m library validate
+
+      - name: Rebuild compiled export
+        run: python -m library export --output dist/graph.json --format json
+
+      - name: Commit updated export (if changed)
+        run: |
+          if [[ -n "$(git status --porcelain dist/graph.json)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add dist/graph.json
+            git commit -m "chore: regenerate dist/graph.json [skip ci]"
+            git push
+          else
+            echo "export unchanged; nothing to commit"
+          fi

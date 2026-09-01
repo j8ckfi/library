@@ -115,3 +115,4 @@ def train_and_eval(packed_sources):
 - **Eval every N**: default 100–1000 steps as in Poolside's published practice; same infer codepath as serving.
 - **Promote**: `use_research_flag` (or equivalent) is how a win ships. Do not fork the trainer.
 - **Scheduler**: do not stand up FoundationDB/Volcano/NCCL P2P until trainer and infer are actually on separate GPU pools for online RL.
+- **Query-conditioned item scoring (optional)**: Bergson (`method:bergson`) / TrackStar (`method:trackstar`) can rank training sequences or tokens against a query eval (`bergson score`, LESS-style). Complementary to AutoMixer mix-weight search: AutoMixer searches source ratios; Bergson scores items for one query. Not a mix-recipe SOTA and not a factory-process SOTA. Skip until you have a query behavior to attribute.

@@ -204,6 +204,10 @@ class TestQueryEngine(unittest.TestCase):
             for p in directed_sssp
         ))
 
+        tda = self.engine.sota("task:training-data-attribution")
+        self.assertTrue(any(p["method"].id == "method:magic" for p in tda))
+        self.assertFalse(any(p["method"].id == "method:bergson" for p in tda))
+
         keyword_sssp = self.engine.sota("directed sssp")
         self.assertTrue(any(p["method"].id == "method:bmssp" for p in keyword_sssp))
 
@@ -373,6 +377,89 @@ class TestModelFactorySystemsShelf(unittest.TestCase):
         self.assertNotIn("poolside-titan", body)
         self.assertNotIn("poolside-atlas", body)
         self.assertNotIn("poolside-hive", body)
+
+
+class TestDataAttributionShelf(unittest.TestCase):
+    """Bergson/MAGIC is diagnostic tooling; it must not retarget train-kernel SOTA."""
+
+    def setUp(self):
+        self.graph = load_graph(Path("graph"))
+        self.engine = QueryEngine(self.graph)
+
+    def test_training_data_attribution_sota_is_magic_not_bergson(self):
+        task = self.graph.get_node("task:training-data-attribution")
+        self.assertIsNotNone(task)
+        self.assertEqual(task.domain, "interpretability")
+        sota_ids = [entry["method"] for entry in task.metadata.get("current_sota", [])]
+        self.assertEqual(sota_ids, ["method:magic"])
+        self.assertNotIn("method:bergson", sota_ids)
+        paths = self.engine.sota("task:training-data-attribution")
+        self.assertTrue(any(p["method"].id == "method:magic" for p in paths))
+        self.assertFalse(any(p["method"].id == "method:bergson" for p in paths))
+
+    def test_bergson_is_active_library_with_empty_sota_for(self):
+        bergson = self.graph.get_node("method:bergson")
+        self.assertIsNotNone(bergson)
+        self.assertEqual(bergson.status, "active")
+        self.assertEqual(bergson.metadata.get("sota_for") or [], [])
+        self.assertEqual(bergson.metadata.get("category"), "data-attribution")
+        self.assertEqual(bergson.metadata.get("supersedes") or [], [])
+        magic = self.graph.get_node("method:magic")
+        self.assertNotEqual(magic.metadata.get("superseded_by"), "method:bergson")
+        self.assertNotIn("method:magic", bergson.metadata.get("supersedes") or [])
+
+    def test_bergson_does_not_appear_on_mix_or_factory_sota(self):
+        open_data = self.graph.get_node("task:open-data-recipe")
+        factory = self.graph.get_node("task:industrial-model-building")
+        open_sota = [entry["method"] for entry in open_data.metadata.get("current_sota", [])]
+        factory_sota = [entry["method"] for entry in factory.metadata.get("current_sota", [])]
+        self.assertNotIn("method:bergson", open_sota)
+        self.assertNotIn("method:bergson", factory_sota)
+        self.assertIn("method:olmo-3", open_sota)
+        self.assertIn("method:poolside-model-factory", factory_sota)
+        self.assertNotIn("method:bergson", factory.metadata.get("methods") or [])
+        recipe = self.graph.get_node("recipe:small-lab-model-factory")
+        self.assertEqual(recipe.get("method"), "method:poolside-model-factory")
+
+    def test_trackstar_ekfac_source_exist(self):
+        trackstar = self.graph.get_node("method:trackstar")
+        ekfac = self.graph.get_node("method:ek-fac")
+        source = self.graph.get_node("method:source-unrolling")
+        self.assertIsNotNone(trackstar)
+        self.assertIsNotNone(ekfac)
+        self.assertIsNotNone(source)
+        self.assertEqual(trackstar.status, "active")
+        self.assertEqual(ekfac.status, "active")
+        self.assertEqual(source.status, "niche")
+        for method in (trackstar, ekfac, source):
+            self.assertEqual(method.metadata.get("category"), "data-attribution")
+            self.assertEqual(method.metadata.get("sota_for") or [], [])
+
+    def test_locked_training_sota_unchanged(self):
+        locks = {
+            "task:pretrain-dense-7b": "method:muon2",
+            "task:math-code-rl-dense": "method:cispo",
+            "task:open-data-recipe": "method:olmo-3",
+            "task:industrial-model-building": "method:poolside-model-factory",
+            "task:directed-sssp-nonneg": "method:bmssp",
+            "task:teacher-free-on-policy-self-adaptation": "method:opsa",
+        }
+        for task_id, method_id in locks.items():
+            paths = self.engine.sota(task_id)
+            self.assertTrue(
+                any(p["method"].id == method_id for p in paths),
+                f"{task_id} lost {method_id}",
+            )
+            self.assertFalse(any(p["method"].id == "method:bergson" for p in paths))
+            self.assertFalse(any(p["method"].id == "method:magic" for p in paths))
+
+        sae = self.engine.sota("task:mechanistic-interpretability-dictionaries")
+        sae_ids = [p["method"].id for p in sae]
+        self.assertIn("method:sasa", sae_ids)
+        self.assertIn("method:circuitsteer", sae_ids)
+        self.assertIn("method:fega", sae_ids)
+        self.assertNotIn("method:bergson", sae_ids)
+        self.assertNotIn("method:magic", sae_ids)
 
 
 def run_cli(*cli_args: str) -> subprocess.CompletedProcess:
@@ -612,6 +699,9 @@ tags: []
         opsa = self.engine.sota("task:teacher-free-on-policy-self-adaptation")
         self.assertTrue(any(p["method"].id == "method:opsa" for p in opsa))
         self.assertFalse(any(p["method"].id == "method:cispo" for p in opsa))
+        tda = self.engine.sota("task:training-data-attribution")
+        self.assertTrue(any(p["method"].id == "method:magic" for p in tda))
+        self.assertFalse(any(p["method"].id == "method:bergson" for p in tda))
 
     def test_json_on_walk_path_stats_index(self):
         walk = run_cli("walk", "method:cispo", "--json")

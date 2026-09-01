@@ -20,56 +20,70 @@ When you are asked to **"train model X to do Y"**, **do not rely on outdated pre
 
 Use this quick-routing table as of **2026-09-01**:
 
+<!-- CHEAT-SHEET:START -->
 ```
-task: pretrain dense 7B optimizer  -> muon2 (2604.09967) + kl-soap (2607.20548) if memory allows
-task: budget ~1.5-2B dense pretrain on consumer GPUs -> puro-2b (2608.27370); NOT olmo-3 7B, NOT muon2+kl-soap
-task: open data recipe             -> olmo-3 / dolma-3 (2512.13961)
-task: pretrain MoE architecture    -> deepseek-v4 (2606.19348) + kimi-k3 (2607.24653)
-task: train MoE on NVL72        -> mixture-of-kittens (MoK megakernel, 1070 tok/s/GPU on GB300 NVL72)
-task: instruct SFT                 -> olmo-3 dolci (2512.13961); industrial alt nemotron-cascade-2 (2603.19220)
-task: math/code RL, dense          -> cispo (minimax-m1 2506.13585 + scalerl 2510.13786)
-task: math/code RL, Pass@K / coverage / no-backward -> es-reasoning (2608.27351); Pass@1 default remains cispo
-task: math/code RL, MoE/VL         -> sapo (2511.20347); gspo only if Qwen3.5-Omni Talker
-task: agentic async RL             -> sao (2607.07508)
-task: all-zero verifier groups     -> verigate (2605.30451)
-task: LoRA quality 24GB            -> vanilla LoRA + rsLoRA + LR sweep (2602.04998, 2601.22708) NOT DoRA
-task: LoRA must 4-bit              -> aqlora-q (2608.23816) or autoqra (2602.22268)
-task: full-param mem pretrain      -> scale (2506.16659) not galore
-task: native 1.58-bit pretrain     -> sparse-bitnet (2603.05168); keep 2B4T as dense cite
-task: ternary an existing SOTA LLM -> scaleq-1.58 (2608.01078)
-task: FP4 hardware train           -> quartet-ii nvfp4 (2601.22813) / mxfp4 (2605.09825) / kimi-k3 QAT
-task: distill student              -> opd 2604.13016 (single-teacher) / open-mopd 2608.19098 (multi-teacher)
-task: SNN sequence/SSM             -> longspike (2606.12895); train with a2sg (2606.11236); silif stays as speech-neuron cite
-task: continuous control           -> efficienttdmpc (2605.16692) family; dream-mpc (2605.04568) gradient planner
-task: neural video GPU             -> dcvc-uf (2606.04410)
-task: neural video deploy          -> mlvc (2606.28027)
-task: distill a reasoner (OPD+RLVR)-> opdvr (2608.24696)
-task: token-level advantages (1/p) -> bpco (2608.23566)
-task: posttrain diffusion          -> diffusion-opsd (2608.24646); no task-specific teacher (flow) -> self-opd (2608.26872)
-task: video MLLM RL                -> orarl (2608.20492)
-task: label-free TTT / no-GT test-time reasoner -> ttpo (2608.27448)
-task: unlabeled math reasoner posttrain (no GT) -> u-opsd (2608.06296)
-task: privileged-teacher OPSD / gold-solution self-distillation -> vista (2608.28306)
-task: data-free self-evolution incl. unverifiable -> j-zero (2608.26582)
-task: teacher-free / label-free on-policy self-adaptation -> opsa (2608.31046); NOT cispo when labels exist; NOT opd when a strong teacher is the goal
-task: LoRA RLVR-stable adapter upgrade -> nora (2608.31036); quality default remains vanilla LoRA + rsLoRA + LR sweep
-task: RLVR token-filter plug-in (GRPO/DAPO/CISPO-family truncation) -> gmts (2608.30632); does NOT replace cispo
-task: teacher OPD trajectory filter -> ra-opd (2608.27960); does NOT replace opd or opsa
-task: hybrid residual / Qwen-style next architecture -> qwen38-next (2608.30320); does NOT replace muon2 or deepseek-v4/kimi-k3
-task: MoE layer layout / communication-efficient experts -> ce-moe (2608.28511); does NOT replace deepseek-v4/kimi-k3
-task: full low-bit fine-tune (NF4/INT4/MXFP4 code-space) -> gradcodes (2608.30908); 4-bit PEFT default remains aqlora-q; FP4 hardware train remains quartet-ii
-task: SAE dictionary               -> sasa (2606.06333) KEEP
-task: SAE circuits                 -> circuitsteer (2608.05732)
-task: SAE effect geometry          -> fega (2607.24645)
-task: operator, regular-grid PDE     -> cvit / poseidon-finetune; fno is baseline only
-task: operator, industrial CAD mesh  -> transolver-3 (2602.04940); alts ab-upt / geotransolver / domino
-task: operator, pretrained foundation-> poseidon (2405.19101) or unisolver (2405.17527); fine-tune when PDE family shifts
-task: operator, physics-informed     -> pi-cvit (2606.06164) + SOAP; not a 2021 PINN
-task: operator, Fourier LoRA/adapt   -> f-adapter (2509.23173) NOT vanilla LoRA
-task: operator, weather/climate      -> fourcastnet-3 (2507.12144) (forecast cousin, not CAE)
-task: industrial model-building / factory -> poolside-model-factory (Laguna 2605.27605). Process default, not a train-kernel default. Small lab: configs-as-code + Dagster lineage + streamed mixes; skip custom scheduler. CISPO/Muon stay the train defaults. [2026-08-31]
-task: directed SSSP distances, sparse, comparison-addition -> BMSSP; need vertex order or typical n -> Dijkstra
+task:directed-sssp-nonneg -> method:bmssp (2504.17033, 2026-08)
+task:1bit-extreme-quantization -> method:sparse-bitnet (2603.05168, 2026-08-26)
+task:fp4-hardware-training -> method:quartet-ii (2601.22813, 2026-08-26) + method:mxfp4-mi355x (2605.09825, 2026-08-26)
+task:post-training-ternary-quantization -> method:scaleq-158 (2608.01078, 2026-08-26)
+task:continuous-control-world-model -> method:efficienttdmpc (2605.16692, 2026-08-26) + method:dream-mpc (2605.04568, 2026-08-26)
+task:visuomotor-servo-control -> method:td-mpc2 (2310.16828, 2026-08-26)
+task:posttrain-diffusion -> method:diffusion-opsd (2608.24646, 2026-08-27) + method:self-opd (2608.26872, 2026-08-28)
+task:4bit-peft-quantization -> method:aqlora-q (2608.23816, 2026-08-26) + method:autoqra (2602.22268, 2026-08-26)
+task:full-lowbit-finetune -> method:gradcodes (2608.30908, 2026-09-01)
+  when memory must fit a 4-bit stack but a mixed-precision adapter at inference is acceptable -> task:4bit-peft-quantization
+  when native FP4 forward/backward hardware training from scratch -> task:fp4-hardware-training
+  when quality LoRA on 24GB without a fully quantized checkpoint constraint -> task:lora-quality-tuning
+task:full-param-memory-efficient-pretrain -> method:scale (2506.16659, 2026-08-26)
+task:lora-quality-tuning -> method:lr-matters-lora (2602.04998, 2026-08-26)
+task:parameter-efficient-fine-tuning -> method:lr-matters-lora (2602.04998, 2026-08-26) + method:aqlora-q (2608.23816, 2026-08-26)
+task:mechanistic-interpretability-dictionaries -> method:sasa (2606.06333, 2026-08-26) + method:circuitsteer (2608.05732, 2026-08-26) + method:fega (2607.24645, 2026-08-26)
+task:sae-circuits -> method:circuitsteer (2608.05732, 2026-08-26)
+task:sae-effect-geometry -> method:fega (2607.24645, 2026-08-26)
+task:agentic-async-rl -> method:sao (2607.07508, 2026-08-26)
+task:all-zero-verifier-groups -> method:verigate (2605.30451, 2026-08-26)
+task:data-free-self-evolution -> method:j-zero (2608.26582, 2026-08-31)
+task:direct-preference-alignment -> method:olmo-3 (2512.13961, 2026-08-26)
+task:distill-reasoner-verifier -> method:opdvr (2608.24696, 2026-08-27)
+task:instruct-sft-alignment -> method:olmo-3 (2512.13961, 2026-08-26) + method:nemotron-cascade-2 (2603.19220, 2026-08-26)
+task:label-free-reasoner-posttrain -> method:u-opsd (2608.06296, 2026-08-28)
+task:label-free-test-time-reasoner -> method:ttpo (2608.27448, 2026-08-28)
+task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
+task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
+task:passk-reasoning-coverage -> method:es-reasoning (2608.27351, 2026-08-31)
+task:privileged-teacher-opsd -> method:vista (2608.28306, 2026-08-31)
+task:reasoning-rl-alignment -> method:cispo (2506.13585, 2026-08-26) + method:sapo (2511.20347, 2026-08-26)
+task:student-distillation -> method:opd (2604.13016, 2026-08-26) + method:open-mopd (2608.19098, 2026-08-28)
+task:teacher-free-on-policy-self-adaptation -> method:opsa (2608.31046, 2026-09-01)
+  when verifiable labels exist and the goal is Pass@1 RLVR -> task:math-code-rl-dense
+  when a strong teacher is available and the goal is intentional distillation -> task:student-distillation
+  when unlabeled existing math problems with majority-vote pseudo-solutions -> task:label-free-reasoner-posttrain
+  when test-time adaptation on unlabeled queries -> task:label-free-test-time-reasoner
+  when zero external problems, including unverifiable domains -> task:data-free-self-evolution
+  when flow matching or continuous diffusion post-training -> task:posttrain-diffusion
+task:token-level-critic-rl -> method:bpco (2608.23566, 2026-08-27)
+task:budget-consumer-pretrain -> method:puro-2b (2608.27370, 2026-08-31)
+task:linear-time-sequence-modeling -> method:mamba-2 (2405.21060, 2024-05)
+task:llm-pretraining-optimization -> method:muon2 (2604.09967, 2026-08-26)
+task:open-data-recipe -> method:olmo-3 (2512.13961, 2026-08-26)
+task:pretrain-dense-7b -> method:muon2 (2604.09967, 2026-08-26)
+task:pretrain-moe-frontier -> method:deepseek-v4 (2606.19348, 2026-08-26) + method:kimi-k3 (2607.24653, 2026-08-26)
+task:operator-foundation -> method:poseidon (2405.19101, 2026-08-28) + method:unisolver (2405.17527, 2026-08-28)
+task:operator-fourier-adapt -> method:f-adapter (2509.23173, 2026-08-28)
+task:operator-grid-pde -> method:cvit (2405.13998, 2026-08-28) + method:poseidon (2405.19101, 2026-08-28)
+task:operator-industrial-mesh -> method:transolver-3 (2602.04940, 2026-08-28)
+task:operator-physics-informed -> method:pi-cvit (2606.06164, 2026-08-28)
+task:operator-weather -> method:fourcastnet-3 (2507.12144, 2026-08-28)
+task:snn-sequence-modeling -> method:longspike (2606.12895, 2026-08-26)
+task:spiking-neural-networks-training -> method:longspike (2606.12895, 2026-08-26) + method:a2sg (2606.11236, 2026-08-26)
+task:industrial-model-building -> method:poolside-model-factory (2605.27605, 2026-08)
+task:train-moe-nvl72 -> method:mixture-of-kittens (2026-08-26)
+task:learned-video-compression -> method:dcvc-uf (2606.04410, 2026-08-26) + method:mlvc (2606.28027, 2026-08-26)
+task:neural-video-deploy -> method:mlvc (2606.28027, 2026-08-26)
+task:neural-video-gpu -> method:dcvc-uf (2606.04410, 2026-08-26)
+task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 ```
+<!-- CHEAT-SHEET:END -->
 
 ---
 
@@ -180,18 +194,23 @@ Canonical query paths:
 
 ## 6. Querying the Library via CLI
 
-The library provides a zero-dependency CLI (`python -m library`):
+The library provides a zero-dependency CLI (`python -m library`). Prefer `sota` / `decide` over `query`. JSON is first-class (`--json`); `--brief` is the ~10-line tier. `graph/INDEX.md` and the §2 cheat-sheet are L3 derived views — regenerate with `index`, never hand-edit them.
 
 ### 6.1 Resolving SOTA for a Task or Domain
 ```bash
 # Look up canonical SOTA method, claims, paper, and recipe for pretraining
 python -m library sota "pretrain dense 7B"
 
-# Direct task ID lookup
+# Direct task ID lookup (decision-shaped default)
 python -m library sota "task:math-code-rl-dense"
 
-# Structured JSON output for agent tools
+# Brief (~10 lines) and structured JSON
+python -m library sota "task:math-code-rl-dense" --brief
 python -m library sota "task:parameter-efficient-fine-tuning" --json
+
+# Six-question decision: use / instead / do-not-use / gotchas / code / trust
+python -m library decide "task:math-code-rl-dense"
+python -m library decide "task:math-code-rl-dense" --json
 ```
 
 ### 6.2 Searching the Graph
@@ -217,6 +236,27 @@ python -m library walk "method:muon2"
 
 # Find path between any two graph nodes
 python -m library path --from "task:pretrain-dense-7b" --to "recipe:muon2-pretraining"
+```
+
+### 6.4 Routing, freshness, index, and supersession
+```bash
+# Rank candidate tasks (scope / out_of_scope / redirects). Never empty without near-misses.
+python -m library route "pretrain dense 7B"
+python -m library route "pretrain dense 7B" --json
+
+# Freshness queue. Default budget 120 days. Exit 1 if any task current_sota is over budget.
+python -m library stale
+python -m library stale --max-age-days 120 --json
+
+# Regenerate graph/INDEX.md and this file's §2 cheat-sheet from graph state
+python -m library index
+python -m library index --json
+
+# Validate: exit 1 only for schema/integrity errors. INDEX.md / cheat-sheet drift is a WARNING (exit 0).
+python -m library validate
+
+# Transactional supersession (refuses unless post-conditions hold). --dry-run writes nothing.
+python -m library supersede method:new method:old --task task:example --dry-run
 ```
 
 ---
@@ -276,7 +316,7 @@ staleness) are in [docs/ontology.md](docs/ontology.md) §4.1.1.
             plausibly sits near a task boundary, check that task's `scope`, `out_of_scope`, and
             `redirects` before resolving. Follow `redirects` mechanically — they encode hard-won
             negative knowledge ("not this scale", "NOT DoRA").
-2. RESOLVE  `python -m library sota <task>` -> method + claims + papers + recipes.
+2. RESOLVE  `python -m library sota <task>` or `python -m library decide <task>` -> method + claims + papers + recipes.
 3. VERIFY   weight each claim by evidence (verified + evidence_level) and freshness
             (as_of / last_reviewed). If a task's current_sota is older than 4 months, say so in your
             answer and re-check literature before committing an expensive plan.
@@ -291,7 +331,7 @@ staleness) are in [docs/ontology.md](docs/ontology.md) §4.1.1.
 - **Remote first**: if you are working against the GitHub remote (no local clone), fetch the compiled
   graph in one call — `gh api repos/j8ckfi/library/contents/dist/graph.json` (CI keeps it fresh) — and
   fall back to per-node `contents/` fetches only for files you will act on.
-- Prefer `sota` over `query` (one call returns the whole resolution path); prefer `query --json` for
+- Prefer `sota` / `decide` over `query` (one call returns the whole resolution path); prefer `query --json` for
   scripted filtering; use `show` only on the specific nodes you will act on; use `walk`/`path` only when
   `sota`/`query` leave a genuine traversal question open.
 - Never re-derive what a single `validate` can tell you; run it after every write and before reporting

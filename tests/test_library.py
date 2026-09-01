@@ -1,18 +1,29 @@
 """Comprehensive unit and integration test suite for j8ckfi/library."""
 
-import unittest
-import tempfile
-import shutil
 import json
+import shutil
+import subprocess
+import sys
+import tempfile
+import unittest
 from pathlib import Path
 
-from library.graph import KnowledgeGraph, Node, Edge
-from library.loader import load_graph, parse_frontmatter, load_node_from_file
-from library.validator import validate_graph, validate_node_schema, validate_references, validate_supersession_cycles
-from library.query import QueryEngine, tokenize
-from library.traverse import describe_node_neighborhood, find_shortest_path
-from library.exporter import export_graph_to_dict, export_graph
+from library.decide import build_decision
+from library.exporter import export_graph, export_graph_to_dict
+from library.graph import Edge, KnowledgeGraph, Node
+from library.indexgen import derived_drift, write_index
 from library.ingest import create_node_from_template
+from library.loader import load_graph, load_node_from_file, parse_frontmatter
+from library.query import QueryEngine, tokenize
+from library.stale import collect_stale
+from library.supersede import apply_supersede
+from library.traverse import describe_node_neighborhood, find_shortest_path
+from library.validator import (
+    validate_graph,
+    validate_node_schema,
+    validate_references,
+    validate_supersession_cycles,
+)
 
 
 class TestKnowledgeGraphLoaderAndValidation(unittest.TestCase):
@@ -362,6 +373,275 @@ class TestModelFactorySystemsShelf(unittest.TestCase):
         self.assertNotIn("poolside-titan", body)
         self.assertNotIn("poolside-atlas", body)
         self.assertNotIn("poolside-hive", body)
+
+
+def run_cli(*cli_args: str) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        [sys.executable, "-m", "library", *cli_args],
+        capture_output=True,
+        text=True,
+        cwd=str(Path(".").resolve()),
+    )
+
+
+class TestCliErgonomics(unittest.TestCase):
+    def setUp(self):
+        self.graph = load_graph(Path("graph"))
+        self.engine = QueryEngine(self.graph)
+
+    def test_index_writes_and_is_idempotent(self):
+        first = write_index(self.graph)
+        self.assertTrue(first["written"])
+        index_path = Path("graph/INDEX.md")
+        self.assertTrue(index_path.exists())
+        text1 = index_path.read_text(encoding="utf-8")
+        self.assertIn("task:pretrain-dense-7b", text1)
+        self.assertIn("DO NOT HAND-EDIT", text1)
+        second = write_index(load_graph(Path("graph")))
+        text2 = Path(second["written"][0]).read_text(encoding="utf-8")
+        self.assertEqual(text1, text2)
+        self.assertFalse(second["stale"])
+        agents = Path("AGENTS.md").read_text(encoding="utf-8")
+        self.assertIn("<!-- CHEAT-SHEET:START -->", agents)
+        self.assertIn("<!-- CHEAT-SHEET:END -->", agents)
+
+    def test_validate_warns_if_index_missing_or_stale(self):
+        tmp = Path(tempfile.mkdtemp())
+        try:
+            res = validate_graph(self.graph, graph_root=tmp, agents_path=tmp / "AGENTS.md")
+            self.assertFalse(res.has_errors)
+            self.assertTrue(
+                any("INDEX" in w.message or "missing" in w.message.lower() for w in res.warnings)
+            )
+        finally:
+            shutil.rmtree(tmp)
+
+        write_index(self.graph)
+        index_path = Path("graph/INDEX.md")
+        original = index_path.read_text(encoding="utf-8")
+        try:
+            index_path.write_text(original + "\n# tamper\n", encoding="utf-8")
+            res_stale = validate_graph(load_graph(Path("graph")))
+            self.assertFalse(res_stale.has_errors)
+            self.assertTrue(any("stale" in w.message.lower() for w in res_stale.warnings))
+        finally:
+            index_path.write_text(original, encoding="utf-8")
+
+    def test_sota_brief_and_json_parse(self):
+        brief = run_cli("sota", "task:math-code-rl-dense", "--brief")
+        self.assertEqual(brief.returncode, 0, brief.stderr)
+        self.assertIn("cispo", brief.stdout.lower())
+        self.assertLessEqual(len(brief.stdout.strip().splitlines()), 12)
+
+        js = run_cli("sota", "task:math-code-rl-dense", "--json")
+        self.assertEqual(js.returncode, 0, js.stderr)
+        data = json.loads(js.stdout)
+        self.assertIn("resolutions", data)
+        self.assertIn("decision", data)
+        self.assertTrue(data["resolutions"])
+        self.assertTrue(data["resolutions"][0]["claims"])
+
+    def test_decide_math_code_rl_dense_cispo_not_grpo(self):
+        out = run_cli("decide", "task:math-code-rl-dense")
+        self.assertEqual(out.returncode, 0, out.stderr)
+        use_section = out.stdout.split("What would I use instead?")[0]
+        self.assertIn("CISPO", use_section.upper() + out.stdout.upper())
+        self.assertIn("method:cispo", out.stdout)
+        self.assertNotIn("method:grpo", use_section.lower())
+        payload = build_decision(self.graph, "task:math-code-rl-dense")
+        use_ids = [row["id"] for row in payload["use"]]
+        self.assertIn("method:cispo", use_ids)
+        self.assertNotIn("method:grpo", use_ids)
+        instead_ids = [row["id"] for row in payload["instead"]]
+        self.assertNotIn("method:grpo", instead_ids)
+
+    def test_stale_max_age_days_1_reports(self):
+        out = run_cli("stale", "--max-age-days", "1", "--json")
+        self.assertEqual(out.returncode, 1, out.stdout)
+        data = json.loads(out.stdout)
+        self.assertTrue(data["over_budget"])
+        self.assertTrue(any(item.get("over_budget") for item in data["items"]))
+        self.assertIn("id", data["items"][0])
+        self.assertIn("age_days", data["items"][0])
+
+        report = collect_stale(self.graph, max_age_days=1)
+        self.assertTrue(report["over_budget"])
+
+    def test_route_pretrain_dense_7b(self):
+        out = run_cli("route", "pretrain dense 7B", "--json")
+        self.assertEqual(out.returncode, 0, out.stderr)
+        data = json.loads(out.stdout)
+        self.assertTrue(data["candidates"])
+        self.assertEqual(data["candidates"][0]["id"], "task:pretrain-dense-7b")
+        self.assertTrue(data["candidates"][0]["reasons"])
+        nonsense = run_cli("route", "zzzz-not-a-real-task-qqq", "--json")
+        miss = json.loads(nonsense.stdout)
+        self.assertTrue(miss["candidates"])
+
+    def test_supersede_dry_run_does_not_write(self):
+        method_path = Path("graph/methods/cispo.md")
+        task_path = Path("graph/tasks/math-code-rl-dense.md")
+        changelog = Path("graph/CHANGELOG.md")
+        before = {
+            str(method_path): method_path.read_text(encoding="utf-8"),
+            str(task_path): task_path.read_text(encoding="utf-8"),
+            str(changelog): changelog.read_text(encoding="utf-8"),
+        }
+        out = run_cli(
+            "supersede",
+            "method:cispo",
+            "method:dapo",
+            "--task",
+            "task:math-code-rl-dense",
+            "--dry-run",
+        )
+        self.assertEqual(out.returncode, 0, out.stderr)
+        self.assertIn("DRY RUN", out.stdout)
+        for path, text in before.items():
+            self.assertEqual(Path(path).read_text(encoding="utf-8"), text)
+
+    def test_supersede_fixture_write_and_rollback_graph_untouched(self):
+        tmp = Path(tempfile.mkdtemp())
+        try:
+            (tmp / "methods").mkdir()
+            (tmp / "tasks").mkdir()
+            (tmp / "CHANGELOG.md").write_text("# Graph Change Log\n\n---\n", encoding="utf-8")
+            (tmp / "methods" / "alpha.md").write_text(
+                """---
+id: method:alpha
+type: method
+title: "Alpha"
+category: "optimizer"
+status: active
+sota_for: []
+supersedes: []
+papers: []
+recipes: []
+claims:
+  - benchmark: "B"
+    metric: "m"
+    value: 1
+    date: "2026-09"
+    verified: true
+tags: []
+---
+
+# Alpha
+""",
+                encoding="utf-8",
+            )
+            (tmp / "methods" / "beta.md").write_text(
+                """---
+id: method:beta
+type: method
+title: "Beta"
+category: "optimizer"
+status: sota
+sota_for:
+  - task:demo
+supersedes: []
+papers: []
+recipes: []
+claims:
+  - benchmark: "B"
+    metric: "m"
+    value: 1
+    date: "2026-01"
+    verified: true
+tags: []
+---
+
+# Beta
+""",
+                encoding="utf-8",
+            )
+            (tmp / "tasks" / "demo.md").write_text(
+                """---
+id: task:demo
+type: task
+title: "Demo"
+domain: "pretraining"
+summary: "Demo task"
+current_sota:
+  - method: method:beta
+    as_of: "2026-01"
+    benchmark: "B"
+    metric: "m"
+    value: 1
+methods:
+  - method:beta
+  - method:alpha
+tags: []
+---
+
+# Demo
+""",
+                encoding="utf-8",
+            )
+            g = load_graph(tmp)
+            result = apply_supersede(g, "method:alpha", "method:beta", "task:demo", dry_run=False)
+            self.assertTrue(result["ok"], result.get("errors"))
+            self.assertTrue(result["written"])
+            reloaded = load_graph(tmp)
+            res = validate_graph(reloaded, check_derived=False)
+            self.assertFalse(res.has_errors, res.errors)
+            alpha = reloaded.get_node("method:alpha")
+            beta = reloaded.get_node("method:beta")
+            task = reloaded.get_node("task:demo")
+            self.assertEqual(alpha.status, "sota")
+            self.assertEqual(beta.status, "superseded")
+            self.assertEqual(beta.metadata.get("superseded_by"), "method:alpha")
+            self.assertEqual(task.metadata["current_sota"][0]["method"], "method:alpha")
+        finally:
+            shutil.rmtree(tmp)
+
+    def test_validate_real_graph_zero_errors(self):
+        write_index(self.graph)
+        res = validate_graph(load_graph(Path("graph")))
+        self.assertEqual(len(res.errors), 0, res.errors)
+        drift = derived_drift(load_graph(Path("graph")))
+        self.assertEqual(drift, [])
+
+    def test_sota_defaults_locked(self):
+        dense = self.engine.sota("task:pretrain-dense-7b")
+        self.assertTrue(any(p["method"].id == "method:muon2" for p in dense))
+        factory = self.engine.sota("task:industrial-model-building")
+        self.assertTrue(any(p["method"].id == "method:poolside-model-factory" for p in factory))
+        sssp = self.engine.sota("task:directed-sssp-nonneg")
+        self.assertTrue(any(p["method"].id == "method:bmssp" for p in sssp))
+        opsa = self.engine.sota("task:teacher-free-on-policy-self-adaptation")
+        self.assertTrue(any(p["method"].id == "method:opsa" for p in opsa))
+        self.assertFalse(any(p["method"].id == "method:cispo" for p in opsa))
+
+    def test_json_on_walk_path_stats_index(self):
+        walk = run_cli("walk", "method:cispo", "--json")
+        self.assertEqual(walk.returncode, 0, walk.stderr)
+        walk_data = json.loads(walk.stdout)
+        self.assertEqual(walk_data["id"], "method:cispo")
+        self.assertIn("outgoing", walk_data)
+
+        path = run_cli(
+            "path",
+            "--from",
+            "task:pretrain-dense-7b",
+            "--to",
+            "recipe:muon2-pretraining",
+            "--json",
+        )
+        self.assertEqual(path.returncode, 0, path.stderr)
+        path_data = json.loads(path.stdout)
+        self.assertGreaterEqual(path_data["hops"], 1)
+
+        stats = run_cli("stats", "--json")
+        self.assertEqual(stats.returncode, 0, stats.stderr)
+        stats_data = json.loads(stats.stdout)
+        self.assertIn("node_count", stats_data)
+
+        idx = run_cli("index", "--json")
+        self.assertEqual(idx.returncode, 0, idx.stderr)
+        idx_data = json.loads(idx.stdout)
+        self.assertIn("written", idx_data)
+        self.assertIn("stale", idx_data)
 
 
 if __name__ == "__main__":

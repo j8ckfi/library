@@ -83,7 +83,13 @@ def load_graph(root_dir: Path) -> KnowledgeGraph:
         # Skip docs, templates, and top-level README/AGENTS files when loading graph/
         if "templates" in file_path.parts or "docs" in file_path.parts:
             continue
-        if file_path.name in ("README.md", "AGENTS.md", "PULL_REQUEST_TEMPLATE.md"):
+        if file_path.name in (
+            "README.md",
+            "AGENTS.md",
+            "PULL_REQUEST_TEMPLATE.md",
+            "INDEX.md",
+            "CHANGELOG.md",
+        ):
             continue
 
         node = load_node_from_file(file_path)

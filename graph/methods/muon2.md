@@ -37,6 +37,7 @@ Muon2 is a second-generation matrix orthogonalization momentum optimizer designe
 ## When to Use
 - Default SOTA optimizer for pretraining dense 7B language models from scratch.
 - Hidden matrix layers in multi-layer perceptrons and attention projections. Keep embeddings and `lm_head` on AdamW.
+- Qwen3.8-Next's Muon+AdamW split (`method:qwen38-next`) is a production architecture recipe, not a replacement of this 7B optimizer default.
 
 ## Gotchas & Failure Modes
 - Embedding tables, 1D vectors, and normalization scale factors should be optimized with standard AdamW rather than matrix orthogonalization.

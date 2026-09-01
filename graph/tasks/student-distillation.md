@@ -28,6 +28,9 @@ methods:
   - method:w2s-opd
   - method:nemotron-cascade-2
   - method:on-policy-distillation
+  - method:ra-opd
+  - method:opsa
+last_reviewed: "2026-09-01"
 tags:
   - post-training
   - distillation
@@ -40,7 +43,9 @@ tags:
 ## Problem Definition
 Training small local students (1B–8B) from large teacher models (70B–405B) with generalized on-policy divergence matching.
 
-## SOTA Recommendation (as of 2026-08-28)
-- **Single-Teacher Distillation Default**: **OPD** (`method:opd`, `paper:opd` `arXiv:2604.13016`).
+## SOTA Recommendation (as of 2026-09-01)
+- **Single-Teacher Distillation Default**: **OPD** (`method:opd`, `paper:opd` `arXiv:2604.13016`). Unchanged.
 - **Multi-Teacher Student Distillation Default**: **Open-MOPD** (`method:open-mopd`, `paper:open-mopd` `arXiv:2608.19098`) for token-share balancing, gap-aware dynamic budget allocation, and student reward refresh across specialized teacher models.
 - **Related alternative**: Use `method:vista` instead when the teacher is a privileged same-model copy that sees the gold solution (not a larger frozen teacher). OPD remains the student-distillation default.
+- **Optional teacher-OPD filter**: `method:ra-opd` (`arXiv:2608.27960`) keeps trajectories with sign-agree teacher return vs outcome reward. Does not replace OPD.
+- **No teacher / no labels**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace OPD when a strong teacher is the goal.

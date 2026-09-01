@@ -20,6 +20,9 @@ methods:
   - method:minpro
   - method:dr-grpo
   - method:grpo
+  - method:gmts
+  - method:opsa
+last_reviewed: "2026-09-01"
 tags:
   - post-training
   - reasoning
@@ -33,7 +36,9 @@ tags:
 ## Problem Definition
 Training dense language models to generate long chains of thought (CoT) and verifiable solutions for competitive math and coding problems.
 
-## SOTA Recommendation (as of 2026-08-26)
-- **Primary Method (Pass@1 labeled RLVR)**: **CISPO** (`method:cispo`, MiniMax-M1 2506.13585 + ScaleRL 2510.13786).
+## SOTA Recommendation (as of 2026-09-01)
+- **Primary Method (Pass@1 labeled RLVR)**: **CISPO** (`method:cispo`, MiniMax-M1 2506.13585 + ScaleRL 2510.13786). Unchanged.
 - **Systems Reference**: DAPO stays as systems paper reference. GRPO stays retired.
 - **Related alternative (Pass@K / coverage / no-backward)**: `method:es-reasoning` (`arXiv:2608.27351`). Do not swap CISPO for ES or revive GRPO when the goal is Pass@1.
+- **Optional token-filter plug-in**: `method:gmts` (`arXiv:2608.30632`) when using GRPO/DAPO/CISPO-family token truncation. Does not replace CISPO.
+- **No labels / no teacher**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace CISPO when labels exist.

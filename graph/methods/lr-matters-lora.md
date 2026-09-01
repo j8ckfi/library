@@ -38,5 +38,8 @@ Re-evaluating low-rank adaptation reveals that with rank-stabilized scaling (\(\
 ## When to Use
 - Default SOTA quality choice for 24GB single-GPU parameter-efficient fine-tuning (NOT DoRA).
 
+## Relation to Existing SOTA
+- Remains the 24GB LoRA quality default. `method:nora` is a recommended RLVR-stable adapter upgrade (status active) and is not a completed supersession of this protocol.
+
 ## Supersession
 - Supersedes `method:dora` and `method:delora` as the PEFT quality default.

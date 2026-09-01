@@ -17,6 +17,8 @@ methods:
   - method:j-zero
   - method:opdvr
   - method:cispo
+  - method:opsa
+last_reviewed: "2026-09-01"
 tags:
   - post-training
   - distillation
@@ -33,3 +35,4 @@ Training and aligning multi-step reasoning capabilities on vast corpora of unlab
 - **Primary Method**: **u-OPSD** (`method:u-opsd`, `paper:u-opsd` `arXiv:2608.06296`) for unsupervised on-policy self-distillation.
 - **When Labels/Verifiers Exist**: Prefer `method:opdvr` (for distillation with verifiers) or `method:cispo` (for train-time RL with labels).
 - **Data-free self-evolution (no existing problem corpus, including unverifiable domains)**: Use `method:j-zero`. u-OPSD remains the default for unlabeled existing math problems (no Challenger; consensus pseudo-solutions).
+- **Teacher-free on-policy self-adaptation (no consensus teacher)**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace u-OPSD's majority-vote protocol.

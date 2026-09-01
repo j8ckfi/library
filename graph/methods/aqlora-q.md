@@ -39,5 +39,8 @@ AQLoRA-Q is the state-of-the-art 4-bit quantized adapter fine-tuning method:
 ## When to Use
 - Default SOTA method when fine-tuning memory must fit on a 4-bit stack.
 
+## Relation to Existing SOTA
+- Remains the 4-bit PEFT speed/recipe default. Fully low-bit checkpoints with no high-precision adapter are `method:gradcodes` on `task:full-lowbit-finetune`, which does not replace AQLoRA-Q.
+
 ## Supersession
 - Supersedes `method:qlora` as the speed and recipe default on 4-bit fine-tuning stacks.

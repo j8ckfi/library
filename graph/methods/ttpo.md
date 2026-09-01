@@ -45,3 +45,4 @@ Test-Time Policy Optimization (TTPO) resolves the brittleness of consensus pseud
 ## Relation to Existing SOTA
 - Complementary to `method:opdvr` (which requires ground-truth verifiers/teachers during training) and `method:cispo` (train-time reinforcement learning with verifiable rewards). TTPO provides the label-free test-time reasoning standard.
 - Train-time data-free self-evolution (including unverifiable domains) is `method:j-zero`, not TTPO.
+- Train-time teacher-free self-adaptation on an unlabeled prompt set is `method:opsa`, not TTPO.

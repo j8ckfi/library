@@ -43,3 +43,4 @@ Self-OPD converts student self-exploration into dense per-step velocity guidance
 
 ## Relation to Existing SOTA
 - Co-exists with `method:diffusion-opsd` under `task:posttrain-diffusion`: use `method:diffusion-opsd` as the general reward/self-distillation default; use `method:self-opd` when working with flow matching models and avoiding task-specific teachers.
+- LLM teacher-free on-policy self-adaptation is `method:opsa`, not Self-OPD.

@@ -40,6 +40,7 @@ OPD (On-Policy Distillation) is the state-of-the-art framework for distilling la
 
 ## Relation to Existing SOTA
 - Remains the single-teacher student-distillation default. For a privileged same-model teacher that sees the gold solution, use `method:vista` instead of vanilla OPSD; that does not replace OPD.
+- Optional filter when a verifier is available: `method:ra-opd`. Teacher-free train-time self-adaptation is `method:opsa` and does not replace OPD when a strong teacher is the goal.
 
 ## Supersession
 - Supersedes `method:on-policy-distillation` (GKD baseline) as the primary distillation reference.

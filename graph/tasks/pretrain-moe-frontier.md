@@ -27,6 +27,9 @@ methods:
   - method:apertus
   - method:glm-5
   - method:muonclip-kimi-k2
+  - method:qwen38-next
+  - method:ce-moe
+last_reviewed: "2026-09-01"
 tags:
   - pretraining
   - moe
@@ -38,7 +41,9 @@ tags:
 ## Problem Definition
 Training sparse Mixture-of-Experts models enables scaling parameter capacity into hundreds of billions of parameters while keeping active FLOPs per token bounded.
 
-## SOTA Recommendation (as of 2026-08-26)
-- **Architecture**: **DeepSeek-V4** (`method:deepseek-v4`, 2606.19348) + **Kimi-K3** (`method:kimi-k3`, 2607.24653).
+## SOTA Recommendation (as of 2026-09-01)
+- **Architecture**: **DeepSeek-V4** (`method:deepseek-v4`, 2606.19348) + **Kimi-K3** (`method:kimi-k3`, 2607.24653). Unchanged.
 - **Optimizer**: **MuonClip** (`paper:muonclip-kimi-k2`) / **Muon2** (`method:muon2`).
 - **NVL72 Systems Megakernel**: **Mixture-of-Kittens** (`method:mixture-of-kittens`, `task:train-moe-nvl72`).
+- **Adjacent Qwen-style hybrid residual recipe**: `method:qwen38-next` (`arXiv:2608.30320`). Does not replace DeepSeek-V4 / Kimi-K3 or Muon2.
+- **Optional communication-efficient layout**: `method:ce-moe` (`arXiv:2608.28511`) when expert-parallel all-to-all dominates. Layout niche only.

@@ -68,6 +68,7 @@ J-Zero is a unified Challenger–Solver–Judge loop with no external training d
 ## Relation to Existing SOTA
 - First-hop for `task:data-free-self-evolution` only. Does **not** replace `method:u-opsd` (unlabeled existing math problems, no Challenger, consensus pseudo-solutions), `method:ttpo` (test-time, no training loop), or `method:cispo` / `method:sapo` / `method:sao` (labeled and agentic RL defaults).
 - Does not supersede R-Zero or G-Zero as graph nodes; those papers are baselines in `paper:j-zero`, not first-hop methods here.
+- Teacher-free on-policy self-adaptation on an existing unlabeled prompt set is `method:opsa`, not J-Zero.
 
 ## Gotchas & Failure Modes
 - **GRPO is the inner self-play optimizer, not a recommendation to use GRPO as this library's math/code RLVR default.** That default remains `method:cispo`. Using GRPO here does not change labeled RLVR routing.

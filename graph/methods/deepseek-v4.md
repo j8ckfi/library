@@ -43,5 +43,8 @@ DeepSeek-V4 establishes the state-of-the-art sparse Mixture-of-Experts architect
 ## When to Use
 - Default SOTA architecture template for pretraining large-scale sparse MoE models. Co-default with Kimi-K3 for frontier deployments.
 
+## Relation to Existing SOTA
+- Remains the frontier MoE architecture co-default with `method:kimi-k3`. `method:qwen38-next` is an adjacent Qwen-style hybrid residual recipe; `method:ce-moe` is an optional expert-layout niche. Neither replaces DeepSeek-V4.
+
 ## Supersession
 - Supersedes `method:deepseek-v3` as the canonical architecture template.

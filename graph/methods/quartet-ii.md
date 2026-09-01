@@ -37,3 +37,4 @@ Quartet-II implements hardware-aware NVFP4 (4-bit floating point) training for d
 
 ## Relation to Existing SOTA
 - Puro-2B's blockwise E4M3 / MXFP8 pretrain (`method:puro-2b`) is not NVFP4 and does not replace Quartet-II.
+- Fully low-bit fine-tuning of an already-quantized checkpoint is `method:gradcodes` on `task:full-lowbit-finetune`, not native FP4 hardware training.

@@ -22,6 +22,8 @@ methods:
   - method:autoqra
   - method:qlora
   - method:beft
+  - method:gradcodes
+last_reviewed: "2026-09-01"
 tags:
   - efficiency
   - peft
@@ -31,5 +33,6 @@ tags:
 
 # 4-Bit Quantized PEFT & Adaptation
 
-## SOTA Recommendation (as of 2026-08-26)
-- **Primary Method**: **AQLoRA-Q** (`method:aqlora-q`, 2608.23816) or **AutoQRA** (`method:autoqra`, 2602.22268).
+## SOTA Recommendation (as of 2026-09-01)
+- **Primary Method**: **AQLoRA-Q** (`method:aqlora-q`, 2608.23816) or **AutoQRA** (`method:autoqra`, 2602.22268). Unchanged.
+- **Fully low-bit checkpoint (no mixed adapter)**: `method:gradcodes` on `task:full-lowbit-finetune`. That does not replace this 4-bit PEFT default.

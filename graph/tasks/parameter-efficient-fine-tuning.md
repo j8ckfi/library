@@ -31,6 +31,9 @@ methods:
   - method:dora
   - method:galore
   - method:lora
+  - method:nora
+  - method:gradcodes
+last_reviewed: "2026-09-01"
 tags:
   - efficiency
   - peft
@@ -43,7 +46,7 @@ tags:
 ## Problem Definition
 Adapting multi-billion parameter base models to downstream tasks with minimal trainable parameters on single GPU hardware.
 
-## SOTA Recommendation (as of 2026-08-26)
-- **LoRA Quality 24GB**: **Vanilla LoRA + rsLoRA + LR sweep** (`method:lr-matters-lora`, 2602.04998, 2601.22708) — NOT DoRA.
-- **LoRA Must 4-Bit**: **AQLoRA-Q** (`method:aqlora-q`, 2608.23816) or **AutoQRA** (`method:autoqra`, 2602.22268).
+## SOTA Recommendation (as of 2026-09-01)
+- **LoRA Quality 24GB**: **Vanilla LoRA + rsLoRA + LR sweep** (`method:lr-matters-lora`, 2602.04998, 2601.22708) — NOT DoRA. Unchanged. `method:nora` (`arXiv:2608.31036`) is a recommended RLVR-stable adapter upgrade, not a completed supersession of that default.
+- **LoRA Must 4-Bit**: **AQLoRA-Q** (`method:aqlora-q`, 2608.23816) or **AutoQRA** (`method:autoqra`, 2602.22268). Fully low-bit checkpoints with no high-precision adapter: `method:gradcodes` on `task:full-lowbit-finetune`.
 - **Full-Parameter Memory-Efficient Pretrain**: **SCALE** (`method:scale`, 2506.16659) — not GaLore.

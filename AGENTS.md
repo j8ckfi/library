@@ -18,7 +18,7 @@ When you are asked to **"train model X to do Y"**, **do not rely on outdated pre
 
 ## 2. Agent Routing Cheat-Sheet (First-Hop SOTA Index)
 
-Use this quick-routing table as of **2026-08-31**:
+Use this quick-routing table as of **2026-09-01**:
 
 ```
 task: pretrain dense 7B optimizer  -> muon2 (2604.09967) + kl-soap (2607.20548) if memory allows
@@ -51,6 +51,13 @@ task: label-free TTT / no-GT test-time reasoner -> ttpo (2608.27448)
 task: unlabeled math reasoner posttrain (no GT) -> u-opsd (2608.06296)
 task: privileged-teacher OPSD / gold-solution self-distillation -> vista (2608.28306)
 task: data-free self-evolution incl. unverifiable -> j-zero (2608.26582)
+task: teacher-free / label-free on-policy self-adaptation -> opsa (2608.31046); NOT cispo when labels exist; NOT opd when a strong teacher is the goal
+task: LoRA RLVR-stable adapter upgrade -> nora (2608.31036); quality default remains vanilla LoRA + rsLoRA + LR sweep
+task: RLVR token-filter plug-in (GRPO/DAPO/CISPO-family truncation) -> gmts (2608.30632); does NOT replace cispo
+task: teacher OPD trajectory filter -> ra-opd (2608.27960); does NOT replace opd or opsa
+task: hybrid residual / Qwen-style next architecture -> qwen38-next (2608.30320); does NOT replace muon2 or deepseek-v4/kimi-k3
+task: MoE layer layout / communication-efficient experts -> ce-moe (2608.28511); does NOT replace deepseek-v4/kimi-k3
+task: full low-bit fine-tune (NF4/INT4/MXFP4 code-space) -> gradcodes (2608.30908); 4-bit PEFT default remains aqlora-q; FP4 hardware train remains quartet-ii
 task: SAE dictionary               -> sasa (2606.06333) KEEP
 task: SAE circuits                 -> circuitsteer (2608.05732)
 task: SAE effect geometry          -> fega (2607.24645)
@@ -66,7 +73,7 @@ task: directed SSSP distances, sparse, comparison-addition -> BMSSP; need vertex
 
 ---
 
-## 3. SOTA Map (What You Actually Pick Today — 2026-08-31)
+## 3. SOTA Map (What You Actually Pick Today — 2026-09-01)
 
 1. **Train a ~7B dense LM from scratch**: Use **Muon2** (`method:muon2`, `paper:muon2` `arXiv:2604.09967`) with **KL-SOAP** (`method:soap-muon-scale`, `paper:soap-muon-scale` `arXiv:2607.20548`) if GPU memory allows. Keep embeddings / `lm_head` on AdamW. Data: **OLMo-3 / Dolma-3** open data recipe (`method:olmo-3`, `paper:olmo-3` `arXiv:2512.13961`).
 2. **Pretrain an MoE architecture**: Use **DeepSeek-V4** (`method:deepseek-v4`, `paper:deepseek-v4` `arXiv:2606.19348`) with **Kimi-K3** (`method:kimi-k3`, `paper:kimi-k3` `arXiv:2607.24653`) as co-default.
@@ -99,6 +106,13 @@ task: directed SSSP distances, sparse, comparison-addition -> BMSSP; need vertex
 29. **Budget ~1.5-2B dense pretrain on consumer GPUs**: Use **Puro-2B** (`method:puro-2b`, `paper:puro-2b` `arXiv:2608.27370`) for Qwen3-1.7B-arch ~2B from scratch on RTX 5090 (blockwise FP8, MuonH, CMA, Kaiyuan-Spark). Does **not** replace `method:muon2` + KL-SOAP as the 7B optimizer default, `method:olmo-3` as the open 7B/instruct data recipe, or `method:quartet-ii` as NVFP4. FP8 here is blockwise E4M3/MXFP8, not NVFP4.
 30. **Math/code RLVR for Pass@K / coverage / no-backward**: Use **ES-reasoning** (`method:es-reasoning`, `paper:es-reasoning` `arXiv:2608.27351`) one-point z-scored ES. Default when labels exist and the goal is Pass@1 remains **CISPO**. This is not a GRPO revival.
 31. **Directed SSSP distances (sparse, comparison-addition)**: Use **BMSSP** (`method:bmssp`, `paper:sorting-barrier-sssp` `arXiv:2504.17033`) for \(O(m\log^{2/3}n)\) distances, not vertex order. Need the distance order or typical \(n\) → **Dijkstra** (`method:dijkstra`). Not an ML training method; do not use for train-dense, MoE, CISPO, Muon, or OLMo.
+32. **Teacher-free / label-free on-policy self-adaptation**: Use **OPSA** (`method:opsa`, `paper:opsa` `arXiv:2608.31046`) for entropy-adaptive negative advantages on the lowest-logp tokens with no teacher, reward, or hint. Does **not** replace `method:cispo` when labels exist, `method:opd` when a strong teacher is available and intentional distillation is the goal, `method:u-opsd` (consensus pseudo-solutions), `method:ttpo` (test-time), `method:self-opd` (flow matching), `method:vista`, or `method:j-zero`.
+33. **RLVR-stable LoRA upgrade candidate**: Use **NoRA** (`method:nora`, `paper:nora` `arXiv:2608.31036`) to rank-normalize LoRA $A$ (or NoRA-init). Status `active`. The 24GB quality default remains **Vanilla LoRA + rsLoRA + LR sweep** (`method:lr-matters-lora`). Do not treat this as a completed supersession.
+34. **RLVR token-filter plug-in**: Use **GMTS** (`method:gmts`, `paper:gmts` `arXiv:2608.30632`) to keep top-20% tokens by $|E\cdot\omega|$ on GRPO/DAPO/CISPO-family trainers. Does **not** replace CISPO.
+35. **Teacher OPD trajectory filter**: Use **RA-OPD** (`method:ra-opd`, `paper:ra-opd` `arXiv:2608.27960`) to keep trajectories with $(2R-1)G\geq 0$. Modular filter on teacher OPD. Does **not** replace OPD or OPSA. Tension with OPSA's teacher-noise finding is documented, not a supersession.
+36. **Hybrid residual / Qwen-style next architecture**: Use **Qwen3.8-Next** (`method:qwen38-next`, `paper:qwen38-next` `arXiv:2608.30320`) as the GDN↔attention + Gated Residual + QSA + Muon/AdamW-split production recipe. Does **not** replace Muon2 as the ~7B optimizer default or DeepSeek-V4 / Kimi-K3 as MoE architecture defaults. FlashQLA is the public kernel.
+37. **Communication-efficient MoE layout**: Use **CE-MoE** (`method:ce-moe`, `paper:ce-moe` `arXiv:2608.28511`) to concentrate experts in fewer routed layers (~33% fewer GPU-h at 31.5B in the paper). Layout niche. Does **not** replace DeepSeek-V4 / Kimi-K3.
+38. **Fully low-bit fine-tune in code space**: Use **GradCodeS** (`method:gradcodes`, `paper:gradcodes` `arXiv:2608.30908`) when the deployed checkpoint must stay NF4/INT4/MXFP4 with no high-precision adapter. Does **not** replace AQLoRA-Q as 4-bit PEFT default or Quartet-II as NVFP4 hardware training.
 
 ---
 
@@ -129,6 +143,13 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `puro-2b` (2608.27370) is the first-hop for ~1.5-2B consumer-GPU / tight-budget dense pretrain. It does not supersede `muon2`, `olmo-3`, or `quartet-ii`. MuonH is a documented Muon/Muon2-family variant; Muon2's `sota_for` is unchanged.
 - `es-reasoning` (2608.27351) is the first-hop for Pass@K / reasoning coverage / no-backward RLVR. It does not supersede `cispo`. GRPO stays retired.
 - `bmssp` (2504.17033) supersedes `dijkstra` for directed SSSP *distances* in the comparison-addition model on sparse graphs; Dijkstra remains the practical default and is optimal if the vertex distance *order* is required.
+- `opsa` (2608.31046) is the first-hop for teacher-free / label-free on-policy self-adaptation. It does not supersede `cispo`, `opd`, `u-opsd`, `ttpo`, `self-opd`, `vista`, or `j-zero`.
+- `nora` (2608.31036) is an active RLVR-stable LoRA upgrade candidate. It does not supersede `lr-matters-lora` as the 24GB quality default.
+- `gmts` (2608.30632) is an optional RLVR token-filter plug-in. It does not supersede `cispo`.
+- `ra-opd` (2608.27960) is a modular teacher-OPD trajectory filter. It does not supersede `opd` or `opsa`.
+- `qwen38-next` (2608.30320) is an adjacent hybrid residual / Qwen-style production architecture recipe. It does not supersede `muon2` or `deepseek-v4` / `kimi-k3`.
+- `ce-moe` (2608.28511) is an optional MoE layer-layout niche. It does not supersede `deepseek-v4` / `kimi-k3`.
+- `gradcodes` (2608.30908) is the first-hop for fully low-bit code-space fine-tuning. It does not supersede `aqlora-q` or `quartet-ii`.
 
 ---
 

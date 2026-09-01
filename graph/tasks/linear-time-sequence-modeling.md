@@ -13,6 +13,9 @@ current_sota:
     notes: "State Space Duality (SSD) connects structured state spaces with matrix multiplication tensor cores."
 methods:
   - method:mamba-2
+  - method:qwen38-next
+  - method:gated-deltanet-2
+last_reviewed: "2026-09-01"
 tags:
   - pretraining
   - architecture

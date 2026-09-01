@@ -78,6 +78,18 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 ### task:sae-effect-geometry — SAE Effect Geometry & Feature Interaction
 - **SOTA**: `method:fega` `2607.24645` (as_of 2026-08-26) — Feature Interaction Geometry: Default SOTA SAE Effect Geometry
 
+### task:training-data-attribution — Training Data Attribution (LOO / LDS / Query-Conditioned Scoring)
+- **Scope**: Leave-one-out / linear datamodeling score (LDS), fact tracing, and LESS-style example or token scoring of a training corpus for a specified query eval.
+- **SOTA**: `method:magic` `2504.16430` (as_of 2026-09-01) — GPT-2 WikiText FT LDS (50 queries, N=400 retrains, 95% CI, Adam): 0.983 ± 0.005
+  - do not use when open-weight final checkpoint only, no training trajectory → `method:trackstar`
+  - do not use when 7B pretrain attribution without a 3–5× train-run budget → `method:trackstar`
+  - do not use when mix-ratio search or replacing an open pretrain mix → `method:olmo-3`
+- **Redirects**:
+  - when mix-ratio search or replacing an open pretrain mix → `task:open-data-recipe`
+  - when SAE dictionaries, circuits, or effect geometry → `task:mechanistic-interpretability-dictionaries`
+  - when factory process / experiments-as-code / lineage → `task:industrial-model-building`
+- **Out of scope**: Mix-ratio search over data sources (Dolma / OLMo-3 / AutoMixer); SAE dictionaries, circuits, and steering (SASA / CircuitSteer / FEGA); Train kernels: optimizer, architecture, RLVR loss (Muon2, CISPO, OPD); Unlearning trainers and forget-set optimization; Fused MoE expert attribution (gpt-oss, Mixtral, Qwen-MoE, OLMoE)
+
 ## post-training
 
 ### task:agentic-async-rl — Agentic Asynchronous Reinforcement Learning

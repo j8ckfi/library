@@ -40,6 +40,10 @@ task:parameter-efficient-fine-tuning -> method:lr-matters-lora (2602.04998, 2026
 task:mechanistic-interpretability-dictionaries -> method:sasa (2606.06333, 2026-08-26) + method:circuitsteer (2608.05732, 2026-08-26) + method:fega (2607.24645, 2026-08-26)
 task:sae-circuits -> method:circuitsteer (2608.05732, 2026-08-26)
 task:sae-effect-geometry -> method:fega (2607.24645, 2026-08-26)
+task:training-data-attribution -> method:magic (2504.16430, 2026-09-01)
+  when mix-ratio search or replacing an open pretrain mix -> task:open-data-recipe
+  when SAE dictionaries, circuits, or effect geometry -> task:mechanistic-interpretability-dictionaries
+  when factory process / experiments-as-code / lineage -> task:industrial-model-building
 task:agentic-async-rl -> method:sao (2607.07508, 2026-08-26)
 task:all-zero-verifier-groups -> method:verigate (2605.30451, 2026-08-26)
 task:data-free-self-evolution -> method:j-zero (2608.26582, 2026-08-31)
@@ -127,6 +131,7 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 36. **Hybrid residual / Qwen-style next architecture**: Use **Qwen3.8-Next** (`method:qwen38-next`, `paper:qwen38-next` `arXiv:2608.30320`) as the GDN↔attention + Gated Residual + QSA + Muon/AdamW-split production recipe. Does **not** replace Muon2 as the ~7B optimizer default or DeepSeek-V4 / Kimi-K3 as MoE architecture defaults. FlashQLA is the public kernel.
 37. **Communication-efficient MoE layout**: Use **CE-MoE** (`method:ce-moe`, `paper:ce-moe` `arXiv:2608.28511`) to concentrate experts in fewer routed layers (~33% fewer GPU-h at 31.5B in the paper). Layout niche. Does **not** replace DeepSeek-V4 / Kimi-K3.
 38. **Fully low-bit fine-tune in code space**: Use **GradCodeS** (`method:gradcodes`, `paper:gradcodes` `arXiv:2608.30908`) when the deployed checkpoint must stay NF4/INT4/MXFP4 with no high-precision adapter. Does **not** replace AQLoRA-Q as 4-bit PEFT default or Quartet-II as NVFP4 hardware training.
+39. **Training data attribution (LOO / LDS / query-conditioned scoring)**: Use **MAGIC** (`method:magic`, `paper:magic` `arXiv:2504.16430`) when you control the trainer and need peak LDS. Library: **Bergson** (`method:bergson`, `paper:bergson` `arXiv:2606.11660`, `pip install bergson`) — status `active`, `sota_for: []`, optional factory component like AutoMixer, never mix/kernel/factory SOTA. Small-lab filtering default: **TrackStar** (`method:trackstar`). Does **not** replace CISPO, Muon2, OPD, OLMo-3, Poolside factory, BMSSP, OPSA, or SAE dictionaries.
 
 ---
 
@@ -164,6 +169,7 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `qwen38-next` (2608.30320) is an adjacent hybrid residual / Qwen-style production architecture recipe. It does not supersede `muon2` or `deepseek-v4` / `kimi-k3`.
 - `ce-moe` (2608.28511) is an optional MoE layer-layout niche. It does not supersede `deepseek-v4` / `kimi-k3`.
 - `gradcodes` (2608.30908) is the first-hop for fully low-bit code-space fine-tuning. It does not supersede `aqlora-q` or `quartet-ii`.
+- `magic` (2504.16430) is the first-hop for `task:training-data-attribution` only (narrow LDS). `bergson` (2606.11660) is the library umbrella and does not supersede MAGIC. Neither retargets CISPO, Muon2, OPD, OLMo-3, factory process, BMSSP, OPSA, or SAE SOTA.
 
 ---
 

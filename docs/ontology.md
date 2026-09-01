@@ -66,7 +66,7 @@ Represents an algorithm, architecture, loss function, or training technique.
 id: method:<slug>
 type: method
 title: "<Method Name>"
-category: "<optimizer|architecture|rl-alignment|quantization|peft|spiking|circuits|codec|servo-control|neural-operator|training-systems|graph-algorithms>"
+category: "<optimizer|architecture|rl-alignment|quantization|peft|spiking|circuits|codec|servo-control|neural-operator|training-systems|graph-algorithms|data-attribution>"
 status: "<sota|active|superseded|niche|experimental>"
 sota_for:
   - task:<task-slug>
@@ -89,6 +89,8 @@ tags:
   - <tag-1>
 ---
 ```
+
+`category: data-attribution` is leave-one-out / influence / MAGIC-style scoring of training tokens or sequences for a query behavior. Diagnostic tooling, not a train kernel, mix-ratio search, or SAE dictionary. Do not reuse `data-curriculum` or `training-systems` for this shelf.
 
 ### 2.3 Paper Node (`paper:<slug>`)
 Represents published or preprint literature describing the technique.

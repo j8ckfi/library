@@ -40,7 +40,7 @@ Represents an ML objective, optimization problem, or capability benchmark.
 id: task:<slug>
 type: task
 title: "<Human Readable Title>"
-domain: "<pretraining|post-training|efficiency|compression|snn|interpretability|video|control|scientific-ml|systems|algorithms>"
+domain: "<pretraining|post-training|efficiency|compression|snn|interpretability|video|control|scientific-ml|systems|algorithms|agents>"
 summary: "<1-2 sentence problem description>"
 current_sota:
   - method: method:<method-slug>
@@ -66,7 +66,7 @@ Represents an algorithm, architecture, loss function, or training technique.
 id: method:<slug>
 type: method
 title: "<Method Name>"
-category: "<optimizer|architecture|rl-alignment|quantization|peft|spiking|circuits|codec|servo-control|neural-operator|training-systems|graph-algorithms|data-attribution>"
+category: "<optimizer|architecture|rl-alignment|quantization|peft|spiking|circuits|codec|servo-control|neural-operator|training-systems|graph-algorithms|data-attribution|agent-harness|agent-protocol|agent-memory|agent-recursion>"
 status: "<sota|active|superseded|niche|experimental>"
 sota_for:
   - task:<task-slug>
@@ -91,6 +91,8 @@ tags:
 ```
 
 `category: data-attribution` is leave-one-out / influence / MAGIC-style scoring of training tokens or sequences for a query behavior. Diagnostic tooling, not a train kernel, mix-ratio search, or SAE dictionary. Do not reuse `data-curriculum` or `training-systems` for this shelf.
+
+`category: agent-harness`, `agent-protocol`, `agent-memory`, and `agent-recursion` are the Agents shelf. They are not `rl-alignment` (SAO trains a policy) and not `training-systems`.
 
 ### 2.3 Paper Node (`paper:<slug>`)
 Represents published or preprint literature describing the technique.

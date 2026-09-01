@@ -2,7 +2,7 @@
 id: method:template-method
 type: method
 title: "Method Name"
-category: "optimizer" # optimizer | architecture | rl-alignment | quantization | peft | spiking | circuits | codec | servo-control | neural-operator | training-systems | graph-algorithms | data-attribution
+category: "optimizer" # optimizer | architecture | rl-alignment | quantization | peft | spiking | circuits | codec | servo-control | neural-operator | training-systems | graph-algorithms | data-attribution | agent-harness | agent-protocol | agent-memory | agent-recursion
 status: sota # sota | active | superseded | niche | experimental
 sota_for:
   - task:template-task

@@ -5,6 +5,97 @@
 Derived from task `current_sota`, task `redirects`, and method `do_not_use_for`.
 Regenerate with `python -m library index`. Never hand-edit this file.
 
+## agents
+
+### task:agent-communication — Agent Communication
+- **Scope**: Tool schemas, files on disk, and protocols. Not a SWE loop and not MAS.
+- **SOTA**: `method:mcp` `2602.11988` (as_of 2026-07) — MCP spec (stateless core): 2026-07-28 stateless core (agent↔tool)
+  - do not use when two independent vendor agents must negotiate → `method:a2a-protocol`
+  - do not use when the model has weak or no native function calling → `method:nlt`
+  - do not use when LLM-generating AGENTS.md as the instruction protocol → `method:mini-swe-agent`
+  - do not use when stuffing 40 MCP servers into a SWE loop as the design → `method:mini-swe-agent`
+- **Redirects**:
+  - when building the SWE loop rather than the tool protocol → `task:software-engineering-agent-harness`
+  - when wanting a multi-agent crew as the communication layer → `task:multi-agent-orchestration`
+- **Out of scope**: Choosing the SWE harness (mini-SWE-agent); Multi-agent orchestration as a default; Training SAO
+
+### task:agent-memory — Agent Memory
+- **Scope**: How an agent stores and updates strategies across tasks. Not dumped-prompt RLM and not a SWE loop.
+- **SOTA**: `method:ace` `2510.04618` (as_of 2025-10) — AppWorld, DeepSeek-V3.1: ACE 59.4 vs ReAct 42.4 (+17); vs GEPA latency −82%
+  - do not use when recursive summary as the only long-context strategy → `method:rlm`
+  - do not use when SWE patch loop with no persistent playbook → `method:mini-swe-agent`
+  - do not use when long-lived persona OS-style paging → `method:memgpt`
+- **Redirects**:
+  - when dumped corpus ≫ window → `task:long-context-prompt-offload`
+  - when SWE issue-to-patch without a playbook → `task:software-engineering-agent-harness`
+- **Out of scope**: Recursive summary as the only long-context strategy; SWE patch loops with no playbook need; Dumped 10M-token prompt
+
+### task:computer-use-agent — Computer-Use Agent
+- **Scope**: GUI computer-use. Paper protocol OSWorld 2.0 for desktop. Not GitHub-issue-to-patch.
+- **SOTA**: `method:claude-computer-use` `2606.29537` (as_of 2026-06) — OSWorld 2.0 paper protocol: Opus 4.8 max think + batched tools 20.6% binary / 54.8% partial; GPT-5.5 ~13% binary
+  - do not use when GitHub issue → patch → `method:mini-swe-agent`
+  - do not use when citing aggregator Opus 5 70.6% or Steel GPT-5.6 Sol 62.6% partial as this method's SOTA → `method:claude-computer-use`
+  - do not use when trained mobile GUI policy → `method:mai-ui`
+- **Redirects**:
+  - when GitHub issue to patch → `task:software-engineering-agent-harness`
+- **Out of scope**: GitHub issue → patch (SWE harness); OSWorld-Verified as the ranking bench (near-saturated); Aggregator 70.6% / Steel 62.6% as method SOTA
+
+### task:long-context-prompt-offload — Long-Context Prompt Offload
+- **Scope**: Dumped corpus ≫ context window. RLM REPL offload. Not a SWE harness and not trajectory folding.
+- **SOTA**: `method:rlm` `2512.24601` (as_of 2025-12) — GPT-5 Table 1 OOLONG-Pairs / BrowseComp+ 1K (depth=1): OOLONG-Pairs 58.0 vs compaction 0.1 vs Claude Code offload 6.5; BrowseComp+ 1K 91.3 vs compaction 70.5 vs base 0.0 OOM
+  - do not use when GitHub-issue-to-patch / SWE harness → `method:mini-swe-agent`
+  - do not use when long tool/web/SWE trajectory with folding → `method:foldgrpo`
+  - do not use when training an async agent policy → `method:sao`
+  - do not use when multi-agent orchestration as the long-context strategy → `method:single-agent-plus-tools`
+  - do not use when recursion depth > 1 as default → `method:rlm`
+  - do not use when corpus already on a filesystem you can grep → `method:coding-agent-file-offload`
+- **Redirects**:
+  - when GitHub issue to patch without a dumped corpus → `task:software-engineering-agent-harness`
+  - when long tool/web/SWE trajectory with folding → `task:long-horizon-tool-agent`
+- **Out of scope**: Ordinary SWE issue-to-patch without a dumped 10M prompt; Long tool/web trajectory folding (small active context); Training SAO; Recursive summary as the only strategy
+
+### task:long-horizon-tool-agent — Long-Horizon Tool Agent
+- **Scope**: Many sequential tool steps whose history must be folded. Not dumped-prompt offload and not the SWE harness without folding.
+- **SOTA**: `method:foldgrpo` `2510.11967` (as_of 2025-10) — BrowseComp-Plus / SWE-Bench Verified, Seed-OSS-36B 32K×10: BrowseComp-Plus 0.620 vs ReAct 327K+GRPO 0.540 vs ReAct 32K 0.286; SWE-Bench Verified 0.580 vs ReAct 327K+GRPO 0.574; GPT-5 ReAct 0.793 / 0.718 still ahead
+  - do not use when dumped corpus ≫ window → `method:rlm`
+  - do not use when SWE harness without folding → `method:mini-swe-agent`
+  - do not use when training async agent RL without folding → `method:sao`
+  - do not use when frontier-model SOTA vs GPT-5 ReAct → `method:foldgrpo`
+  - do not use when multi-agent as the long-horizon strategy → `method:single-agent-plus-tools`
+- **Redirects**:
+  - when dumped corpus much larger than the window → `task:long-context-prompt-offload`
+  - when SWE harness without folding → `task:software-engineering-agent-harness`
+- **Out of scope**: Dumped corpus prompt offload (RLM); SWE harness without folding; Async RL training without a folding objective (SAO)
+
+### task:multi-agent-orchestration — Multi-Agent Orchestration
+- **Scope**: Whether to use more than one agent. Default is single agent + tools (mini-SWE-agent / CCA). Not training SAO.
+- **SOTA**: `method:single-agent-plus-tools` `2606.04455` (as_of 2026-06) — MAC / Illusion of MAS / Gao cascade: do not; 5/39 MAC configs beat human; auto MAS underperforms CoT-SC up to 10× cost
+  - do not use when internal high-value parallel breadth research → `method:anthropic-orchestrator-worker`
+  - do not use when SWE patches → `method:mini-swe-agent`
+  - do not use when τ-bench policy dialog → `method:mcp`
+  - do not use when dumped long prompt → `method:rlm`
+  - do not use when training an agent policy → `method:sao`
+- **Redirects**:
+  - when GitHub issue to patch → `task:software-engineering-agent-harness`
+  - when train asynchronous RL for a tool-use policy → `task:agentic-async-rl`
+- **Out of scope**: SWE patches; τ-bench policy dialog; Sequential one-context work; CrewAI-default theater; Training SAO
+
+### task:software-engineering-agent-harness — Build an Agent (Software Engineering Harness)
+- **Scope**: First hop when you need to build an agent: loop + ACI + tools for repo work. Default is the dumb bash ReAct loop.
+- **SOTA**: `method:mini-swe-agent` `2405.15793` (as_of 2026-09) — SWE-bench Pro public (Scale, locked mini) / official Verified JSON / vals.ai locked mini: Pro Muse Spark 1.1 61.50±3.10 (ranking now); official JSON mini+Claude 4.5 Opus high 76.8% (2026-02-17); vals.ai Claude Opus 5 97.00% / DeepSeek V4 Pro 0813 96.40% (2026-09, different snapshot)
+  - do not use when training an async agent policy (tool-use RL) → `method:sao`
+  - do not use when dumped corpus much larger than the context window → `method:rlm`
+  - do not use when long tool/web trajectory with a small active context → `method:foldgrpo`
+  - do not use when planner-coder-tester multi-agent theater for a single patch → `method:single-agent-plus-tools`
+  - do not use when GUI / OS desktop computer-use → `method:claude-computer-use`
+  - do not use when notes/context management beyond bash on a hard repo → `method:cca`
+- **Redirects**:
+  - when train asynchronous RL for a tool-use policy → `task:agentic-async-rl`
+  - when math-code RLVR with verifiable rewards → `task:math-code-rl-dense`
+  - when GUI / OS desktop computer-use → `task:computer-use-agent`
+  - when 10M-token dumped corpus that does not fit the window → `task:long-context-prompt-offload`
+- **Out of scope**: Training an async agent policy (SAO); Math/code RLVR (CISPO); GUI / OS desktop computer-use; Dumped 10M-token corpus prompt offload (RLM); Trajectory folding (FoldGRPO); Planner-coder-tester multi-agent theater for a single patch; Meta-agent search as the default design process
+
 ## algorithms
 
 ### task:directed-sssp-nonneg — Directed Single-Source Shortest Paths (Non-Negative Real Weights)
@@ -93,7 +184,11 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 ## post-training
 
 ### task:agentic-async-rl — Agentic Asynchronous Reinforcement Learning
+- **Scope**: Training a tool-use / sandbox policy with asynchronous RL. Not choosing a software-engineering harness.
 - **SOTA**: `method:sao` `2607.07508` (as_of 2026-08-26) — Agentic Tool-Use & Multi-Turn Sandbox Benchmarks: Default SOTA for agentic async RL
+- **Redirects**:
+  - when build an agent rather than train a policy → `task:software-engineering-agent-harness`
+- **Out of scope**: Building or choosing a software-engineering agent loop (mini-SWE-agent / CCA / OpenHands); Dumped long-prompt offload (RLM); GUI computer-use without policy training
 
 ### task:all-zero-verifier-groups — All-Zero Verifier Groups & Process Supervision
 - **SOTA**: `method:verigate` `2605.30451` (as_of 2026-08-26) — All-Zero Verifier Group Benchmarks / Process Supervision: Default SOTA for verifier gating

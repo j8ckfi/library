@@ -22,6 +22,28 @@ Use this quick-routing table as of **2026-09-01**:
 
 <!-- CHEAT-SHEET:START -->
 ```
+task:agent-communication -> method:mcp (2602.11988, 2026-07)
+  when building the SWE loop rather than the tool protocol -> task:software-engineering-agent-harness
+  when wanting a multi-agent crew as the communication layer -> task:multi-agent-orchestration
+task:agent-memory -> method:ace (2510.04618, 2025-10)
+  when dumped corpus ≫ window -> task:long-context-prompt-offload
+  when SWE issue-to-patch without a playbook -> task:software-engineering-agent-harness
+task:computer-use-agent -> method:claude-computer-use (2606.29537, 2026-06)
+  when GitHub issue to patch -> task:software-engineering-agent-harness
+task:long-context-prompt-offload -> method:rlm (2512.24601, 2025-12)
+  when GitHub issue to patch without a dumped corpus -> task:software-engineering-agent-harness
+  when long tool/web/SWE trajectory with folding -> task:long-horizon-tool-agent
+task:long-horizon-tool-agent -> method:foldgrpo (2510.11967, 2025-10)
+  when dumped corpus much larger than the window -> task:long-context-prompt-offload
+  when SWE harness without folding -> task:software-engineering-agent-harness
+task:multi-agent-orchestration -> method:single-agent-plus-tools (2606.04455, 2026-06)
+  when GitHub issue to patch -> task:software-engineering-agent-harness
+  when train asynchronous RL for a tool-use policy -> task:agentic-async-rl
+task:software-engineering-agent-harness -> method:mini-swe-agent (2405.15793, 2026-09)
+  when train asynchronous RL for a tool-use policy -> task:agentic-async-rl
+  when math-code RLVR with verifiable rewards -> task:math-code-rl-dense
+  when GUI / OS desktop computer-use -> task:computer-use-agent
+  when 10M-token dumped corpus that does not fit the window -> task:long-context-prompt-offload
 task:directed-sssp-nonneg -> method:bmssp (2504.17033, 2026-08)
 task:1bit-extreme-quantization -> method:sparse-bitnet (2603.05168, 2026-08-26)
 task:fp4-hardware-training -> method:quartet-ii (2601.22813, 2026-08-26) + method:mxfp4-mi355x (2605.09825, 2026-08-26)
@@ -45,6 +67,7 @@ task:training-data-attribution -> method:magic (2504.16430, 2026-09-01)
   when SAE dictionaries, circuits, or effect geometry -> task:mechanistic-interpretability-dictionaries
   when factory process / experiments-as-code / lineage -> task:industrial-model-building
 task:agentic-async-rl -> method:sao (2607.07508, 2026-08-26)
+  when build an agent rather than train a policy -> task:software-engineering-agent-harness
 task:all-zero-verifier-groups -> method:verigate (2605.30451, 2026-08-26)
 task:data-free-self-evolution -> method:j-zero (2608.26582, 2026-08-31)
 task:direct-preference-alignment -> method:olmo-3 (2512.13961, 2026-08-26)
@@ -132,6 +155,7 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 37. **Communication-efficient MoE layout**: Use **CE-MoE** (`method:ce-moe`, `paper:ce-moe` `arXiv:2608.28511`) to concentrate experts in fewer routed layers (~33% fewer GPU-h at 31.5B in the paper). Layout niche. Does **not** replace DeepSeek-V4 / Kimi-K3.
 38. **Fully low-bit fine-tune in code space**: Use **GradCodeS** (`method:gradcodes`, `paper:gradcodes` `arXiv:2608.30908`) when the deployed checkpoint must stay NF4/INT4/MXFP4 with no high-precision adapter. Does **not** replace AQLoRA-Q as 4-bit PEFT default or Quartet-II as NVFP4 hardware training.
 39. **Training data attribution (LOO / LDS / query-conditioned scoring)**: Use **MAGIC** (`method:magic`, `paper:magic` `arXiv:2504.16430`) when you control the trainer and need peak LDS. Library: **Bergson** (`method:bergson`, `paper:bergson` `arXiv:2606.11660`, `pip install bergson`) — status `active`, `sota_for: []`, optional factory component like AutoMixer, never mix/kernel/factory SOTA. Small-lab filtering default: **TrackStar** (`method:trackstar`). Does **not** replace CISPO, Muon2, OPD, OLMo-3, Poolside factory, BMSSP, OPSA, or SAE dictionaries.
+40. **Build an agent (harness, not training)**: First hop is **`task:software-engineering-agent-harness` / mini-SWE-agent** (`method:mini-swe-agent`). RLM (`task:long-context-prompt-offload`) only for dumped long prompts. SAO (`task:agentic-async-rl`) is training an agent policy, not a scaffold. Do not start from multi-agent orchestration.
 
 ---
 
@@ -170,6 +194,7 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `ce-moe` (2608.28511) is an optional MoE layer-layout niche. It does not supersede `deepseek-v4` / `kimi-k3`.
 - `gradcodes` (2608.30908) is the first-hop for fully low-bit code-space fine-tuning. It does not supersede `aqlora-q` or `quartet-ii`.
 - `magic` (2504.16430) is the first-hop for `task:training-data-attribution` only (narrow LDS). `bergson` (2606.11660) is the library umbrella and does not supersede MAGIC. Neither retargets CISPO, Muon2, OPD, OLMo-3, factory process, BMSSP, OPSA, or SAE SOTA.
+- Agents shelf (`mini-swe-agent`, RLM, FoldGRPO, ACE, MCP, Claude computer-use, single-agent+tools) does not supersede `sao`, CISPO, Muon2, OPD, OLMo-3, factory, BMSSP, OPSA, SAE, or MAGIC/Bergson. SAO remains SOTA for `task:agentic-async-rl`.
 
 ---
 
@@ -321,7 +346,8 @@ staleness) are in [docs/ontology.md](docs/ontology.md) §4.1.1.
 1. ROUTE    user request -> task:<slug>. Try the cheat-sheet (§2) first; if no hit or the request
             plausibly sits near a task boundary, check that task's `scope`, `out_of_scope`, and
             `redirects` before resolving. Follow `redirects` mechanically — they encode hard-won
-            negative knowledge ("not this scale", "NOT DoRA").
+            negative knowledge ("not this scale", "NOT DoRA"). First hop for "build an agent" is
+            task:software-engineering-agent-harness / mini-swe-agent (not multi-agent, not SAO).
 2. RESOLVE  `python -m library sota <task>` or `python -m library decide <task>` -> method + claims + papers + recipes.
 3. VERIFY   weight each claim by evidence (verified + evidence_level) and freshness
             (as_of / last_reviewed). If a task's current_sota is older than 4 months, say so in your

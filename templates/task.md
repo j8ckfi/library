@@ -2,7 +2,7 @@
 id: task:template-task
 type: task
 title: "Task Title"
-domain: "pretraining" # pretraining | post-training | efficiency | compression | snn | interpretability | video | control | scientific-ml | systems | algorithms
+domain: "pretraining" # pretraining | post-training | efficiency | compression | snn | interpretability | video | control | scientific-ml | systems | algorithms | agents
 summary: "High-level summary of the optimization or capability challenge."
 scope: "One sentence: exactly what problems this task node owns."
 out_of_scope: []

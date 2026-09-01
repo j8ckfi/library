@@ -734,5 +734,116 @@ tags: []
         self.assertIn("stale", idx_data)
 
 
+class TestAgentsShelf(unittest.TestCase):
+    """Agents shelf is orthogonal to training SOTA (CISPO, Muon2, SAO, ...)."""
+
+    def setUp(self):
+        self.graph = load_graph(Path("graph"))
+        self.engine = QueryEngine(self.graph)
+
+    def _sota_ids(self, task_id: str):
+        task = self.graph.get_node(task_id)
+        self.assertIsNotNone(task, f"missing {task_id}")
+        return [entry["method"] for entry in task.metadata.get("current_sota", [])]
+
+    def test_agents_domain_is_recognized(self):
+        domains = {n.domain for n in self.graph.get_nodes_by_type("task")}
+        self.assertIn("agents", domains)
+
+    def test_software_engineering_agent_harness_sota_is_mini_not_cca_sao_rlm(self):
+        ids = self._sota_ids("task:software-engineering-agent-harness")
+        self.assertEqual(ids, ["method:mini-swe-agent"])
+        self.assertNotIn("method:cca", ids)
+        self.assertNotIn("method:sao", ids)
+        self.assertNotIn("method:rlm", ids)
+        paths = self.engine.sota("task:software-engineering-agent-harness")
+        self.assertTrue(any(p["method"].id == "method:mini-swe-agent" for p in paths))
+        self.assertFalse(any(p["method"].id in ("method:cca", "method:sao", "method:rlm") for p in paths))
+
+    def test_build_an_agent_routes_to_swe_harness_not_sao(self):
+        ranked = self.engine.route("build an agent")
+        self.assertGreaterEqual(len(ranked), 1)
+        self.assertEqual(ranked[0].node.id, "task:software-engineering-agent-harness")
+        self.assertNotEqual(ranked[0].node.id, "task:agentic-async-rl")
+
+    def test_long_context_prompt_offload_sota_is_rlm(self):
+        self.assertEqual(self._sota_ids("task:long-context-prompt-offload"), ["method:rlm"])
+        rlm = self.graph.get_node("method:rlm")
+        self.assertEqual(rlm.status, "sota")
+        self.assertEqual(rlm.metadata.get("category"), "agent-recursion")
+
+    def test_long_horizon_tool_agent_sota_is_foldgrpo(self):
+        self.assertEqual(self._sota_ids("task:long-horizon-tool-agent"), ["method:foldgrpo"])
+
+    def test_agent_memory_sota_is_ace(self):
+        self.assertEqual(self._sota_ids("task:agent-memory"), ["method:ace"])
+
+    def test_agent_communication_sota_is_mcp(self):
+        self.assertEqual(self._sota_ids("task:agent-communication"), ["method:mcp"])
+
+    def test_computer_use_sota_is_claude_osworld2_not_aggregator(self):
+        self.assertEqual(self._sota_ids("task:computer-use-agent"), ["method:claude-computer-use"])
+        method = self.graph.get_node("method:claude-computer-use")
+        blobs = []
+        for claim in method.metadata.get("claims", []):
+            blobs.append(str(claim.get("value") or ""))
+            blobs.append(str(claim.get("notes") or ""))
+        blob = " ".join(blobs)
+        self.assertIn("20.6", blob)
+        self.assertIn("70.6", blob)
+
+    def test_multi_agent_default_is_single_agent_plus_tools(self):
+        self.assertEqual(
+            self._sota_ids("task:multi-agent-orchestration"),
+            ["method:single-agent-plus-tools"],
+        )
+
+    def test_agents_methods_do_not_appear_on_training_sota(self):
+        locked = (
+            "task:math-code-rl-dense",
+            "task:pretrain-dense-7b",
+            "task:open-data-recipe",
+            "task:industrial-model-building",
+            "task:agentic-async-rl",
+        )
+        banned = ("method:rlm", "method:cca", "method:foldgrpo", "method:mini-swe-agent")
+        for task_id in locked:
+            sota_ids = self._sota_ids(task_id)
+            for method_id in banned:
+                self.assertNotIn(method_id, sota_ids, f"{method_id} on {task_id}")
+
+        magic = self.graph.get_node("task:training-data-attribution")
+        if magic is not None:
+            sota_ids = [e["method"] for e in magic.metadata.get("current_sota", [])]
+            for method_id in banned:
+                self.assertNotIn(method_id, sota_ids)
+
+    def test_sao_remains_sota_for_agentic_async_rl(self):
+        ids = self._sota_ids("task:agentic-async-rl")
+        self.assertEqual(ids, ["method:sao"])
+        sao = self.graph.get_node("method:sao")
+        self.assertEqual(sao.status, "sota")
+        self.assertIn("task:agentic-async-rl", sao.metadata.get("sota_for") or [])
+        paths = self.engine.sota("task:agentic-async-rl")
+        self.assertTrue(any(p["method"].id == "method:sao" for p in paths))
+
+    def test_locked_training_sota_untouched(self):
+        self.assertIn("method:cispo", self._sota_ids("task:math-code-rl-dense"))
+        self.assertIn("method:muon2", self._sota_ids("task:pretrain-dense-7b"))
+        self.assertIn("method:olmo-3", self._sota_ids("task:open-data-recipe"))
+        self.assertIn("method:poolside-model-factory", self._sota_ids("task:industrial-model-building"))
+        self.assertIn("method:bmssp", self._sota_ids("task:directed-sssp-nonneg"))
+        self.assertIn("method:opsa", self._sota_ids("task:teacher-free-on-policy-self-adaptation"))
+        automixer = self.graph.get_node("method:automixer")
+        self.assertEqual(automixer.metadata.get("sota_for") or [], [])
+
+    def test_agent_method_categories(self):
+        self.assertEqual(self.graph.get_node("method:mini-swe-agent").get("category"), "agent-harness")
+        self.assertEqual(self.graph.get_node("method:mcp").get("category"), "agent-protocol")
+        self.assertEqual(self.graph.get_node("method:ace").get("category"), "agent-memory")
+        self.assertEqual(self.graph.get_node("method:rlm").get("category"), "agent-recursion")
+        self.assertEqual(self.graph.get_node("method:foldgrpo").get("category"), "agent-recursion")
+
+
 if __name__ == "__main__":
     unittest.main()

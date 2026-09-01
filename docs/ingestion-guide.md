@@ -156,8 +156,8 @@ receipt — never rewrite history.
 
 Between ingestions, the graph decays. A maintenance agent should periodically:
 
-1. List stale tasks: any task whose `current_sota[].as_of` is older than 4 months
-   (roadmap command: `library stale`; until then, grep `as_of` dates under `graph/tasks/`).
+1. List stale tasks: `python -m library stale` (default budget 4 months). Until you have a
+   clone, grep `as_of` dates under `graph/tasks/`.
 2. For each stale task, re-read the primary papers, search for newer competing work, and either:
    - **Reaffirm** — bump `last_reviewed` to today (no content change), or
    - **Supersede** — run the Step 3 transaction with a new method.

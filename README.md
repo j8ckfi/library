@@ -122,26 +122,42 @@ task: directed SSSP distances, sparse, comparison-addition -> BMSSP; need vertex
 
 ## 4. Fast Navigation CLI
 
+Prefer `sota` / `decide` over `query`. `--json` is unbounded and a superset of prose; `--brief` is ~10 lines.
+
 ```bash
 # 1. Look up SOTA method, claims, paper, and recipe for any task
 python -m library sota "pretrain dense 7B"
+python -m library sota "task:math-code-rl-dense" --brief
+python -m library decide "task:math-code-rl-dense"
 
-# 2. Search graph nodes
+# 2. Rank candidate tasks (scope / redirects). Never empty without near-misses.
+python -m library route "pretrain dense 7B"
+
+# 3. Search graph nodes
 python -m library query "muon2" --type method
 
-# 3. View node metadata and full prose
+# 4. View node metadata and full prose
 python -m library show "method:cispo"
 
-# 4. Inspect incoming and outgoing graph edges
+# 5. Inspect incoming and outgoing graph edges
 python -m library walk "method:muon2"
 
-# 5. Find shortest traversal path between concepts
+# 6. Find shortest traversal path between concepts
 python -m library path --from "task:pretrain-dense-7b" --to "recipe:muon2-pretraining"
 
-# 6. Validate graph schema and referential integrity
+# 7. Freshness queue (exit 1 if any task current_sota exceeds 120 days)
+python -m library stale --max-age-days 120
+
+# 8. Regenerate graph/INDEX.md and the AGENTS.md cheat-sheet (L3 derived; do not hand-edit)
+python -m library index
+
+# 9. Validate graph schema and referential integrity (INDEX drift is a warning, exit 0)
 python -m library validate
 
-# 7. Remote, no-clone usage: the whole graph as ONE file (CI keeps it fresh)
+# 10. Transactional supersession (dry-run writes nothing)
+python -m library supersede method:new method:old --task task:example --dry-run
+
+# 11. Remote, no-clone usage: the whole graph as ONE file (CI keeps it fresh)
 gh api repos/j8ckfi/library/contents/dist/graph.json
 ```
 

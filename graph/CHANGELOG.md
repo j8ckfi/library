@@ -6,6 +6,12 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-01 — receipt: OPSA sweep #12 (4a8406e1)
+- Squash-merged ingest of OPSA, NoRA, GMTS, RA-OPD, Qwen3.8-Next, CE-MoE, and GradCodeS, plus new tasks `task:teacher-free-on-policy-self-adaptation` (OPSA) and `task:full-lowbit-finetune` (GradCodeS). Training defaults unchanged: CISPO, Muon2, OPD family, OLMo-3, factory process, BMSSP. Per-method receipts follow.
+
+### 2026-09-01 — integrity: mirror supersedes for method:muon-optimizer
+- `method:muon-scalable.supersedes` now includes `method:muon-optimizer` so the existing `superseded_by` pointer is bidirectional. No SOTA retarget.
+
 ### 2026-09-01 — ingest method:opsa (new task:teacher-free-on-policy-self-adaptation)
 - Added paper:opsa, method:opsa, recipe:opsa, task:teacher-free-on-policy-self-adaptation.
 - Status sota for teacher-free / label-free on-policy self-adaptation only. Does not supersede method:cispo, method:opd, method:u-opsd, method:ttpo, method:self-opd, method:vista, or method:j-zero.

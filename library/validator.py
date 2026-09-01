@@ -2,10 +2,16 @@
 
 import re
 from dataclasses import dataclass, field
-from typing import List, Dict, Set, Any
+from datetime import date
+from typing import List, Dict, Set, Any, Optional
 from pathlib import Path
 
+from library.dates import age_days
 from library.graph import KnowledgeGraph, Node
+from library.indexgen import derived_drift, repo_paths
+from library.stale import DEFAULT_MAX_AGE_DAYS
+
+EVIDENCE_LEVELS = {"peer-reviewed", "preprint", "self-reported", "unofficial-repro"}
 
 
 @dataclass
@@ -92,6 +98,14 @@ def validate_node_schema(node: Node) -> List[Issue]:
                     issues.append(Issue("ERROR", n_id, path, f"Claim missing required field '{req}'"))
             if "date" in claim and not DATE_PATTERN.match(str(claim["date"])):
                 issues.append(Issue("ERROR", n_id, path, f"Claim date '{claim.get('date')}' must match YYYY-MM format"))
+            level = claim.get("evidence_level")
+            if level is not None and level not in EVIDENCE_LEVELS:
+                issues.append(Issue(
+                    "ERROR",
+                    n_id,
+                    path,
+                    f"Invalid evidence_level '{level}'. Expected one of: {', '.join(sorted(EVIDENCE_LEVELS))}",
+                ))
 
     elif node.type == "paper":
         for req in ["title", "authors", "year", "month", "arxiv_id", "url"]:
@@ -133,6 +147,9 @@ def validate_references(graph: KnowledgeGraph) -> List[Issue]:
                 if isinstance(sota_entry, dict) and "method" in sota_entry:
                     check_ref(sota_entry["method"], "current_sota.method")
             check_ref(meta.get("methods", []), "methods")
+            for redirect in meta.get("redirects") or []:
+                if isinstance(redirect, dict) and redirect.get("to"):
+                    check_ref(redirect["to"], "redirects.to")
 
         elif node.type == "method":
             check_ref(meta.get("sota_for", []), "sota_for")
@@ -141,6 +158,9 @@ def validate_references(graph: KnowledgeGraph) -> List[Issue]:
                 check_ref(meta["superseded_by"], "superseded_by")
             check_ref(meta.get("papers", []), "papers")
             check_ref(meta.get("recipes", []), "recipes")
+            for guard in meta.get("do_not_use_for") or []:
+                if isinstance(guard, dict) and guard.get("use_instead"):
+                    check_ref(guard["use_instead"], "do_not_use_for.use_instead")
 
         elif node.type == "paper":
             check_ref(meta.get("methods", []), "methods")
@@ -187,7 +207,92 @@ def validate_supersession_cycles(graph: KnowledgeGraph) -> List[Issue]:
     return issues
 
 
-def validate_graph(graph: KnowledgeGraph) -> ValidationResult:
+def validate_supersession_postconditions(graph: KnowledgeGraph) -> List[Issue]:
+    """Ontology §4.5: superseded methods cannot be current_sota; superseded_by must mirror supersedes."""
+    issues: List[Issue] = []
+
+    for task in graph.get_nodes_by_type("task"):
+        for entry in task.metadata.get("current_sota") or []:
+            if not isinstance(entry, dict):
+                continue
+            method_id = entry.get("method")
+            method = graph.get_node(method_id) if method_id else None
+            if method and method.status == "superseded":
+                issues.append(Issue(
+                    "ERROR",
+                    task.id,
+                    task.file_path,
+                    f"status: superseded method '{method_id}' appears in current_sota",
+                ))
+
+    for method in graph.get_nodes_by_type("method"):
+        successor_id = method.metadata.get("superseded_by")
+        if not successor_id:
+            continue
+        successor = graph.get_node(successor_id)
+        if successor is None:
+            continue
+        supersedes = successor.metadata.get("supersedes") or []
+        if isinstance(supersedes, str):
+            supersedes = [supersedes]
+        if method.id not in supersedes:
+            issues.append(Issue(
+                "ERROR",
+                method.id,
+                method.file_path,
+                f"superseded_by '{successor_id}' has no mirror supersedes entry for '{method.id}'",
+            ))
+
+    return issues
+
+
+def validate_staleness_warnings(
+    graph: KnowledgeGraph,
+    today: Optional[date] = None,
+    max_age_days: int = DEFAULT_MAX_AGE_DAYS,
+) -> List[Issue]:
+    if today is None:
+        today = date.today()
+    issues: List[Issue] = []
+    for task in graph.get_nodes_by_type("task"):
+        entries = [e for e in (task.metadata.get("current_sota") or []) if isinstance(e, dict)]
+        if not entries:
+            continue
+        for entry in entries:
+            as_of = entry.get("as_of")
+            age = age_days(as_of, today)
+            if as_of is None or age is None or age > max_age_days:
+                issues.append(Issue(
+                    "WARNING",
+                    task.id,
+                    task.file_path,
+                    f"current_sota as_of '{as_of}' is stale vs {max_age_days}-day budget",
+                ))
+    return issues
+
+
+def validate_derived_views(
+    graph: KnowledgeGraph,
+    graph_root: Optional[Path] = None,
+    agents_path: Optional[Path] = None,
+) -> List[Issue]:
+    paths = repo_paths(graph, graph_root)
+    index_path = paths["index_path"]
+    agents = Path(agents_path) if agents_path is not None else paths["agents_path"]
+    messages = derived_drift(graph, index_path=index_path, agents_path=agents)
+    issues = []
+    for message in messages:
+        issues.append(Issue("WARNING", "graph:INDEX", index_path, message))
+    return issues
+
+
+def validate_graph(
+    graph: KnowledgeGraph,
+    graph_root: Optional[Path] = None,
+    agents_path: Optional[Path] = None,
+    check_derived: bool = True,
+    today: Optional[date] = None,
+) -> ValidationResult:
     """Runs all schema, reference, and consistency checks on the graph."""
     res = ValidationResult()
 
@@ -196,5 +301,10 @@ def validate_graph(graph: KnowledgeGraph) -> ValidationResult:
 
     res.issues.extend(validate_references(graph))
     res.issues.extend(validate_supersession_cycles(graph))
+    res.issues.extend(validate_supersession_postconditions(graph))
+    res.issues.extend(validate_staleness_warnings(graph, today=today))
+
+    if check_derived:
+        res.issues.extend(validate_derived_views(graph, graph_root=graph_root, agents_path=agents_path))
 
     return res

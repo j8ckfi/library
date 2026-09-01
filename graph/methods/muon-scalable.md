@@ -8,6 +8,7 @@ superseded_by: method:muon2
 sota_for: []
 supersedes:
   - method:muon
+  - method:muon-optimizer
 papers:
   - paper:muon-scalable
 recipes:

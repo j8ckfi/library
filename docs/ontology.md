@@ -233,7 +233,7 @@ A recommendation's truth decays. Mechanical rule:
   Its recommendation must be re-verified against current literature before an agent acts on it.
 - `task.last_reviewed` records when a routing/SOTA re-check last happened; `method.last_reviewed` when the
   method's claims were last re-checked. Both default to the claim date when absent.
-- The roadmap command `library stale --max-age-days N` (see [system-design.md §8](system-design.md)) turns
+- The command `library stale --max-age-days N` (see [system-design.md §8](system-design.md)) turns
   this into a prioritized maintenance queue and a CI-able exit code.
 
 ### 4.4 Evidence Trust Gradient
@@ -245,14 +245,14 @@ set `verified: false` and say so in decision output — never silently.
 
 ### 4.5 Validator Rule Targets (post-conditions, not prose suggestions)
 
-The following checks are the mechanical definition of the workflows above. Until implemented in
-`library/validator.py`, they are review checklist items; once implemented they are hard errors/warnings:
+The following checks are enforced by `library/validator.py` (`python -m library validate`).
+Warnings do not fail the graph (exit 0); errors do (exit 1).
 
 | Level | Rule |
 | :--- | :--- |
-| ERROR | A `status: superseded` method appears in any task's `current_sota` or `methods` list |
+| ERROR | A `status: superseded` method appears in any task's `current_sota` |
 | ERROR | `superseded_by` set without a matching `supersedes` edge on the new method (one-way supersession) |
 | ERROR | `redirects[].to` and `do_not_use_for[].use_instead` references must resolve to existing nodes |
 | ERROR | `evidence_level` must be one of the four enumerated values |
 | WARNING | Any task's `current_sota[].as_of` older than the 4-month staleness budget |
-| WARNING | `graph/INDEX.md` out of sync with graph state (once `library index` exists) |
+| WARNING | `graph/INDEX.md` or the AGENTS.md cheat-sheet block out of sync with graph state (`python -m library index`) |

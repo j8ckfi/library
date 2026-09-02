@@ -806,7 +806,13 @@ class TestAgentsShelf(unittest.TestCase):
             "task:industrial-model-building",
             "task:agentic-async-rl",
         )
-        banned = ("method:rlm", "method:cca", "method:foldgrpo", "method:mini-swe-agent")
+        banned = (
+            "method:rlm",
+            "method:cca",
+            "method:foldgrpo",
+            "method:mini-swe-agent",
+            "method:omp2-harness",
+        )
         for task_id in locked:
             sota_ids = self._sota_ids(task_id)
             for method_id in banned:
@@ -843,6 +849,45 @@ class TestAgentsShelf(unittest.TestCase):
         self.assertEqual(self.graph.get_node("method:ace").get("category"), "agent-memory")
         self.assertEqual(self.graph.get_node("method:rlm").get("category"), "agent-recursion")
         self.assertEqual(self.graph.get_node("method:foldgrpo").get("category"), "agent-recursion")
+        self.assertEqual(self.graph.get_node("method:omp2-harness").get("category"), "agent-harness")
+
+    def test_agent_harness_runtime_sota_is_omp2_not_mini(self):
+        ids = self._sota_ids("task:agent-harness-runtime")
+        self.assertEqual(ids, ["method:omp2-harness"])
+        omp2 = self.graph.get_node("method:omp2-harness")
+        self.assertEqual(omp2.status, "sota")
+        self.assertEqual(omp2.metadata.get("sota_for"), ["task:agent-harness-runtime"])
+        self.assertEqual(omp2.metadata.get("supersedes") or [], [])
+        paths = self.engine.sota("task:agent-harness-runtime")
+        self.assertTrue(any(p["method"].id == "method:omp2-harness" for p in paths))
+        self.assertFalse(any(p["method"].id == "method:mini-swe-agent" for p in paths))
+
+    def test_omp2_does_not_appear_on_training_or_eval_sota(self):
+        expected = {
+            "task:software-engineering-agent-harness": "method:mini-swe-agent",
+            "task:math-code-rl-dense": "method:cispo",
+            "task:pretrain-dense-7b": "method:muon2",
+            "task:agentic-async-rl": "method:sao",
+            "task:training-data-attribution": "method:magic",
+            "task:long-context-prompt-offload": "method:rlm",
+            "task:agent-communication": "method:mcp",
+        }
+        for task_id, method_id in expected.items():
+            sota_ids = self._sota_ids(task_id)
+            self.assertIn(method_id, sota_ids, f"{task_id} lost {method_id}")
+            self.assertNotIn("method:omp2-harness", sota_ids, f"omp2-harness on {task_id}")
+
+    def test_harness_kernel_redirects_both_ways(self):
+        swe = self.graph.get_node("task:software-engineering-agent-harness")
+        runtime = self.graph.get_node("task:agent-harness-runtime")
+        swe_tos = [r["to"] for r in swe.metadata.get("redirects") or []]
+        runtime_tos = [r["to"] for r in runtime.metadata.get("redirects") or []]
+        self.assertIn("task:agent-harness-runtime", swe_tos)
+        self.assertIn("task:software-engineering-agent-harness", runtime_tos)
+        ranked_loop = self.engine.route("build an agent")
+        self.assertEqual(ranked_loop[0].node.id, "task:software-engineering-agent-harness")
+        ranked_engine = self.engine.route("building a production engine rewind sandbox remote TUI")
+        self.assertEqual(ranked_engine[0].node.id, "task:agent-harness-runtime")
 
 
 if __name__ == "__main__":

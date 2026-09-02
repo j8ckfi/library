@@ -14,7 +14,7 @@ redirects:
     to: "task:software-engineering-agent-harness"
   - when: "wanting a multi-agent crew as the communication layer"
     to: "task:multi-agent-orchestration"
-last_reviewed: "2026-09-01"
+last_reviewed: "2026-09-02"
 current_sota:
   - method: method:mcp
     as_of: "2026-07"
@@ -39,7 +39,7 @@ tags:
 # Agent Communication
 
 ## Problem Definition
-How agents call tools, how two agents negotiate, and how humans put instructions on disk.
+How agents call tools, how two agents negotiate, and how humans put instructions on disk. The Stencil Harness Playbook agrees MCP must not sit in the permanent tool grammar (discover the long tail via `dyn`/Bash); MCP remains current_sota here as the agent↔tool protocol.
 
 ## Evaluation Protocol & Benchmarks
 - MCP: spec 2026-07-28, not a leaderboard.

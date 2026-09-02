@@ -26,10 +26,13 @@ do_not_use_for:
   - when: "notes/context management beyond bash on a hard repo"
     reason: "CCA is the equal-model alternative when you need notes"
     use_instead: "method:cca"
+  - when: "building a durable coding-agent engine (rewind/fork/remote/sandbox/TUI)"
+    reason: "mini-SWE-agent is the SWE-bench start/eval loop, not a production harness kernel"
+    use_instead: "method:omp2-harness"
 assumptions:
   - "Locked SWE-bench mini harness; bash-only ReAct; linear history; independent subprocess.run actions."
   - "Model quality, not scaffold complexity, is the ranking variable on official boards."
-last_reviewed: "2026-09-01"
+last_reviewed: "2026-09-02"
 papers:
   - paper:mini-swe-agent
   - paper:mac-meta-agent
@@ -90,6 +93,7 @@ MAC (2606.04455): code agents given 12–24h to write an agent; only 5/39 config
 - Multi-agent planner-coder-tester for one patch → still this loop, not MAS.
 - GUI desktop → `method:claude-computer-use`.
 - Need notes/context mgmt beyond bash → `method:cca`.
+- Durable production engine (rewind/fork/remote/sandbox/TUI) → `method:omp2-harness` / `task:agent-harness-runtime`.
 
 ## Gotchas & Failure Modes
 - Do not mix vals.ai 97% with official JSON 79.2% or 76.8% (different snapshots/models).

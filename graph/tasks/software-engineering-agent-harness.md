@@ -22,7 +22,9 @@ redirects:
     to: "task:computer-use-agent"
   - when: "10M-token dumped corpus that does not fit the window"
     to: "task:long-context-prompt-offload"
-last_reviewed: "2026-09-01"
+  - when: "building a production engine (rewind, sandbox, remote, TUI)"
+    to: "task:agent-harness-runtime"
+last_reviewed: "2026-09-02"
 current_sota:
   - method: method:mini-swe-agent
     as_of: "2026-09"
@@ -49,7 +51,7 @@ tags:
 # Build an Agent (Software Engineering Harness)
 
 ## Problem Definition
-Choose the loop, ACI, and tools for repository-level software engineering (issue → patch). This is **not** training an agent policy. Agents are bad at designing agents (MAC 5/39; prior-design context hurts). First hop is the simple bash ReAct loop, not multi-agent and not SAO.
+Choose the loop, ACI, and tools for repository-level software engineering (issue → patch). This is **not** training an agent policy. Agents are bad at designing agents (MAC 5/39; prior-design context hurts). First hop is the simple bash ReAct loop, not multi-agent and not SAO. Production engines that must rewind, sandbox, drive remotely, and serve a TUI belong on `task:agent-harness-runtime` (`method:omp2-harness`); this task's current_sota stays mini-SWE-agent.
 
 ## Evaluation Protocol & Benchmarks
 - **Locked mini harness**: official SWE-bench Verified JSON; Scale SWE-bench Pro public; vals.ai locked mini. Label the board. Do not mix snapshots.
@@ -59,4 +61,4 @@ Choose the loop, ACI, and tools for repository-level software engineering (issue
 - **Default**: **mini-SWE-agent** (`method:mini-swe-agent`).
 - **Active**: CCA when you need notes/context management; OpenHands/CodeAct as production OSS.
 - **Niche**: Live-SWE-agent (official JSON 79.2% tie).
-- **Not this task**: SAO, CISPO, RLM, FoldGRPO, OSWorld.
+- **Not this task**: SAO, CISPO, RLM, FoldGRPO, OSWorld. Production harness kernels (rewind/fork/remote/sandbox/TUI) are `task:agent-harness-runtime`.

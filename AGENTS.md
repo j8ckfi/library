@@ -18,13 +18,18 @@ When you are asked to **"train model X to do Y"**, **do not rely on outdated pre
 
 ## 2. Agent Routing Cheat-Sheet (First-Hop SOTA Index)
 
-Use this quick-routing table as of **2026-09-01**:
+Use this quick-routing table as of **2026-09-02**:
 
 <!-- CHEAT-SHEET:START -->
 ```
 task:agent-communication -> method:mcp (2602.11988, 2026-07)
   when building the SWE loop rather than the tool protocol -> task:software-engineering-agent-harness
   when wanting a multi-agent crew as the communication layer -> task:multi-agent-orchestration
+task:agent-harness-runtime -> method:omp2-harness (2026-09-02)
+  when issue-to-patch / locked eval -> task:software-engineering-agent-harness
+  when train agent RL -> task:agentic-async-rl
+  when dumped long prompt -> task:long-context-prompt-offload
+  when how to talk to tools/agents as a protocol -> task:agent-communication
 task:agent-memory -> method:ace (2510.04618, 2025-10)
   when dumped corpus ≫ window -> task:long-context-prompt-offload
   when SWE issue-to-patch without a playbook -> task:software-engineering-agent-harness
@@ -44,6 +49,7 @@ task:software-engineering-agent-harness -> method:mini-swe-agent (2405.15793, 20
   when math-code RLVR with verifiable rewards -> task:math-code-rl-dense
   when GUI / OS desktop computer-use -> task:computer-use-agent
   when 10M-token dumped corpus that does not fit the window -> task:long-context-prompt-offload
+  when building a production engine (rewind, sandbox, remote, TUI) -> task:agent-harness-runtime
 task:directed-sssp-nonneg -> method:bmssp (2504.17033, 2026-08)
 task:1bit-extreme-quantization -> method:sparse-bitnet (2603.05168, 2026-08-26)
 task:fp4-hardware-training -> method:quartet-ii (2601.22813, 2026-08-26) + method:mxfp4-mi355x (2605.09825, 2026-08-26)
@@ -114,7 +120,7 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 
 ---
 
-## 3. SOTA Map (What You Actually Pick Today — 2026-09-01)
+## 3. SOTA Map (What You Actually Pick Today — 2026-09-02)
 
 1. **Train a ~7B dense LM from scratch**: Use **Muon2** (`method:muon2`, `paper:muon2` `arXiv:2604.09967`) with **KL-SOAP** (`method:soap-muon-scale`, `paper:soap-muon-scale` `arXiv:2607.20548`) if GPU memory allows. Keep embeddings / `lm_head` on AdamW. Data: **OLMo-3 / Dolma-3** open data recipe (`method:olmo-3`, `paper:olmo-3` `arXiv:2512.13961`).
 2. **Pretrain an MoE architecture**: Use **DeepSeek-V4** (`method:deepseek-v4`, `paper:deepseek-v4` `arXiv:2606.19348`) with **Kimi-K3** (`method:kimi-k3`, `paper:kimi-k3` `arXiv:2607.24653`) as co-default.
@@ -156,6 +162,7 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 38. **Fully low-bit fine-tune in code space**: Use **GradCodeS** (`method:gradcodes`, `paper:gradcodes` `arXiv:2608.30908`) when the deployed checkpoint must stay NF4/INT4/MXFP4 with no high-precision adapter. Does **not** replace AQLoRA-Q as 4-bit PEFT default or Quartet-II as NVFP4 hardware training.
 39. **Training data attribution (LOO / LDS / query-conditioned scoring)**: Use **MAGIC** (`method:magic`, `paper:magic` `arXiv:2504.16430`) when you control the trainer and need peak LDS. Library: **Bergson** (`method:bergson`, `paper:bergson` `arXiv:2606.11660`, `pip install bergson`) — status `active`, `sota_for: []`, optional factory component like AutoMixer, never mix/kernel/factory SOTA. Small-lab filtering default: **TrackStar** (`method:trackstar`). Does **not** replace CISPO, Muon2, OPD, OLMo-3, Poolside factory, BMSSP, OPSA, or SAE dictionaries.
 40. **Build an agent (harness, not training)**: First hop is **`task:software-engineering-agent-harness` / mini-SWE-agent** (`method:mini-swe-agent`). RLM (`task:long-context-prompt-offload`) only for dumped long prompts. SAO (`task:agentic-async-rl`) is training an agent policy, not a scaffold. Do not start from multi-agent orchestration.
+41. **Building a harness kernel**: `task:agent-harness-runtime` / omp² (`method:omp2-harness`). Running SWE-bench / issue-to-patch remains mini-SWE-agent.
 
 ---
 
@@ -194,7 +201,7 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `ce-moe` (2608.28511) is an optional MoE layer-layout niche. It does not supersede `deepseek-v4` / `kimi-k3`.
 - `gradcodes` (2608.30908) is the first-hop for fully low-bit code-space fine-tuning. It does not supersede `aqlora-q` or `quartet-ii`.
 - `magic` (2504.16430) is the first-hop for `task:training-data-attribution` only (narrow LDS). `bergson` (2606.11660) is the library umbrella and does not supersede MAGIC. Neither retargets CISPO, Muon2, OPD, OLMo-3, factory process, BMSSP, OPSA, or SAE SOTA.
-- Agents shelf (`mini-swe-agent`, RLM, FoldGRPO, ACE, MCP, Claude computer-use, single-agent+tools) does not supersede `sao`, CISPO, Muon2, OPD, OLMo-3, factory, BMSSP, OPSA, SAE, or MAGIC/Bergson. SAO remains SOTA for `task:agentic-async-rl`.
+- Agents shelf (`mini-swe-agent`, RLM, FoldGRPO, ACE, MCP, Claude computer-use, single-agent+tools, omp2-harness) does not supersede `sao`, CISPO, Muon2, OPD, OLMo-3, factory, BMSSP, OPSA, SAE, or MAGIC/Bergson. SAO remains SOTA for `task:agentic-async-rl`. `omp2-harness` does not supersede `mini-swe-agent`, CCA, OpenHands, MCP, ACE, FoldGRPO, or RLM.
 
 ---
 
@@ -348,6 +355,7 @@ staleness) are in [docs/ontology.md](docs/ontology.md) §4.1.1.
             `redirects` before resolving. Follow `redirects` mechanically — they encode hard-won
             negative knowledge ("not this scale", "NOT DoRA"). First hop for "build an agent" is
             task:software-engineering-agent-harness / mini-swe-agent (not multi-agent, not SAO).
+            Building a harness kernel → task:agent-harness-runtime / omp2; running SWE-bench → mini-swe-agent.
 2. RESOLVE  `python -m library sota <task>` or `python -m library decide <task>` -> method + claims + papers + recipes.
 3. VERIFY   weight each claim by evidence (verified + evidence_level) and freshness
             (as_of / last_reviewed). If a task's current_sota is older than 4 months, say so in your

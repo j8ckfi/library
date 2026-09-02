@@ -19,6 +19,20 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when wanting a multi-agent crew as the communication layer → `task:multi-agent-orchestration`
 - **Out of scope**: Choosing the SWE harness (mini-SWE-agent); Multi-agent orchestration as a default; Training SAO
 
+### task:agent-harness-runtime — Agent Harness Runtime
+- **Scope**: Architecture of a production coding-agent harness that must survive multiplexed local workspaces, remote drivers, spectators, and untrusted autonomous factory jobs (the four envelope tests in the Stencil Harness Playbook).
+- **SOTA**: `method:omp2-harness` (as_of 2026-09-02) — Pi official extension examples (Appendix A) + four envelope tests: 2 correct of 78 Pi examples (60 stateless, 17 stateful); journal covering message tree only ⇒ rewind/fork/resume lie
+  - do not use when SWE-bench start/eval loop or GitHub issue → patch → `method:mini-swe-agent`
+  - do not use when equal-model Pro scaffold vs SWE-agent → `method:cca`
+  - do not use when training an async agent policy → `method:sao`
+  - do not use when stuffing MCP into the permanent tool grammar → `method:mcp`
+- **Redirects**:
+  - when issue-to-patch / locked eval → `task:software-engineering-agent-harness`
+  - when train agent RL → `task:agentic-async-rl`
+  - when dumped long prompt → `task:long-context-prompt-offload`
+  - when how to talk to tools/agents as a protocol → `task:agent-communication`
+- **Out of scope**: SWE-bench eval loops and issue-to-patch start loops; Training an agent policy (SAO); Dumped 10M-token prompts (RLM); MCP as the product protocol (MCP stays agent-communication)
+
 ### task:agent-memory — Agent Memory
 - **Scope**: How an agent stores and updates strategies across tasks. Not dumped-prompt RLM and not a SWE loop.
 - **SOTA**: `method:ace` `2510.04618` (as_of 2025-10) — AppWorld, DeepSeek-V3.1: ACE 59.4 vs ReAct 42.4 (+17); vs GEPA latency −82%
@@ -89,11 +103,13 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when planner-coder-tester multi-agent theater for a single patch → `method:single-agent-plus-tools`
   - do not use when GUI / OS desktop computer-use → `method:claude-computer-use`
   - do not use when notes/context management beyond bash on a hard repo → `method:cca`
+  - do not use when building a durable coding-agent engine (rewind/fork/remote/sandbox/TUI) → `method:omp2-harness`
 - **Redirects**:
   - when train asynchronous RL for a tool-use policy → `task:agentic-async-rl`
   - when math-code RLVR with verifiable rewards → `task:math-code-rl-dense`
   - when GUI / OS desktop computer-use → `task:computer-use-agent`
   - when 10M-token dumped corpus that does not fit the window → `task:long-context-prompt-offload`
+  - when building a production engine (rewind, sandbox, remote, TUI) → `task:agent-harness-runtime`
 - **Out of scope**: Training an async agent policy (SAO); Math/code RLVR (CISPO); GUI / OS desktop computer-use; Dumped 10M-token corpus prompt offload (RLM); Trajectory folding (FoldGRPO); Planner-coder-tester multi-agent theater for a single patch; Meta-agent search as the default design process
 
 ## algorithms

@@ -8,7 +8,7 @@ This document provides exact instructions for autonomous training and research a
 
 `j8ckfi/library` is a machine-readable and human-navigable knowledge graph of current (2025–2026) state-of-the-art machine learning training methods, papers, and code recipes.
 
-When you are asked to **"train model X to do Y"**, **do not rely on outdated pre-training knowledge**. Query this library to determine:
+When using this library to choose a training method, resolve the relevant task and inspect its evidence to determine:
 1. What the current date-stamped SOTA method is.
 2. What empirical claims, benchmarks, and baselines substantiate it.
 3. What primary paper authored the technique.
@@ -132,104 +132,13 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 
 ---
 
-## 3. SOTA Map (What You Actually Pick Today — 2026-09-02)
+## 3. Method selection
 
-1. **Train a ~7B dense LM from scratch**: Use **Muon2** (`method:muon2`, `paper:muon2` `arXiv:2604.09967`) with **KL-SOAP** (`method:soap-muon-scale`, `paper:soap-muon-scale` `arXiv:2607.20548`) if GPU memory allows. Keep embeddings / `lm_head` on AdamW. Data: **OLMo-3 / Dolma-3** open data recipe (`method:olmo-3`, `paper:olmo-3` `arXiv:2512.13961`).
-2. **Pretrain an MoE architecture**: Use **DeepSeek-V4** (`method:deepseek-v4`, `paper:deepseek-v4` `arXiv:2606.19348`) with **Kimi-K3** (`method:kimi-k3`, `paper:kimi-k3` `arXiv:2607.24653`) as co-default.
-3. **SFT a chat / instruct model**: **OLMo-3 Dolci stack** (`method:olmo-3`, `paper:olmo-3` `arXiv:2512.13961`); industrial alternative **Nemotron-Cascade 2** (`method:nemotron-cascade-2`, `paper:nemotron-cascade-2` `arXiv:2603.19220`).
-4. **RL a reasoner (math/code, verifiable)**: For dense models, use **CISPO** (`method:cispo`, MiniMax-M1 `paper:minimax-m1` `arXiv:2506.13585` + ScaleRL `paper:scalerl` `arXiv:2510.13786`). For MoE and Vision-Language models, use **SAPO** (`method:sapo`, `paper:sapo` `arXiv:2511.20347`, ms-swift `loss_type=sapo`); use **GSPO** (`method:gspo`) only for Qwen3.5-Omni Talker (`paper:qwen35-omni` `arXiv:2604.15804`). Gate process supervision with **VeriGate** (`method:verigate`, `paper:verigate` `arXiv:2605.30451`).
-5. **Agentic async RL**: Use **SAO** (`method:sao`, `paper:sao` `arXiv:2607.07508`) for asynchronous environment and tool-use reinforcement learning.
-6. **LoRA a local model on 24GB**: Quality default is **Vanilla LoRA + rsLoRA + LR sweep** (`method:lr-matters-lora`, `paper:lr-matters-lora` `arXiv:2602.04998`, `paper:lora-unified-study` `arXiv:2601.22708`) — NOT DoRA. If memory must fit on a 4-bit stack, use **AQLoRA-Q** (`method:aqlora-q`, `paper:aqlora` `arXiv:2608.23816`) or **AutoQRA** (`method:autoqra`, `paper:autoqra` `arXiv:2602.22268`). For memory-efficient full-parameter pretraining, use **SCALE** (`method:scale`, `paper:scale` `arXiv:2506.16659`, ICML 2026) — not GaLore.
-7. **Extreme compression / on-device**: For native 1.58-bit pretraining from scratch, use **Sparse-BitNet** (`method:sparse-bitnet`, `paper:sparse-bitnet` `arXiv:2603.05168`); keep 2B4T (`paper:bitnet-b158`) as dense citation. For post-training ternarization of existing pre-trained LLMs, use **ScaleQ-1.58** (`method:scaleq-158`, `paper:scaleq-158` `arXiv:2608.01078`). For native FP4 hardware training, use **Quartet-II NVFP4** (`method:quartet-ii`, `paper:quartet-ii` `arXiv:2601.22813`) or **MXFP4** (`method:mxfp4-mi355x`, `paper:mxfp4-mi355x` `arXiv:2605.09825`) / Kimi-K3 QAT.
-8. **Distill a student from a teacher**: Use **OPD** (`method:opd`, `paper:opd` `arXiv:2604.13016`) for single-teacher distillation and **Open-MOPD** (`method:open-mopd`, `paper:open-mopd` `arXiv:2608.19098`) for multi-teacher distillation.
-9. **Train a spiking neural net (SNN)**: Use **LongSpike** (`method:longspike`, `paper:longspike` `arXiv:2606.12895`) for SSM-SNN sequence modeling; train with **A2SG** (`method:a2sg`, `paper:a2sg` `arXiv:2606.11236`) adaptive surrogate gradients. SiLIF (`method:silif`) stays as speech-neuron citation.
-10. **Learned control / world-model RL**: Use **EfficientTDMPC** (`method:efficienttdmpc`, `paper:efficienttdmpc` `arXiv:2605.16692`) family; **Dream-MPC** (`method:dream-mpc`, `paper:dream-mpc` `arXiv:2605.04568`, ICML 2026) gradient planner.
-11. **Neural video compression**: For GPU neural video, use **DCVC-UF** (`method:dcvc-uf`, `paper:dcvc-uf` `arXiv:2606.04410`). For deployable edge/mobile neural video, use **MLVC** (`method:mlvc`, `paper:mlvc` `arXiv:2606.28027`). DCVC-RT (`method:dcvcrt`) stays as 2025 realtime reference.
-12. **Mechanistic interpretability & SAEs**: Dictionary default is **SASA** (`method:sasa`, `paper:sasa` `arXiv:2606.06333`) KEEP. For SAE circuits and steering, use **CircuitSteer** (`method:circuitsteer`, `paper:circuitsteer` `arXiv:2608.05732`). For SAE effect geometry, use **FEGA** (`method:fega`, `paper:fega` `arXiv:2607.24645`).
-13. **Train an MoE on NVL72 / systems megakernel**: Use **Mixture-of-Kittens** (`method:mixture-of-kittens`, `paper:mixture-of-kittens`, `recipe:mixture-of-kittens`) for fused dispatch + SwiGLU + combine on Blackwell GB200/GB300 NVL72 racks.
-14. **Distill a reasoner with verifiable reward (OPD + RLVR)**: Use **OPDVR** (`method:opdvr`, `paper:opdvr` `arXiv:2608.24696`) for zero-extra-hyperparameter ReLU correctness gating.
-15. **Token-level advantages from 1 sample/prompt**: Use **BPCO** (`method:bpco`, `paper:bpco` `arXiv:2608.23566`) actor-critic optimization with DPPO, bounded value head, MC targets, and length-adaptive GAE.
-16. **Diffusion post-training & reward alignment**: Use **DiffusionOPSD** (`method:diffusion-opsd`, `paper:diffusion-opsd` `arXiv:2608.24646`) for on-policy self-distillation with bounded intermediate clean-output targets; use **Self-OPD** (`method:self-opd`, `paper:self-opd` `arXiv:2608.26872`) for teacher-free flow matching multi-objective alignment.
-17. **Video MLLM reinforcement learning**: Use **OraRL** (`method:orarl`, `paper:orarl` `arXiv:2608.20492`) for annotation-as-rollout with decoupled baseline and sign-balanced pruning without CoT overhead.
-18. **Label-free test-time reasoning (TTT)**: Use **TTPO** (`method:ttpo`, `paper:ttpo` `arXiv:2608.27448`) for asymmetric test-time policy optimization (agreeing rollout OPSD + disagreeing rollout Grouped RL).
-19. **Unlabeled math reasoner post-training (no GT)**: Use **u-OPSD** (`method:u-opsd`, `paper:u-opsd` `arXiv:2608.06296`) for unsupervised on-policy self-distillation via rollout consensus pseudo-solutions and disagreement targeting.
-20. **Neural operators for regular-grid PDEs**: Use **CViT** (`method:cvit`, `paper:cvit` `arXiv:2405.13998`, ICLR 2025) Continuous Vision Transformer; alternatively **Poseidon** (`method:poseidon`, `paper:poseidon` `arXiv:2405.19101`) fine-tuned for the target PDE family. FNO (`method:fno`) remains a classical baseline.
-21. **Neural operators for industrial CAD meshes & 3D CFD**: Use **Transolver-3** (`method:transolver-3`, `paper:transolver-3` `arXiv:2602.04940`, ICML 2026) for >160M cell geometries (DrivAerML / AhmedML / NASA-CRM). Industrial alternatives: **AB-UPT** (`method:ab-upt`, `paper:ab-upt` `arXiv:2502.09692`), **GeoTransolver** (`method:geotransolver`, `paper:geotransolver` `arXiv:2512.20399`), and **DoMINO** (`method:domino`, `paper:domino` `arXiv:2501.13350`). GAOT (`method:gaot`) is active but not industrial default (lost on DrivAerML surface pressure 34.00 vs 3.71). Honest gaps: shocks, long chaotic rollouts, out-of-family geometry, stationary-aero-mostly.
-22. **Pretrained foundation neural operators**: Use **Poseidon** (`method:poseidon`, `paper:poseidon` `arXiv:2405.19101`) scOT SwinV2 foundation model or **Unisolver** (`method:unisolver`, `paper:unisolver` `arXiv:2405.17527`, ICML 2025) PDE-conditional transformer. Fine-tune when PDE family shifts.
-23. **Physics-informed neural operators (little/no labeled data)**: Use **PI-CViT** (`method:pi-cvit`, `paper:pi-cvit` `arXiv:2606.06164`) with GradNorm balancing, causal temporal weighting, and SOAP second-order optimizer — not a 2021 PINN / PINO.
-24. **Parameter-efficient fine-tuning for Fourier operators**: Use **F-Adapter** (`method:f-adapter`, `paper:f-adapter` `arXiv:2509.23173`, NeurIPS 2025) with ~2% trainable parameters. Hard rule: do NOT use vanilla LoRA on Fourier latent operators due to depth-amplified spectral error floors.
-25. **Global weather & climate forecasting neural operators**: Use **FourCastNet 3** (`method:fourcastnet-3`, `paper:fourcastnet-3` `arXiv:2507.12144`) spherical convolutional neural operator with calibrated probabilistic ensembles (weather forecasting engine, not CAD mesh CAE).
-26. **Industrial model-building / factory process**: Use **Poolside Model Factory** (`method:poolside-model-factory`, `paper:laguna-m1-xs2` `arXiv:2605.27605`). Process default, not a train-kernel default. Small lab: experiments-as-code + Dagster lineage + streamed mixes; skip custom FoundationDB scheduler / NCCL P2P / AutoMixer swarms / Titan megakernel. CISPO and Muon stay the train defaults (Laguna ran those on the factory stack).
-27. **Privileged-teacher OPSD / gold-solution self-distillation**: Use **VISTA** (`method:vista`, `paper:vista` `arXiv:2608.28306`) when a same-size teacher is privileged with a gold reference solution and a deterministic outcome verifier. Keeps the OPSD student update and adapts the teacher on verified rollouts at top-k teacher-first KL positions. Does **not** replace `method:opd` (single-teacher student distillation), `method:open-mopd` (multi-teacher), `method:opdvr` (OPD+RLVR), `method:cispo` (dense RLVR), or `method:u-opsd` (unlabeled/no-GT).
-28. **Data-free self-evolution (verifiable and unverifiable)**: Use **J-Zero** (`method:j-zero`, `paper:j-zero` `arXiv:2608.26582`) for Challenger-Solver-Judge co-evolution from zero external data. Judge co-adapts from loop-structure preference pairs (role-asymmetry and subtask-amplification), not from its own scores. Does **not** replace `method:u-opsd` (unlabeled existing math problems), `method:ttpo` (test-time), or `method:cispo` / `method:sapo` / `method:sao` (labeled/agentic RL). GRPO here is the inner self-play optimizer, not the library's math/code RLVR default.
-29. **Budget ~1.5-2B dense pretrain on consumer GPUs**: Use **Puro-2B** (`method:puro-2b`, `paper:puro-2b` `arXiv:2608.27370`) for Qwen3-1.7B-arch ~2B from scratch on RTX 5090 (blockwise FP8, MuonH, CMA, Kaiyuan-Spark). Does **not** replace `method:muon2` + KL-SOAP as the 7B optimizer default, `method:olmo-3` as the open 7B/instruct data recipe, or `method:quartet-ii` as NVFP4. FP8 here is blockwise E4M3/MXFP8, not NVFP4.
-30. **Math/code RLVR for Pass@K / coverage / no-backward**: Use **ES-reasoning** (`method:es-reasoning`, `paper:es-reasoning` `arXiv:2608.27351`) one-point z-scored ES. Default when labels exist and the goal is Pass@1 remains **CISPO**. This is not a GRPO revival.
-31. **Directed SSSP distances (sparse, comparison-addition)**: Use **BMSSP** (`method:bmssp`, `paper:sorting-barrier-sssp` `arXiv:2504.17033`) for \(O(m\log^{2/3}n)\) distances, not vertex order. Need the distance order or typical \(n\) → **Dijkstra** (`method:dijkstra`). Not an ML training method; do not use for train-dense, MoE, CISPO, Muon, or OLMo.
-32. **Teacher-free / label-free on-policy self-adaptation**: Use **OPSA** (`method:opsa`, `paper:opsa` `arXiv:2608.31046`) for entropy-adaptive negative advantages on the lowest-logp tokens with no teacher, reward, or hint. Does **not** replace `method:cispo` when labels exist, `method:opd` when a strong teacher is available and intentional distillation is the goal, `method:u-opsd` (consensus pseudo-solutions), `method:ttpo` (test-time), `method:self-opd` (flow matching), `method:vista`, or `method:j-zero`.
-33. **RLVR-stable LoRA upgrade candidate**: Use **NoRA** (`method:nora`, `paper:nora` `arXiv:2608.31036`) to rank-normalize LoRA $A$ (or NoRA-init). Status `active`. The 24GB quality default remains **Vanilla LoRA + rsLoRA + LR sweep** (`method:lr-matters-lora`). Do not treat this as a completed supersession.
-34. **RLVR token-filter plug-in**: Use **GMTS** (`method:gmts`, `paper:gmts` `arXiv:2608.30632`) to keep top-20% tokens by $|E\cdot\omega|$ on GRPO/DAPO/CISPO-family trainers. Does **not** replace CISPO.
-35. **Teacher OPD trajectory filter**: Use **RA-OPD** (`method:ra-opd`, `paper:ra-opd` `arXiv:2608.27960`) to keep trajectories with $(2R-1)G\geq 0$. Modular filter on teacher OPD. Does **not** replace OPD or OPSA. Tension with OPSA's teacher-noise finding is documented, not a supersession.
-36. **Hybrid residual / Qwen-style next architecture**: Use **Qwen3.8-Next** (`method:qwen38-next`, `paper:qwen38-next` `arXiv:2608.30320`) as the GDN↔attention + Gated Residual + QSA + Muon/AdamW-split production recipe. Does **not** replace Muon2 as the ~7B optimizer default or DeepSeek-V4 / Kimi-K3 as MoE architecture defaults. FlashQLA is the public kernel.
-37. **Communication-efficient MoE layout**: Use **CE-MoE** (`method:ce-moe`, `paper:ce-moe` `arXiv:2608.28511`) to concentrate experts in fewer routed layers (~33% fewer GPU-h at 31.5B in the paper). Layout niche. Does **not** replace DeepSeek-V4 / Kimi-K3.
-38. **Fully low-bit fine-tune in code space**: Use **GradCodeS** (`method:gradcodes`, `paper:gradcodes` `arXiv:2608.30908`) when the deployed checkpoint must stay NF4/INT4/MXFP4 with no high-precision adapter. Does **not** replace AQLoRA-Q as 4-bit PEFT default or Quartet-II as NVFP4 hardware training.
-39. **Training data attribution (LOO / LDS / query-conditioned scoring)**: Use **MAGIC** (`method:magic`, `paper:magic` `arXiv:2504.16430`) when you control the trainer and need peak LDS. Library: **Bergson** (`method:bergson`, `paper:bergson` `arXiv:2606.11660`, `pip install bergson`) — status `active`, `sota_for: []`, optional factory component like AutoMixer, never mix/kernel/factory SOTA. Small-lab filtering default: **TrackStar** (`method:trackstar`). Does **not** replace CISPO, Muon2, OPD, OLMo-3, Poolside factory, BMSSP, OPSA, or SAE dictionaries.
-40. **Build an agent (harness, not training)**: First hop is **`task:software-engineering-agent-harness` / mini-SWE-agent** (`method:mini-swe-agent`). RLM (`task:long-context-prompt-offload`) only for dumped long prompts. SAO (`task:agentic-async-rl`) is training an agent policy, not a scaffold. Do not start from multi-agent orchestration.
-41. **Building a harness kernel**: `task:agent-harness-runtime` / omp² (`method:omp2-harness`). Running SWE-bench / issue-to-patch remains mini-SWE-agent.
-42. **Outcome-only long-horizon agent RL**: Use **CANOPY** (`method:canopy`, `paper:canopy` `arXiv:2609.01245`) when a programmatic checker exists: scale same-task groups until sparse outcome signal reappears, KL-anchor, on-policy, action-token loss. AppWorld Feb 2026 leaderboard TGC 86.9 / 67.6 (Qwen3-14B). Does **not** replace SAO, FoldGRPO, CISPO, mini-SWE-agent, or omp2. When there is **no** checker, use **DRACO** (`method:draco`, `paper:draco` `arXiv:2609.04094`) dynamic rubrics + closed-form step credit. DRACO does **not** replace CANOPY.
-43. **OPD data-efficiency (one example)**: `method:opd-one-example` (`arXiv:2609.04172`). OPD is data-overfed but algorithm-starved. One query recovers most full-data gain; ~16 semantically diverse queries ≈ full-data / MOPD. Does **not** replace OPD, CISPO, OPSA, Open-MOPD, or RA-OPD.
-44. **First-mistake process credit**: **Cliff** (`method:cliff`, `arXiv:2609.02817`) Pitfall Step → prefix / suffix token advantages on GRPO/DAPO-style trainers. Active plug-in, not a PRM. Does **not** replace CISPO, OPD, or VeriGate.
-45. **RFT example-reweight plug-in**: **DIEM** (`method:diem`, `arXiv:2608.29252`) gradient-alignment importance + constrained batch reweight. Like GMTS: optional. Does **not** replace CISPO.
-46. **Sampled-token OPD entropy plug-in**: **IDA-OPD** (`method:ida-opd`, `arXiv:2608.29846`) keep entropy-expanding $A_y$; shrink $\mathcal{I}_H<0$ by $|q-p|/(q+p)$. Does **not** replace OPD or CISPO.
-47. **Sample-level recipe router**: **Self-Routing** (`method:self-routing`, `arXiv:2609.01422`) GRPO / OPSD / REG / skip from rollout correctness+confidence. No external teacher. ms-swift code planned, not released. Does **not** replace CISPO or OPSA.
+Resolve the requested task against the current graph with `python -m library sota` or `decide`. Inspect the chosen method's scope, evidence, date, hardware requirements, paper, and recipe before applying it. A dated routing snapshot is a starting point, not a requirement to replace an explicitly requested model or algorithm.
 
----
+## 4. Supersession and lineage
 
-## 4. Supersedes Edges & Lineage
-
-The knowledge graph encodes the following explicit supersession relationships:
-- `muon2` supersedes `muon` and `muon-scalable` (2502.16982) as what to implement.
-- `olmo-3` supersedes `olmo-2` (2501.00656) and `tulu3-rlvr` (2411.15124) for open instruct and data recipes.
-- `deepseek-v4` supersedes `deepseek-v3` as architecture template; `kimi-k3` remains co-default.
-- `cispo` supersedes `dapo` as dense RL default (`dapo` stays as systems paper).
-- `sapo` supersedes `gspo` as Qwen MoE/VL algorithm.
-- `sao` supersedes `group-GRPO` / `grpo` for agentic async RL.
-- `opd` (2604.13016) supersedes `on-policy-distillation` / `gkd` as the distill cite.
-- `aqlora-q` supersedes `qlora` as speed/recipe default on 4-bit stack.
-- `lr-matters-lora` (2602.04998) supersedes `dora` and `delora` as quality default.
-- `scale` (2506.16659) supersedes `galore` for mem-efficient pretrain.
-- `sparse-bitnet` (2603.05168) supersedes `bitnet-b158` as the 2026 BitNet line (keep 2B4T as downloadable dense cite).
-- `longspike` (2606.12895) supersedes `silif` as SSM-SNN default (`silif` stays speech-neuron).
-- `efficienttdmpc` (2605.16692) supersedes `td-mpc2`.
-- `dcvc-uf` (2606.04410) supersedes `dcvcrt` as GPU NVC; `mlvc` (2606.28027) supersedes `dcvcrt` as deployable NVC.
-- `a2sg` (2606.11236) supersedes static `surrogate-gradient-snn`.
-- `sasa` (2606.06333) supersedes `gated-sae` and `standard-sae` vector SAEs.
-- `transolver-3` (2602.04940) supersedes `transolver` (2402.02366) and `transolver-pp` (2502.02414) as the industrial mesh default (`transolver` and `transolver-pp` stay active).
-- `pi-cvit` (2606.06164) supersedes `pino` (2111.03794) as physics-informed operator default.
-- `fourcastnet-3` (2507.12144) supersedes `sfno` (2306.03838) as spherical weather operator default.
-- `vista` (2608.28306) improves vanilla OPSD (Zhao et al. 2601.18734) in the privileged-teacher setting (same-size teacher that sees the gold solution). VISTA does not supersede `opd`, `open-mopd`, `opdvr`, `cispo`, or `u-opsd`.
-- `j-zero` (2608.26582) is the first-hop for data-free self-evolution covering unverifiable domains. It does not supersede `u-opsd`, `ttpo`, `cispo`, `sapo`, or `sao`. R-Zero / G-Zero are paper baselines, not graph nodes.
-- `puro-2b` (2608.27370) is the first-hop for ~1.5-2B consumer-GPU / tight-budget dense pretrain. It does not supersede `muon2`, `olmo-3`, or `quartet-ii`. MuonH is a documented Muon/Muon2-family variant; Muon2's `sota_for` is unchanged.
-- `es-reasoning` (2608.27351) is the first-hop for Pass@K / reasoning coverage / no-backward RLVR. It does not supersede `cispo`. GRPO stays retired.
-- `bmssp` (2504.17033) supersedes `dijkstra` for directed SSSP *distances* in the comparison-addition model on sparse graphs; Dijkstra remains the practical default and is optimal if the vertex distance *order* is required.
-- `opsa` (2608.31046) is the first-hop for teacher-free / label-free on-policy self-adaptation. It does not supersede `cispo`, `opd`, `u-opsd`, `ttpo`, `self-opd`, `vista`, or `j-zero`.
-- `nora` (2608.31036) is an active RLVR-stable LoRA upgrade candidate. It does not supersede `lr-matters-lora` as the 24GB quality default.
-- `gmts` (2608.30632) is an optional RLVR token-filter plug-in. It does not supersede `cispo`.
-- `ra-opd` (2608.27960) is a modular teacher-OPD trajectory filter. It does not supersede `opd` or `opsa`.
-- `qwen38-next` (2608.30320) is an adjacent hybrid residual / Qwen-style production architecture recipe. It does not supersede `muon2` or `deepseek-v4` / `kimi-k3`.
-- `ce-moe` (2608.28511) is an optional MoE layer-layout niche. It does not supersede `deepseek-v4` / `kimi-k3`.
-- `gradcodes` (2608.30908) is the first-hop for fully low-bit code-space fine-tuning. It does not supersede `aqlora-q` or `quartet-ii`.
-- `magic` (2504.16430) is the first-hop for `task:training-data-attribution` only (narrow LDS). `bergson` (2606.11660) is the library umbrella and does not supersede MAGIC. Neither retargets CISPO, Muon2, OPD, OLMo-3, factory process, BMSSP, OPSA, or SAE SOTA.
-- Agents shelf (`mini-swe-agent`, RLM, FoldGRPO, ACE, MCP, Claude computer-use, single-agent+tools, omp2-harness) does not supersede `sao`, CISPO, Muon2, OPD, OLMo-3, factory, BMSSP, OPSA, SAE, or MAGIC/Bergson. SAO remains SOTA for `task:agentic-async-rl`. `omp2-harness` does not supersede `mini-swe-agent`, CCA, OpenHands, MCP, ACE, FoldGRPO, or RLM.
-- `canopy` (2609.01245) is the first-hop for `task:outcome-only-long-horizon-agent-rl` when a programmatic checker exists. It does not supersede `sao`, `foldgrpo`, `cispo`, `mini-swe-agent`, or `omp2-harness`.
-- `draco` (2609.04094) is the outcome-blind rubric sibling on that task. It does not supersede `canopy`, `sao`, `cispo`, or `foldgrpo`.
-- `opd-one-example` (2609.04172) is a data-efficiency note on OPD. It does not supersede `opd`, `cispo`, `opsa`, `open-mopd`, or `ra-opd`.
-- `cliff` (2609.02817) is an active first-mistake process-credit plug-in. It does not supersede `cispo`, `opd`, or `verigate`, and is not a PRM.
-- `diem` (2608.29252) is an optional RFT example-reweight plug-in. It does not supersede `cispo` or `gmts`.
-- `ida-opd` (2608.29846) is a sampled-token OPD entropy plug-in. It does not supersede `opd`, `cispo`, `opsa`, or `ra-opd`.
-- `self-routing` (2609.01422) is an active sample-level GRPO/OPSD router. It does not supersede `cispo` or `opsa`.
-- `paper:spurious-advantage-grpo` (2609.04063) is a GRPO/CISPO gotcha (within-group magnitude can reward lucky guesses). SignBalance is not a library method and does not retarget current_sota.
-
----
+Read supersession from the canonical method and task nodes. Keep old-method, new-method, and parent-task records consistent when updating a recommendation; follow the ingestion contract below. Avoid maintaining a second handwritten catalog of these relationships here.
 
 ## 5. Fast Navigation Paths (Hops)
 
@@ -400,8 +309,7 @@ staleness) are in [docs/ontology.md](docs/ontology.md) §4.1.1.
 - Prefer `sota` / `decide` over `query` (one call returns the whole resolution path); prefer `query --json` for
   scripted filtering; use `show` only on the specific nodes you will act on; use `walk`/`path` only when
   `sota`/`query` leave a genuine traversal question open.
-- Never re-derive what a single `validate` can tell you; run it after every write and before reporting
-  graph changes.
+- Never re-derive what a single `validate` can tell you; run it after a coherent batch of graph edits and before reporting graph changes.
 
 ### 9.3 Trust calibration
 

@@ -13,6 +13,9 @@ do_not_use_for:
   - when: "the goal is Pass@K / coverage / no-backward RLVR"
     reason: "That shelf is ES-reasoning, not token truncation"
     use_instead: "method:es-reasoning"
+  - when: "reweighting whole examples by gradient alignment"
+    reason: "That is DIEM; GMTS filters tokens"
+    use_instead: "method:diem"
 assumptions:
   - "Host RLVR already computes per-token entropy, importance ratio, advantage, and clip indicator (GRPO/DAPO/CISPO-family)."
   - "Paper evaluates plug-in to GRPO and DAPO on Qwen2.5-Math/Coder 1.5B/7B and Qwen3-8B; default keep ratio is top 20%."

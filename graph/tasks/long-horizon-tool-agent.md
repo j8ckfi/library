@@ -9,12 +9,15 @@ out_of_scope:
   - "Dumped corpus prompt offload (RLM)"
   - "SWE harness without folding"
   - "Async RL training without a folding objective (SAO)"
+  - "Outcome-only long-horizon agent RL (CANOPY / DRACO)"
 redirects:
   - when: "dumped corpus much larger than the window"
     to: "task:long-context-prompt-offload"
   - when: "SWE harness without folding"
     to: "task:software-engineering-agent-harness"
-last_reviewed: "2026-09-01"
+  - when: "outcome-only long-horizon agent RL (signal starvation / drift or outcome-blind rubrics)"
+    to: "task:outcome-only-long-horizon-agent-rl"
+last_reviewed: "2026-09-04"
 current_sota:
   - method: method:foldgrpo
     as_of: "2025-10"

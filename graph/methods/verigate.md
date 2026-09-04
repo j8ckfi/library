@@ -38,3 +38,6 @@ VeriGate implements verifier-gated step-level supervision for GRPO in mathematic
 
 ## When to Use
 - Default SOTA method for process supervision and all-zero verifier group optimization.
+
+## Relation to Existing SOTA
+- Remains the gated-PRM / all-zero-group default. `method:cliff` is an active first-mistake credit plug-in, not a PRM, and does not replace VeriGate.

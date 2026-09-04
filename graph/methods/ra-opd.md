@@ -91,6 +91,7 @@ This sits in tension with OPSA: OPSA argues teacher OPD signals are noisy and of
 
 ## Relation to Existing SOTA
 - Niche filter on `task:student-distillation`. Does **not** supersede `method:opd` or `method:opsa`.
+- Sampled-token entropy / pass@k plug-in is `method:ida-opd`, a different add-on. Neither replaces OPD.
 - Beats ExOPD and Uni-OPD in the paper's OPD-variant bake-off; those are paper baselines, not library first-hops.
 
 ## Gotchas & Failure Modes

@@ -6,6 +6,58 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-04 — ingest 2026-09-04 weekday SOTA sweep (OPD-II, Cliff, CANOPY, DIEM, IDA-OPD, Self-Routing, DRACO, spurious-advantage gotcha)
+- Added task:outcome-only-long-horizon-agent-rl (CANOPY current_sota; DRACO active sibling). Plug-ins wired beside CISPO/OPD/VeriGate without stealing current_sota. `paper:spurious-advantage-grpo` is a gotcha only (no new method). Per-method receipts follow.
+- Does not supersede method:cispo, method:opd, method:sao, method:opsa, method:mini-swe-agent, method:verigate, method:foldgrpo, method:open-mopd, method:ra-opd, or method:omp2-harness.
+- Scope checks: new agent-RL task redirects async → agentic-async-rl, folding → long-horizon-tool-agent, dense math/code → math-code-rl-dense, harness → software-engineering-agent-harness, kernel → agent-harness-runtime. Reverse redirects added on those tasks.
+
+### 2026-09-04 — ingest method:opd-one-example (niche; does not supersede method:opd)
+- Added paper:opd-one-example (2609.04172), method:opd-one-example, recipe:opd-one-example. Wired to task:student-distillation; Part-II pointer on method:opd / recipe:opd.
+- Status niche. OPD is data-overfed but algorithm-starved: one query recovers most full-data gain; ~16 semantically diverse queries match full-data / MOPD.
+- Evidence: R1-Distill-1.5B math avg@16 one-shot 68.5 vs full-data 69.8 at step 300; state coverage 71.5% / 98.9% at 1 / 16 queries (arXiv:2609.04172); verified: true; evidence_level: preprint. Code: Thinking-Space/One-Shot-OPD.
+- Scope checks: does not supersede method:opd, method:cispo, method:opsa, method:open-mopd, or method:ra-opd.
+
+### 2026-09-04 — ingest method:cliff (active plug-in; does not supersede method:cispo)
+- Added paper:cliff (2609.02817), method:cliff, recipe:cliff. Wired to task:math-code-rl-dense, task:reasoning-rl-alignment, task:all-zero-verifier-groups.
+- Status active. First-mistake Pitfall Step → token advantages on GRPO/DAPO-style trainers. Not a PRM. Default λ=0. No public code.
+- Evidence: Qwen3-4B math avg Cliff 65.66 vs GRPO 61.68 vs OPD 58.17; abstract +15% vs OPD / +7% vs GRPO across 12 scenarios (arXiv:2609.02817); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1 default; VeriGate remains gated-PRM default; OPD remains distill default.
+
+### 2026-09-04 — ingest method:canopy (new task:outcome-only-long-horizon-agent-rl)
+- Added paper:canopy (2609.01245), method:canopy, recipe:canopy, task:outcome-only-long-horizon-agent-rl.
+- Status sota for outcome-only long-horizon agent RL when a programmatic checker exists. Code listed: AlibabaResearch/SignalCoverageRL.
+- Evidence: AppWorld Feb 2026 leaderboard Qwen3-14B TGC 86.9 / 67.6; SWE-bench Verified Qwen3.5-9B mean@4 31.3 → 47.9 (+16.6) (arXiv:2609.01245); verified: true; evidence_level: preprint.
+- Scope checks: does not supersede method:sao, method:foldgrpo, method:cispo, method:mini-swe-agent, method:omp2-harness, or method:draco.
+
+### 2026-09-04 — ingest method:diem (active example-reweight; does not supersede method:cispo)
+- Added paper:diem (2608.29252), method:diem, recipe:diem. Wired to task:math-code-rl-dense / task:reasoning-rl-alignment.
+- Status active. Gradient-alignment importance + constrained batch reweight. Like GMTS: optional. Code: hrtan/DIEM.
+- Evidence: Qwen3-4B five-bench avg 40.66 vs GRPO 37.30; Qwen2.5-VL-7B six-bench 61.8 vs RFT 59.1 (arXiv:2608.29252); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1 default; GMTS remains the token-filter plug-in.
+
+### 2026-09-04 — ingest method:ida-opd (niche sampled-token entropy plug-in; does not supersede method:opd)
+- Added paper:ida-opd (2608.29846), method:ida-opd, recipe:ida-opd. Wired to task:student-distillation beside ra-opd / opsa / opd.
+- Status niche. Keep entropy-expanding A_y; shrink I_H(y)<0 by |q-p|/(q+p). No public code.
+- Evidence: Qwen3-8B pass@16 AIME24/25 83.3/76.7 vs OPD 79.1/70.7; Qwen3-4B AIME24 pass@16 83.3 vs OPD 78.7 (arXiv:2608.29846); verified: true; evidence_level: preprint.
+- Scope checks: does not replace CISPO or OPD.
+
+### 2026-09-04 — ingest method:self-routing (active recipe router; does not supersede method:cispo or method:opsa)
+- Added paper:self-routing (2609.01422), method:self-routing, recipe:self-routing. Wired to task:math-code-rl-dense / task:reasoning-rl-alignment / task:teacher-free-on-policy-self-adaptation (neighbor only).
+- Status active. Sample-level GRPO / OPSD / REG / skip from rollout correctness+confidence. No external teacher. ms-swift code planned, not released.
+- Evidence: Qwen3-4B six-bench avg 73.7 vs GRPO 66.8 vs OPSD 70.4; Qwen3.5-4B 86.6 vs 79.8 / 83.0 (arXiv:2609.01422); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1 default; OPSA remains teacher-free unlabeled default (Self-Routing's OPSD branch needs gold answers).
+
+### 2026-09-04 — ingest method:draco (active outcome-blind sibling; does not supersede method:canopy)
+- Added paper:draco (2609.04094), method:draco, recipe:draco. Wired to task:outcome-only-long-horizon-agent-rl beside CANOPY.
+- Status active. Dynamic rubrics + closed-form step credit when no programmatic checker. Code: IBM/draco.
+- Evidence: Qwen3.6-27B AppWorld TN TGC p^1 85.3 vs base 69.4 vs outcome-reward GRPO 80.0; τ-bench SR 20.4 vs base 15.8 (arXiv:2609.04094); verified: true; evidence_level: preprint.
+- Scope checks: does not supersede method:sao, method:cispo, method:canopy, or method:foldgrpo. Different backbone/protocol than CANOPY's 86.9; not a bake-off.
+
+### 2026-09-04 — ingest paper:spurious-advantage-grpo (gotcha only; no new method)
+- Added paper:spurious-advantage-grpo (2609.04063). Updated Gotchas on method:grpo, method:cispo, recipe:cispo, recipe:grpo-trl-training.
+- SignBalance is documented in the paper node and is **not** a library method. current_sota unchanged (CISPO).
+- Evidence: Qwen2.5-0.5B Avg-8 SignBalance 36.61 vs GRPO 34.24, lift on bounded-answer benches; MATH-7.5K 55.95% bounded answer shapes (arXiv:2609.04063); verified: true; evidence_level: preprint.
+
 ### 2026-09-02 — ingest method:omp2-harness (new task:agent-harness-runtime)
 - Added paper:harness-playbook (Stencil blog, Can Bölük; no arXiv), method:omp2-harness, recipe:omp2-harness, task:agent-harness-runtime.
 - Status sota for production harness-runtime architecture only. Does not supersede method:mini-swe-agent, method:cca, method:openhands-codeact, method:sao, method:foldgrpo, method:rlm, method:magic, method:cispo, method:muon2, method:mcp, or method:ace. omp/Pi are informal predecessors, not library nodes.

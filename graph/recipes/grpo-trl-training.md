@@ -83,3 +83,4 @@ training_args = GRPOConfig(
 - **Group Size (`num_generations`)**: Set to 8 or 16 for stable group variance estimation.
 - **KL Coefficient (`beta`)**: 0.01 to 0.05. If training collapses or outputs become repetitive, increase \(\beta\).
 - **vLLM Rollout Acceleration**: Essential to maintain high GPU compute utilization during multi-step reasoning rollouts.
+- **Spurious advantage**: within-group $|\hat{A}|$ can reward lucky guesses on bounded-answer and search-agent tasks (`paper:spurious-advantage-grpo`). Dense Pass@1 default is `method:cispo`, not this recipe.

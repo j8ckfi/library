@@ -7,6 +7,7 @@ summary: "First hop for building an agent: the loop, agent-computer interface, a
 scope: "First hop when you need to build an agent: loop + ACI + tools for repo work. Default is the dumb bash ReAct loop."
 out_of_scope:
   - "Training an async agent policy (SAO)"
+  - "Outcome-only long-horizon agent RL (CANOPY / DRACO)"
   - "Math/code RLVR (CISPO)"
   - "GUI / OS desktop computer-use"
   - "Dumped 10M-token corpus prompt offload (RLM)"
@@ -24,7 +25,9 @@ redirects:
     to: "task:long-context-prompt-offload"
   - when: "building a production engine (rewind, sandbox, remote, TUI)"
     to: "task:agent-harness-runtime"
-last_reviewed: "2026-09-02"
+  - when: "train outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit)"
+    to: "task:outcome-only-long-horizon-agent-rl"
+last_reviewed: "2026-09-04"
 current_sota:
   - method: method:mini-swe-agent
     as_of: "2026-09"

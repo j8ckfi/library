@@ -8,8 +8,10 @@ sota_for:
   - task:student-distillation
 supersedes:
   - method:on-policy-distillation
+last_reviewed: "2026-09-04"
 papers:
   - paper:opd
+  - paper:opd-one-example
 recipes:
   - recipe:opd
 claims:
@@ -40,7 +42,12 @@ OPD (On-Policy Distillation) is the state-of-the-art framework for distilling la
 
 ## Relation to Existing SOTA
 - Remains the single-teacher student-distillation default. For a privileged same-model teacher that sees the gold solution, use `method:vista` instead of vanilla OPSD; that does not replace OPD.
-- Optional filter when a verifier is available: `method:ra-opd`. Teacher-free train-time self-adaptation is `method:opsa` and does not replace OPD when a strong teacher is the goal.
+- Optional filter when a verifier is available: `method:ra-opd`. Sampled-token pass@k entropy plug-in: `method:ida-opd`. Teacher-free train-time self-adaptation is `method:opsa` and does not replace OPD when a strong teacher is the goal.
+- Data-efficiency companion (`paper:opd-one-example`, `method:opd-one-example`): OPD is data-overfed but algorithm-starved. One query recovers most full-data gain; ~16 semantically diverse queries match full-data / MOPD. Prefer semantic diversity over volume. Does not change this method's status.
+
+## Gotchas & Failure Modes
+- Do not scale the prompt set when 16-shot already matches full-data OPD. The remaining gap is student absorption / step-efficiency (`method:opd-one-example`).
+- Sampled-token OPD can raise pass@1 while flattening pass@k. That is `method:ida-opd`, not more data.
 
 ## Supersession
 - Supersedes `method:on-policy-distillation` (GKD baseline) as the primary distillation reference.

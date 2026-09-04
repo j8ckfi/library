@@ -28,6 +28,7 @@ task:agent-communication -> method:mcp (2602.11988, 2026-07)
 task:agent-harness-runtime -> method:omp2-harness (2026-09-02)
   when issue-to-patch / locked eval -> task:software-engineering-agent-harness
   when train agent RL -> task:agentic-async-rl
+  when outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) -> task:outcome-only-long-horizon-agent-rl
   when dumped long prompt -> task:long-context-prompt-offload
   when how to talk to tools/agents as a protocol -> task:agent-communication
 task:agent-memory -> method:ace (2510.04618, 2025-10)
@@ -41,6 +42,7 @@ task:long-context-prompt-offload -> method:rlm (2512.24601, 2025-12)
 task:long-horizon-tool-agent -> method:foldgrpo (2510.11967, 2025-10)
   when dumped corpus much larger than the window -> task:long-context-prompt-offload
   when SWE harness without folding -> task:software-engineering-agent-harness
+  when outcome-only long-horizon agent RL (signal starvation / drift or outcome-blind rubrics) -> task:outcome-only-long-horizon-agent-rl
 task:multi-agent-orchestration -> method:single-agent-plus-tools (2606.04455, 2026-06)
   when GitHub issue to patch -> task:software-engineering-agent-harness
   when train asynchronous RL for a tool-use policy -> task:agentic-async-rl
@@ -50,6 +52,7 @@ task:software-engineering-agent-harness -> method:mini-swe-agent (2405.15793, 20
   when GUI / OS desktop computer-use -> task:computer-use-agent
   when 10M-token dumped corpus that does not fit the window -> task:long-context-prompt-offload
   when building a production engine (rewind, sandbox, remote, TUI) -> task:agent-harness-runtime
+  when train outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) -> task:outcome-only-long-horizon-agent-rl
 task:directed-sssp-nonneg -> method:bmssp (2504.17033, 2026-08)
 task:1bit-extreme-quantization -> method:sparse-bitnet (2603.05168, 2026-08-26)
 task:fp4-hardware-training -> method:quartet-ii (2601.22813, 2026-08-26) + method:mxfp4-mi355x (2605.09825, 2026-08-26)
@@ -74,6 +77,7 @@ task:training-data-attribution -> method:magic (2504.16430, 2026-09-01)
   when factory process / experiments-as-code / lineage -> task:industrial-model-building
 task:agentic-async-rl -> method:sao (2607.07508, 2026-08-26)
   when build an agent rather than train a policy -> task:software-engineering-agent-harness
+  when outcome-only long-horizon agent RL (coverage / anti-drift), not async stragglers -> task:outcome-only-long-horizon-agent-rl
 task:all-zero-verifier-groups -> method:verigate (2605.30451, 2026-08-26)
 task:data-free-self-evolution -> method:j-zero (2608.26582, 2026-08-31)
 task:direct-preference-alignment -> method:olmo-3 (2512.13961, 2026-08-26)
@@ -82,7 +86,15 @@ task:instruct-sft-alignment -> method:olmo-3 (2512.13961, 2026-08-26) + method:n
 task:label-free-reasoner-posttrain -> method:u-opsd (2608.06296, 2026-08-28)
 task:label-free-test-time-reasoner -> method:ttpo (2608.27448, 2026-08-28)
 task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
+  when outcome-only long-horizon interactive agent RL -> task:outcome-only-long-horizon-agent-rl
+  when train asynchronous RL for a tool-use policy -> task:agentic-async-rl
 task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
+task:outcome-only-long-horizon-agent-rl -> method:canopy (2609.01245, 2026-09-04)
+  when variable environment latency / async stragglers, not sparse-outcome coverage -> task:agentic-async-rl
+  when the problem is context folding of a long tool trajectory, not the RL signal -> task:long-horizon-tool-agent
+  when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
+  when build an agent loop rather than train a policy -> task:software-engineering-agent-harness
+  when production engine (rewind, sandbox, remote, TUI) -> task:agent-harness-runtime
 task:passk-reasoning-coverage -> method:es-reasoning (2608.27351, 2026-08-31)
 task:privileged-teacher-opsd -> method:vista (2608.28306, 2026-08-31)
 task:reasoning-rl-alignment -> method:cispo (2506.13585, 2026-08-26) + method:sapo (2511.20347, 2026-08-26)
@@ -163,6 +175,12 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 39. **Training data attribution (LOO / LDS / query-conditioned scoring)**: Use **MAGIC** (`method:magic`, `paper:magic` `arXiv:2504.16430`) when you control the trainer and need peak LDS. Library: **Bergson** (`method:bergson`, `paper:bergson` `arXiv:2606.11660`, `pip install bergson`) — status `active`, `sota_for: []`, optional factory component like AutoMixer, never mix/kernel/factory SOTA. Small-lab filtering default: **TrackStar** (`method:trackstar`). Does **not** replace CISPO, Muon2, OPD, OLMo-3, Poolside factory, BMSSP, OPSA, or SAE dictionaries.
 40. **Build an agent (harness, not training)**: First hop is **`task:software-engineering-agent-harness` / mini-SWE-agent** (`method:mini-swe-agent`). RLM (`task:long-context-prompt-offload`) only for dumped long prompts. SAO (`task:agentic-async-rl`) is training an agent policy, not a scaffold. Do not start from multi-agent orchestration.
 41. **Building a harness kernel**: `task:agent-harness-runtime` / omp² (`method:omp2-harness`). Running SWE-bench / issue-to-patch remains mini-SWE-agent.
+42. **Outcome-only long-horizon agent RL**: Use **CANOPY** (`method:canopy`, `paper:canopy` `arXiv:2609.01245`) when a programmatic checker exists: scale same-task groups until sparse outcome signal reappears, KL-anchor, on-policy, action-token loss. AppWorld Feb 2026 leaderboard TGC 86.9 / 67.6 (Qwen3-14B). Does **not** replace SAO, FoldGRPO, CISPO, mini-SWE-agent, or omp2. When there is **no** checker, use **DRACO** (`method:draco`, `paper:draco` `arXiv:2609.04094`) dynamic rubrics + closed-form step credit. DRACO does **not** replace CANOPY.
+43. **OPD data-efficiency (one example)**: `method:opd-one-example` (`arXiv:2609.04172`). OPD is data-overfed but algorithm-starved. One query recovers most full-data gain; ~16 semantically diverse queries ≈ full-data / MOPD. Does **not** replace OPD, CISPO, OPSA, Open-MOPD, or RA-OPD.
+44. **First-mistake process credit**: **Cliff** (`method:cliff`, `arXiv:2609.02817`) Pitfall Step → prefix / suffix token advantages on GRPO/DAPO-style trainers. Active plug-in, not a PRM. Does **not** replace CISPO, OPD, or VeriGate.
+45. **RFT example-reweight plug-in**: **DIEM** (`method:diem`, `arXiv:2608.29252`) gradient-alignment importance + constrained batch reweight. Like GMTS: optional. Does **not** replace CISPO.
+46. **Sampled-token OPD entropy plug-in**: **IDA-OPD** (`method:ida-opd`, `arXiv:2608.29846`) keep entropy-expanding $A_y$; shrink $\mathcal{I}_H<0$ by $|q-p|/(q+p)$. Does **not** replace OPD or CISPO.
+47. **Sample-level recipe router**: **Self-Routing** (`method:self-routing`, `arXiv:2609.01422`) GRPO / OPSD / REG / skip from rollout correctness+confidence. No external teacher. ms-swift code planned, not released. Does **not** replace CISPO or OPSA.
 
 ---
 
@@ -202,6 +220,14 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `gradcodes` (2608.30908) is the first-hop for fully low-bit code-space fine-tuning. It does not supersede `aqlora-q` or `quartet-ii`.
 - `magic` (2504.16430) is the first-hop for `task:training-data-attribution` only (narrow LDS). `bergson` (2606.11660) is the library umbrella and does not supersede MAGIC. Neither retargets CISPO, Muon2, OPD, OLMo-3, factory process, BMSSP, OPSA, or SAE SOTA.
 - Agents shelf (`mini-swe-agent`, RLM, FoldGRPO, ACE, MCP, Claude computer-use, single-agent+tools, omp2-harness) does not supersede `sao`, CISPO, Muon2, OPD, OLMo-3, factory, BMSSP, OPSA, SAE, or MAGIC/Bergson. SAO remains SOTA for `task:agentic-async-rl`. `omp2-harness` does not supersede `mini-swe-agent`, CCA, OpenHands, MCP, ACE, FoldGRPO, or RLM.
+- `canopy` (2609.01245) is the first-hop for `task:outcome-only-long-horizon-agent-rl` when a programmatic checker exists. It does not supersede `sao`, `foldgrpo`, `cispo`, `mini-swe-agent`, or `omp2-harness`.
+- `draco` (2609.04094) is the outcome-blind rubric sibling on that task. It does not supersede `canopy`, `sao`, `cispo`, or `foldgrpo`.
+- `opd-one-example` (2609.04172) is a data-efficiency note on OPD. It does not supersede `opd`, `cispo`, `opsa`, `open-mopd`, or `ra-opd`.
+- `cliff` (2609.02817) is an active first-mistake process-credit plug-in. It does not supersede `cispo`, `opd`, or `verigate`, and is not a PRM.
+- `diem` (2608.29252) is an optional RFT example-reweight plug-in. It does not supersede `cispo` or `gmts`.
+- `ida-opd` (2608.29846) is a sampled-token OPD entropy plug-in. It does not supersede `opd`, `cispo`, `opsa`, or `ra-opd`.
+- `self-routing` (2609.01422) is an active sample-level GRPO/OPSD router. It does not supersede `cispo` or `opsa`.
+- `paper:spurious-advantage-grpo` (2609.04063) is a GRPO/CISPO gotcha (within-group magnitude can reward lucky guesses). SignBalance is not a library method and does not retarget current_sota.
 
 ---
 

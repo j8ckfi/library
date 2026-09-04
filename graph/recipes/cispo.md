@@ -24,3 +24,7 @@ import torch
 
 print("CISPO MiniMax-M1 / ScaleRL reasoning RL recipe loaded")
 ```
+
+## Gotchas
+- Group-relative magnitude can still reward lucky guesses on bounded-answer / search-agent settings (`paper:spurious-advantage-grpo`). CISPO clips IS weights; it does not remove composition-dependent $|\hat{A}|$. Do not swap CISPO for SignBalance or revive GRPO.
+- Optional plug-ins that do not change this default: `method:gmts` (token filter), `method:diem` (example reweight), `method:cliff` (first-mistake credit), `method:self-routing` (sample-level recipe router).

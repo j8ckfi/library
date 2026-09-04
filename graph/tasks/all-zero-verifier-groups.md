@@ -15,6 +15,8 @@ methods:
   - method:verigate
   - method:dapo
   - method:cispo
+  - method:cliff
+last_reviewed: "2026-09-04"
 tags:
   - post-training
   - reasoning
@@ -27,5 +29,6 @@ tags:
 ## Problem Definition
 Handling hard reasoning problems where all sampled candidate rollouts fail (all-zero verification groups), and preventing un-gated Process Reward Models from rewarding flawed reasoning steps.
 
-## SOTA Recommendation (as of 2026-08-26)
-- **Primary Method**: **VeriGate** (`method:verigate`, 2605.30451).
+## SOTA Recommendation (as of 2026-09-04)
+- **Primary Method**: **VeriGate** (`method:verigate`, 2605.30451). Unchanged.
+- **Optional first-mistake credit (not a PRM)**: `method:cliff` (`arXiv:2609.02817`) locates one Pitfall Step with an off-the-shelf teacher. Active plug-in. Does not replace VeriGate or CISPO.

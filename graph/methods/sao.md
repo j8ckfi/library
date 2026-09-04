@@ -9,6 +9,14 @@ sota_for:
 supersedes:
   - method:grpo
   - method:dr-grpo
+do_not_use_for:
+  - when: "sparse-outcome coverage / anti-drift on a small revisited task pool, not async latency"
+    reason: "SAO is the async straggler default; CANOPY/DRACO own outcome-only long-horizon agent RL"
+    use_instead: "task:outcome-only-long-horizon-agent-rl"
+  - when: "build an agent rather than train a policy"
+    reason: "SAO trains a policy; the harness default is mini-SWE-agent"
+    use_instead: "method:mini-swe-agent"
+last_reviewed: "2026-09-04"
 papers:
   - paper:sao
 recipes:
@@ -40,6 +48,9 @@ SAO (Single-Rollout Asynchronous Optimization) solves the straggler bottleneck i
 
 ## When to Use
 - Default SOTA optimizer for agentic async RL and tool-calling environments.
+
+## Relation to Existing SOTA
+- Remains SOTA for `task:agentic-async-rl`. Does **not** own outcome-only long-horizon coverage (`method:canopy`) or outcome-blind rubric credit (`method:draco`).
 
 ## Supersession
 - Supersedes synchronous `method:grpo` / `method:dr-grpo` for agentic asynchronous tasks.

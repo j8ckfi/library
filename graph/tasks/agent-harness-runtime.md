@@ -8,6 +8,7 @@ scope: "Architecture of a production coding-agent harness that must survive mult
 out_of_scope:
   - "SWE-bench eval loops and issue-to-patch start loops"
   - "Training an agent policy (SAO)"
+  - "Outcome-only long-horizon agent RL (CANOPY / DRACO)"
   - "Dumped 10M-token prompts (RLM)"
   - "MCP as the product protocol (MCP stays agent-communication)"
 redirects:
@@ -15,6 +16,8 @@ redirects:
     to: "task:software-engineering-agent-harness"
   - when: "train agent RL"
     to: "task:agentic-async-rl"
+  - when: "outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit)"
+    to: "task:outcome-only-long-horizon-agent-rl"
   - when: "dumped long prompt"
     to: "task:long-context-prompt-offload"
   - when: "how to talk to tools/agents as a protocol"

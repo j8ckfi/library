@@ -8,10 +8,11 @@ sota_for:
   - task:student-distillation
 supersedes:
   - method:on-policy-distillation
-last_reviewed: "2026-09-04"
+last_reviewed: "2026-09-07"
 papers:
   - paper:opd
   - paper:opd-one-example
+  - paper:opd-hard-cot-selection
 recipes:
   - recipe:opd
 claims:
@@ -44,9 +45,12 @@ OPD (On-Policy Distillation) is the state-of-the-art framework for distilling la
 - Remains the single-teacher student-distillation default. For a privileged same-model teacher that sees the gold solution, use `method:vista` instead of vanilla OPSD; that does not replace OPD.
 - Optional filter when a verifier is available: `method:ra-opd`. Sampled-token pass@k entropy plug-in: `method:ida-opd`. Teacher-free train-time self-adaptation is `method:opsa` and does not replace OPD when a strong teacher is the goal.
 - Data-efficiency companion (`paper:opd-one-example`, `method:opd-one-example`): OPD is data-overfed but algorithm-starved. One query recovers most full-data gain; ~16 semantically diverse queries match full-data / MOPD. Prefer semantic diversity over volume. Does not change this method's status.
+- Hard-CoT selection sibling (`paper:opd-hard-cot-selection`, `method:opd-hard-cot-selection`): hard/long-CoT examples drive gains, not high token entropy; 8 hard can match 17K. Does not replace this method or OPD-II.
+- Self-extrapolating teacher (`method:rise`): no external teacher; needs RLVR grounding. Does not replace OPD when a white-box teacher is the goal.
 
 ## Gotchas & Failure Modes
 - Do not scale the prompt set when 16-shot already matches full-data OPD. The remaining gap is student absorption / step-efficiency (`method:opd-one-example`).
+- Prefer hard/long-CoT over easy short traces when ranking a small set (`method:opd-hard-cot-selection`). Do not treat that as OPD-II's diversity finding.
 - Sampled-token OPD can raise pass@1 while flattening pass@k. That is `method:ida-opd`, not more data.
 
 ## Supersession

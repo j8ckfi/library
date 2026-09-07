@@ -16,6 +16,8 @@ methods:
   - method:muon2
   - method:olmo-3
   - method:quartet-ii
+  - method:layer-dropout
+last_reviewed: "2026-09-07"
 tags:
   - pretraining
   - budget
@@ -35,4 +37,4 @@ Pretrain a dense ~1.5-2B decoder-only Transformer from scratch when the lab has 
 
 ## SOTA Recommendation (as of 2026-08-31)
 - **Primary Method**: **Puro-2B** (`method:puro-2b`, `paper:puro-2b` `arXiv:2608.27370`).
-- **Not This Task**: `method:muon2` + `method:soap-muon-scale` remain the dense ~7B optimizer default. `method:olmo-3` remains the open 7B/instruct data recipe. `method:quartet-ii` remains native NVFP4 hardware training.
+- **Not This Task**: `method:muon2` + `method:soap-muon-scale` remain the dense ~7B optimizer default. `method:olmo-3` remains the open 7B/instruct data recipe. `method:quartet-ii` remains native NVFP4 hardware training. `method:layer-dropout` is an optional pretrain regularizer, not this recipe.

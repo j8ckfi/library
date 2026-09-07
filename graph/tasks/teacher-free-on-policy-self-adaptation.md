@@ -26,7 +26,6 @@ redirects:
     to: "task:data-free-self-evolution"
   - when: "flow matching or continuous diffusion post-training"
     to: "task:posttrain-diffusion"
-last_reviewed: "2026-09-04"
 current_sota:
   - method: method:opsa
     as_of: "2026-09-01"
@@ -42,6 +41,8 @@ methods:
   - method:ttpo
   - method:opd
   - method:cispo
+  - method:rise
+last_reviewed: "2026-09-07"
 tags:
   - post-training
   - on-policy
@@ -64,3 +65,4 @@ Improve a reasoning policy at train time using only on-policy rollouts and the p
 - **Primary Method**: **OPSA** (`method:opsa`, `paper:opsa` `arXiv:2608.31046`) for supervision-free entropy-adaptive negative advantages on the lowest-logp tokens.
 - **Not This Task**: `method:cispo` remains labeled dense RLVR; `method:opd` remains single-teacher distillation; `method:u-opsd` remains unlabeled consensus distillation; `method:ttpo` remains test-time; `method:j-zero` remains data-free self-evolution; `method:self-opd` remains flow matching.
 - **Adjacent router (not this method)**: `method:self-routing` still needs a verifier and gold answers for its OPSD branch. It does not replace OPSA.
+- **Adjacent RLVR-grounded synthetic teacher (not this method)**: `method:rise` still needs outcome-verified RLVR. It does not replace OPSA.

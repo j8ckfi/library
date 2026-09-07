@@ -181,6 +181,10 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 45. **RFT example-reweight plug-in**: **DIEM** (`method:diem`, `arXiv:2608.29252`) gradient-alignment importance + constrained batch reweight. Like GMTS: optional. Does **not** replace CISPO.
 46. **Sampled-token OPD entropy plug-in**: **IDA-OPD** (`method:ida-opd`, `arXiv:2608.29846`) keep entropy-expanding $A_y$; shrink $\mathcal{I}_H<0$ by $|q-p|/(q+p)$. Does **not** replace OPD or CISPO.
 47. **Sample-level recipe router**: **Self-Routing** (`method:self-routing`, `arXiv:2609.01422`) GRPO / OPSD / REG / skip from rollout correctness+confidence. No external teacher. ms-swift code planned, not released. Does **not** replace CISPO or OPSA.
+48. **RLVR adaptive IS clip**: **GAPO** (`method:gapo`, `arXiv:2609.00444`, EMNLP 2026 Main) adapts GRPO/GSPO clip width to rollout advantage so scarce-correct hard-problem traces keep update headroom. Active plug-in. Does **not** replace CISPO.
+49. **Self-extrapolating OPD teacher**: **RISE** (`method:rise`, `arXiv:2609.05295`) builds a synthetic teacher from the model's own RLVR trajectory (param or logit extrapolation). No external teacher, no gold conditioning. Does **not** replace OPD, CISPO, or OPSA.
+50. **LLM pretrain layer dropout**: **Don't Drop Dropout** (`method:layer-dropout`, `arXiv:2609.05275`, ICML 2026) structured layer sparsity with $r_{\mathrm{train}}=1/\rho$. Same-FLOPs lower loss; same-steps up to ~25% FLOP save; ~1.5× self-speculative inference. Does **not** replace Muon2.
+51. **OPD hard-CoT selection**: `method:opd-hard-cot-selection` (`arXiv:2609.05198`). Hard/long-CoT examples drive OPD gains (not high token entropy); 8 hard can match 17K. Sibling to OPD-II's diversity finding. Does **not** replace OPD or `method:opd-one-example`.
 
 ---
 
@@ -228,6 +232,10 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `ida-opd` (2608.29846) is a sampled-token OPD entropy plug-in. It does not supersede `opd`, `cispo`, `opsa`, or `ra-opd`.
 - `self-routing` (2609.01422) is an active sample-level GRPO/OPSD router. It does not supersede `cispo` or `opsa`.
 - `paper:spurious-advantage-grpo` (2609.04063) is a GRPO/CISPO gotcha (within-group magnitude can reward lucky guesses). SignBalance is not a library method and does not retarget current_sota.
+- `gapo` (2609.00444) is an active GRPO/GSPO clip-boundary plug-in. It does not supersede `cispo`.
+- `rise` (2609.05295) is an active RLVR-grounded self-extrapolating OPD teacher. It does not supersede `opd`, `cispo`, `opsa`, or `vista`.
+- `layer-dropout` (2609.05275) is an active pretrain regularizer. It does not supersede `muon2`.
+- `opd-hard-cot-selection` (2609.05198) is a niche hard/long-CoT data-selection finding on OPD. It does not supersede `opd` or `opd-one-example`.
 
 ---
 

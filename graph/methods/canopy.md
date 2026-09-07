@@ -85,6 +85,7 @@ Test-time budget transfer raises turns and context without search. Differentiate
 
 ## Relation to Existing SOTA
 - SOTA only for `task:outcome-only-long-horizon-agent-rl`. Does **not** supersede `method:sao`, `method:foldgrpo`, `method:cispo`, `method:mini-swe-agent`, `method:omp2-harness`, or `method:draco`.
+- Tool-using pre-RL OPKD (`method:pta`) does not scale sparse episode-end groups and does not replace CANOPY.
 
 ## Gotchas & Failure Modes
 - Dense pass-fraction rewards manufacture within-group variance but can reward wrong approaches. CANOPY's claim is that scaled exploration removes the need to densify.

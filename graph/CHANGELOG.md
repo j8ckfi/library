@@ -6,6 +6,41 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-07 — ingest 2026-09-07 weekday SOTA sweep (GAPO, RISE, layer-dropout, OPD hard-CoT, PTA)
+- Added five active/niche methods without stealing current_sota. CISPO, OPD, OPSA, Muon2, CANOPY, SAO, and FoldGRPO remain first hops. Per-method receipts follow.
+- Skipped (WATCH only): Iris 2609.04304 (search-agent SFT-RL climbing recipe; domain-specific); ACE expert skipping 2609.05228 (training-free MoE inference); MaxKernel 2609.04523 (TPU kernel agents); mHC residual analysis 2609.05309 (interpretability of existing mHC).
+- Scope checks: no half supersessions; cheat-sheet first hops unchanged.
+
+### 2026-09-07 — ingest method:pta (active; does not supersede method:opd / method:cispo / method:canopy / method:sao / method:foldgrpo)
+- Added paper:pta (2609.04773, EMNLP 2026 Main), method:pta, recipe:pta. Wired to task:student-distillation; related mentions on task:long-horizon-tool-agent and task:agentic-async-rl.
+- Status active. OPKD for tool-using agents: student-induced but teacher-committed rollouts; chunk-level verification + turn-level commitment; persistent lookahead. No official GitHub.
+- Evidence: Search-R1 PTA+RL macro best@4 34.59 vs OPKD+RL 32.07; DeepEyes 70.00 vs 67.20; lookahead 0.644 vs 0.519 samples/s (arXiv:2609.04773); verified: true; evidence_level: preprint (EMNLP accept noted).
+- Scope checks: OPD remains text distill; CISPO remains Pass@1 RLVR; CANOPY remains outcome-only agent RL; SAO remains async policy train; FoldGRPO remains folding.
+
+### 2026-09-07 — ingest method:gapo (active plug-in; does not supersede method:cispo)
+- Added paper:gapo (2609.00444, EMNLP 2026 Main), method:gapo, recipe:gapo. Wired to task:math-code-rl-dense.
+- Status active. Adapts GRPO/GSPO IS-ratio clip to rollout advantage (reverse-KL trust-region). No reward shaping. Code: Sheng-J/GAPO.
+- Evidence: R1-Distill-Qwen-1.5B AIME24 Pass@1/16 GAPO 44.0/76.7 vs GSPO 41.3/73.3; DeepCoder LCB-v5 24.8 vs 22.4 (arXiv:2609.00444); verified: true; evidence_level: preprint (EMNLP accept noted).
+- Scope checks: CISPO remains Pass@1 default; OPD / OPSA / CANOPY unchanged.
+
+### 2026-09-07 — ingest method:rise (active; does not supersede method:opd / method:cispo / method:opsa)
+- Added paper:rise (2609.05295), method:rise, recipe:rise. Wired to task:student-distillation; related mentions on task:math-code-rl-dense and task:teacher-free-on-policy-self-adaptation.
+- Status active. Synthetic teacher from the model's own RLVR trajectory via param/logit extrapolation. No official GitHub.
+- Evidence: Qwen3-8B Math Avg RISE (weight) 62.7 vs GRPO 60.0; OLMo3-7B 56.4 vs 47.6; ALFWorld 84.4 vs 75.0 (arXiv:2609.05295); verified: true; evidence_level: preprint.
+- Scope checks: OPD remains single-teacher distill; CISPO remains labeled RLVR; OPSA remains supervision-free; VISTA remains privileged-gold OPSD.
+
+### 2026-09-07 — ingest method:layer-dropout (active; does not supersede method:muon2)
+- Added paper:dont-drop-dropout (2609.05275, ICML 2026 extended), method:layer-dropout, recipe:layer-dropout. Wired to task:llm-pretraining-optimization, task:pretrain-dense-7b; optional note on task:budget-consumer-pretrain.
+- Status active. Structured layer dropout with $r_{\mathrm{train}}=1/\rho$. Practical code: torchtune layer_dropout.py / fairseq LayerDrop (override residual scale).
+- Evidence: 1.8B val 1.836 vs dense 1.849 at 15% FLOP save; 8.2B 25% FLOP save; ~1.5× self-speculative inference (arXiv:2609.05275); verified: true; evidence_level: peer-reviewed.
+- Scope checks: Muon2 remains ~7B optimizer; Puro-2B remains consumer ~2B recipe.
+
+### 2026-09-07 — ingest method:opd-hard-cot-selection (niche; does not supersede method:opd or method:opd-one-example)
+- Added paper:opd-hard-cot-selection (2609.05198), method:opd-hard-cot-selection, recipe:opd-hard-cot-selection. Wired to task:student-distillation; cross-linked with method:opd-one-example.
+- Status niche. Hard/long-CoT selection on OPD (not high token entropy); 8 hard examples match 17K. Sibling to OPD-II's diversity-vs-volume finding.
+- Evidence: R1-Distill-Qwen-1.5B 8-hard avg 53.6 vs 17K 53.7; 7B 8-shot 59.5 vs 59.6 (arXiv:2609.05198); verified: true; evidence_level: preprint.
+- Scope checks: OPD remains distill default; OPD-II remains the diversity/volume note.
+
 ### 2026-09-04 — ingest 2026-09-04 weekday SOTA sweep (OPD-II, Cliff, CANOPY, DIEM, IDA-OPD, Self-Routing, DRACO, spurious-advantage gotcha)
 - Added task:outcome-only-long-horizon-agent-rl (CANOPY current_sota; DRACO active sibling). Plug-ins wired beside CISPO/OPD/VeriGate without stealing current_sota. `paper:spurious-advantage-grpo` is a gotcha only (no new method). Per-method receipts follow.
 - Does not supersede method:cispo, method:opd, method:sao, method:opsa, method:mini-swe-agent, method:verigate, method:foldgrpo, method:open-mopd, method:ra-opd, or method:omp2-harness.

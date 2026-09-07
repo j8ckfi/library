@@ -34,7 +34,9 @@ methods:
   - method:cliff
   - method:self-routing
   - method:opsa
-last_reviewed: "2026-09-04"
+  - method:gapo
+  - method:rise
+last_reviewed: "2026-09-07"
 tags:
   - post-training
   - reasoning
@@ -48,7 +50,7 @@ tags:
 ## Problem Definition
 Training dense language models to generate long chains of thought (CoT) and verifiable solutions for competitive math and coding problems.
 
-## SOTA Recommendation (as of 2026-09-04)
+## SOTA Recommendation (as of 2026-09-07)
 - **Primary Method (Pass@1 labeled RLVR)**: **CISPO** (`method:cispo`, MiniMax-M1 2506.13585 + ScaleRL 2510.13786). Unchanged.
 - **Systems Reference**: DAPO stays as systems paper reference. GRPO stays retired.
 - **Related alternative (Pass@K / coverage / no-backward)**: `method:es-reasoning` (`arXiv:2608.27351`). Do not swap CISPO for ES or revive GRPO when the goal is Pass@1.
@@ -56,5 +58,7 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Optional example-reweight plug-in**: `method:diem` (`arXiv:2608.29252`) gradient-alignment batch reweight. Does not replace CISPO.
 - **Optional first-mistake process credit**: `method:cliff` (`arXiv:2609.02817`). Active plug-in, not a PRM, not a CISPO replacement. VeriGate remains the gated-PRM default.
 - **Optional sample-level recipe router**: `method:self-routing` (`arXiv:2609.01422`) GRPO / OPSD / REG / skip from rollout correctness+confidence. Does not replace CISPO or OPSA.
+- **Optional adaptive IS clip**: `method:gapo` (`arXiv:2609.00444`, EMNLP 2026 Main) widens the GRPO/GSPO clip on scarce-correct hard-problem rollouts. Active plug-in. Does not replace CISPO.
+- **Related RLVR+self-OPD loop**: `method:rise` (`arXiv:2609.05295`) builds a synthetic teacher from the model's own RLVR trajectory. Does not replace CISPO, OPD, or OPSA.
 - **No labels / no teacher**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace CISPO when labels exist.
 - **Gotcha**: group-relative magnitude can reward lucky guesses on bounded-answer / search-agent settings (`paper:spurious-advantage-grpo`). Do not promote SignBalance over CISPO.

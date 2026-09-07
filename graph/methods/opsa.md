@@ -29,6 +29,9 @@ do_not_use_for:
   - when: "routing GRPO vs OPSD vs skip using rollout correctness, with gold answers available"
     reason: "That is Self-Routing, a labeled plug-in; OPSA is supervision-free"
     use_instead: "method:self-routing"
+  - when: "RLVR is already running and the goal is a synthetic OPD teacher from the training trajectory"
+    reason: "RISE extrapolates RLVR displacement into token-level OPD targets; OPSA has no verifier"
+    use_instead: "method:rise"
 assumptions:
   - "Train-time unlabeled prompt corpus exists (paper: DAPO-17k questions, labels unused)."
   - "Policy can sample long on-policy rollouts; paper trains Qwen3-1.7B/4B and Qwen3.5-9B in non-thinking mode on 8 GPUs via slime."
@@ -99,9 +102,10 @@ The paper's diagnosis of OPD: teacher advantages on student prefixes are noisy (
 - Test-time only -> `method:ttpo`.
 - No problem corpus at all -> `method:j-zero`.
 - Flow / diffusion -> `method:self-opd`.
+- Already running RLVR and want a synthetic OPD teacher from that trajectory -> `method:rise`.
 
 ## Relation to Existing SOTA
-- First-hop only for `task:teacher-free-on-policy-self-adaptation`. Does **not** replace `method:cispo`, `method:opd`, `method:open-mopd`, `method:opdvr`, `method:u-opsd`, `method:self-opd`, `method:ttpo`, `method:vista`, `method:j-zero`, or `method:self-routing`.
+- First-hop only for `task:teacher-free-on-policy-self-adaptation`. Does **not** replace `method:cispo`, `method:opd`, `method:open-mopd`, `method:opdvr`, `method:u-opsd`, `method:self-opd`, `method:ttpo`, `method:vista`, `method:j-zero`, `method:self-routing`, or `method:rise`.
 - Paper finding that OPD gains may not be distillation is documented here; it is not a supersession of OPD.
 
 ## Gotchas & Failure Modes

@@ -9,7 +9,7 @@ sota_for:
   - task:reasoning-rl-alignment
 supersedes:
   - method:dapo
-last_reviewed: "2026-09-04"
+last_reviewed: "2026-09-07"
 papers:
   - paper:minimax-m1
   - paper:scalerl
@@ -49,7 +49,7 @@ CISPO (Clipped IS-weight Policy Optimization) establishes the state-of-the-art r
 ## Relation to Existing SOTA
 - Remains the dense math/code RLVR default for Pass@1 when labels exist. GRPO inside `method:j-zero` is that method's inner self-play optimizer, not a change to this default.
 - For Pass@K / reasoning coverage or a no-backward memory budget, use `method:es-reasoning` on `task:passk-reasoning-coverage`. That is not a GRPO revival and does not replace CISPO.
-- Optional token-filter plug-in: `method:gmts`. Example-reweight plug-in: `method:diem`. First-mistake process credit: `method:cliff` (not a PRM; does not replace VeriGate). Sample-level GRPO/OPSD router: `method:self-routing`. Teacher-free unlabeled train-time self-adaptation: `method:opsa`. None of these replace CISPO when labels exist.
+- Optional token-filter plug-in: `method:gmts`. Example-reweight plug-in: `method:diem`. First-mistake process credit: `method:cliff` (not a PRM; does not replace VeriGate). Sample-level GRPO/OPSD router: `method:self-routing`. Adaptive IS clip: `method:gapo` (does not replace CISPO). RLVR+self-OPD loop: `method:rise` (does not replace CISPO, OPD, or OPSA). Tool-using pre-RL OPKD: `method:pta` (does not replace CISPO). Teacher-free unlabeled train-time self-adaptation: `method:opsa`. None of these replace CISPO when labels exist.
 
 ## Supersession
 - Supersedes `method:dapo` as the dense RL default (DAPO remains as a systems reference).

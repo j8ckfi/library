@@ -19,6 +19,9 @@ do_not_use_for:
   - when: "multi-teacher imbalance is the failure mode"
     reason: "16 diverse queries per domain can match full-data MOPD, but Open-MOPD remains the multi-teacher algorithm"
     use_instead: "method:open-mopd"
+  - when: "the question is hard/long-CoT vs easy short traces"
+    reason: "That is OPD hard-CoT selection, not OPD-II's diversity-vs-volume finding"
+    use_instead: "method:opd-hard-cot-selection"
   - when: "filtering teacher-OPD trajectories by outcome alignment"
     reason: "That is RA-OPD, not a smaller query set"
     use_instead: "method:ra-opd"
@@ -26,7 +29,7 @@ assumptions:
   - "Running reverse-KL / sampled-token or top-k OPD with a white-box teacher (paper: veRL, batch of 64 rollouts, AdamW 1e-6)."
   - "Prefer semantically diverse queries over volume; 16 BGE-M3 cluster representatives matched full DAPO-Math-17K."
   - "Does not change the OPD loss. Companion to paper:opd (2604.13016)."
-last_reviewed: "2026-09-04"
+last_reviewed: "2026-09-07"
 papers:
   - paper:opd-one-example
 recipes:
@@ -75,6 +78,7 @@ OPD-II is not a new loss. It is the data-minimal operating point of `method:opd`
 ## Relation to Existing SOTA
 - Niche data-efficiency note on `task:student-distillation`. Does **not** supersede `method:opd`, `method:cispo`, `method:opsa`, `method:open-mopd`, or `method:ra-opd`.
 - Distinct from `method:opd2` (multi-teacher routing), which is a different node.
+- Sibling data-efficiency result: `method:opd-hard-cot-selection` (`arXiv:2609.05198`) ranks hard/long-CoT vs easy, not diversity vs volume. Neither replaces the other.
 
 ## Gotchas & Failure Modes
 - Semantic diversity beats volume: 16 queries from 16 clusters beat 16 queries from one cluster. Order of a fixed set does not matter.

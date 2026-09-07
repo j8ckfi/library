@@ -51,6 +51,7 @@ SAO (Single-Rollout Asynchronous Optimization) solves the straggler bottleneck i
 
 ## Relation to Existing SOTA
 - Remains SOTA for `task:agentic-async-rl`. Does **not** own outcome-only long-horizon coverage (`method:canopy`) or outcome-blind rubric credit (`method:draco`).
+- Pre-RL tool OPKD with persistent lookahead (`method:pta`) is not this shelf: lookahead fills idle distill capacity under a fixed teacher; SAO owns async policy-train stragglers.
 
 ## Supersession
 - Supersedes synchronous `method:grpo` / `method:dr-grpo` for agentic asynchronous tasks.

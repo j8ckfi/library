@@ -289,6 +289,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when zero external problems including unverifiable domains → `method:j-zero`
   - do not use when flow matching or continuous diffusion post-training → `method:self-opd`
   - do not use when routing GRPO vs OPSD vs skip using rollout correctness, with gold answers available → `method:self-routing`
+  - do not use when RLVR is already running and the goal is a synthetic OPD teacher from the training trajectory → `method:rise`
 - **Redirects**:
   - when verifiable labels exist and the goal is Pass@1 RLVR → `task:math-code-rl-dense`
   - when a strong teacher is available and the goal is intentional distillation → `task:student-distillation`

@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "node_count": 620,
-  "edge_count": 2334,
+  "node_count": 623,
+  "edge_count": 2349,
   "nodes": [
     {
       "id": "recipe:geotransolver",
@@ -658,6 +658,36 @@
         ]
       },
       "body": "# Nemotron-3-Ultra MoE Recipe\n\n```python\nimport torch\n\nprint(\"Nemotron-3-Ultra MoE recipe loaded\")\n```"
+    },
+    {
+      "id": "recipe:pta",
+      "type": "recipe",
+      "title": "PTA Teacher-Committed Tool Rollout Recipe",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/recipes/pta.md",
+      "metadata": {
+        "id": "recipe:pta",
+        "type": "recipe",
+        "title": "PTA Teacher-Committed Tool Rollout Recipe",
+        "method": "method:pta",
+        "task": "task:student-distillation",
+        "target_hardware": "8x NVIDIA H100 80GB (32B teacher + 1.7B/2B student, paper: veRL + SGLang)",
+        "framework": "PyTorch / veRL / SGLang",
+        "repo_url": "none found",
+        "pip_dependencies": [
+          "torch>=2.5.0",
+          "verl>=0.4.0",
+          "sglang>=0.4.0"
+        ],
+        "tags": [
+          "recipe",
+          "pta",
+          "distillation",
+          "tool-use"
+        ]
+      },
+      "body": "# PTA Teacher-Committed Tool Rollout Recipe\n\n## Hardware & Environment Setup\n- No official GitHub as of 2026-09-07. Paper inserts teacher verification into veRL + SGLang's chunk-level generation loop.\n- Retrieval: Qwen3-1.7B student / Qwen3-32B teacher, prompt 8192, response 16384, batch 32, ≤15 turns, ≤256 chunks/sample, 5 epochs.\n- Perception: Qwen3-VL-2B-Thinking / Qwen3-VL-32B-Thinking, prompt=response 8192, batch 32, ≤128 chunks/sample, 1 epoch.\n- Host text distill without tools stays `method:opd`. Downstream labeled math RLVR stays CISPO. Async tool RL stays SAO.\n\n## Quickstart Implementation\n\n```python\nfrom typing import Callable\n\n\ndef verify_chunk(teacher_topk: set[int], proposed: list[int], teacher_greedy: list[int]) -> list[int]:\n    \"\"\"Keep a student chunk iff every token is in the teacher's top-K; else teacher greedy.\"\"\"\n    if all(tok in teacher_topk for tok in proposed):\n        return proposed\n    return teacher_greedy[: len(proposed)]\n\n\ndef pta_rollout(\n    propose_chunk: Callable[[list[int], list[int]], list[int]],\n    verify: Callable[[list[int], list[int]], list[int]],\n    parse_tool: Callable[[list[int]], object | None],\n    env_step: Callable[[object], list[int]],\n    is_final: Callable[[list[int]], bool],\n    is_turn_done: Callable[[list[int]], bool],\n    token_budget: int,\n) -> list[int]:\n    \"\"\"Student-induced, teacher-committed trajectory. Tools run only after a verified turn.\"\"\"\n    tau: list[int] = []\n    while len(tau) < token_budget:\n        pending: list[int] = []\n        while not is_turn_done(pending):\n            proposed = propose_chunk(tau, pending)\n            pending.extend(verify(tau, proposed))\n        tau.extend(pending)\n        call = parse_tool(pending)\n        if call is not None:\n            tau.extend(env_step(call))\n        elif is_final(pending):\n            break\n    return tau\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Distill KL only on committed assistant tokens. Do not supervise observations.\n- Do not skip in-span tool-call replacement. Buffering alone is not the method.\n- Persistent lookahead: treat verified chunks as resumable units; carry unfinished samples across student updates under the **same** teacher. Table 5: +24% throughput vs synchronous.\n- After PTA, run the environment's native RL (Search-R1 / DeepEyes) with unrestricted student rollouts. Do not keep the teacher on the tool path at RL time."
     },
     {
       "id": "recipe:cca-swe",
@@ -4642,7 +4672,7 @@
             "to": "task:outcome-only-long-horizon-agent-rl"
           }
         ],
-        "last_reviewed": "2026-09-04",
+        "last_reviewed": "2026-09-07",
         "current_sota": [
           {
             "method": "method:sao",
@@ -4657,7 +4687,8 @@
           "method:sao",
           "method:bpco",
           "method:dr-grpo",
-          "method:grpo"
+          "method:grpo",
+          "method:pta"
         ],
         "tags": [
           "post-training",
@@ -4666,7 +4697,7 @@
           "sao"
         ]
       },
-      "body": "# Agentic Asynchronous Reinforcement Learning\n\n## Problem Definition\nTraining agentic foundation models to interact with multi-turn environments (bash shells, code execution sandboxes, web browsers) where variable environment latency causes severe worker straggler bottlenecks under synchronous group RL algorithms.\n\nThis is **policy training**. Building a software-engineering agent loop is `task:software-engineering-agent-harness` (`method:mini-swe-agent`), not this task.\n\n## SOTA Recommendation (as of 2026-09-04)\n- **Primary Method**: **SAO** (`method:sao`, 2607.07508). Unchanged.\n- **Not This Task**: sparse-outcome coverage / anti-drift on AppWorld-style agents is `task:outcome-only-long-horizon-agent-rl` (`method:canopy` / `method:draco`). Folding is `task:long-horizon-tool-agent`."
+      "body": "# Agentic Asynchronous Reinforcement Learning\n\n## Problem Definition\nTraining agentic foundation models to interact with multi-turn environments (bash shells, code execution sandboxes, web browsers) where variable environment latency causes severe worker straggler bottlenecks under synchronous group RL algorithms.\n\nThis is **policy training**. Building a software-engineering agent loop is `task:software-engineering-agent-harness` (`method:mini-swe-agent`), not this task.\n\n## SOTA Recommendation (as of 2026-09-07)\n- **Primary Method**: **SAO** (`method:sao`, 2607.07508). Unchanged.\n- **Related pre-RL tool OPKD (not this async-train default)**: `method:pta` (`arXiv:2609.04773`) teacher-commits tool turns before Search-R1 / DeepEyes RL. Lookahead fills idle distill capacity; it is not SAO's straggler replay.\n- **Not This Task**: sparse-outcome coverage / anti-drift on AppWorld-style agents is `task:outcome-only-long-horizon-agent-rl` (`method:canopy` / `method:draco`). Folding is `task:long-horizon-tool-agent`."
     },
     {
       "id": "task:operator-physics-informed",
@@ -6956,7 +6987,8 @@
           "method:opd-hard-cot-selection",
           "method:ida-opd",
           "method:opsa",
-          "method:rise"
+          "method:rise",
+          "method:pta"
         ],
         "last_reviewed": "2026-09-07",
         "tags": [
@@ -6966,7 +6998,7 @@
           "opd"
         ]
       },
-      "body": "# Small Local Student Distillation from Strong Teacher\n\n## Problem Definition\nTraining small local students (1B–8B) from large teacher models (70B–405B) with generalized on-policy divergence matching.\n\n## SOTA Recommendation (as of 2026-09-07)\n- **Single-Teacher Distillation Default**: **OPD** (`method:opd`, `paper:opd` `arXiv:2604.13016`). Unchanged.\n- **Multi-Teacher Student Distillation Default**: **Open-MOPD** (`method:open-mopd`, `paper:open-mopd` `arXiv:2608.19098`) for token-share balancing, gap-aware dynamic budget allocation, and student reward refresh across specialized teacher models.\n- **Related alternative**: Use `method:vista` instead when the teacher is a privileged same-model copy that sees the gold solution (not a larger frozen teacher). OPD remains the student-distillation default.\n- **Optional teacher-OPD filter**: `method:ra-opd` (`arXiv:2608.27960`) keeps trajectories with sign-agree teacher return vs outcome reward. Does not replace OPD.\n- **Optional sampled-token entropy plug-in**: `method:ida-opd` (`arXiv:2608.29846`) keeps entropy-expanding $A_y$ and shrinks $\\mathcal{I}_H<0$ by $|q-p|/(q+p)$. Does not replace OPD or CISPO.\n- **Data-efficiency note**: `method:opd-one-example` (`arXiv:2609.04172`) — one query recovers most full-data OPD; ~16 diverse queries ≈ full-data / MOPD. Does not replace OPD.\n- **Data-selection sibling**: `method:opd-hard-cot-selection` (`arXiv:2609.05198`) — hard/long-CoT examples drive OPD gains (not high token entropy); 8 hard can match 17K. Does not replace OPD or OPD-II.\n- **Related self-extrapolating teacher**: `method:rise` (`arXiv:2609.05295`) synthesizes an OPD teacher from the student's RLVR trajectory. No external teacher. Does not replace OPD, CISPO, or OPSA.\n- **No teacher / no labels**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace OPD when a strong teacher is the goal."
+      "body": "# Small Local Student Distillation from Strong Teacher\n\n## Problem Definition\nTraining small local students (1B–8B) from large teacher models (70B–405B) with generalized on-policy divergence matching.\n\n## SOTA Recommendation (as of 2026-09-07)\n- **Single-Teacher Distillation Default**: **OPD** (`method:opd`, `paper:opd` `arXiv:2604.13016`). Unchanged.\n- **Multi-Teacher Student Distillation Default**: **Open-MOPD** (`method:open-mopd`, `paper:open-mopd` `arXiv:2608.19098`) for token-share balancing, gap-aware dynamic budget allocation, and student reward refresh across specialized teacher models.\n- **Related alternative**: Use `method:vista` instead when the teacher is a privileged same-model copy that sees the gold solution (not a larger frozen teacher). OPD remains the student-distillation default.\n- **Optional teacher-OPD filter**: `method:ra-opd` (`arXiv:2608.27960`) keeps trajectories with sign-agree teacher return vs outcome reward. Does not replace OPD.\n- **Optional sampled-token entropy plug-in**: `method:ida-opd` (`arXiv:2608.29846`) keeps entropy-expanding $A_y$ and shrinks $\\mathcal{I}_H<0$ by $|q-p|/(q+p)$. Does not replace OPD or CISPO.\n- **Data-efficiency note**: `method:opd-one-example` (`arXiv:2609.04172`) — one query recovers most full-data OPD; ~16 diverse queries ≈ full-data / MOPD. Does not replace OPD.\n- **Data-selection sibling**: `method:opd-hard-cot-selection` (`arXiv:2609.05198`) — hard/long-CoT examples drive OPD gains (not high token entropy); 8 hard can match 17K. Does not replace OPD or OPD-II.\n- **Related self-extrapolating teacher**: `method:rise` (`arXiv:2609.05295`) synthesizes an OPD teacher from the student's RLVR trajectory. No external teacher. Does not replace OPD, CISPO, or OPSA.\n- **Tool-using OPKD**: `method:pta` (`arXiv:2609.04773`, EMNLP 2026 Main) — student-induced but teacher-committed rollouts; tool calls execute only after the teacher verifies the turn. Pre-RL distill for Search-R1 / DeepEyes. Does not replace OPD for text-only distillation.\n- **No teacher / no labels**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace OPD when a strong teacher is the goal."
     },
     {
       "id": "task:learned-video-compression",
@@ -7138,7 +7170,7 @@
             "to": "task:outcome-only-long-horizon-agent-rl"
           }
         ],
-        "last_reviewed": "2026-09-04",
+        "last_reviewed": "2026-09-07",
         "current_sota": [
           {
             "method": "method:foldgrpo",
@@ -7152,7 +7184,8 @@
         "methods": [
           "method:foldgrpo",
           "method:agentfold",
-          "method:rao"
+          "method:rao",
+          "method:pta"
         ],
         "tags": [
           "agents",
@@ -7161,7 +7194,7 @@
           "long-horizon"
         ]
       },
-      "body": "# Long-Horizon Tool Agent\n\n## Problem Definition\nThe agent takes many tool/web/SWE steps. The problem is the **trajectory**, not a dumped prompt. Keep a small active context by folding completed sub-trajectories.\n\n## Evaluation Protocol & Benchmarks\n- BrowseComp-Plus, SWE-Bench Verified at 32K×10 vs ReAct 32K and ReAct 327K+GRPO.\n- Record GPT-5 ReAct as still ahead.\n\n## SOTA Landscape\n- **current_sota**: FoldGRPO (`method:foldgrpo`).\n- **Active**: AgentFold (web history, 36.2% BrowseComp); RAO (trained recursion, TextCraft 24% vs 95%)."
+      "body": "# Long-Horizon Tool Agent\n\n## Problem Definition\nThe agent takes many tool/web/SWE steps. The problem is the **trajectory**, not a dumped prompt. Keep a small active context by folding completed sub-trajectories.\n\n## Evaluation Protocol & Benchmarks\n- BrowseComp-Plus, SWE-Bench Verified at 32K×10 vs ReAct 32K and ReAct 327K+GRPO.\n- Record GPT-5 ReAct as still ahead.\n\n## SOTA Landscape\n- **current_sota**: FoldGRPO (`method:foldgrpo`). Unchanged.\n- **Active**: AgentFold (web history, 36.2% BrowseComp); RAO (trained recursion, TextCraft 24% vs 95%).\n- **Related pre-RL tool OPKD (not this folding default)**: `method:pta` (`arXiv:2609.04773`) teacher-commits tool turns before Search-R1 / DeepEyes RL. Does not replace FoldGRPO."
     },
     {
       "id": "task:privileged-teacher-opsd",
@@ -14717,6 +14750,44 @@
       "body": "# What Matters in On-Policy Distillation? A Perspective on Data Efficiency and Data Selection\n\n## Abstract Summary\nData-centric mechanisms in OPD are under-explored relative to algorithm design. This paper studies 1-shot and few-shot OPD. 1-shot is consistently effective; harder examples yield larger gains. The driver is not high token entropy but the longer CoT that hard problems induce: long traces keep the student aligned with the teacher over a long horizon and teach reflection patterns (e.g. \"Alternatively\") missing from short CoTs. Select hard examples only. Even teacher-unsolvable items can be used. On four models from 1.5B to 7B, 8 hard examples match the DAPO-Math-17K full-set baseline. Sibling to OPD-II (`paper:opd-one-example`, 2609.04172): that paper emphasizes query *diversity vs volume*; this paper emphasizes *hard/long-CoT vs easy/short-CoT*. Neither replaces OPD.\n\n## Key Contributions\n1. **1-shot OPD works across sampled examples**; hard queries beat easy ones (best 1-shot $\\pi_{973}$ avg 51.7 vs easy $\\pi_5$ 48.0 vs full-set 53.7 on R1-Distill-Qwen-1.5B).\n2. **Long CoT, not token entropy**, is the data mechanism. Hard problems generate longer traces with reflection.\n3. **Difficulty ranking**: 16 rollouts each for student and teacher; $A_i=(S_i+T_i)/2$; Easy $A_i>0.9$, Medium $[0.1,0.9]$, Hard $A_i<0.1$.\n4. **8 hard examples ≈ 17K**: $\\{\\pi_{874},\\ldots,\\pi_{997}\\}$ avg 53.6 vs DAPO-Math-17K 53.7. Teacher-unsolvable hard items remain usable.\n\n## Empirical Highlights\n- R1-Distill-Qwen-1.5B <- JustRL-1.5B: 8 hard 53.6 vs 17K 53.7 vs random 1K 53.6 vs 8 easy 51.2.\n- Skywork-OR1-Math-7B -> R1-Distill-Qwen-7B: 8-shot 59.5 vs full-set 59.6; 1-shot 58.4 vs student 56.3.\n- Qwen3-4B -> Qwen3-1.7B-Base: 8-shot 21.3 vs full-set 22.5 vs student 6.3.\n- Training: verl, batch/mini-batch 64, 8 responses/prompt, top-16 reverse KL, 279 steps (1 epoch of 17K), 8x H100.\n\n## Open Source Repository & Resources\n- No official GitHub found as of 2026-09-07. Host loop is ordinary top-$k$ OPD (`recipe:opd`). This paper only changes the query set (`recipe:opd-hard-cot-selection`)."
     },
     {
+      "id": "paper:pta",
+      "type": "paper",
+      "title": "Persistent Teacher Anchoring for Tool-Using Agents",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/papers/pta.md",
+      "metadata": {
+        "id": "paper:pta",
+        "type": "paper",
+        "title": "Persistent Teacher Anchoring for Tool-Using Agents",
+        "authors": [
+          "Hyun Bin Park",
+          "Kyungho Song",
+          "Sangmin Lee",
+          "Du-Seong Chang"
+        ],
+        "year": 2026,
+        "month": 9,
+        "arxiv_id": "2609.04773",
+        "url": "https://arxiv.org/abs/2609.04773",
+        "methods": [
+          "method:pta"
+        ],
+        "cites": [
+          "paper:opd",
+          "paper:gkd"
+        ],
+        "tags": [
+          "post-training",
+          "distillation",
+          "tool-use",
+          "opkd",
+          "pta"
+        ]
+      },
+      "body": "# Persistent Teacher Anchoring for Tool-Using Agents\n\n## Abstract Summary\nOn-policy knowledge distillation (OPKD) matches the student to a teacher next-token distribution on student-generated trajectories, then hands the student to downstream RL. In tool use the teacher–student gap is not just text: a student-written call executes before supervision and its observation shapes later prefixes. Existing proposer-verifier methods govern retained text but leave tool execution outside their scope. Persistent Teacher Anchoring (PTA) is a student-induced but teacher-committed rollout: the student proposes chunks, the teacher verifies them (reject if outside teacher top-$K$), and a tool call reaches the environment only after the teacher has verified the whole turn. Verified chunks are atomic units, so persistent lookahead can fill idle rollout capacity and carry unfinished samples across student updates under a fixed verifier. Pre-RL PTA then Search-R1-style retrieval RL and DeepEyes-style perception RL improve macro best@4 by +2.5 / +2.8 vs OPKD under the same downstream RL budget; lookahead raises throughput 24%. Accepted to EMNLP 2026 Main. No official GitHub as of 2026-09-07.\n\n## Key Contributions\n1. **Turn-level commitment**: chunk-level teacher verification plus a pending-turn buffer; `Environment.step` runs only after the whole assistant turn is finalized.\n2. **Student-induced, teacher-committed**: ~90% of committed assistant tokens stay student-proposed; rare in-call replacements (0.05% retrieval / 0.82% perception) are load-bearing — suppressing them collapses the gain.\n3. **Source-aware OPKD**: KL only on committed assistant positions, not observations.\n4. **Persistent lookahead**: verified chunk boundaries let the scheduler promote future samples ($T_{\\mathrm{sched}}=(B+P)/(t^{\\mathrm{gen}}+t^{\\mathrm{update}})$); +24% throughput (0.519 → 0.644 samples/s).\n\n## Empirical Highlights\n- Retrieval (Qwen3-1.7B ← Qwen3-32B, Search-R1): PTA+RL macro best@4 34.59 vs OPKD+RL 32.07 vs Direct RL 32.66 vs base 30.77.\n- Perception (Qwen3-VL-2B ← Qwen3-VL-32B, DeepEyes): PTA+RL macro best@4 70.00 vs OPKD+RL 67.20 vs Direct RL 68.10.\n- Pre-RL perception checkpoint: PTA leads OPKD on all six metrics; HRBench8K best@4 65.00 vs 58.00.\n- Lookahead: 20.2 promoted samples/step; 24% throughput.\n\n## Open Source Repository & Resources\n- No official GitHub found as of 2026-09-07. Paper implements PTA in veRL with SGLang by inserting teacher verification into the chunk-level generation loop (`recipe:pta`)."
+    },
+    {
       "id": "method:a2a-protocol",
       "type": "method",
       "title": "Agent2Agent Protocol (A2A) v1.0",
@@ -15796,7 +15867,7 @@
           "sota"
         ]
       },
-      "body": "# CANOPY (Coverage-Anchored On-Policy RL)\n\n## Method Overview\nCANOPY is a protocol, not a new optimizer. It keeps GRPO's group-relative advantage and attacks two failures of outcome-only agent RL:\n\n1. **Explore more (signal starvation).** Sparse reward yields gradient only when a same-task group mixes success and failure. Size $n$ from a pilot $\\hat{p}_{\\min}$ so $P_{\\mathrm{sig}}\\approx 1-(1-p)^n$ hits a target coverage; keep the hardest tasks; do not cap per-turn generation.\n2. **Drift less.** One update per rollout batch (no stale mini-batches); sparse fully-correct reward (no pass-fraction proxy); pooled token-mean loss over action tokens only; KL to the frozen base; quarantine serving-layer faults so they do not look like agent failures.\n\nTest-time budget transfer raises turns and context without search. Differentiated from `method:draco`: CANOPY assumes a programmatic checker; DRACO redistributes rubric scores when none exists.\n\n## When to Use\n- Long-horizon interactive agents with a unit-test / patch verifier, where prior work dropped hard tasks or added dense rewards because groups of n≤8 were silent.\n- Transferring the same coverage+anti-drift principles to SWE repair (retune n, KL, horizon; do not copy AppWorld HPs).\n\n## When NOT to Use\n- Async tool-latency training -> `method:sao`.\n- Context folding -> `method:foldgrpo`.\n- Single-turn math/code -> `method:cispo`.\n- Choosing a harness -> `method:mini-swe-agent`.\n- No checker -> `method:draco`.\n\n## Relation to Existing SOTA\n- SOTA only for `task:outcome-only-long-horizon-agent-rl`. Does **not** supersede `method:sao`, `method:foldgrpo`, `method:cispo`, `method:mini-swe-agent`, `method:omp2-harness`, or `method:draco`.\n\n## Gotchas & Failure Modes\n- Dense pass-fraction rewards manufacture within-group variance but can reward wrong approaches. CANOPY's claim is that scaled exploration removes the need to densify.\n- Importance clip is inert when there is one update per batch; do not read a CISPO-style clip as the method.\n- SWE HPs are not AppWorld HPs. Copying n=32 / β=1e-4 onto expensive SWE episodes is a waste of GPU-weeks.\n- Leaderboard TGC is mean@1 at 100 turns / 61k; do not compare to training-budget mean@4 without saying so."
+      "body": "# CANOPY (Coverage-Anchored On-Policy RL)\n\n## Method Overview\nCANOPY is a protocol, not a new optimizer. It keeps GRPO's group-relative advantage and attacks two failures of outcome-only agent RL:\n\n1. **Explore more (signal starvation).** Sparse reward yields gradient only when a same-task group mixes success and failure. Size $n$ from a pilot $\\hat{p}_{\\min}$ so $P_{\\mathrm{sig}}\\approx 1-(1-p)^n$ hits a target coverage; keep the hardest tasks; do not cap per-turn generation.\n2. **Drift less.** One update per rollout batch (no stale mini-batches); sparse fully-correct reward (no pass-fraction proxy); pooled token-mean loss over action tokens only; KL to the frozen base; quarantine serving-layer faults so they do not look like agent failures.\n\nTest-time budget transfer raises turns and context without search. Differentiated from `method:draco`: CANOPY assumes a programmatic checker; DRACO redistributes rubric scores when none exists.\n\n## When to Use\n- Long-horizon interactive agents with a unit-test / patch verifier, where prior work dropped hard tasks or added dense rewards because groups of n≤8 were silent.\n- Transferring the same coverage+anti-drift principles to SWE repair (retune n, KL, horizon; do not copy AppWorld HPs).\n\n## When NOT to Use\n- Async tool-latency training -> `method:sao`.\n- Context folding -> `method:foldgrpo`.\n- Single-turn math/code -> `method:cispo`.\n- Choosing a harness -> `method:mini-swe-agent`.\n- No checker -> `method:draco`.\n\n## Relation to Existing SOTA\n- SOTA only for `task:outcome-only-long-horizon-agent-rl`. Does **not** supersede `method:sao`, `method:foldgrpo`, `method:cispo`, `method:mini-swe-agent`, `method:omp2-harness`, or `method:draco`.\n- Tool-using pre-RL OPKD (`method:pta`) does not scale sparse episode-end groups and does not replace CANOPY.\n\n## Gotchas & Failure Modes\n- Dense pass-fraction rewards manufacture within-group variance but can reward wrong approaches. CANOPY's claim is that scaled exploration removes the need to densify.\n- Importance clip is inert when there is one update per batch; do not read a CISPO-style clip as the method.\n- SWE HPs are not AppWorld HPs. Copying n=32 / β=1e-4 onto expensive SWE episodes is a waste of GPU-weeks.\n- Leaderboard TGC is mean@1 at 100 turns / 61k; do not compare to training-budget mean@4 without saying so."
     },
     {
       "id": "method:causalmix",
@@ -16112,7 +16183,7 @@
           "sota"
         ]
       },
-      "body": "# CISPO (Clipped IS-weight Policy Optimization)\n\n## Method Overview\nCISPO (Clipped IS-weight Policy Optimization) establishes the state-of-the-art reinforcement learning standard for dense reasoning models:\n1. **Clipped IS-Weight Formulation**: Clips \\(\\text{sg}(\\text{clip}(\\rho))\\) directly on the importance sampling weight (with stop-gradient) rather than standard PPO-surrogate objective clipping, ensuring every token (including rare forks) receives a non-zero gradient.\n2. **Dense Reasoning Alignment**: Maximizes verifiable pass@1 accuracy across competitive math and programming benchmarks.\n\n## Implementation & Frameworks\n- Repository: `https://github.com/MiniMax-AI/MiniMax-M1`\n- Supported in NeMo-RL and ms-swift via `loss_type=cispo`.\n\n## When to Use\n- Default SOTA optimizer for dense model math and code reasoning RL.\n\n## Relation to Existing SOTA\n- Remains the dense math/code RLVR default for Pass@1 when labels exist. GRPO inside `method:j-zero` is that method's inner self-play optimizer, not a change to this default.\n- For Pass@K / reasoning coverage or a no-backward memory budget, use `method:es-reasoning` on `task:passk-reasoning-coverage`. That is not a GRPO revival and does not replace CISPO.\n- Optional token-filter plug-in: `method:gmts`. Example-reweight plug-in: `method:diem`. First-mistake process credit: `method:cliff` (not a PRM; does not replace VeriGate). Sample-level GRPO/OPSD router: `method:self-routing`. Adaptive IS clip: `method:gapo` (does not replace CISPO). RLVR+self-OPD loop: `method:rise` (does not replace CISPO, OPD, or OPSA). Teacher-free unlabeled train-time self-adaptation: `method:opsa`. None of these replace CISPO when labels exist.\n\n## Supersession\n- Supersedes `method:dapo` as the dense RL default (DAPO remains as a systems reference).\n\n## Gotchas & Failure Modes\n- Group-relative magnitude $|\\hat{A}|=\\sqrt{n^-/n^+}$ can reward lucky guesses on bounded-answer items, bounded sub-cases inside open math (~56% of MATH-7.5K by answer shape), and search-agent trajectories that cash out via outcome-only exact match (`paper:spurious-advantage-grpo`). CISPO still clips IS weights, not this composition-dependent scale. Do not revive GRPO or promote SignBalance over CISPO."
+      "body": "# CISPO (Clipped IS-weight Policy Optimization)\n\n## Method Overview\nCISPO (Clipped IS-weight Policy Optimization) establishes the state-of-the-art reinforcement learning standard for dense reasoning models:\n1. **Clipped IS-Weight Formulation**: Clips \\(\\text{sg}(\\text{clip}(\\rho))\\) directly on the importance sampling weight (with stop-gradient) rather than standard PPO-surrogate objective clipping, ensuring every token (including rare forks) receives a non-zero gradient.\n2. **Dense Reasoning Alignment**: Maximizes verifiable pass@1 accuracy across competitive math and programming benchmarks.\n\n## Implementation & Frameworks\n- Repository: `https://github.com/MiniMax-AI/MiniMax-M1`\n- Supported in NeMo-RL and ms-swift via `loss_type=cispo`.\n\n## When to Use\n- Default SOTA optimizer for dense model math and code reasoning RL.\n\n## Relation to Existing SOTA\n- Remains the dense math/code RLVR default for Pass@1 when labels exist. GRPO inside `method:j-zero` is that method's inner self-play optimizer, not a change to this default.\n- For Pass@K / reasoning coverage or a no-backward memory budget, use `method:es-reasoning` on `task:passk-reasoning-coverage`. That is not a GRPO revival and does not replace CISPO.\n- Optional token-filter plug-in: `method:gmts`. Example-reweight plug-in: `method:diem`. First-mistake process credit: `method:cliff` (not a PRM; does not replace VeriGate). Sample-level GRPO/OPSD router: `method:self-routing`. Adaptive IS clip: `method:gapo` (does not replace CISPO). RLVR+self-OPD loop: `method:rise` (does not replace CISPO, OPD, or OPSA). Tool-using pre-RL OPKD: `method:pta` (does not replace CISPO). Teacher-free unlabeled train-time self-adaptation: `method:opsa`. None of these replace CISPO when labels exist.\n\n## Supersession\n- Supersedes `method:dapo` as the dense RL default (DAPO remains as a systems reference).\n\n## Gotchas & Failure Modes\n- Group-relative magnitude $|\\hat{A}|=\\sqrt{n^-/n^+}$ can reward lucky guesses on bounded-answer items, bounded sub-cases inside open math (~56% of MATH-7.5K by answer shape), and search-agent trajectories that cash out via outcome-only exact match (`paper:spurious-advantage-grpo`). CISPO still clips IS weights, not this composition-dependent scale. Do not revive GRPO or promote SignBalance over CISPO."
     },
     {
       "id": "method:claude-computer-use",
@@ -17882,7 +17953,7 @@
           "sota"
         ]
       },
-      "body": "# Context-Folding + FoldGRPO\n\n## Method Overview\nFold completed sub-trajectories so a long tool/web/SWE run keeps a 32K active window (Sun et al. 2510.11967). FoldGRPO is RL on that folded agent. Code: `https://github.com/sunnweiwei/FoldAgent`. This is **not** RLM (dumped prompt) and **not** the SWE harness default.\n\n## When to Use\n- Long horizon of tool calls with a small active context, 36B-class trained agent.\n\n## When NOT to Use\n- Dumped prompt → `method:rlm`. SWE loop without folding → `method:mini-swe-agent`. Async RL without folding → `method:sao`.\n\n## Gotchas & Failure Modes\n- GPT-5 ReAct still ahead (BrowseComp-Plus 0.793 / SWE-Bench Verified 0.718). Do not claim frontier-model SOTA.\n- Open FoldAgent is a verl reimplementation and may differ from the paper's train code."
+      "body": "# Context-Folding + FoldGRPO\n\n## Method Overview\nFold completed sub-trajectories so a long tool/web/SWE run keeps a 32K active window (Sun et al. 2510.11967). FoldGRPO is RL on that folded agent. Code: `https://github.com/sunnweiwei/FoldAgent`. This is **not** RLM (dumped prompt) and **not** the SWE harness default.\n\n## When to Use\n- Long horizon of tool calls with a small active context, 36B-class trained agent.\n\n## When NOT to Use\n- Dumped prompt → `method:rlm`. SWE loop without folding → `method:mini-swe-agent`. Async RL without folding → `method:sao`. Teacher-committed tool OPKD before Search-R1 / DeepEyes RL → `method:pta` (commits turns; does not fold history).\n\n## Gotchas & Failure Modes\n- GPT-5 ReAct still ahead (BrowseComp-Plus 0.793 / SWE-Bench Verified 0.718). Do not claim frontier-model SOTA.\n- Open FoldAgent is a verl reimplementation and may differ from the paper's train code."
     },
     {
       "id": "method:fourcastnet-3",
@@ -21229,7 +21300,7 @@
           "sota"
         ]
       },
-      "body": "# OPD (On-Policy Distillation)\n\n## Method Overview\nOPD (On-Policy Distillation) is the state-of-the-art framework for distilling large frontier teachers into compact local student models:\n1. **Student Rollout Generation**: Samples token sequences from the *student* policy rather than teacher traces.\n2. **Generalized Divergence Scoring**: Evaluates student tokens using teacher forward log-probabilities with reverse or mixed KL divergence.\n\n## When to Use\n- Default SOTA method for distilling reasoning and conversational capabilities into small student models.\n\n## Relation to Existing SOTA\n- Remains the single-teacher student-distillation default. For a privileged same-model teacher that sees the gold solution, use `method:vista` instead of vanilla OPSD; that does not replace OPD.\n- Optional filter when a verifier is available: `method:ra-opd`. Sampled-token pass@k entropy plug-in: `method:ida-opd`. Teacher-free train-time self-adaptation is `method:opsa` and does not replace OPD when a strong teacher is the goal.\n- Data-efficiency companion (`paper:opd-one-example`, `method:opd-one-example`): OPD is data-overfed but algorithm-starved. One query recovers most full-data gain; ~16 semantically diverse queries match full-data / MOPD. Prefer semantic diversity over volume. Does not change this method's status.\n- Hard-CoT selection sibling (`paper:opd-hard-cot-selection`, `method:opd-hard-cot-selection`): hard/long-CoT examples drive gains, not high token entropy; 8 hard can match 17K. Does not replace this method or OPD-II.\n- Self-extrapolating teacher (`method:rise`): no external teacher; needs RLVR grounding. Does not replace OPD when a white-box teacher is the goal.\n\n## Gotchas & Failure Modes\n- Do not scale the prompt set when 16-shot already matches full-data OPD. The remaining gap is student absorption / step-efficiency (`method:opd-one-example`).\n- Prefer hard/long-CoT over easy short traces when ranking a small set (`method:opd-hard-cot-selection`). Do not treat that as OPD-II's diversity finding.\n- Sampled-token OPD can raise pass@1 while flattening pass@k. That is `method:ida-opd`, not more data.\n\n## Supersession\n- Supersedes `method:on-policy-distillation` (GKD baseline) as the primary distillation reference."
+      "body": "# OPD (On-Policy Distillation)\n\n## Method Overview\nOPD (On-Policy Distillation) is the state-of-the-art framework for distilling large frontier teachers into compact local student models:\n1. **Student Rollout Generation**: Samples token sequences from the *student* policy rather than teacher traces.\n2. **Generalized Divergence Scoring**: Evaluates student tokens using teacher forward log-probabilities with reverse or mixed KL divergence.\n\n## When to Use\n- Default SOTA method for distilling reasoning and conversational capabilities into small student models.\n\n## Relation to Existing SOTA\n- Remains the single-teacher student-distillation default. For a privileged same-model teacher that sees the gold solution, use `method:vista` instead of vanilla OPSD; that does not replace OPD.\n- Optional filter when a verifier is available: `method:ra-opd`. Sampled-token pass@k entropy plug-in: `method:ida-opd`. Teacher-free train-time self-adaptation is `method:opsa` and does not replace OPD when a strong teacher is the goal.\n- Data-efficiency companion (`paper:opd-one-example`, `method:opd-one-example`): OPD is data-overfed but algorithm-starved. One query recovers most full-data gain; ~16 semantically diverse queries match full-data / MOPD. Prefer semantic diversity over volume. Does not change this method's status.\n- Hard-CoT selection sibling (`paper:opd-hard-cot-selection`, `method:opd-hard-cot-selection`): hard/long-CoT examples drive gains, not high token entropy; 8 hard can match 17K. Does not replace this method or OPD-II.\n- Self-extrapolating teacher (`method:rise`): no external teacher; needs RLVR grounding. Does not replace OPD when a white-box teacher is the goal.\n- Tool-using OPKD (`method:pta`): student-induced but teacher-committed rollouts; tool calls execute only after the teacher verifies the turn. Does not replace OPD for plain text distillation.\n\n## Gotchas & Failure Modes\n- Do not scale the prompt set when 16-shot already matches full-data OPD. The remaining gap is student absorption / step-efficiency (`method:opd-one-example`).\n- Prefer hard/long-CoT over easy short traces when ranking a small set (`method:opd-hard-cot-selection`). Do not treat that as OPD-II's diversity finding.\n- Sampled-token OPD can raise pass@1 while flattening pass@k. That is `method:ida-opd`, not more data.\n\n## Supersession\n- Supersedes `method:on-policy-distillation` (GKD baseline) as the primary distillation reference."
     },
     {
       "id": "method:opd2",
@@ -22555,7 +22626,7 @@
           "sota"
         ]
       },
-      "body": "# SAO (Single-Rollout Asynchronous Optimization)\n\n## Method Overview\nSAO (Single-Rollout Asynchronous Optimization) solves the straggler bottleneck in multi-turn agent environments (tool calls, code sandboxes, SWE benchmarks):\n1. **Single Rollout per Prompt**: Uses 1 rollout per prompt coupled with a learned value model, avoiding costly multi-sample synchronization under variable execution latency.\n2. **Double-Sided Token Clipping**: Applies symmetric token-level clipping bounds for stable asynchronous updates.\n3. **Agentic Async Scale**: Successfully adopted in large-scale agentic training (e.g. GLM-5.2). Does not replace dense math/code optimizers like CISPO.\n\n## When to Use\n- Default SOTA optimizer for agentic async RL and tool-calling environments.\n\n## Relation to Existing SOTA\n- Remains SOTA for `task:agentic-async-rl`. Does **not** own outcome-only long-horizon coverage (`method:canopy`) or outcome-blind rubric credit (`method:draco`).\n\n## Supersession\n- Supersedes synchronous `method:grpo` / `method:dr-grpo` for agentic asynchronous tasks."
+      "body": "# SAO (Single-Rollout Asynchronous Optimization)\n\n## Method Overview\nSAO (Single-Rollout Asynchronous Optimization) solves the straggler bottleneck in multi-turn agent environments (tool calls, code sandboxes, SWE benchmarks):\n1. **Single Rollout per Prompt**: Uses 1 rollout per prompt coupled with a learned value model, avoiding costly multi-sample synchronization under variable execution latency.\n2. **Double-Sided Token Clipping**: Applies symmetric token-level clipping bounds for stable asynchronous updates.\n3. **Agentic Async Scale**: Successfully adopted in large-scale agentic training (e.g. GLM-5.2). Does not replace dense math/code optimizers like CISPO.\n\n## When to Use\n- Default SOTA optimizer for agentic async RL and tool-calling environments.\n\n## Relation to Existing SOTA\n- Remains SOTA for `task:agentic-async-rl`. Does **not** own outcome-only long-horizon coverage (`method:canopy`) or outcome-blind rubric credit (`method:draco`).\n- Pre-RL tool OPKD with persistent lookahead (`method:pta`) is not this shelf: lookahead fills idle distill capacity under a fixed teacher; SAO owns async policy-train stragglers.\n\n## Supersession\n- Supersedes synchronous `method:grpo` / `method:dr-grpo` for agentic asynchronous tasks."
     },
     {
       "id": "method:sapo",
@@ -24846,6 +24917,111 @@
         ]
       },
       "body": "# OPD Hard-CoT Selection\n\n## Method Overview\nOPD hard-CoT selection is not a new loss. It is a data-selection operating point of `method:opd`: keep the ordinary on-policy reverse-KL (paper: top-16) and train on the hardest queries. Score a pool with 16 student and 16 teacher rollouts, $A_i=(S_i+T_i)/2$, and take Hard $A_i<0.1$. Gains come from longer CoT paths — horizon alignment plus reflection tokens — not from high token entropy. Teacher-unsolvable hard items still work because the token-level teacher signal is not an outcome reward.\n\nSibling to `method:opd-one-example` (OPD-II, 2609.04172). OPD-II: one query recovers most full-data gain; ~16 *semantically diverse* queries match full-data / MOPD. This paper: *hard/long-CoT* examples drive the gain; 8 hard can match 17K. Cross-link both when choosing a small OPD set. Neither replaces OPD.\n\n## When to Use\n- Already running teacher OPD and you can score query difficulty with a few student/teacher rollouts: prefer hard/long-CoT over easy short traces.\n- Diagnosing an OPD data stall: if 8 hard examples already match 17K, collecting more easy prompts will not help.\n\n## When NOT to Use\n- Distill algorithm -> `method:opd`.\n- The open question is diversity vs volume (cluster representatives) -> `method:opd-one-example`.\n- Labeled Pass@1 RLVR -> `method:cispo`.\n- No teacher -> `method:opsa`.\n\n## Relation to Existing SOTA\n- Niche data-selection note on `task:student-distillation`. Does **not** supersede `method:opd` or `method:opd-one-example`.\n- Distinct from `method:ida-opd` (sampled-token entropy plug-in) and `method:ra-opd` (trajectory filter).\n\n## Gotchas & Failure Modes\n- Do not confuse \"8 hard\" with OPD-II's \"16 diverse\". Different axes: difficulty/CoT length vs semantic coverage.\n- Easy 8-shot (51.2) undershoots hard 8-shot (53.6) on the 1.5B pair. Ranking by $A_i$ is the method.\n- Teacher-unsolvable hard examples are usable; do not drop them because the outcome would be zero under RLVR.\n- Paper trains a fixed 279 steps (one 17K epoch). Few-shot is not fewer optimizer steps."
+    },
+    {
+      "id": "method:pta",
+      "type": "method",
+      "title": "PTA (Persistent Teacher Anchoring)",
+      "domain": null,
+      "status": "active",
+      "file_path": "graph/methods/pta.md",
+      "metadata": {
+        "id": "method:pta",
+        "type": "method",
+        "title": "PTA (Persistent Teacher Anchoring)",
+        "category": "distillation",
+        "status": "active",
+        "sota_for": [],
+        "supersedes": [],
+        "do_not_use_for": [
+          {
+            "when": "plain text distillation without tool execution",
+            "reason": "PTA's load-bearing piece is delaying and correcting tool calls before they hit the environment; OPD remains the text OPKD default",
+            "use_instead": "method:opd"
+          },
+          {
+            "when": "single-turn math/code Pass@1 RLVR",
+            "reason": "PTA is a pre-RL distill construction for tool-using agents, not the labeled dense RLVR default",
+            "use_instead": "method:cispo"
+          },
+          {
+            "when": "outcome-only long-horizon agent RL (coverage / anti-drift)",
+            "reason": "PTA does not scale sparse episode-end groups; CANOPY owns that shelf",
+            "use_instead": "method:canopy"
+          },
+          {
+            "when": "training async agent RL for straggler latency",
+            "reason": "Lookahead here fills idle distill capacity under a fixed teacher; SAO is the async policy-train default",
+            "use_instead": "method:sao"
+          },
+          {
+            "when": "folding a long tool trajectory into a small active context",
+            "reason": "PTA commits turns; it does not fold history. FoldGRPO is the folding default",
+            "use_instead": "method:foldgrpo"
+          },
+          {
+            "when": "build a SWE / issue-to-patch harness rather than distill a tool policy",
+            "reason": "mini-SWE-agent is the harness first hop",
+            "use_instead": "method:mini-swe-agent"
+          }
+        ],
+        "assumptions": [
+          "White-box teacher during rollout construction. Retrieval: Qwen3-32B teacher / Qwen3-1.7B student. Perception: Qwen3-VL-32B / Qwen3-VL-2B-Thinking.",
+          "Tool interface is Search-R1-style retrieval or DeepEyes-style bbox zoom. Paper does not cover code execution, DBs, or multi-agent.",
+          "veRL + SGLang chunk loop. Distill KL only on committed assistant tokens. Downstream RL restores unrestricted student rollouts."
+        ],
+        "last_reviewed": "2026-09-07",
+        "papers": [
+          "paper:pta"
+        ],
+        "recipes": [
+          "recipe:pta"
+        ],
+        "claims": [
+          {
+            "benchmark": "Search-R1 retrieval (NQ / PopQA / HotpotQA / Musique), Qwen3-1.7B after same-budget RL",
+            "metric": "macro best@4 EM",
+            "value": 34.59,
+            "baseline": "OPKD+RL 32.07 / Direct RL 32.66 / base 30.77",
+            "date": "2026-09-07",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.04773",
+            "notes": "Table 2. +2.5 vs OPKD. EMNLP 2026 Main. Weighted best@4 39.92 vs OPKD 37.09."
+          },
+          {
+            "benchmark": "DeepEyes perception (VStar / HRBench4K / HRBench8K), Qwen3-VL-2B after same-budget RL",
+            "metric": "macro best@4",
+            "value": 70.0,
+            "baseline": "OPKD+RL 67.20 / Direct RL 68.10 / base 66.96",
+            "date": "2026-09-07",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.04773",
+            "notes": "Table 3. +2.8 vs OPKD. Pre-RL Table 4 already leads OPKD on all six metrics (HRBench8K best@4 65.00 vs 58.00)."
+          },
+          {
+            "benchmark": "Lookahead scheduler vs synchronous PTA rollouts",
+            "metric": "throughput (samples/s)",
+            "value": 0.644,
+            "baseline": "Synchronous 0.519 (24% lift); 20.2 promoted samples/step",
+            "date": "2026-09-07",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.04773",
+            "notes": "Table 5. Fills idle capacity; does not shorten generation or update time."
+          }
+        ],
+        "tags": [
+          "post-training",
+          "distillation",
+          "tool-use",
+          "opkd",
+          "pta",
+          "active"
+        ]
+      },
+      "body": "# PTA (Persistent Teacher Anchoring)\n\n## Method Overview\nPTA is OPKD for tool-using agents. The student proposes a chunk; the teacher verifies it (keep if inside teacher top-$K$, else replace). Verified chunks accumulate in a pending turn $R$. Only after $R$ is finalized is the assistant turn appended to the committed trajectory $\\tau$ and a parsed tool call allowed to hit the environment. Observations then join $\\tau$. Distillation is reverse-KL on committed assistant positions only.\n\nThat turn boundary is also a persistence unit. Persistent lookahead advances future samples in idle rollout slots and carries unfinished prefixes across student updates because the teacher verifier is fixed.\n\nThis is not text-only SKD/SWITCH. Those decide which tokens are kept; PTA decides **when a turn may act**. It is a pre-RL distill phase. Downstream RL restores unrestricted student-driven rollouts. It does not replace CISPO, CANOPY, SAO, FoldGRPO, or plain-text OPD.\n\n## When to Use\n- Distilling a smaller tool-using student (search / visual zoom) from a white-box teacher **before** Search-R1- or DeepEyes-style RL.\n- When vanilla OPKD lets student tool calls execute into teacher-unvisited states and the later prefixes poison the KL target.\n\n## When NOT to Use\n- No tools -> `method:opd`.\n- Labeled math/code Pass@1 RLVR -> `method:cispo`.\n- Sparse episode-end coverage -> `method:canopy`.\n- Async stragglers -> `method:sao`.\n- Context folding -> `method:foldgrpo`.\n- Building a harness -> `method:mini-swe-agent`.\n\n## Relation to Existing SOTA\n- Active plug-in on `task:student-distillation`. Related mention on `task:long-horizon-tool-agent` and `task:agentic-async-rl`. Does **not** supersede `method:opd`, `method:cispo`, `method:canopy`, `method:sao`, or `method:foldgrpo`.\n- Distinct from `method:vista` (privileged gold OPSD) and `method:rise` (self-extrapolated teacher, no external model).\n\n## Gotchas & Failure Modes\n- Safe timing without in-call replacement is not PTA: the ablation that keeps buffering but ships the student's original tool call falls below OPKD.\n- Teacher inference is on the rollout path. Lookahead recovers idle slots; it does not remove verifier cost.\n- Paper does not cover code execution, databases, or multi-agent interaction.\n- Each setting is trained once; significance is evaluation variation, not seed variation.\n- Downstream RL must be unrestricted student rollouts. The pre-RL policy never saw the error states the teacher blocked."
     }
   ],
   "edges": [
@@ -25260,6 +25436,24 @@
     {
       "source": "recipe:nemotron-3-ultra",
       "target": "task:pretrain-moe-frontier",
+      "relation": "recipe_for_task",
+      "properties": {}
+    },
+    {
+      "source": "recipe:pta",
+      "target": "method:pta",
+      "relation": "implements",
+      "properties": {}
+    },
+    {
+      "source": "method:pta",
+      "target": "recipe:pta",
+      "relation": "implemented_by",
+      "properties": {}
+    },
+    {
+      "source": "recipe:pta",
+      "target": "task:student-distillation",
       "relation": "recipe_for_task",
       "properties": {}
     },
@@ -28017,6 +28211,18 @@
     },
     {
       "source": "method:grpo",
+      "target": "task:agentic-async-rl",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:agentic-async-rl",
+      "target": "method:pta",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:pta",
       "target": "task:agentic-async-rl",
       "relation": "targets_task",
       "properties": {}
@@ -32954,6 +33160,18 @@
       "properties": {}
     },
     {
+      "source": "task:student-distillation",
+      "target": "method:pta",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:pta",
+      "target": "task:student-distillation",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
       "source": "task:learned-video-compression",
       "target": "method:dcvc-uf",
       "relation": "has_sota_method",
@@ -33345,6 +33563,18 @@
     },
     {
       "source": "method:rao",
+      "target": "task:long-horizon-tool-agent",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:long-horizon-tool-agent",
+      "target": "method:pta",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:pta",
       "target": "task:long-horizon-tool-agent",
       "relation": "targets_task",
       "properties": {}
@@ -39068,6 +39298,42 @@
     {
       "source": "paper:opd-one-example",
       "target": "paper:opd-hard-cot-selection",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:pta",
+      "target": "method:pta",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:pta",
+      "target": "paper:pta",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:pta",
+      "target": "paper:opd",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:opd",
+      "target": "paper:pta",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:pta",
+      "target": "paper:gkd",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:gkd",
+      "target": "paper:pta",
       "relation": "cited_by",
       "properties": {}
     },

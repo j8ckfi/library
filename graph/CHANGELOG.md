@@ -6,10 +6,16 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
-### 2026-09-07 — ingest 2026-09-07 weekday SOTA sweep (GAPO, RISE, layer-dropout, OPD hard-CoT)
-- Added four active/niche methods without stealing current_sota. CISPO, OPD, OPSA, Muon2, and CANOPY remain first hops. Per-method receipts follow.
+### 2026-09-07 — ingest 2026-09-07 weekday SOTA sweep (GAPO, RISE, layer-dropout, OPD hard-CoT, PTA)
+- Added five active/niche methods without stealing current_sota. CISPO, OPD, OPSA, Muon2, CANOPY, SAO, and FoldGRPO remain first hops. Per-method receipts follow.
 - Skipped (WATCH only): Iris 2609.04304 (search-agent SFT-RL climbing recipe; domain-specific); ACE expert skipping 2609.05228 (training-free MoE inference); MaxKernel 2609.04523 (TPU kernel agents); mHC residual analysis 2609.05309 (interpretability of existing mHC).
 - Scope checks: no half supersessions; cheat-sheet first hops unchanged.
+
+### 2026-09-07 — ingest method:pta (active; does not supersede method:opd / method:cispo / method:canopy / method:sao / method:foldgrpo)
+- Added paper:pta (2609.04773, EMNLP 2026 Main), method:pta, recipe:pta. Wired to task:student-distillation; related mentions on task:long-horizon-tool-agent and task:agentic-async-rl.
+- Status active. OPKD for tool-using agents: student-induced but teacher-committed rollouts; chunk-level verification + turn-level commitment; persistent lookahead. No official GitHub.
+- Evidence: Search-R1 PTA+RL macro best@4 34.59 vs OPKD+RL 32.07; DeepEyes 70.00 vs 67.20; lookahead 0.644 vs 0.519 samples/s (arXiv:2609.04773); verified: true; evidence_level: preprint (EMNLP accept noted).
+- Scope checks: OPD remains text distill; CISPO remains Pass@1 RLVR; CANOPY remains outcome-only agent RL; SAO remains async policy train; FoldGRPO remains folding.
 
 ### 2026-09-07 — ingest method:gapo (active plug-in; does not supersede method:cispo)
 - Added paper:gapo (2609.00444, EMNLP 2026 Main), method:gapo, recipe:gapo. Wired to task:math-code-rl-dense.

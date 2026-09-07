@@ -70,7 +70,7 @@ Fold completed sub-trajectories so a long tool/web/SWE run keeps a 32K active wi
 - Long horizon of tool calls with a small active context, 36B-class trained agent.
 
 ## When NOT to Use
-- Dumped prompt → `method:rlm`. SWE loop without folding → `method:mini-swe-agent`. Async RL without folding → `method:sao`.
+- Dumped prompt → `method:rlm`. SWE loop without folding → `method:mini-swe-agent`. Async RL without folding → `method:sao`. Teacher-committed tool OPKD before Search-R1 / DeepEyes RL → `method:pta` (commits turns; does not fold history).
 
 ## Gotchas & Failure Modes
 - GPT-5 ReAct still ahead (BrowseComp-Plus 0.793 / SWE-Bench Verified 0.718). Do not claim frontier-model SOTA.

@@ -17,7 +17,7 @@ redirects:
     to: "task:software-engineering-agent-harness"
   - when: "outcome-only long-horizon agent RL (signal starvation / drift or outcome-blind rubrics)"
     to: "task:outcome-only-long-horizon-agent-rl"
-last_reviewed: "2026-09-04"
+last_reviewed: "2026-09-07"
 current_sota:
   - method: method:foldgrpo
     as_of: "2025-10"
@@ -29,6 +29,7 @@ methods:
   - method:foldgrpo
   - method:agentfold
   - method:rao
+  - method:pta
 tags:
   - agents
   - agent-recursion
@@ -46,5 +47,6 @@ The agent takes many tool/web/SWE steps. The problem is the **trajectory**, not 
 - Record GPT-5 ReAct as still ahead.
 
 ## SOTA Landscape
-- **current_sota**: FoldGRPO (`method:foldgrpo`).
+- **current_sota**: FoldGRPO (`method:foldgrpo`). Unchanged.
 - **Active**: AgentFold (web history, 36.2% BrowseComp); RAO (trained recursion, TextCraft 24% vs 95%).
+- **Related pre-RL tool OPKD (not this folding default)**: `method:pta` (`arXiv:2609.04773`) teacher-commits tool turns before Search-R1 / DeepEyes RL. Does not replace FoldGRPO.

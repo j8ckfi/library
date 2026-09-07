@@ -185,6 +185,7 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 49. **Self-extrapolating OPD teacher**: **RISE** (`method:rise`, `arXiv:2609.05295`) builds a synthetic teacher from the model's own RLVR trajectory (param or logit extrapolation). No external teacher, no gold conditioning. Does **not** replace OPD, CISPO, or OPSA.
 50. **LLM pretrain layer dropout**: **Don't Drop Dropout** (`method:layer-dropout`, `arXiv:2609.05275`, ICML 2026) structured layer sparsity with $r_{\mathrm{train}}=1/\rho$. Same-FLOPs lower loss; same-steps up to ~25% FLOP save; ~1.5× self-speculative inference. Does **not** replace Muon2.
 51. **OPD hard-CoT selection**: `method:opd-hard-cot-selection` (`arXiv:2609.05198`). Hard/long-CoT examples drive OPD gains (not high token entropy); 8 hard can match 17K. Sibling to OPD-II's diversity finding. Does **not** replace OPD or `method:opd-one-example`.
+52. **Tool-using OPKD**: **PTA** (`method:pta`, `arXiv:2609.04773`, EMNLP 2026 Main) student-induced but teacher-committed rollouts; tool calls execute only after the teacher verifies the turn; persistent lookahead ~+24% throughput. Pre-RL distill then Search-R1 / DeepEyes RL. Does **not** replace OPD (text distill), CISPO (math RLVR), CANOPY (outcome-only agent RL), SAO (async stragglers), or FoldGRPO (folding).
 
 ---
 
@@ -236,6 +237,7 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `rise` (2609.05295) is an active RLVR-grounded self-extrapolating OPD teacher. It does not supersede `opd`, `cispo`, `opsa`, or `vista`.
 - `layer-dropout` (2609.05275) is an active pretrain regularizer. It does not supersede `muon2`.
 - `opd-hard-cot-selection` (2609.05198) is a niche hard/long-CoT data-selection finding on OPD. It does not supersede `opd` or `opd-one-example`.
+- `pta` (2609.04773) is an active OPKD construction for tool-using agents. It does not supersede `opd`, `cispo`, `canopy`, `sao`, or `foldgrpo`.
 
 ---
 

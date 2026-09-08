@@ -8,7 +8,7 @@ sota_for:
   - task:student-distillation
 supersedes:
   - method:on-policy-distillation
-last_reviewed: "2026-09-07"
+last_reviewed: "2026-09-08"
 papers:
   - paper:opd
   - paper:opd-one-example
@@ -48,6 +48,9 @@ OPD (On-Policy Distillation) is the state-of-the-art framework for distilling la
 - Hard-CoT selection sibling (`paper:opd-hard-cot-selection`, `method:opd-hard-cot-selection`): hard/long-CoT examples drive gains, not high token entropy; 8 hard can match 17K. Does not replace this method or OPD-II.
 - Self-extrapolating teacher (`method:rise`): no external teacher; needs RLVR grounding. Does not replace OPD when a white-box teacher is the goal.
 - Tool-using OPKD (`method:pta`): student-induced but teacher-committed rollouts; tool calls execute only after the teacher verifies the turn. Does not replace OPD for plain text distillation.
+- Prompt-level teacher gate (`method:tgopd`): verifier-scored teacher probes then exclusive OPD vs GRPO. Does not replace this method.
+- Sparse token-budget plug-in (`method:sparse-opd-supervision`): 1–2 tokens per trajectory (~0.05%) can match/beat full-token OPD. Does not replace this method.
+- Sequential stack (`method:opd-then-rlvr`): OPD then RLVR beats joint one-step fusion when both are used. Does not replace this method or CISPO.
 
 ## Gotchas & Failure Modes
 - Do not scale the prompt set when 16-shot already matches full-data OPD. The remaining gap is student absorption / step-efficiency (`method:opd-one-example`).

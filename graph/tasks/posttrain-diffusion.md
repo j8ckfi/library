@@ -20,6 +20,10 @@ current_sota:
 methods:
   - method:diffusion-opsd
   - method:self-opd
+redirects:
+  - when: "lossless multi-token / diffusion-augmented AR serving, not image-policy alignment"
+    to: "task:diffusion-augmented-ar"
+last_reviewed: "2026-09-08"
 tags:
   - diffusion
   - post-training
@@ -32,6 +36,7 @@ tags:
 ## Problem Definition
 Aligning generative diffusion and flow models with downstream reward functions (aesthetic quality, text-image alignment, human preference ratings). Endpoint rewards create a structural mismatch because feedback is only observed on decoded final images, while the model operates across multi-step denoising trajectories.
 
-## SOTA Recommendation (as of 2026-08-28)
+## SOTA Recommendation (as of 2026-09-08)
 - **Primary Method (Reward/Self-Distill with Behavior Policy)**: **DiffusionOPSD** (`method:diffusion-opsd`, `paper:diffusion-opsd` `arXiv:2608.24646`) for on-policy self-distillation with bounded intermediate clean-output targets.
 - **Teacher-Free Flow Matching / Multi-Objective Alignment**: **Self-OPD** (`method:self-opd`, `paper:self-opd` `arXiv:2608.26872`) for stochastic SDE branching vs deterministic self-reference and reward-level multi-objective fusion without task-specific teachers.
+- **Not This Task**: lossless AR multi-token serving is `method:uno` on `task:diffusion-augmented-ar`. Does not replace this image/flow post-train default.

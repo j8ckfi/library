@@ -8,11 +8,14 @@ scope: "Single-turn (or short-CoT) dense math/code RLVR with a programmatic veri
 out_of_scope:
   - "Long-horizon interactive agents judged only at episode end (CANOPY / DRACO)"
   - "Async tool-latency RL (SAO)"
+  - "Live-web multi-hop search-agent training (Iris)"
 redirects:
   - when: "outcome-only long-horizon interactive agent RL"
     to: "task:outcome-only-long-horizon-agent-rl"
   - when: "train asynchronous RL for a tool-use policy"
     to: "task:agentic-async-rl"
+  - when: "train a live-web multi-hop search agent (SFT-RL climbing)"
+    to: "task:web-search-agent-rl"
 current_sota:
   - method: method:cispo
     as_of: "2026-08-26"
@@ -36,7 +39,11 @@ methods:
   - method:opsa
   - method:gapo
   - method:rise
-last_reviewed: "2026-09-07"
+  - method:flowbalance
+  - method:tgopd
+  - method:sparse-opd-supervision
+  - method:opd-then-rlvr
+last_reviewed: "2026-09-08"
 tags:
   - post-training
   - reasoning
@@ -50,7 +57,7 @@ tags:
 ## Problem Definition
 Training dense language models to generate long chains of thought (CoT) and verifiable solutions for competitive math and coding problems.
 
-## SOTA Recommendation (as of 2026-09-07)
+## SOTA Recommendation (as of 2026-09-08)
 - **Primary Method (Pass@1 labeled RLVR)**: **CISPO** (`method:cispo`, MiniMax-M1 2506.13585 + ScaleRL 2510.13786). Unchanged.
 - **Systems Reference**: DAPO stays as systems paper reference. GRPO stays retired.
 - **Related alternative (Pass@K / coverage / no-backward)**: `method:es-reasoning` (`arXiv:2608.27351`). Do not swap CISPO for ES or revive GRPO when the goal is Pass@1.
@@ -60,5 +67,9 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Optional sample-level recipe router**: `method:self-routing` (`arXiv:2609.01422`) GRPO / OPSD / REG / skip from rollout correctness+confidence. Does not replace CISPO or OPSA.
 - **Optional adaptive IS clip**: `method:gapo` (`arXiv:2609.00444`, EMNLP 2026 Main) widens the GRPO/GSPO clip on scarce-correct hard-problem rollouts. Active plug-in. Does not replace CISPO.
 - **Related RLVR+self-OPD loop**: `method:rise` (`arXiv:2609.05295`) builds a synthetic teacher from the model's own RLVR trajectory. Does not replace CISPO, OPD, or OPSA.
+- **Optional verifier-grounded self-improvement**: `method:flowbalance` (`arXiv:2609.03241`) privileged same-model trajectory balance, sign-gated by group advantage. Does not replace CISPO, OPSA, OPD, VISTA, RISE, or CANOPY.
+- **Optional OPD teacher-reliability gate**: `method:tgopd` (`arXiv:2609.02998`) on `task:student-distillation`. Prompt-level probes then dense OPD or GRPO. Does not replace CISPO or OPD.
+- **Optional sparse OPD token mask**: `method:sparse-opd-supervision` (`arXiv:2609.04565`). Does not replace CISPO or OPD.
+- **Optional OPD-then-RL stack**: `method:opd-then-rlvr` (`arXiv:2609.04108`) when both OPD and RLVR will run; sequence them, do not fuse in one step. Stage-2 Pass@1 algorithm stays CISPO. Does not replace CISPO or OPD.
 - **No labels / no teacher**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace CISPO when labels exist.
 - **Gotcha**: group-relative magnitude can reward lucky guesses on bounded-answer / search-agent settings (`paper:spurious-advantage-grpo`). Do not promote SignBalance over CISPO.

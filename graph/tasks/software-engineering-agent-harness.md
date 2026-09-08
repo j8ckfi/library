@@ -14,6 +14,7 @@ out_of_scope:
   - "Trajectory folding (FoldGRPO)"
   - "Planner-coder-tester multi-agent theater for a single patch"
   - "Meta-agent search as the default design process"
+  - "Training a live-web search policy (Iris)"
 redirects:
   - when: "train asynchronous RL for a tool-use policy"
     to: "task:agentic-async-rl"
@@ -27,7 +28,9 @@ redirects:
     to: "task:agent-harness-runtime"
   - when: "train outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit)"
     to: "task:outcome-only-long-horizon-agent-rl"
-last_reviewed: "2026-09-04"
+  - when: "train a live-web multi-hop search agent (SFT-RL climbing)"
+    to: "task:web-search-agent-rl"
+last_reviewed: "2026-09-08"
 current_sota:
   - method: method:mini-swe-agent
     as_of: "2026-09"
@@ -64,4 +67,4 @@ Choose the loop, ACI, and tools for repository-level software engineering (issue
 - **Default**: **mini-SWE-agent** (`method:mini-swe-agent`).
 - **Active**: CCA when you need notes/context management; OpenHands/CodeAct as production OSS.
 - **Niche**: Live-SWE-agent (official JSON 79.2% tie).
-- **Not this task**: SAO, CISPO, RLM, FoldGRPO, OSWorld. Production harness kernels (rewind/fork/remote/sandbox/TUI) are `task:agent-harness-runtime`.
+- **Not this task**: SAO, CISPO, RLM, FoldGRPO, OSWorld, Iris search-agent training. Production harness kernels (rewind/fork/remote/sandbox/TUI) are `task:agent-harness-runtime`.

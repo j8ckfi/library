@@ -11,6 +11,7 @@ out_of_scope:
   - "Single-turn dense math/code RLVR (CISPO)"
   - "Building or choosing a SWE harness rather than training a policy (mini-SWE-agent)"
   - "Production harness kernel (omp2)"
+  - "Live-web multi-hop search-agent training (Iris)"
 redirects:
   - when: "variable environment latency / async stragglers, not sparse-outcome coverage"
     to: "task:agentic-async-rl"
@@ -22,7 +23,9 @@ redirects:
     to: "task:software-engineering-agent-harness"
   - when: "production engine (rewind, sandbox, remote, TUI)"
     to: "task:agent-harness-runtime"
-last_reviewed: "2026-09-04"
+  - when: "train a live-web multi-hop search agent (SFT-RL climbing)"
+    to: "task:web-search-agent-rl"
+last_reviewed: "2026-09-08"
 current_sota:
   - method: method:canopy
     as_of: "2026-09-04"
@@ -37,6 +40,7 @@ methods:
   - method:foldgrpo
   - method:cispo
   - method:mini-swe-agent
+  - method:iris
 tags:
   - post-training
   - agentic
@@ -62,4 +66,4 @@ Two siblings share this task and are not substitutes:
 ## SOTA Recommendation (as of 2026-09-04)
 - **Primary Method (checker exists)**: **CANOPY** (`method:canopy`, `paper:canopy` `arXiv:2609.01245`).
 - **Outcome-blind / no checker**: **DRACO** (`method:draco`, `paper:draco` `arXiv:2609.04094`). Active, does not replace CANOPY when a verifier exists.
-- **Not This Task**: `method:sao` remains async-straggler RL; `method:foldgrpo` remains trajectory folding; `method:cispo` remains dense Pass@1; `method:mini-swe-agent` remains the harness; `method:omp2-harness` remains the production engine.
+- **Not This Task**: `method:sao` remains async-straggler RL; `method:foldgrpo` remains trajectory folding; `method:cispo` remains dense Pass@1; `method:mini-swe-agent` remains the harness; `method:omp2-harness` remains the production engine; `method:iris` remains live-web search-agent training.

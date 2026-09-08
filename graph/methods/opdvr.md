@@ -43,3 +43,4 @@ OPDVR integrates dense token-level on-policy teacher guidance with deterministic
 ## Relation to Existing SOTA
 - Complements `method:opd` (general distillation) and `method:cispo` (pure RL reasoning) specifically for verifiable reasoning distillation.
 - Remains the OPD+RLVR default. Use `method:vista` when the teacher is a privileged same-model copy that sees the gold solution (privileged-teacher OPSD + teacher adaptation), not a larger frozen teacher with ReLU correctness gating.
+- Sequential stack (`method:opd-then-rlvr`): OPD then RLVR instead of one-step fusion. Does not replace this method.

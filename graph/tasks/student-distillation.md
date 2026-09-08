@@ -35,7 +35,10 @@ methods:
   - method:opsa
   - method:rise
   - method:pta
-last_reviewed: "2026-09-07"
+  - method:tgopd
+  - method:sparse-opd-supervision
+  - method:opd-then-rlvr
+last_reviewed: "2026-09-08"
 tags:
   - post-training
   - distillation
@@ -48,7 +51,7 @@ tags:
 ## Problem Definition
 Training small local students (1B–8B) from large teacher models (70B–405B) with generalized on-policy divergence matching.
 
-## SOTA Recommendation (as of 2026-09-07)
+## SOTA Recommendation (as of 2026-09-08)
 - **Single-Teacher Distillation Default**: **OPD** (`method:opd`, `paper:opd` `arXiv:2604.13016`). Unchanged.
 - **Multi-Teacher Student Distillation Default**: **Open-MOPD** (`method:open-mopd`, `paper:open-mopd` `arXiv:2608.19098`) for token-share balancing, gap-aware dynamic budget allocation, and student reward refresh across specialized teacher models.
 - **Related alternative**: Use `method:vista` instead when the teacher is a privileged same-model copy that sees the gold solution (not a larger frozen teacher). OPD remains the student-distillation default.
@@ -58,4 +61,7 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Data-selection sibling**: `method:opd-hard-cot-selection` (`arXiv:2609.05198`) — hard/long-CoT examples drive OPD gains (not high token entropy); 8 hard can match 17K. Does not replace OPD or OPD-II.
 - **Related self-extrapolating teacher**: `method:rise` (`arXiv:2609.05295`) synthesizes an OPD teacher from the student's RLVR trajectory. No external teacher. Does not replace OPD, CISPO, or OPSA.
 - **Tool-using OPKD**: `method:pta` (`arXiv:2609.04773`, EMNLP 2026 Main) — student-induced but teacher-committed rollouts; tool calls execute only after the teacher verifies the turn. Pre-RL distill for Search-R1 / DeepEyes. Does not replace OPD for text-only distillation.
+- **Optional prompt-level teacher gate**: `method:tgopd` (`arXiv:2609.02998`) admits dense OPD only after verifier-scored teacher probes pass; else GRPO. Sibling of RA-OPD / IDA-OPD / VISTA. Does not replace OPD, CISPO, OPSA, or Open-MOPD.
+- **Optional sparse token-budget plug-in**: `method:sparse-opd-supervision` (`arXiv:2609.04565`) supervises 1–2 tokens per trajectory (~0.05%) and can match/beat full-token OPD. Does not replace OPD or CISPO.
+- **Optional stacking order when both OPD and RLVR will run**: `method:opd-then-rlvr` (`arXiv:2609.04108`) — OPD then RL, not joint one-step fusion. Does not replace OPD or CISPO.
 - **No teacher / no labels**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace OPD when a strong teacher is the goal.

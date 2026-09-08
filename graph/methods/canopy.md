@@ -26,6 +26,9 @@ do_not_use_for:
   - when: "no programmatic checker exists and the reward must come from process criteria"
     reason: "DRACO is the outcome-blind rubric sibling"
     use_instead: "method:draco"
+  - when: "train a live-web multi-hop search agent (SFT-RL climbing)"
+    reason: "CANOPY is AppWorld coverage/anti-drift, not a live-web search data+climbing recipe"
+    use_instead: "method:iris"
 assumptions:
   - "A held-out unit-test / patch verifier exists. Sparse fully-correct reward, not pass-fraction."
   - "Paper: Qwen3-14B on AppWorld train split (90 tasks), veRL, n=32, 50 turns / 32k train, 100 turns / 61k test, KL β=1e-4, lr 3e-6, 90 steps, hardest tier kept."

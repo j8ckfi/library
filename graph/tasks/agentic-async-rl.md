@@ -10,12 +10,14 @@ out_of_scope:
   - "Dumped long-prompt offload (RLM)"
   - "GUI computer-use without policy training"
   - "Outcome-only long-horizon agent RL where the failure is signal starvation / policy drift, not async latency"
+  - "Live-web multi-hop search-agent training (Iris SFT-RL climbing)"
 redirects:
   - when: "build an agent rather than train a policy"
     to: "task:software-engineering-agent-harness"
   - when: "outcome-only long-horizon agent RL (coverage / anti-drift), not async stragglers"
     to: "task:outcome-only-long-horizon-agent-rl"
-last_reviewed: "2026-09-07"
+  - when: "train a live-web multi-hop search agent (SFT-RL climbing), not async stragglers"
+    to: "task:web-search-agent-rl"
 current_sota:
   - method: method:sao
     as_of: "2026-08-26"
@@ -29,6 +31,8 @@ methods:
   - method:dr-grpo
   - method:grpo
   - method:pta
+  - method:iris
+last_reviewed: "2026-09-08"
 tags:
   - post-training
   - agentic
@@ -43,7 +47,7 @@ Training agentic foundation models to interact with multi-turn environments (bas
 
 This is **policy training**. Building a software-engineering agent loop is `task:software-engineering-agent-harness` (`method:mini-swe-agent`), not this task.
 
-## SOTA Recommendation (as of 2026-09-07)
+## SOTA Recommendation (as of 2026-09-08)
 - **Primary Method**: **SAO** (`method:sao`, 2607.07508). Unchanged.
 - **Related pre-RL tool OPKD (not this async-train default)**: `method:pta` (`arXiv:2609.04773`) teacher-commits tool turns before Search-R1 / DeepEyes RL. Lookahead fills idle distill capacity; it is not SAO's straggler replay.
-- **Not This Task**: sparse-outcome coverage / anti-drift on AppWorld-style agents is `task:outcome-only-long-horizon-agent-rl` (`method:canopy` / `method:draco`). Folding is `task:long-horizon-tool-agent`.
+- **Not This Task**: sparse-outcome coverage / anti-drift on AppWorld-style agents is `task:outcome-only-long-horizon-agent-rl` (`method:canopy` / `method:draco`). Folding is `task:long-horizon-tool-agent`. Live-web search-agent climbing is `task:web-search-agent-rl` (`method:iris`).

@@ -13,6 +13,7 @@ out_of_scope:
   - "Test-time unlabeled adaptation (TTPO)"
   - "Data-free Challenger-Solver-Judge curriculum generation (J-Zero)"
   - "Teacher-free flow-matching / diffusion alignment (Self-OPD)"
+  - "Verifier-grounded privileged-hindsight trajectory balance (FlowBalance)"
 redirects:
   - when: "verifiable labels exist and the goal is Pass@1 RLVR"
     to: "task:math-code-rl-dense"
@@ -26,6 +27,8 @@ redirects:
     to: "task:data-free-self-evolution"
   - when: "flow matching or continuous diffusion post-training"
     to: "task:posttrain-diffusion"
+  - when: "verifier-grounded same-model self-improvement with privileged hindsight"
+    to: "task:math-code-rl-dense"
 current_sota:
   - method: method:opsa
     as_of: "2026-09-01"
@@ -42,7 +45,8 @@ methods:
   - method:opd
   - method:cispo
   - method:rise
-last_reviewed: "2026-09-07"
+  - method:flowbalance
+last_reviewed: "2026-09-08"
 tags:
   - post-training
   - on-policy
@@ -61,8 +65,9 @@ Improve a reasoning policy at train time using only on-policy rollouts and the p
 - **Primary Benchmarks**: AIME24, AIME25, HMMT25 Avg@32 and Pass@32 on Qwen3 / Qwen3.5 non-thinking models trained on DAPO-17k questions only.
 - **Evaluation Pitfalls**: Do not treat OPSA wins over OPD as a reason to drop teachers when the actual goal is knowledge transfer. Do not swap CISPO for OPSA when labels exist.
 
-## SOTA Recommendation (as of 2026-09-01)
+## SOTA Recommendation (as of 2026-09-08)
 - **Primary Method**: **OPSA** (`method:opsa`, `paper:opsa` `arXiv:2608.31046`) for supervision-free entropy-adaptive negative advantages on the lowest-logp tokens.
 - **Not This Task**: `method:cispo` remains labeled dense RLVR; `method:opd` remains single-teacher distillation; `method:u-opsd` remains unlabeled consensus distillation; `method:ttpo` remains test-time; `method:j-zero` remains data-free self-evolution; `method:self-opd` remains flow matching.
 - **Adjacent router (not this method)**: `method:self-routing` still needs a verifier and gold answers for its OPSD branch. It does not replace OPSA.
 - **Adjacent RLVR-grounded synthetic teacher (not this method)**: `method:rise` still needs outcome-verified RLVR. It does not replace OPSA.
+- **Adjacent verifier-grounded self-improvement (not this method)**: `method:flowbalance` needs a verifier and privileged hindsight. It does not replace OPSA.

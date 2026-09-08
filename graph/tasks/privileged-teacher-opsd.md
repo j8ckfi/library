@@ -16,6 +16,8 @@ methods:
   - method:opd
   - method:opdvr
   - method:u-opsd
+  - method:flowbalance
+last_reviewed: "2026-09-08"
 tags:
   - post-training
   - distillation
@@ -34,6 +36,7 @@ Train a problem-only student on its own rollouts using dense token-level targets
 - **Primary Benchmarks**: AIME 2024, AIME 2025, HMMT 2025 Avg@12 on Qwen3 instruct models.
 - **Evaluation Pitfalls**: Do not treat this task as single-teacher student distillation from a frontier model (`task:student-distillation` / `method:opd`) or as OPD+RLVR with an external teacher (`task:distill-reasoner-verifier` / `method:opdvr`).
 
-## SOTA Recommendation (as of 2026-08-31)
+## SOTA Recommendation (as of 2026-09-08)
 - **Primary Method**: **VISTA** (`method:vista`, `paper:vista` `arXiv:2608.28306`) for verifier-informed student-to-teacher adaptation on privileged-teacher OPSD.
 - **Not This Task**: `method:opd` remains the single-teacher student-distillation default; `method:opdvr` remains the OPD+RLVR default; `method:u-opsd` remains the unlabeled/no-GT default.
+- **Adjacent inner-loop (not this method)**: `method:flowbalance` uses privileged hindsight as a stopped trajectory-balance feature, not a teacher update. VISTA stays this task's first hop.

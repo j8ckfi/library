@@ -48,6 +48,7 @@ OPD (On-Policy Distillation) is the state-of-the-art framework for distilling la
 - Hard-CoT selection sibling (`paper:opd-hard-cot-selection`, `method:opd-hard-cot-selection`): hard/long-CoT examples drive gains, not high token entropy; 8 hard can match 17K. Does not replace this method or OPD-II.
 - Self-extrapolating teacher (`method:rise`): no external teacher; needs RLVR grounding. Does not replace OPD when a white-box teacher is the goal.
 - Tool-using OPKD (`method:pta`): student-induced but teacher-committed rollouts; tool calls execute only after the teacher verifies the turn. Does not replace OPD for plain text distillation.
+- Prompt-level teacher gate (`method:tgopd`): verifier-scored teacher probes then exclusive OPD vs GRPO. Does not replace this method.
 
 ## Gotchas & Failure Modes
 - Do not scale the prompt set when 16-shot already matches full-data OPD. The remaining gap is student absorption / step-efficiency (`method:opd-one-example`).

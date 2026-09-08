@@ -6,6 +6,35 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-08 — ingest 2026-09-08 weekday SOTA sweep (FlowBalance, TGOPD, OT optimizer schedules, Uno)
+- Added four methods without stealing CISPO / Muon2 / OPD / OPSA / CANOPY / RISE / GAPO current_sota. Uno is sota only for the new `task:diffusion-augmented-ar`. Per-method receipts follow.
+- Skipped (WATCH only): 2608.25936 OPSD critical review; EmbodiedSkills; ENEAS; revision-propagation; training-free MoE expert halving (2609.04575); expert pruning under over-dispersion (2609.04453); mHC residual analysis (2609.05309); Speculative Uncertainty draft-gate (2609.05274). Tue arXiv /new still showed Mon 7 Sep listings at sweep time; HF Daily Papers 2026-09-08 used as extra signal.
+- Scope checks: no half supersessions; CISPO, Muon2, OPD remain first hops on their tasks.
+
+### 2026-09-08 — ingest method:flowbalance (active; does not supersede method:cispo / method:opsa / method:opd / method:vista / method:u-opsd / method:rise / method:canopy)
+- Added paper:flowbalance (2609.03241), method:flowbalance, recipe:flowbalance. Wired to task:math-code-rl-dense; related mentions on task:teacher-free-on-policy-self-adaptation and task:privileged-teacher-opsd.
+- Status active. Privileged same-model token logp-gains aggregated to trajectory self-guidance, sign-gated by verifier group advantage, fitted by profiled trajectory balance. Code: alexhuang13/FlowBalance.
+- Evidence: Qwen3-4B five-bench avg 64.26 vs FlowRL 63.22 vs GRPO 62.31; Qwen3-8B 67.61 vs 65.85 / 65.49; AIME24@16 89.33 vs FlowRL 86.67 (Table 1, arXiv:2609.03241); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1 default; OPSA remains supervision-free; VISTA remains privileged-teacher adaptation.
+
+### 2026-09-08 — ingest method:tgopd (active OPD plug-in; does not supersede method:opd / method:cispo / method:opsa / method:open-mopd)
+- Added paper:tgopd (2609.02998), method:tgopd, recipe:tgopd (stub; no official code). Wired to task:student-distillation; optional mention on task:math-code-rl-dense.
+- Status active. Prompt-level teacher probes then exclusive dense OPD vs GRPO. Sibling of RA-OPD / IDA-OPD / VISTA.
+- Evidence: 4B LCB Vanilla OPD 42.3 closes 21% of 39.4→53.3 gap, TGOPD 47.1 closes 55%; 35B LCB TGOPD 64.0 vs base 61.0 vs teacher 62.7 (only positive transfer); 4B SOPD teacher GPU 9.8%→78.9% (Table 1/3, arXiv:2609.02998); verified: true; evidence_level: preprint.
+- Scope checks: OPD remains distill default; CISPO remains Pass@1 RLVR; Open-MOPD remains multi-teacher.
+
+### 2026-09-08 — ingest method:optimizer-memory-schedules (active; does not supersede method:muon2) and thin method:adana
+- Added paper:optimizer-memory-schedules (2609.04577), method:optimizer-memory-schedules, recipe:optimizer-memory-schedules (stub; no official code). Wired to task:llm-pretraining-optimization and task:pretrain-dense-7b. Thin method:adana + paper:adana (2602.05298) as the primary ADANA cite; `sota_for: []`.
+- Status active. OT horizon changes optimizer rank and optimal LR/WD/memory. WD $\sim\sqrt{\mathrm{OT}}$; LR schedule ranking reverses; longer OT favors longer fixed memory.
+- Evidence: 51M $1\times$ linear LR vs $8\times$/$32\times$ cosine; $c_{\mathrm{uniform}}=8\sqrt{f}$; Muon token multiplier vs AdamW $\sim 1.4\times$–$1.7\times$; ADANA equivalent-OT exponent 1.15–1.20 vs AdamW (arXiv:2609.04577); verified: true; evidence_level: preprint. 51M–253M only — not a 7B bake-off.
+- Scope checks: Muon2 remains ~7B optimizer; Puro-2B remains consumer ~2B.
+
+### 2026-09-08 — ingest method:uno (new task:diffusion-augmented-ar)
+- Added paper:uno (2609.04010), method:uno, recipe:uno, task:diffusion-augmented-ar. Reverse redirects on task:posttrain-diffusion and task:llm-pretraining-optimization.
+- Status sota for diffusion-augmented AR serving/train-addon only. Code: ifm-ai/uno.
+- Evidence: 8B Uno SWE-Verified 68.4 vs DiffusionGemma 18.7; system throughput 5255 vs 1136 / 1197 tok/s; Uno Qwen 1.6× vs base AR at max H200 batch, >5700 tok/s (Table 1 / §5.2, arXiv:2609.04010); verified: true; evidence_level: preprint.
+- Scope checks: does not supersede method:diffusion-opsd, method:self-opd, method:muon2, or method:cispo.
+
 ### 2026-09-07 — ingest 2026-09-07 weekday SOTA sweep (GAPO, RISE, layer-dropout, OPD hard-CoT, PTA)
 - Added five active/niche methods without stealing current_sota. CISPO, OPD, OPSA, Muon2, CANOPY, SAO, and FoldGRPO remain first hops. Per-method receipts follow.
 - Skipped (WATCH only): Iris 2609.04304 (search-agent SFT-RL climbing recipe; domain-specific); ACE expert skipping 2609.05228 (training-free MoE inference); MaxKernel 2609.04523 (TPU kernel agents); mHC residual analysis 2609.05309 (interpretability of existing mHC).

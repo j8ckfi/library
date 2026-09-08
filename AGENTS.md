@@ -60,7 +60,12 @@ task:post-training-ternary-quantization -> method:scaleq-158 (2608.01078, 2026-0
 task:continuous-control-world-model -> method:efficienttdmpc (2605.16692, 2026-08-26) + method:dream-mpc (2605.04568, 2026-08-26)
 task:visuomotor-servo-control -> method:td-mpc2 (2310.16828, 2026-08-26)
 task:posttrain-diffusion -> method:diffusion-opsd (2608.24646, 2026-08-27) + method:self-opd (2608.26872, 2026-08-28)
+  when lossless multi-token / diffusion-augmented AR serving, not image-policy alignment -> task:diffusion-augmented-ar
 task:4bit-peft-quantization -> method:aqlora-q (2608.23816, 2026-08-26) + method:autoqra (2602.22268, 2026-08-26)
+task:diffusion-augmented-ar -> method:uno (2609.04010, 2026-09-08)
+  when aligning text-to-image diffusion or flow models with rewards -> task:posttrain-diffusion
+  when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
+  when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
 task:full-lowbit-finetune -> method:gradcodes (2608.30908, 2026-09-01)
   when memory must fit a 4-bit stack but a mixed-precision adapter at inference is acceptable -> task:4bit-peft-quantization
   when native FP4 forward/backward hardware training from scratch -> task:fp4-hardware-training
@@ -106,10 +111,12 @@ task:teacher-free-on-policy-self-adaptation -> method:opsa (2608.31046, 2026-09-
   when test-time adaptation on unlabeled queries -> task:label-free-test-time-reasoner
   when zero external problems, including unverifiable domains -> task:data-free-self-evolution
   when flow matching or continuous diffusion post-training -> task:posttrain-diffusion
+  when verifier-grounded same-model self-improvement with privileged hindsight -> task:math-code-rl-dense
 task:token-level-critic-rl -> method:bpco (2608.23566, 2026-08-27)
 task:budget-consumer-pretrain -> method:puro-2b (2608.27370, 2026-08-31)
 task:linear-time-sequence-modeling -> method:mamba-2 (2405.21060, 2024-05)
 task:llm-pretraining-optimization -> method:muon2 (2604.09967, 2026-08-26)
+  when lossless multi-token / diffusion-augmented AR serving rather than the pretrain optimizer -> task:diffusion-augmented-ar
 task:open-data-recipe -> method:olmo-3 (2512.13961, 2026-08-26)
 task:pretrain-dense-7b -> method:muon2 (2604.09967, 2026-08-26)
 task:pretrain-moe-frontier -> method:deepseek-v4 (2606.19348, 2026-08-26) + method:kimi-k3 (2607.24653, 2026-08-26)
@@ -186,6 +193,10 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 50. **LLM pretrain layer dropout**: **Don't Drop Dropout** (`method:layer-dropout`, `arXiv:2609.05275`, ICML 2026) structured layer sparsity with $r_{\mathrm{train}}=1/\rho$. Same-FLOPs lower loss; same-steps up to ~25% FLOP save; ~1.5× self-speculative inference. Does **not** replace Muon2.
 51. **OPD hard-CoT selection**: `method:opd-hard-cot-selection` (`arXiv:2609.05198`). Hard/long-CoT examples drive OPD gains (not high token entropy); 8 hard can match 17K. Sibling to OPD-II's diversity finding. Does **not** replace OPD or `method:opd-one-example`.
 52. **Tool-using OPKD**: **PTA** (`method:pta`, `arXiv:2609.04773`, EMNLP 2026 Main) student-induced but teacher-committed rollouts; tool calls execute only after the teacher verifies the turn; persistent lookahead ~+24% throughput. Pre-RL distill then Search-R1 / DeepEyes RL. Does **not** replace OPD (text distill), CISPO (math RLVR), CANOPY (outcome-only agent RL), SAO (async stragglers), or FoldGRPO (folding).
+53. **Verifier-grounded trajectory-balance self-improvement**: **FlowBalance** (`method:flowbalance`, `arXiv:2609.03241`) privileged same-model logp-gains aggregated to trajectory self-guidance, sign-gated by verifier group advantage, fitted by profiled trajectory balance. Active on labeled math RLVR. Does **not** replace CISPO, OPSA, OPD, VISTA, u-OPSD, RISE, or CANOPY.
+54. **Prompt-level OPD teacher gate**: **TGOPD** (`method:tgopd`, `arXiv:2609.02998`) verifier-scored teacher probes then exclusive dense OPD vs GRPO. Idle teacher utilization 9.8%→78.9% in the measured 4B SOPD run. Active plug-in. Does **not** replace OPD, CISPO, OPSA, or Open-MOPD.
+55. **Overtraining-axis optimizer HPs**: **Optimizer memory schedules** (`method:optimizer-memory-schedules`, `arXiv:2609.04577`) — relative optimizer rank and optimal LR/WD/memory change with OT; WD $\sim\sqrt{\mathrm{OT}}$; longer OT favors longer fixed memory. ADANA (`method:adana`, `arXiv:2602.05298`) is a named baseline. Does **not** replace Muon2.
+56. **Diffusion-augmented AR serving**: **Uno** (`method:uno`, `arXiv:2609.04010`) keeps AR/NTP weights, adds Diffusion Distillation adapters and $\Psi$-Spec lossless multi-token decode (no separate draft model). First hop for `task:diffusion-augmented-ar`. Does **not** replace DiffusionOPSD / Self-OPD, Muon2, or CISPO.
 
 ---
 
@@ -238,6 +249,10 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `layer-dropout` (2609.05275) is an active pretrain regularizer. It does not supersede `muon2`.
 - `opd-hard-cot-selection` (2609.05198) is a niche hard/long-CoT data-selection finding on OPD. It does not supersede `opd` or `opd-one-example`.
 - `pta` (2609.04773) is an active OPKD construction for tool-using agents. It does not supersede `opd`, `cispo`, `canopy`, `sao`, or `foldgrpo`.
+- `flowbalance` (2609.03241) is an active verifier-grounded trajectory-balance self-improvement method. It does not supersede `cispo`, `opsa`, `opd`, `vista`, `u-opsd`, `rise`, or `canopy`.
+- `tgopd` (2609.02998) is an active prompt-level teacher-reliability gate on OPD. It does not supersede `opd`, `cispo`, `opsa`, `open-mopd`, `ra-opd`, or `ida-opd`.
+- `optimizer-memory-schedules` (2609.04577) is active OT-horizon HP guidance. It does not supersede `muon2`. `adana` (2602.05298) is a named optimizer in that study with empty `sota_for`.
+- `uno` (2609.04010) is the first-hop for `task:diffusion-augmented-ar` only. It does not supersede `diffusion-opsd`, `self-opd`, `muon2`, or `cispo`.
 
 ---
 

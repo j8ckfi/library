@@ -149,12 +149,27 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 ### task:posttrain-diffusion — Diffusion Post-Training and Reward Alignment
 - **SOTA**: `method:diffusion-opsd` `2608.24646` (as_of 2026-08-27) — SD 3.5-M / Z-Image-Turbo (10 Evaluators): Best in 19/20 reward-matched settings; 40-63% GPU-hr reduction
 - **SOTA**: `method:self-opd` `2608.26872` (as_of 2026-08-28) — Flow Matching Visual Alignment (Single & Mixed Reward Benchmarks): Outperforms Flow-GRPO, Flow-OPD, and DiffusionNFT without external task-specific teachers
+- **Redirects**:
+  - when lossless multi-token / diffusion-augmented AR serving, not image-policy alignment → `task:diffusion-augmented-ar`
 
 ## efficiency
 
 ### task:4bit-peft-quantization — 4-Bit Quantized PEFT & Adaptation
 - **SOTA**: `method:aqlora-q` `2608.23816` (as_of 2026-08-26) — 4-Bit Single GPU PEFT: Default SOTA Speed/Recipe on 4-Bit Stack
 - **SOTA**: `method:autoqra` `2602.22268` (as_of 2026-08-26) — Automated 4-Bit Quantized Adaptation: Co-Default SOTA
+
+### task:diffusion-augmented-ar — Diffusion-Augmented Autoregressive LLMs
+- **Scope**: Train-addon Diffusion Distillation and lossless Ψ-Spec / speculative-style decode for AR LLMs (serving throughput and rollout speedups).
+- **SOTA**: `method:uno` `2609.04010` (as_of 2026-09-08) — 8B Uno vs DiffusionGemma-26B-A4B / Mercury 2 / EAGLE-3 / DFlash (1K/8K H200): SWE-Verified 68.4 vs DiffusionGemma 18.7; system 5255 tok/s vs 1136 / 1197; Uno Qwen 1.6× vs base AR at max batch
+  - do not use when aligning text-to-image diffusion / flow models with rewards → `method:diffusion-opsd`
+  - do not use when teacher-free flow-matching visual alignment → `method:self-opd`
+  - do not use when choosing the ~7B dense pretrain optimizer → `method:muon2`
+  - do not use when Pass@1 labeled math/code RLVR → `method:cispo`
+- **Redirects**:
+  - when aligning text-to-image diffusion or flow models with rewards → `task:posttrain-diffusion`
+  - when choosing the ~7B dense pretrain optimizer → `task:llm-pretraining-optimization`
+  - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
+- **Out of scope**: Text-to-image / flow reward alignment (DiffusionOPSD / Self-OPD); ~7B dense pretrain optimizer (Muon2); Pass@1 labeled math/code RLVR algorithm (CISPO); Standalone discrete diffusion LMs that replace the AR distribution
 
 ### task:full-lowbit-finetune — Fully Low-Bit Fine-Tuning in Quantized Code Space
 - **Scope**: Deployment-faithful fine-tuning over quantization codes and scales (NF4 / INT4 / MXFP4) so the optimized state is the deployed state.
@@ -297,7 +312,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when test-time adaptation on unlabeled queries → `task:label-free-test-time-reasoner`
   - when zero external problems, including unverifiable domains → `task:data-free-self-evolution`
   - when flow matching or continuous diffusion post-training → `task:posttrain-diffusion`
-- **Out of scope**: Labeled math/code RLVR with verifiable rewards (CISPO); Single-teacher or multi-teacher student distillation (OPD / Open-MOPD); Privileged-teacher OPSD with gold solutions (VISTA); Unlabeled existing math problems using rollout-consensus pseudo-solutions (u-OPSD); Test-time unlabeled adaptation (TTPO); Data-free Challenger-Solver-Judge curriculum generation (J-Zero); Teacher-free flow-matching / diffusion alignment (Self-OPD)
+  - when verifier-grounded same-model self-improvement with privileged hindsight → `task:math-code-rl-dense`
+- **Out of scope**: Labeled math/code RLVR with verifiable rewards (CISPO); Single-teacher or multi-teacher student distillation (OPD / Open-MOPD); Privileged-teacher OPSD with gold solutions (VISTA); Unlabeled existing math problems using rollout-consensus pseudo-solutions (u-OPSD); Test-time unlabeled adaptation (TTPO); Data-free Challenger-Solver-Judge curriculum generation (J-Zero); Teacher-free flow-matching / diffusion alignment (Self-OPD); Verifier-grounded privileged-hindsight trajectory balance (FlowBalance)
 
 ### task:token-level-critic-rl — Token-Level Advantage Estimation with Single-Sample Critics
 - **SOTA**: `method:bpco` `2608.23566` (as_of 2026-08-27) — Mathematical Reasoning & Rubric Evaluation (1.5B to 30B-A3B): Matches or exceeds group-relative GRPO baseline with 1 response per prompt
@@ -312,6 +328,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:llm-pretraining-optimization — Large Language Model Pretraining Optimization
 - **SOTA**: `method:muon2` `2604.09967` (as_of 2026-08-26) — Moonlight 7B Pretraining / FineWeb: ~2x token efficiency vs AdamW
+- **Redirects**:
+  - when lossless multi-token / diffusion-augmented AR serving rather than the pretrain optimizer → `task:diffusion-augmented-ar`
 
 ### task:open-data-recipe — Open Foundation Data Recipe & Pretraining Mix
 - **SOTA**: `method:olmo-3` `2512.13961` (as_of 2026-08-26) — Dolma-3 Open Token Mix: Default SOTA open data recipe

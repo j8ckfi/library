@@ -10,6 +10,7 @@ out_of_scope:
   - "SWE harness without folding"
   - "Async RL training without a folding objective (SAO)"
   - "Outcome-only long-horizon agent RL (CANOPY / DRACO)"
+  - "Live-web multi-hop search-agent training without a folding objective (Iris)"
 redirects:
   - when: "dumped corpus much larger than the window"
     to: "task:long-context-prompt-offload"
@@ -17,7 +18,9 @@ redirects:
     to: "task:software-engineering-agent-harness"
   - when: "outcome-only long-horizon agent RL (signal starvation / drift or outcome-blind rubrics)"
     to: "task:outcome-only-long-horizon-agent-rl"
-last_reviewed: "2026-09-07"
+  - when: "train a live-web multi-hop search agent (SFT-RL climbing), not folding"
+    to: "task:web-search-agent-rl"
+last_reviewed: "2026-09-08"
 current_sota:
   - method: method:foldgrpo
     as_of: "2025-10"
@@ -30,6 +33,7 @@ methods:
   - method:agentfold
   - method:rao
   - method:pta
+  - method:iris
 tags:
   - agents
   - agent-recursion
@@ -50,3 +54,4 @@ The agent takes many tool/web/SWE steps. The problem is the **trajectory**, not 
 - **current_sota**: FoldGRPO (`method:foldgrpo`). Unchanged.
 - **Active**: AgentFold (web history, 36.2% BrowseComp); RAO (trained recursion, TextCraft 24% vs 95%).
 - **Related pre-RL tool OPKD (not this folding default)**: `method:pta` (`arXiv:2609.04773`) teacher-commits tool turns before Search-R1 / DeepEyes RL. Does not replace FoldGRPO.
+- **Not this folding default**: live-web search-agent climbing is `task:web-search-agent-rl` (`method:iris`).

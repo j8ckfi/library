@@ -18,6 +18,7 @@ methods:
   - method:cispo
   - method:verigate
   - method:tulu3-rlvr
+  - method:opd-then-rlvr
 tags:
   - post-training
   - distillation
@@ -32,5 +33,5 @@ Distilling multi-step reasoning capabilities from strong teacher models into com
 
 ## SOTA Recommendation (as of 2026-08-27)
 - **Primary Method**: **OPDVR** (`method:opdvr`, `paper:opdvr` `arXiv:2608.24696`) for zero-extra-hyperparameter ReLU-gated on-policy distillation.
-- **Related alternative**: Use `method:vista` instead when the teacher is a privileged same-model copy that sees the gold solution (privileged-teacher OPSD + teacher adaptation). OPDVR remains the OPD+RLVR default (teacher model + ReLU correctness gating).
+- **Related sequential stack (not this single-step default)**: `method:opd-then-rlvr` (`arXiv:2609.04108`) runs OPD then RL instead of mixing advantages in one update. Does not replace OPDVR.
 - **Related Benchmarks**: AIME 2024/2025, AMC, GSM8K, MATH-500.

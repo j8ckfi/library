@@ -8,11 +8,14 @@ scope: "Single-turn (or short-CoT) dense math/code RLVR with a programmatic veri
 out_of_scope:
   - "Long-horizon interactive agents judged only at episode end (CANOPY / DRACO)"
   - "Async tool-latency RL (SAO)"
+  - "Live-web multi-hop search-agent training (Iris)"
 redirects:
   - when: "outcome-only long-horizon interactive agent RL"
     to: "task:outcome-only-long-horizon-agent-rl"
   - when: "train asynchronous RL for a tool-use policy"
     to: "task:agentic-async-rl"
+  - when: "train a live-web multi-hop search agent (SFT-RL climbing)"
+    to: "task:web-search-agent-rl"
 current_sota:
   - method: method:cispo
     as_of: "2026-08-26"
@@ -38,6 +41,8 @@ methods:
   - method:rise
   - method:flowbalance
   - method:tgopd
+  - method:sparse-opd-supervision
+  - method:opd-then-rlvr
 last_reviewed: "2026-09-08"
 tags:
   - post-training
@@ -64,5 +69,7 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Related RLVR+self-OPD loop**: `method:rise` (`arXiv:2609.05295`) builds a synthetic teacher from the model's own RLVR trajectory. Does not replace CISPO, OPD, or OPSA.
 - **Optional verifier-grounded self-improvement**: `method:flowbalance` (`arXiv:2609.03241`) privileged same-model trajectory balance, sign-gated by group advantage. Does not replace CISPO, OPSA, OPD, VISTA, RISE, or CANOPY.
 - **Optional OPD teacher-reliability gate**: `method:tgopd` (`arXiv:2609.02998`) on `task:student-distillation`. Prompt-level probes then dense OPD or GRPO. Does not replace CISPO or OPD.
+- **Optional sparse OPD token mask**: `method:sparse-opd-supervision` (`arXiv:2609.04565`). Does not replace CISPO or OPD.
+- **Optional OPD-then-RL stack**: `method:opd-then-rlvr` (`arXiv:2609.04108`) when both OPD and RLVR will run; sequence them, do not fuse in one step. Stage-2 Pass@1 algorithm stays CISPO. Does not replace CISPO or OPD.
 - **No labels / no teacher**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace CISPO when labels exist.
 - **Gotcha**: group-relative magnitude can reward lucky guesses on bounded-answer / search-agent settings (`paper:spurious-advantage-grpo`). Do not promote SignBalance over CISPO.

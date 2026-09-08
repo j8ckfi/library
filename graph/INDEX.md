@@ -77,13 +77,15 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when SWE harness without folding → `method:mini-swe-agent`
   - do not use when training async agent RL without folding → `method:sao`
   - do not use when outcome-only long-horizon agent RL (signal starvation / drift or no checker) → `task:outcome-only-long-horizon-agent-rl`
+  - do not use when train a live-web multi-hop search agent (SFT-RL climbing), not folding → `method:iris`
   - do not use when frontier-model SOTA vs GPT-5 ReAct → `method:foldgrpo`
   - do not use when multi-agent as the long-horizon strategy → `method:single-agent-plus-tools`
 - **Redirects**:
   - when dumped corpus much larger than the window → `task:long-context-prompt-offload`
   - when SWE harness without folding → `task:software-engineering-agent-harness`
   - when outcome-only long-horizon agent RL (signal starvation / drift or outcome-blind rubrics) → `task:outcome-only-long-horizon-agent-rl`
-- **Out of scope**: Dumped corpus prompt offload (RLM); SWE harness without folding; Async RL training without a folding objective (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO)
+  - when train a live-web multi-hop search agent (SFT-RL climbing), not folding → `task:web-search-agent-rl`
+- **Out of scope**: Dumped corpus prompt offload (RLM); SWE harness without folding; Async RL training without a folding objective (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Live-web multi-hop search-agent training without a folding objective (Iris)
 
 ### task:multi-agent-orchestration — Multi-Agent Orchestration
 - **Scope**: Whether to use more than one agent. Default is single agent + tools (mini-SWE-agent / CCA). Not training SAO.
@@ -103,6 +105,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 - **SOTA**: `method:mini-swe-agent` `2405.15793` (as_of 2026-09) — SWE-bench Pro public (Scale, locked mini) / official Verified JSON / vals.ai locked mini: Pro Muse Spark 1.1 61.50±3.10 (ranking now); official JSON mini+Claude 4.5 Opus high 76.8% (2026-02-17); vals.ai Claude Opus 5 97.00% / DeepSeek V4 Pro 0813 96.40% (2026-09, different snapshot)
   - do not use when training an async agent policy (tool-use RL) → `method:sao`
   - do not use when train outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) → `task:outcome-only-long-horizon-agent-rl`
+  - do not use when train a live-web multi-hop search agent (SFT-RL climbing) → `method:iris`
   - do not use when dumped corpus much larger than the context window → `method:rlm`
   - do not use when long tool/web trajectory with a small active context → `method:foldgrpo`
   - do not use when planner-coder-tester multi-agent theater for a single patch → `method:single-agent-plus-tools`
@@ -116,7 +119,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when 10M-token dumped corpus that does not fit the window → `task:long-context-prompt-offload`
   - when building a production engine (rewind, sandbox, remote, TUI) → `task:agent-harness-runtime`
   - when train outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) → `task:outcome-only-long-horizon-agent-rl`
-- **Out of scope**: Training an async agent policy (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Math/code RLVR (CISPO); GUI / OS desktop computer-use; Dumped 10M-token corpus prompt offload (RLM); Trajectory folding (FoldGRPO); Planner-coder-tester multi-agent theater for a single patch; Meta-agent search as the default design process
+  - when train a live-web multi-hop search agent (SFT-RL climbing) → `task:web-search-agent-rl`
+- **Out of scope**: Training an async agent policy (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Math/code RLVR (CISPO); GUI / OS desktop computer-use; Dumped 10M-token corpus prompt offload (RLM); Trajectory folding (FoldGRPO); Planner-coder-tester multi-agent theater for a single patch; Meta-agent search as the default design process; Training a live-web search policy (Iris)
 
 ## algorithms
 
@@ -224,11 +228,13 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 - **Scope**: Training a tool-use / sandbox policy with asynchronous RL. Not choosing a software-engineering harness.
 - **SOTA**: `method:sao` `2607.07508` (as_of 2026-08-26) — Agentic Tool-Use & Multi-Turn Sandbox Benchmarks: Default SOTA for agentic async RL
   - do not use when sparse-outcome coverage / anti-drift on a small revisited task pool, not async latency → `task:outcome-only-long-horizon-agent-rl`
+  - do not use when train a live-web multi-hop search agent (SFT-RL climbing), not async stragglers → `method:iris`
   - do not use when build an agent rather than train a policy → `method:mini-swe-agent`
 - **Redirects**:
   - when build an agent rather than train a policy → `task:software-engineering-agent-harness`
   - when outcome-only long-horizon agent RL (coverage / anti-drift), not async stragglers → `task:outcome-only-long-horizon-agent-rl`
-- **Out of scope**: Building or choosing a software-engineering agent loop (mini-SWE-agent / CCA / OpenHands); Dumped long-prompt offload (RLM); GUI computer-use without policy training; Outcome-only long-horizon agent RL where the failure is signal starvation / policy drift, not async latency
+  - when train a live-web multi-hop search agent (SFT-RL climbing), not async stragglers → `task:web-search-agent-rl`
+- **Out of scope**: Building or choosing a software-engineering agent loop (mini-SWE-agent / CCA / OpenHands); Dumped long-prompt offload (RLM); GUI computer-use without policy training; Outcome-only long-horizon agent RL where the failure is signal starvation / policy drift, not async latency; Live-web multi-hop search-agent training (Iris SFT-RL climbing)
 
 ### task:all-zero-verifier-groups — All-Zero Verifier Groups & Process Supervision
 - **SOTA**: `method:verigate` `2605.30451` (as_of 2026-08-26) — All-Zero Verifier Group Benchmarks / Process Supervision: Default SOTA for verifier gating
@@ -258,7 +264,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 - **Redirects**:
   - when outcome-only long-horizon interactive agent RL → `task:outcome-only-long-horizon-agent-rl`
   - when train asynchronous RL for a tool-use policy → `task:agentic-async-rl`
-- **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO)
+  - when train a live-web multi-hop search agent (SFT-RL climbing) → `task:web-search-agent-rl`
+- **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO); Live-web multi-hop search-agent training (Iris)
 
 ### task:math-code-rl-moe — Mathematical and Code RL Reasoning (MoE Policies)
 - **SOTA**: `method:sapo` `2511.20347` (as_of 2026-08-26) — Qwen3 MoE / MATH-500 MoE RL: Default SOTA for MoE/VL RL
@@ -272,13 +279,15 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when build a SWE / issue-to-patch harness rather than train a policy → `method:mini-swe-agent`
   - do not use when production harness kernel (rewind, sandbox, remote, TUI) → `method:omp2-harness`
   - do not use when no programmatic checker exists and the reward must come from process criteria → `method:draco`
+  - do not use when train a live-web multi-hop search agent (SFT-RL climbing) → `method:iris`
 - **Redirects**:
   - when variable environment latency / async stragglers, not sparse-outcome coverage → `task:agentic-async-rl`
   - when the problem is context folding of a long tool trajectory, not the RL signal → `task:long-horizon-tool-agent`
   - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
   - when build an agent loop rather than train a policy → `task:software-engineering-agent-harness`
   - when production engine (rewind, sandbox, remote, TUI) → `task:agent-harness-runtime`
-- **Out of scope**: Async straggler / tool-latency RL (SAO); Folding a long tool/web/SWE trajectory into a small active context (FoldGRPO); Single-turn dense math/code RLVR (CISPO); Building or choosing a SWE harness rather than training a policy (mini-SWE-agent); Production harness kernel (omp2)
+  - when train a live-web multi-hop search agent (SFT-RL climbing) → `task:web-search-agent-rl`
+- **Out of scope**: Async straggler / tool-latency RL (SAO); Folding a long tool/web/SWE trajectory into a small active context (FoldGRPO); Single-turn dense math/code RLVR (CISPO); Building or choosing a SWE harness rather than training a policy (mini-SWE-agent); Production harness kernel (omp2); Live-web multi-hop search-agent training (Iris)
 
 ### task:passk-reasoning-coverage — Math/Code RLVR for Pass@K Coverage without Backward Pass
 - **SOTA**: `method:es-reasoning` `2608.27351` (as_of 2026-08-31) — GSM8K Easy Setting averages and DeepScaleR Hard Setting math average (AIME24/AIME25/AMC23/MATH500): ES beats GRPO on Pass@16/@32 while still lifting Pass@1 over base; ES then GRPO keeps most of GRPO Pass@1 and the best Hard Pass@32
@@ -317,6 +326,22 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:token-level-critic-rl — Token-Level Advantage Estimation with Single-Sample Critics
 - **SOTA**: `method:bpco` `2608.23566` (as_of 2026-08-27) — Mathematical Reasoning & Rubric Evaluation (1.5B to 30B-A3B): Matches or exceeds group-relative GRPO baseline with 1 response per prompt
+
+### task:web-search-agent-rl — Web Search Agent Training
+- **Scope**: Policy training for ReAct search agents (search/scrape against the live web) with synthetic multi-hop tasks, trajectory/turn filtering, in-cluster judge/summarizer, and iterative SFT-RL climbing.
+- **SOTA**: `method:iris` `2609.04304` (as_of 2026-09-08) — BrowseComp / BrowseComp-ZH / DeepSearchQA / HLE-text, discard-all CM, open-source same-size: Iris-mini 82.2/84.8/86.9/52.3; Iris-pro 88.6/85.1/92.9/56.4
+  - do not use when outcome-only long-horizon agent RL (AppWorld coverage / anti-drift) → `method:canopy`
+  - do not use when variable tool latency / async stragglers is the bottleneck → `method:sao`
+  - do not use when build a SWE / issue-to-patch harness rather than train a search policy → `method:mini-swe-agent`
+  - do not use when the problem is folding a long tool trajectory into a small active context → `method:foldgrpo`
+  - do not use when single-turn math/code Pass@1 RLVR → `method:cispo`
+- **Redirects**:
+  - when outcome-only long-horizon agent RL (AppWorld coverage / anti-drift or rubric credit) → `task:outcome-only-long-horizon-agent-rl`
+  - when variable environment latency / async stragglers, not search-agent climbing → `task:agentic-async-rl`
+  - when build a SWE / issue-to-patch harness rather than train a search policy → `task:software-engineering-agent-harness`
+  - when the problem is context folding of a long tool trajectory, not the search train recipe → `task:long-horizon-tool-agent`
+  - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
+- **Out of scope**: AppWorld / outcome-only long-horizon coverage and anti-drift (CANOPY / DRACO); Async tool-latency / straggler RL (SAO); SWE issue-to-patch harness (mini-SWE-agent); Folding a long tool trajectory into a small active context (FoldGRPO); Single-turn dense math/code RLVR (CISPO)
 
 ## pretraining
 

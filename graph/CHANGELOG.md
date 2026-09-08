@@ -6,6 +6,29 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-08 — catch-up ingest method:iris / method:sparse-opd-supervision / method:opd-then-rlvr (completes the weekday sweep to seven)
+- Completes the 2026-09-08 weekday sweep. Original four (FlowBalance, TGOPD, OT optimizer schedules, Uno) unchanged. Added Iris (new `task:web-search-agent-rl`), sparse OPD supervision, and OPD-then-RLVR. No false supersessions of CISPO / Muon2 / OPD / OPSA / CANOPY / RISE / GAPO / OPDVR / SAO / mini-SWE-agent / FoldGRPO.
+- Still skipped (WATCH): FactoSR, Refuse-without-Refusal, over-editing, CoSkill, ConsensusBench, Multi-Harness RL, Scale-QLoRA, Train-What-You-Deploy, OPSD survey 2608.25936, EmbodiedSkills, ENEAS, revision-propagation, 2609.04575, 2609.04453, 2609.05309, 2609.05274.
+- Scope checks: CISPO, Muon2, OPD, CANOPY, SAO remain first hops on their tasks. Uno remains sota only for `task:diffusion-augmented-ar`. Iris is sota only for the new search-agent task.
+
+### 2026-09-08 — ingest method:iris (new task:web-search-agent-rl)
+- Added paper:iris (2609.04304), method:iris, recipe:iris, task:web-search-agent-rl. Reverse redirects on task:agentic-async-rl, task:outcome-only-long-horizon-agent-rl, task:long-horizon-tool-agent, task:software-engineering-agent-harness, task:math-code-rl-dense.
+- Status sota for live-web search-agent training only. Code/weights: AllSpark-Research/Iris.
+- Evidence: Iris-mini 82.2/84.8/86.9/52.3 and Iris-pro 88.6/85.1/92.9/56.4 on BrowseComp / BrowseComp-ZH / DeepSearchQA / HLE-text with discard-all CM (Table 1); no-CM BrowseComp 64.7 / 72.6 (Table 2, arXiv:2609.04304); verified: true; evidence_level: preprint.
+- Scope checks: CANOPY remains AppWorld; SAO remains async; mini-SWE-agent remains the harness; FoldGRPO remains folding; CISPO remains Pass@1.
+
+### 2026-09-08 — ingest method:sparse-opd-supervision (active OPD plug-in; does not supersede method:opd / method:cispo)
+- Added paper:sparse-opd-supervision (2609.04565), method:sparse-opd-supervision, recipe:sparse-opd-supervision (stub; no official code). Wired to task:student-distillation; optional mention on task:math-code-rl-dense.
+- Status active. Keep-mask on sampled-token OPD: 1–2 tokens (~0.05%) can match/beat full-token OPD.
+- Evidence: Family 8 avg@8 mean pctltail 0.05% 30.1 vs plain OPD 27.5; Family 9 minmaxtok 49.3 vs plain 47.5 vs teacher 46.8 (Tables 3/5, arXiv:2609.04565); verified: true; evidence_level: preprint.
+- Scope checks: OPD remains distill default; CISPO remains Pass@1; IDA-OPD remains the entropy-shrink plug-in.
+
+### 2026-09-08 — ingest method:opd-then-rlvr (active stacking order; does not supersede method:opd / method:cispo / method:opdvr)
+- Added paper:opd-then-rlvr (2609.04108), method:opd-then-rlvr, recipe:opd-then-rlvr. Wired to task:student-distillation and task:math-code-rl-dense; related mention on task:distill-reasoner-verifier. Code: StringNLPLAB/opd-rlvr.
+- Status active. OPD then RL beats pure OPD, pure GRPO, and joint one-step fusion. Not a graph supersession of the algorithms.
+- Evidence: logic pass@1 mean 80.6 vs GRPO 49.4 vs OPD 53.9 vs KDRL 62.8; math 31.8 vs OPD 31.0 vs GRPO 28.4 (Table 2, arXiv:2609.04108); verified: true; evidence_level: preprint.
+- Scope checks: OPD remains distill default; CISPO remains Pass@1 RLVR (paper RL stage is GRPO); OPDVR remains single-step gated OPD+RLVR.
+
 ### 2026-09-08 — ingest 2026-09-08 weekday SOTA sweep (FlowBalance, TGOPD, OT optimizer schedules, Uno)
 - Added four methods without stealing CISPO / Muon2 / OPD / OPSA / CANOPY / RISE / GAPO current_sota. Uno is sota only for the new `task:diffusion-augmented-ar`. Per-method receipts follow.
 - Skipped (WATCH only): 2608.25936 OPSD critical review; EmbodiedSkills; ENEAS; revision-propagation; training-free MoE expert halving (2609.04575); expert pruning under over-dispersion (2609.04453); mHC residual analysis (2609.05309); Speculative Uncertainty draft-gate (2609.05274). Tue arXiv /new still showed Mon 7 Sep listings at sweep time; HF Daily Papers 2026-09-08 used as extra signal.

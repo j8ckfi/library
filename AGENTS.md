@@ -43,6 +43,7 @@ task:long-horizon-tool-agent -> method:foldgrpo (2510.11967, 2025-10)
   when dumped corpus much larger than the window -> task:long-context-prompt-offload
   when SWE harness without folding -> task:software-engineering-agent-harness
   when outcome-only long-horizon agent RL (signal starvation / drift or outcome-blind rubrics) -> task:outcome-only-long-horizon-agent-rl
+  when train a live-web multi-hop search agent (SFT-RL climbing), not folding -> task:web-search-agent-rl
 task:multi-agent-orchestration -> method:single-agent-plus-tools (2606.04455, 2026-06)
   when GitHub issue to patch -> task:software-engineering-agent-harness
   when train asynchronous RL for a tool-use policy -> task:agentic-async-rl
@@ -53,6 +54,7 @@ task:software-engineering-agent-harness -> method:mini-swe-agent (2405.15793, 20
   when 10M-token dumped corpus that does not fit the window -> task:long-context-prompt-offload
   when building a production engine (rewind, sandbox, remote, TUI) -> task:agent-harness-runtime
   when train outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) -> task:outcome-only-long-horizon-agent-rl
+  when train a live-web multi-hop search agent (SFT-RL climbing) -> task:web-search-agent-rl
 task:directed-sssp-nonneg -> method:bmssp (2504.17033, 2026-08)
 task:1bit-extreme-quantization -> method:sparse-bitnet (2603.05168, 2026-08-26)
 task:fp4-hardware-training -> method:quartet-ii (2601.22813, 2026-08-26) + method:mxfp4-mi355x (2605.09825, 2026-08-26)
@@ -83,6 +85,7 @@ task:training-data-attribution -> method:magic (2504.16430, 2026-09-01)
 task:agentic-async-rl -> method:sao (2607.07508, 2026-08-26)
   when build an agent rather than train a policy -> task:software-engineering-agent-harness
   when outcome-only long-horizon agent RL (coverage / anti-drift), not async stragglers -> task:outcome-only-long-horizon-agent-rl
+  when train a live-web multi-hop search agent (SFT-RL climbing), not async stragglers -> task:web-search-agent-rl
 task:all-zero-verifier-groups -> method:verigate (2605.30451, 2026-08-26)
 task:data-free-self-evolution -> method:j-zero (2608.26582, 2026-08-31)
 task:direct-preference-alignment -> method:olmo-3 (2512.13961, 2026-08-26)
@@ -93,6 +96,7 @@ task:label-free-test-time-reasoner -> method:ttpo (2608.27448, 2026-08-28)
 task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
   when outcome-only long-horizon interactive agent RL -> task:outcome-only-long-horizon-agent-rl
   when train asynchronous RL for a tool-use policy -> task:agentic-async-rl
+  when train a live-web multi-hop search agent (SFT-RL climbing) -> task:web-search-agent-rl
 task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
 task:outcome-only-long-horizon-agent-rl -> method:canopy (2609.01245, 2026-09-04)
   when variable environment latency / async stragglers, not sparse-outcome coverage -> task:agentic-async-rl
@@ -100,6 +104,7 @@ task:outcome-only-long-horizon-agent-rl -> method:canopy (2609.01245, 2026-09-04
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
   when build an agent loop rather than train a policy -> task:software-engineering-agent-harness
   when production engine (rewind, sandbox, remote, TUI) -> task:agent-harness-runtime
+  when train a live-web multi-hop search agent (SFT-RL climbing) -> task:web-search-agent-rl
 task:passk-reasoning-coverage -> method:es-reasoning (2608.27351, 2026-08-31)
 task:privileged-teacher-opsd -> method:vista (2608.28306, 2026-08-31)
 task:reasoning-rl-alignment -> method:cispo (2506.13585, 2026-08-26) + method:sapo (2511.20347, 2026-08-26)
@@ -113,6 +118,12 @@ task:teacher-free-on-policy-self-adaptation -> method:opsa (2608.31046, 2026-09-
   when flow matching or continuous diffusion post-training -> task:posttrain-diffusion
   when verifier-grounded same-model self-improvement with privileged hindsight -> task:math-code-rl-dense
 task:token-level-critic-rl -> method:bpco (2608.23566, 2026-08-27)
+task:web-search-agent-rl -> method:iris (2609.04304, 2026-09-08)
+  when outcome-only long-horizon agent RL (AppWorld coverage / anti-drift or rubric credit) -> task:outcome-only-long-horizon-agent-rl
+  when variable environment latency / async stragglers, not search-agent climbing -> task:agentic-async-rl
+  when build a SWE / issue-to-patch harness rather than train a search policy -> task:software-engineering-agent-harness
+  when the problem is context folding of a long tool trajectory, not the search train recipe -> task:long-horizon-tool-agent
+  when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
 task:budget-consumer-pretrain -> method:puro-2b (2608.27370, 2026-08-31)
 task:linear-time-sequence-modeling -> method:mamba-2 (2405.21060, 2024-05)
 task:llm-pretraining-optimization -> method:muon2 (2604.09967, 2026-08-26)
@@ -197,6 +208,9 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 54. **Prompt-level OPD teacher gate**: **TGOPD** (`method:tgopd`, `arXiv:2609.02998`) verifier-scored teacher probes then exclusive dense OPD vs GRPO. Idle teacher utilization 9.8%→78.9% in the measured 4B SOPD run. Active plug-in. Does **not** replace OPD, CISPO, OPSA, or Open-MOPD.
 55. **Overtraining-axis optimizer HPs**: **Optimizer memory schedules** (`method:optimizer-memory-schedules`, `arXiv:2609.04577`) — relative optimizer rank and optimal LR/WD/memory change with OT; WD $\sim\sqrt{\mathrm{OT}}$; longer OT favors longer fixed memory. ADANA (`method:adana`, `arXiv:2602.05298`) is a named baseline. Does **not** replace Muon2.
 56. **Diffusion-augmented AR serving**: **Uno** (`method:uno`, `arXiv:2609.04010`) keeps AR/NTP weights, adds Diffusion Distillation adapters and $\Psi$-Spec lossless multi-token decode (no separate draft model). First hop for `task:diffusion-augmented-ar`. Does **not** replace DiffusionOPSD / Self-OPD, Muon2, or CISPO.
+57. **Web search agent training**: **Iris** (`method:iris`, `arXiv:2609.04304`) reverse-constructed hyperlink tasks → traj/turn filter → SFT → live-search RL → SFT-RL climbing. First hop for `task:web-search-agent-rl`. Does **not** replace CANOPY, SAO, mini-SWE-agent, FoldGRPO, or CISPO.
+58. **Sparse OPD token budget**: **Sparse OPD supervision** (`method:sparse-opd-supervision`, `arXiv:2609.04565`) 1–2 tokens per trajectory (~0.05%) can match/beat full-token OPD. Active plug-in. Does **not** replace OPD or CISPO.
+59. **OPD-then-RLVR stacking order**: **OPD-then-RL** (`method:opd-then-rlvr`, `arXiv:2609.04108`) sequences OPD then RLVR; beats joint one-step fusion. Does **not** replace OPD, CISPO, or OPDVR.
 
 ---
 
@@ -253,6 +267,9 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `tgopd` (2609.02998) is an active prompt-level teacher-reliability gate on OPD. It does not supersede `opd`, `cispo`, `opsa`, `open-mopd`, `ra-opd`, or `ida-opd`.
 - `optimizer-memory-schedules` (2609.04577) is active OT-horizon HP guidance. It does not supersede `muon2`. `adana` (2602.05298) is a named optimizer in that study with empty `sota_for`.
 - `uno` (2609.04010) is the first-hop for `task:diffusion-augmented-ar` only. It does not supersede `diffusion-opsd`, `self-opd`, `muon2`, or `cispo`.
+- `iris` (2609.04304) is the first-hop for `task:web-search-agent-rl` only. It does not supersede `canopy`, `sao`, `mini-swe-agent`, `foldgrpo`, or `cispo`.
+- `sparse-opd-supervision` (2609.04565) is an active OPD token-budget plug-in. It does not supersede `opd` or `cispo`.
+- `opd-then-rlvr` (2609.04108) is active stacking-order guidance (OPD then RLVR, not joint one-step fusion). It does not supersede `opd`, `cispo`, or `opdvr`.
 
 ---
 

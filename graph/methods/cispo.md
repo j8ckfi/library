@@ -14,6 +14,7 @@ papers:
   - paper:minimax-m1
   - paper:scalerl
   - paper:spurious-advantage-grpo
+  - paper:rlvr-group-correlation
 recipes:
   - recipe:cispo
 claims:
@@ -56,3 +57,4 @@ CISPO (Clipped IS-weight Policy Optimization) establishes the state-of-the-art r
 
 ## Gotchas & Failure Modes
 - Group-relative magnitude $|\hat{A}|=\sqrt{n^-/n^+}$ can reward lucky guesses on bounded-answer items, bounded sub-cases inside open math (~56% of MATH-7.5K by answer shape), and search-agent trajectories that cash out via outcome-only exact match (`paper:spurious-advantage-grpo`). CISPO still clips IS weights, not this composition-dependent scale. Do not revive GRPO or promote SignBalance over CISPO.
+- Within-group verifier errors are correlated (`method:rlvr-group-correlation`, ρ≈0.53, Kish n_eff≈1.70 at k=8). Hygiene, not a CISPO replacement.

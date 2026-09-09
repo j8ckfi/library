@@ -11,6 +11,7 @@ out_of_scope:
   - "SWE issue-to-patch harness (mini-SWE-agent)"
   - "Folding a long tool trajectory into a small active context (FoldGRPO)"
   - "Single-turn dense math/code RLVR (CISPO)"
+  - "Routing-harness RSI post-train (NeoHorse-1)"
 redirects:
   - when: "outcome-only long-horizon agent RL (AppWorld coverage / anti-drift or rubric credit)"
     to: "task:outcome-only-long-horizon-agent-rl"
@@ -22,6 +23,8 @@ redirects:
     to: "task:long-horizon-tool-agent"
   - when: "single-turn math/code Pass@1 RLVR"
     to: "task:math-code-rl-dense"
+  - when: "agentic RSI / routing-harness post-train, not search-agent climbing"
+    to: "task:agentic-rsi-routing-posttrain"
 current_sota:
   - method: method:iris
     as_of: "2026-09-08"
@@ -36,7 +39,8 @@ methods:
   - method:foldgrpo
   - method:mini-swe-agent
   - method:cispo
-last_reviewed: "2026-09-08"
+  - method:neohorse-1
+last_reviewed: "2026-09-09"
 tags:
   - post-training
   - agentic
@@ -56,4 +60,4 @@ Train a single ReAct search agent that must decide what to search, how to read r
 
 ## SOTA Recommendation (as of 2026-09-08)
 - **Primary Method**: **Iris** (`method:iris`, `paper:iris` `arXiv:2609.04304`) reverse-constructed tasks → traj/turn filter → SFT → live-search RL → SFT-RL climbing. Code/weights: AllSpark-Research/Iris.
-- **Not This Task**: `method:canopy` remains AppWorld outcome-only; `method:sao` remains async stragglers; `method:mini-swe-agent` remains the SWE harness; `method:foldgrpo` remains folding; `method:cispo` remains dense Pass@1 RLVR.
+- **Not This Task**: `method:canopy` remains AppWorld outcome-only; `method:sao` remains async stragglers; `method:mini-swe-agent` remains the SWE harness; `method:foldgrpo` remains folding; `method:cispo` remains dense Pass@1 RLVR; `method:neohorse-1` remains routing-harness RSI post-train.

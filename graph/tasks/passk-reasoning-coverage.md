@@ -16,6 +16,8 @@ methods:
   - method:cispo
   - method:grpo
   - method:dapo
+  - method:datpo
+last_reviewed: "2026-09-09"
 tags:
   - post-training
   - rl-alignment
@@ -33,6 +35,7 @@ Post-train a dense reasoner on verifiable math/code rewards when repeated-sampli
 - **Primary Benchmarks**: Easy setting — GSM8K post-train, Pass@K on GSM8K/CSQA/HotpotQA/Countdown/GPQA/MBPP. Hard setting — DeepScaleR on DeepSeek-R1-Distill-Qwen-1.5B, math average over AIME24/AIME25/AMC23/MATH-500.
 - **Evaluation Pitfalls**: FLOP-match uses N=32 ES directions versus GRPO G=8. Do not revive GRPO as the library default. Pass@1-first labeled RLVR stays `method:cispo`.
 
-## SOTA Recommendation (as of 2026-08-31)
-- **Primary Method (Pass@K / coverage / no-backward)**: **ES-reasoning** (`method:es-reasoning`, `paper:es-reasoning` `arXiv:2608.27351`).
+## SOTA Recommendation (as of 2026-09-09)
+- **Primary Method (Pass@K / coverage / no-backward)**: **ES-reasoning** (`method:es-reasoning`, `paper:es-reasoning` `arXiv:2608.27351`). Unchanged.
+- **Tree-rollout coverage sibling**: `method:datpo` (`arXiv:2609.08650`) difficulty-adaptive sentence-entropy trees. Active. Does not replace ES-reasoning or CISPO.
 - **Pass@1 default when labels exist**: **CISPO** (`method:cispo`) on `task:math-code-rl-dense`. Sequential ES then GRPO is a Pareto composition in the ES paper, not a GRPO revival.

@@ -29,7 +29,8 @@ methods:
   - method:muonclip-kimi-k2
   - method:qwen38-next
   - method:ce-moe
-last_reviewed: "2026-09-01"
+  - method:moe-sparsity-hp-scaling
+last_reviewed: "2026-09-09"
 tags:
   - pretraining
   - moe
@@ -47,3 +48,4 @@ Training sparse Mixture-of-Experts models enables scaling parameter capacity int
 - **NVL72 Systems Megakernel**: **Mixture-of-Kittens** (`method:mixture-of-kittens`, `task:train-moe-nvl72`).
 - **Adjacent Qwen-style hybrid residual recipe**: `method:qwen38-next` (`arXiv:2608.30320`). Does not replace DeepSeek-V4 / Kimi-K3 or Muon2.
 - **Optional communication-efficient layout**: `method:ce-moe` (`arXiv:2608.28511`) when expert-parallel all-to-all dominates. Layout niche only.
+- **Optional LR/batch vs activation-ratio transfer**: `method:moe-sparsity-hp-scaling` (`arXiv:2609.08690`). Pretrain HP guidance. Does not replace DeepSeek-V4 / Kimi-K3.

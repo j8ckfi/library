@@ -17,7 +17,9 @@ methods:
   - method:opdvr
   - method:u-opsd
   - method:flowbalance
-last_reviewed: "2026-09-08"
+  - method:verpo
+  - method:opsd-collapse-review
+last_reviewed: "2026-09-09"
 tags:
   - post-training
   - distillation
@@ -40,3 +42,5 @@ Train a problem-only student on its own rollouts using dense token-level targets
 - **Primary Method**: **VISTA** (`method:vista`, `paper:vista` `arXiv:2608.28306`) for verifier-informed student-to-teacher adaptation on privileged-teacher OPSD.
 - **Not This Task**: `method:opd` remains the single-teacher student-distillation default; `method:opdvr` remains the OPD+RLVR default; `method:u-opsd` remains the unlabeled/no-GT default.
 - **Adjacent inner-loop (not this method)**: `method:flowbalance` uses privileged hindsight as a stopped trajectory-balance feature, not a teacher update. VISTA stays this task's first hop.
+- **Optional evidence-regularized sibling**: `method:verpo` (`arXiv:2609.06100`). Treats privileged evidence as a proposal on an outcome objective. Does not replace VISTA or CISPO.
+- **Collapse playbook (survey)**: `method:opsd-collapse-review` (`arXiv:2608.25936`). Three levers; no code. Does not replace VISTA.

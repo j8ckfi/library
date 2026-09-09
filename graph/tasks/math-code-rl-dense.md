@@ -50,6 +50,8 @@ methods:
   - method:datpo
   - method:circuitlens
   - method:dataflex-rl
+  - method:verpo
+  - method:rlvr-group-correlation
 last_reviewed: "2026-09-09"
 tags:
   - post-training
@@ -78,9 +80,11 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Negative-result data-policy platform**: `method:dataflex-rl` (`arXiv:2609.06107`) — RLVR data policies do not beat uniform GRPO at 95% CI in that study.
 - **Related RLVR+self-OPD loop**: `method:rise` (`arXiv:2609.05295`) builds a synthetic teacher from the model's own RLVR trajectory. Does not replace CISPO, OPD, or OPSA.
 - **Optional verifier-grounded self-improvement**: `method:flowbalance` (`arXiv:2609.03241`) privileged same-model trajectory balance, sign-gated by group advantage. Does not replace CISPO, OPSA, OPD, VISTA, RISE, or CANOPY.
+- **Optional verified-evidence regularizer**: `method:verpo` (`arXiv:2609.06100`) on `task:privileged-teacher-opsd`. Evidence as a proposal, not CISPO.
+- **Gotcha**: group-relative magnitude can reward lucky guesses on bounded-answer / search-agent settings (`paper:spurious-advantage-grpo`). Do not promote SignBalance over CISPO.
+- **Gotcha (verifier ICC)**: within-group verifier errors are correlated (ρ≈0.53, Kish n_eff≈1.70 at k=8; `method:rlvr-group-correlation`, arXiv:2609.06386). Not an optimizer.
 - **Optional OPD teacher-reliability gate**: `method:tgopd` (`arXiv:2609.02998`) on `task:student-distillation`. Prompt-level probes then dense OPD or GRPO. Does not replace CISPO or OPD.
 - **Optional sparse OPD token mask**: `method:sparse-opd-supervision` (`arXiv:2609.04565`). Does not replace CISPO or OPD.
 - **Optional OPD-then-RL stack**: `method:opd-then-rlvr` (`arXiv:2609.04108`) when both OPD and RLVR will run; sequence them, do not fuse in one step. Stage-2 Pass@1 algorithm stays CISPO. Does not replace CISPO or OPD.
 - **No labels / no teacher**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace CISPO when labels exist.
-- **Gotcha**: group-relative magnitude can reward lucky guesses on bounded-answer / search-agent settings (`paper:spurious-advantage-grpo`). Do not promote SignBalance over CISPO.
 

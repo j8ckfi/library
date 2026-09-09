@@ -243,7 +243,7 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 63. **OPD probability transport**: **RouteOPD** (`method:routeopd`, `arXiv:2609.08337`) pairwise log-odds transport vs sampled reverse-KL. Active OPD plug-in. Does **not** replace OPD, RA-OPD, IDA-OPD, or TGOPD.
 64. **OPD late-training stability**: **TV-OPD** (`method:tv-opd`, `arXiv:2609.08341`) sign of token advantages plus a shared TV scale. Active. Relate to RA-OPD / TrOPD / Stable-OPD without supersession. Does **not** replace OPD.
 65. **Pass@K tree-rollout coverage**: **DATPO** (`method:datpo`, `arXiv:2609.08650`) difficulty-adaptive sentence-entropy trees. Active beside ES-reasoning. CISPO remains Pass@1; ES-reasoning remains the Pass@K / no-backward first hop.
-66. **Weak-to-strong reverse distillation**: **OPRD** (`method:oprd`, `arXiv:2609.08798`) amplifies verifier-supported student gradients along the teacher policy-shift. Distinct from `method:w2s-opd` (matching). Does **not** replace OPD or CISPO.
+66. **Weak-to-strong reverse distillation**: **OPRD** (`method:oprd`, `arXiv:2609.08798`) amplifies verifier-supported student gradients along the teacher policy-shift. Distinct from `method:w2s-opd` (matching). Code: raymin0223/on_policy_reverse_distillation. Does **not** replace OPD or CISPO.
 67. **MoE PEFT adapter consolidation**: **ACE** (`method:ace-moe-peft`, `arXiv:2609.06072`, EMNLP 2026). Slug is `ace-moe-peft` because `method:ace` is Agentic Context Engineering. Active. Does **not** replace `method:lr-matters-lora`.
 68. **Anisotropic per-rank LoRA LR**: **AnLR-LoRA** (`method:anlr-lora`, `arXiv:2609.05885`). Active beside NoRA. Quality default remains vanilla LoRA + rsLoRA + LR sweep.
 69. **FP4 W4A4 noise law**: **KBBQ** (`method:kbbq`, `arXiv:2609.08135`). Active PTQ-style inference niche. Does **not** replace Quartet-II / MXFP4 hardware training.
@@ -252,6 +252,10 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 72. **Long-context RL speculative draft co-train**: **Online Draft Co-Training** (`method:online-draft-cotrain`, `arXiv:2609.07108`, NeMo RL). Niche systems. Does **not** replace Miles or Uno.
 73. **RLVR data-policy negative result**: **DataFlex-RL** (`method:dataflex-rl`, `arXiv:2609.06107`) — selection policies do not beat uniform GRPO at 95% CI in that study. Active note beside ThinkPrior. Does **not** replace CISPO.
 74. **MoE sparsity HP transfer**: **MoE sparsity hyperparameter scaling** (`method:moe-sparsity-hp-scaling`, `arXiv:2609.08690`) LR/batch vs activation ratio. Active pretrain guidance. Does **not** replace DeepSeek-V4 / Kimi-K3.
+75. **Verified-evidence OPSD sibling**: **VERPO** (`method:verpo`, `arXiv:2609.06100`) treats privileged evidence as a proposal on an outcome objective. Active beside VISTA. Does **not** replace CISPO or VISTA.
+76. **MoE post-train router soft-anchor**: **RPB** (`method:rpb`, `arXiv:2609.08115`). Active MoE routing candidate. Does **not** replace SAPO.
+77. **GRPO group verifier ICC**: **RLVR group correlation** (`method:rlvr-group-correlation`, `arXiv:2609.06386`, ρ≈0.53 / Kish n_eff≈1.70 at k=8). Analysis hygiene, not an optimizer. Does **not** replace CISPO.
+78. **OPSD collapse playbook**: **One Symptom, Three Levers** (`method:opsd-collapse-review`, `arXiv:2608.25936`). Survey; no code. Does **not** replace VISTA, OPSA, or CISPO.
 
 ---
 
@@ -326,6 +330,10 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `online-draft-cotrain` (2609.07108) is a niche speculative-draft RL systems path. It does not supersede `miles` or `uno`.
 - `dataflex-rl` (2609.06107) is an active negative-result note on RLVR data policies. It does not supersede `cispo` or `thinkprior`.
 - `moe-sparsity-hp-scaling` (2609.08690) is active MoE LR/batch vs sparsity guidance. It does not supersede `deepseek-v4` or `kimi-k3`.
+- `verpo` (2609.06100) is an active privileged-evidence regularizer. It does not supersede `vista` or `cispo`.
+- `rpb` (2609.08115) is an active MoE post-train router soft-anchor. It does not supersede `sapo`.
+- `rlvr-group-correlation` (2609.06386) is a niche verifier-ICC analysis. It does not supersede `cispo`.
+- `opsd-collapse-review` (2608.25936) is a niche OPSD collapse playbook. It does not supersede `vista`, `opsa`, or `cispo`.
 
 ---
 

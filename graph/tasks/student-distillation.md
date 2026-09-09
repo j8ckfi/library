@@ -62,7 +62,7 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Optional sampled-token entropy plug-in**: `method:ida-opd` (`arXiv:2608.29846`) keeps entropy-expanding $A_y$ and shrinks $\mathcal{I}_H<0$ by $|q-p|/(q+p)$. Does not replace OPD or CISPO.
 - **Optional probability-transport plug-in**: `method:routeopd` (`arXiv:2609.08337`) pairwise log-odds transport vs sampled reverse-KL. Does not replace OPD.
 - **Optional TV-shaped stability plug-in**: `method:tv-opd` (`arXiv:2609.08341`) sign of token advantages plus a shared TV scale. Relate to RA-OPD / TrOPD / Stable-OPD without supersession.
-- **Optional reverse distillation (weak-to-strong)**: `method:oprd` (`arXiv:2609.08798`) amplifies verifier-supported student gradients along the teacher policy-shift. Distinct from `method:w2s-opd` (matching). Does not replace OPD or CISPO.
+- **Optional reverse distillation (weak-to-strong)**: `method:oprd` (`arXiv:2609.08798`, code raymin0223/on_policy_reverse_distillation) amplifies verifier-supported student gradients along the teacher policy-shift. Distinct from `method:w2s-opd` (matching). Does not replace OPD or CISPO.
 - **Data-efficiency note**: `method:opd-one-example` (`arXiv:2609.04172`) — one query recovers most full-data OPD; ~16 diverse queries ≈ full-data / MOPD. Does not replace OPD.
 - **Data-selection sibling**: `method:opd-hard-cot-selection` (`arXiv:2609.05198`) — hard/long-CoT examples drive OPD gains (not high token entropy); 8 hard can match 17K. Does not replace OPD or OPD-II.
 - **Related self-extrapolating teacher**: `method:rise` (`arXiv:2609.05295`) synthesizes an OPD teacher from the student's RLVR trajectory. No external teacher. Does not replace OPD, CISPO, or OPSA.

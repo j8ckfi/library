@@ -46,7 +46,8 @@ methods:
   - method:cispo
   - method:rise
   - method:flowbalance
-last_reviewed: "2026-09-08"
+  - method:opsd-collapse-review
+last_reviewed: "2026-09-09"
 tags:
   - post-training
   - on-policy
@@ -71,3 +72,4 @@ Improve a reasoning policy at train time using only on-policy rollouts and the p
 - **Adjacent router (not this method)**: `method:self-routing` still needs a verifier and gold answers for its OPSD branch. It does not replace OPSA.
 - **Adjacent RLVR-grounded synthetic teacher (not this method)**: `method:rise` still needs outcome-verified RLVR. It does not replace OPSA.
 - **Adjacent verifier-grounded self-improvement (not this method)**: `method:flowbalance` needs a verifier and privileged hindsight. It does not replace OPSA.
+- **OPSD collapse playbook (survey, not this method)**: `method:opsd-collapse-review` (`arXiv:2608.25936`). Privileged-info collapse vs OPSA's teacher-free shelf.

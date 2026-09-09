@@ -6,6 +6,38 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-09 — refine 2026-09-09 sweep (OPRD code, VERPO, RPB, group-correlation, OPSD collapse review)
+- Corrections on the open PR: OPRD recipe now points at raymin0223/on_policy_reverse_distillation. ACE MoE PEFT was already ingested (`method:ace-moe-peft`, UbiquitousAILab/ACE). No CISPO / Muon2 / OPD / OPSA / CANOPY retarget.
+- Added method:verpo (2609.06100), method:rpb (2609.08115), method:rlvr-group-correlation (2609.06386), method:opsd-collapse-review (2608.25936). WATCH skipped: FEE EnvAsScaffold 2609.08404. AnLR-LoRA / MoE HP scaling / AF1 / DataFlex-RL already landed in the first commit.
+- Scope checks: VISTA remains privileged-teacher first hop; SAPO remains MoE/VL RLVR; CISPO remains Pass@1.
+
+### 2026-09-09 — ingest method:verpo (active; does not supersede method:vista / method:cispo)
+- Added paper:verpo (2609.06100), method:verpo, recipe:verpo (stub; no official code). Wired to task:privileged-teacher-opsd; mention on task:math-code-rl-dense.
+- Status active. Privileged evidence as a proposal (Fisher contrast + ZPD gate) on an outcome objective.
+- Evidence: five scientific/tool tasks, best-variant averages Qwen3-4B 0.6857 vs 0.6826, Qwen3-8B 0.7058 vs 0.6895, Llama-3.2-1B 0.5657 vs 0.4751 (arXiv:2609.06100); verified: true; evidence_level: preprint.
+- Scope checks: VISTA remains privileged-teacher SOTA; CISPO remains Pass@1.
+
+### 2026-09-09 — ingest method:rpb (active MoE routing candidate; does not supersede method:sapo)
+- Added paper:rpb (2609.08115), method:rpb, recipe:rpb. Wired to task:math-code-rl-moe. Claimed GitHub naver-ai/rpb was 404 at ingest.
+- Status active. Soft router anchoring vs re-applied LBL or unanchored FT.
+- Evidence: Moonlight-16B-A3B in-domain 45.77 vs LBL 31.91 vs unanchored 29.44 (arXiv:2609.08115); verified: true; evidence_level: preprint.
+- Scope checks: SAPO remains MoE/VL current_sota.
+
+### 2026-09-09 — ingest method:rlvr-group-correlation (niche analysis; does not supersede method:cispo)
+- Added paper:rlvr-group-correlation (2609.06386), method:rlvr-group-correlation, recipe:rlvr-group-correlation. Code: ethxin0011/rlvr_group_correlation. Wired as gotcha on task:math-code-rl-dense / method:grpo / method:cispo.
+- Status niche. Within-group verifier-error ICC, not an optimizer.
+- Evidence: ρ=0.530 [0.500, 0.560] on 24,998 k=8 groups; Kish n_eff=1.70; advantage-sign disagreement ≤0.83% (arXiv:2609.06386); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; sibling gotcha remains paper:spurious-advantage-grpo.
+
+### 2026-09-09 — ingest method:opsd-collapse-review (niche playbook; does not supersede method:vista / method:opsa / method:cispo)
+- Added paper:opsd-collapse-review (2608.25936), method:opsd-collapse-review, recipe:opsd-collapse-review (no code). Wired to task:privileged-teacher-opsd and task:teacher-free-on-policy-self-adaptation.
+- Status niche. Three levers for OPSD collapse (where / what / when). Survey; no new experiments.
+- Evidence: structural review only (arXiv:2608.25936); verified: true; evidence_level: preprint.
+- Scope checks: VISTA / OPSA / CISPO first hops unchanged.
+
+### 2026-09-09 — OPRD recipe code pointer (method:oprd already ingested)
+- Set recipe:oprd repo_url to https://github.com/raymin0223/on_policy_reverse_distillation. Repo is an early stub at ingest; algorithm snippet unchanged. Does not retarget OPD or CISPO.
+
 ### 2026-09-09 — ingest 2026-09-09 weekday SOTA sweep (Miles, NeoHorse-1, ThinkPrior, RouteOPD, TV-OPD, DATPO, OPRD + optionals)
 - Added two new first-hop tasks (`task:frontier-rl-posttrain-stack`, `task:agentic-rsi-routing-posttrain`) plus fifteen methods. No false supersessions of CISPO / Muon2 / OPD / OPSA / CANOPY / Poolside / SAO / ES-reasoning / mini-SWE-agent / Iris / Uno / W2S-OPD.
 - MUST: Miles, NeoHorse-1, ThinkPrior, RouteOPD, TV-OPD, DATPO, OPRD. OPTIONAL (all landed): ACE MoE PEFT, AnLR-LoRA, KBBQ, AF1, CircuitLens, Online Draft Co-Training, DataFlex-RL, MoE sparsity HP scaling. Skipped none of the requested optionals. Already-in-library items (TGOPD, Uno, FlowBalance, Iris, sparse-OPD, OPD-then-RLVR, GAPO, RISE, layer-dropout) were not re-ingested.

@@ -94,7 +94,7 @@ OPRD is **weak-to-strong reverse distillation**. OPD matches teacher logps on st
 - Distinct from VISTA (privileged same-size gold teacher) and RISE (self-extrapolated teacher).
 
 ## Gotchas & Failure Modes
-- No official GitHub as of 2026-09-09.
+- Code: `https://github.com/raymin0223/on_policy_reverse_distillation` (early stub at 2026-09-09 ingest).
 - Tables average five checkpoints; do not compare a single OPRD best ckpt to a GRPO last ckpt.
 - Needs a teacher reference policy and a verifier. No labels → OPSA, not this.
 - Cross-generation Qwen2.5→Qwen3 was out of the teacher's useful range in the paper's prelims.

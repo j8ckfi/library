@@ -6,7 +6,7 @@ method: method:oprd
 task: task:student-distillation
 target_hardware: "same as host GRPO/OPD (paper: Qwen3 4B teacher / 8B student)"
 framework: "PyTorch / host RLVR + teacher logps"
-repo_url: "none found"
+repo_url: "https://github.com/raymin0223/on_policy_reverse_distillation"
 pip_dependencies:
   - "torch>=2.5.0"
   - "transformers>=4.51.0"
@@ -20,7 +20,8 @@ tags:
 # OPRD Reverse Distillation Recipe
 
 ## Hardware & Environment Setup
-- No official GitHub as of 2026-09-09. Needs student rollouts, a frozen teacher, the teacher's reference policy, and an outcome verifier.
+- Official code: `https://github.com/raymin0223/on_policy_reverse_distillation` (stub README at ingest; paper is arXiv:2609.08798).
+- Needs student rollouts, a frozen teacher, the teacher's reference policy, and an outcome verifier.
 - Host Pass@1 algorithm stays CISPO when you are not using a teacher shift. Matching distill stays OPD. Weak-policy matching stays W2S-OPD.
 
 ## Quickstart Implementation

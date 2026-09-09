@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "node_count": 695,
-  "edge_count": 2645,
+  "node_count": 707,
+  "edge_count": 2697,
   "nodes": [
     {
       "id": "recipe:geotransolver",
@@ -3642,6 +3642,34 @@
       "body": "# Fourier Neural Operator (FNO) Training Recipe\n\n## Hardware & Environment Setup\n- Recommended Hardware: 1x NVIDIA RTX 4090 or A100 GPU.\n- Repository: `https://github.com/neuraloperator/neuraloperator`.\n- Benchmark Data: PDEBench, 2D Darcy Flow, 2D Navier-Stokes.\n\n## Hyperparameters & Optimization\n- Loss: Relative L2 Loss (`LpLoss(d=2, p=2)`).\n- Optimizer: AdamW, lr=1e-3, weight_decay=1e-4, CosineAnnealingLR.\n- Modes: 12-16 Fourier modes, width: 32-64 channels."
     },
     {
+      "id": "recipe:rpb",
+      "type": "recipe",
+      "title": "RPB Soft Router Anchoring",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/recipes/rpb.md",
+      "metadata": {
+        "id": "recipe:rpb",
+        "type": "recipe",
+        "title": "RPB Soft Router Anchoring",
+        "method": "method:rpb",
+        "task": "task:math-code-rl-moe",
+        "target_hardware": "MoE post-train box (paper: Moonlight-16B-A3B, Qwen3-30B-A3B-Base)",
+        "framework": "PyTorch",
+        "repo_url": "https://github.com/naver-ai/rpb",
+        "pip_dependencies": [
+          "torch>=2.5.0"
+        ],
+        "tags": [
+          "recipe",
+          "rpb",
+          "moe",
+          "routing"
+        ]
+      },
+      "body": "# RPB Soft Router Anchoring\n\n## Hardware & Environment Setup\n- Claimed code: `https://github.com/naver-ai/rpb` (404 at 2026-09-09 ingest). Host MoE/VL algorithm stays SAPO; RPB only biases the router.\n- Snapshot the base router once. Do not re-enable a uniformity load-balancing loss.\n\n## Quickstart Implementation\n\n```python\nimport torch\nimport torch.nn.functional as F\n\n\ndef rpb_logit_bias(\n    live_logits: torch.Tensor,\n    prior_logits: torch.Tensor,\n    strength: float,\n) -> torch.Tensor:\n    \"\"\"Pull live router logits toward a detached base-router prior.\"\"\"\n    return live_logits + float(strength) * (prior_logits.detach() - live_logits.detach())\n\n\ndef rpb_kl_anchor(\n    live_logits: torch.Tensor,\n    prior_logits: torch.Tensor,\n) -> torch.Tensor:\n    \"\"\"Soft distributional anchor. Weight, logit, and output priors are interchangeable in the paper.\"\"\"\n    live = F.log_softmax(live_logits, dim=-1)\n    prior = F.softmax(prior_logits.detach(), dim=-1)\n    return F.kl_div(live, prior, reduction=\"batchmean\")\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Keep the constraint soft. Hard assignment of the same prior preserves communities and loses accuracy.\n- Logit, weight, and output-distribution priors are comparable; pick the one that is cheapest to store.\n- MoE/VL Pass@1 algorithm stays `method:sapo`."
+    },
+    {
       "id": "recipe:quartet-ii",
       "type": "recipe",
       "title": "Quartet-II NVFP4 Hardware Training Recipe",
@@ -4177,7 +4205,7 @@
         "task": "task:student-distillation",
         "target_hardware": "same as host GRPO/OPD (paper: Qwen3 4B teacher / 8B student)",
         "framework": "PyTorch / host RLVR + teacher logps",
-        "repo_url": "none found",
+        "repo_url": "https://github.com/raymin0223/on_policy_reverse_distillation",
         "pip_dependencies": [
           "torch>=2.5.0",
           "transformers>=4.51.0"
@@ -4189,7 +4217,7 @@
           "weak-to-strong"
         ]
       },
-      "body": "# OPRD Reverse Distillation Recipe\n\n## Hardware & Environment Setup\n- No official GitHub as of 2026-09-09. Needs student rollouts, a frozen teacher, the teacher's reference policy, and an outcome verifier.\n- Host Pass@1 algorithm stays CISPO when you are not using a teacher shift. Matching distill stays OPD. Weak-policy matching stays W2S-OPD.\n\n## Quickstart Implementation\n\n```python\nimport torch\nimport torch.nn.functional as F\n\n\ndef teacher_shift_direction(\n    teacher_logp: torch.Tensor,\n    reference_logp: torch.Tensor,\n) -> torch.Tensor:\n    \"\"\"Detached teacher policy-shift on the sampled tokens. [T].\"\"\"\n    return (teacher_logp - reference_logp).detach()\n\n\ndef verifier_token_grad(student_logp: torch.Tensor, advantage: torch.Tensor) -> torch.Tensor:\n    \"\"\"Verifier-driven per-token term. advantage is outcome group-relative, broadcast to [T].\"\"\"\n    return student_logp * advantage\n\n\ndef oprd_scale(shift: torch.Tensor, student_term: torch.Tensor, eps: float = 1e-8) -> torch.Tensor:\n    \"\"\"Keep the component of the student term along the teacher-shift direction.\n\n    Amplify only when the verifier advantage and the shift agree in sign at the sequence level.\n    \"\"\"\n    shift_n = F.normalize(shift.unsqueeze(0), dim=-1, eps=eps).squeeze(0)\n    proj = (student_term * shift_n).sum()\n    aligned = torch.relu(proj)\n    return aligned * shift_n\n\n\ndef oprd_loss(\n    student_logp: torch.Tensor,\n    teacher_logp: torch.Tensor,\n    reference_logp: torch.Tensor,\n    advantage: torch.Tensor,\n) -> torch.Tensor:\n    \"\"\"Negative aligned projection. advantage is a scalar sequence advantage.\"\"\"\n    shift = teacher_shift_direction(teacher_logp, reference_logp)\n    term = verifier_token_grad(student_logp, advantage)\n    scaled = oprd_scale(shift, term)\n    return -scaled.sum()\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Rescale verifier-supported updates only. Do not regress the student onto the weak teacher.\n- Average several checkpoints when comparing to GRPO/OPD (paper: five equally spaced).\n- Multi-teacher: pair each batch item with its specialist; do not match the full specialist policy."
+      "body": "# OPRD Reverse Distillation Recipe\n\n## Hardware & Environment Setup\n- Official code: `https://github.com/raymin0223/on_policy_reverse_distillation` (stub README at ingest; paper is arXiv:2609.08798).\n- Needs student rollouts, a frozen teacher, the teacher's reference policy, and an outcome verifier.\n- Host Pass@1 algorithm stays CISPO when you are not using a teacher shift. Matching distill stays OPD. Weak-policy matching stays W2S-OPD.\n\n## Quickstart Implementation\n\n```python\nimport torch\nimport torch.nn.functional as F\n\n\ndef teacher_shift_direction(\n    teacher_logp: torch.Tensor,\n    reference_logp: torch.Tensor,\n) -> torch.Tensor:\n    \"\"\"Detached teacher policy-shift on the sampled tokens. [T].\"\"\"\n    return (teacher_logp - reference_logp).detach()\n\n\ndef verifier_token_grad(student_logp: torch.Tensor, advantage: torch.Tensor) -> torch.Tensor:\n    \"\"\"Verifier-driven per-token term. advantage is outcome group-relative, broadcast to [T].\"\"\"\n    return student_logp * advantage\n\n\ndef oprd_scale(shift: torch.Tensor, student_term: torch.Tensor, eps: float = 1e-8) -> torch.Tensor:\n    \"\"\"Keep the component of the student term along the teacher-shift direction.\n\n    Amplify only when the verifier advantage and the shift agree in sign at the sequence level.\n    \"\"\"\n    shift_n = F.normalize(shift.unsqueeze(0), dim=-1, eps=eps).squeeze(0)\n    proj = (student_term * shift_n).sum()\n    aligned = torch.relu(proj)\n    return aligned * shift_n\n\n\ndef oprd_loss(\n    student_logp: torch.Tensor,\n    teacher_logp: torch.Tensor,\n    reference_logp: torch.Tensor,\n    advantage: torch.Tensor,\n) -> torch.Tensor:\n    \"\"\"Negative aligned projection. advantage is a scalar sequence advantage.\"\"\"\n    shift = teacher_shift_direction(teacher_logp, reference_logp)\n    term = verifier_token_grad(student_logp, advantage)\n    scaled = oprd_scale(shift, term)\n    return -scaled.sum()\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Rescale verifier-supported updates only. Do not regress the student onto the weak teacher.\n- Average several checkpoints when comparing to GRPO/OPD (paper: five equally spaced).\n- Multi-teacher: pair each batch item with its specialist; do not match the full specialist policy."
     },
     {
       "id": "recipe:cvit",
@@ -4478,6 +4506,34 @@
       "body": "# ACE MoE Adapter Consolidation\n\n## Hardware & Environment Setup\n- Code: `https://github.com/UbiquitousAILab/ACE`. EMNLP 2026.\n- Keep the global PEFT budget fixed. Raise rank inside a group as you merge experts.\n- Dense 24GB quality default stays `method:lr-matters-lora`. Do not confuse with `method:ace`.\n\n## Quickstart Implementation\n\n```python\nfrom collections import defaultdict\n\n\ndef group_shared_rank(n_experts: int, per_expert_rank: int, n_groups: int) -> int:\n    \"\"\"Move the same adapter budget into fewer, wider LoRAs.\"\"\"\n    if n_groups <= 0:\n        raise ValueError(\"n_groups must be positive\")\n    return max(1, (n_experts * per_expert_rank) // n_groups)\n\n\ndef experts_by_group(assignments: list[int]) -> dict[int, list[int]]:\n    grouped: dict[int, list[int]] = defaultdict(list)\n    for expert_id, group_id in enumerate(assignments):\n        grouped[int(group_id)].append(expert_id)\n    return dict(grouped)\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Group by adapter similarity during/after a short expert-wise warmup, then consolidate.\n- Measure wall-clock vs expert-wise LoRA; the paper's 1.31×–1.48× is the target band."
     },
     {
+      "id": "recipe:rlvr-group-correlation",
+      "type": "recipe",
+      "title": "Within-Group Verifier ICC Hygiene",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/recipes/rlvr-group-correlation.md",
+      "metadata": {
+        "id": "recipe:rlvr-group-correlation",
+        "type": "recipe",
+        "title": "Within-Group Verifier ICC Hygiene",
+        "method": "method:rlvr-group-correlation",
+        "task": "task:math-code-rl-dense",
+        "target_hardware": "CPU for ICC; GPU only if regenerating k=8 rollouts (paper: Qwen2.5-1.5B)",
+        "framework": "PyTorch optional / analysis",
+        "repo_url": "https://github.com/ethxin0011/rlvr_group_correlation",
+        "pip_dependencies": [
+          "numpy"
+        ],
+        "tags": [
+          "recipe",
+          "rlvr",
+          "verifier",
+          "hygiene"
+        ]
+      },
+      "body": "# Within-Group Verifier ICC Hygiene\n\n## Hardware & Environment Setup\n- Official analysis code: `https://github.com/ethxin0011/rlvr_group_correlation`. Pipeline stages live under `src/` (`pilot_gate.py`, `rule_verify.py`, `advantage_replay.py`).\n- This is not a trainer. Host Pass@1 stays CISPO. Do not treat k completions as independent verifier trials.\n\n## Quickstart Implementation\n\n```python\nfrom __future__ import annotations\n\n\ndef kish_n_eff(k: float, rho: float) -> float:\n    \"\"\"Design-effect-adjusted size of a k-completion group under exchangeable correlation.\"\"\"\n    rho = max(float(rho), 0.0)\n    return float(k) / (1.0 + (float(k) - 1.0) * rho)\n\n\ndef icc_oneway(groups: list[list[float]]) -> float | None:\n    \"\"\"One-way random-effects ICC(1) on per-completion error flags.\"\"\"\n    groups = [g for g in groups if len(g) > 1]\n    if len(groups) < 10:\n        return None\n    n = sum(len(g) for g in groups)\n    m = len(groups)\n    grand = sum(sum(g) for g in groups) / n\n    ssb = sum(len(g) * (sum(g) / len(g) - grand) ** 2 for g in groups)\n    ssw = sum(sum((x - sum(g) / len(g)) ** 2 for x in g) for g in groups)\n    df_b, df_w = m - 1, n - m\n    if df_b <= 0 or df_w <= 0:\n        return None\n    msb, msw = ssb / df_b, ssw / df_w\n    k_bar = (n - sum(len(g) ** 2 for g in groups) / n) / (m - 1)\n    denom = msb + (k_bar - 1) * msw\n    if denom == 0:\n        return 0.0\n    icc = (msb - msw) / denom\n    return max(-1.0, min(1.0, icc))\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Paper headline: ρ=0.530 ⇒ n_eff≈1.70 at k=8, not 8 independent scores.\n- Keep group integrity: generate all k completions in one call; drop incomplete groups rather than backfill.\n- Stratify ICC by answer form. Do not quote a single aggregate verifier error rate as independence."
+    },
+    {
       "id": "recipe:claude-computer-use",
       "type": "recipe",
       "title": "Claude computer-use on OSWorld 2.0 protocol",
@@ -4683,6 +4739,34 @@
         ]
       },
       "body": "# Factorized Fourier Neural Operator (F-FNO) Recipe\n\n## Hardware & Environment Setup\n- Recommended Hardware: 1x NVIDIA RTX 4090 or A100.\n- Repository: `https://github.com/alasdairtran/fourierflow`.\n- Data: 2D/3D Navier-Stokes turbulence datasets.\n\n## Hyperparameters & Optimization\n- Loss: Relative L2 Loss.\n- Optimizer: AdamW, lr=1e-3, cosine schedule, weight_decay=1e-4."
+    },
+    {
+      "id": "recipe:verpo",
+      "type": "recipe",
+      "title": "VERPO Evidence-Regularized PO",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/recipes/verpo.md",
+      "metadata": {
+        "id": "recipe:verpo",
+        "type": "recipe",
+        "title": "VERPO Evidence-Regularized PO",
+        "method": "method:verpo",
+        "task": "task:privileged-teacher-opsd",
+        "target_hardware": "same as host RLVR (paper: Qwen3-4B/8B, Llama-3.2-1B)",
+        "framework": "PyTorch / host RLVR trainer",
+        "repo_url": "none found",
+        "pip_dependencies": [
+          "torch>=2.5.0"
+        ],
+        "tags": [
+          "recipe",
+          "verpo",
+          "opsd",
+          "privileged-teacher"
+        ]
+      },
+      "body": "# VERPO Evidence-Regularized PO\n\n## Hardware & Environment Setup\n- No official GitHub as of 2026-09-09. Host Pass@1 algorithm stays CISPO. Privileged-teacher OPSD default stays VISTA.\n- Keep an evidence-free restoration term independent of the ZPD acceptance gate.\n\n## Quickstart Implementation\n\n```python\nimport torch\nimport torch.nn.functional as F\n\n\ndef fisher_evidence_contrast(\n    correction: torch.Tensor,\n    evidence_dir: torch.Tensor,\n    eps: float = 1e-8,\n) -> torch.Tensor:\n    \"\"\"Attenuate token corrections along an estimated evidence-presence direction.\"\"\"\n    u = F.normalize(evidence_dir.reshape(1, -1), dim=-1, eps=eps).reshape_as(evidence_dir)\n    parallel = (correction * u).sum() * u\n    return correction - parallel\n\n\ndef zpd_accept(\n    reward_align: torch.Tensor,\n    fisher_cost: torch.Tensor,\n    tau: float = 1.0,\n) -> torch.Tensor:\n    \"\"\"Stopped scalar in [0, 1]. Does not backprop into the gate.\"\"\"\n    raw = torch.sigmoid((reward_align - fisher_cost) / tau)\n    return raw.detach()\n\n\ndef verpo_token_term(\n    student_logp: torch.Tensor,\n    reference_logp: torch.Tensor,\n    evidence_logp: torch.Tensor,\n    advantage: torch.Tensor,\n    evidence_dir: torch.Tensor,\n    fisher_cost: torch.Tensor,\n) -> torch.Tensor:\n    \"\"\"Outcome term + ungated restoration + gated signed evidence correction.\"\"\"\n    restore = student_logp - reference_logp.detach()\n    signed = (evidence_logp.detach() - student_logp) * advantage\n    signed = fisher_evidence_contrast(signed, evidence_dir)\n    gate = zpd_accept(advantage, fisher_cost)\n    return -(advantage * student_logp + restore + gate * signed).sum()\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Do not let the evidence channel overwrite the outcome advantage.\n- Reference restoration stays ungated. Only the signed correction uses ZPD."
     },
     {
       "id": "recipe:qwen38-next",
@@ -5034,6 +5118,31 @@
       "body": "# Vanilla LoRA + rsLoRA Quality Recipe\n\n```python\nfrom peft import LoraConfig, get_peft_model\n\npeft_config = LoraConfig(\n    r=16,\n    lora_alpha=32,\n    use_rslora=True, # Rank-stabilized LoRA scaling\n    lora_dropout=0.05,\n    bias=\"none\",\n    target_modules=[\"q_proj\", \"k_proj\", \"v_proj\", \"o_proj\", \"gate_proj\", \"up_proj\", \"down_proj\"]\n)\n```"
     },
     {
+      "id": "recipe:opsd-collapse-review",
+      "type": "recipe",
+      "title": "OPSD Collapse Playbook (no code)",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/recipes/opsd-collapse-review.md",
+      "metadata": {
+        "id": "recipe:opsd-collapse-review",
+        "type": "recipe",
+        "title": "OPSD Collapse Playbook (no code)",
+        "method": "method:opsd-collapse-review",
+        "task": "task:privileged-teacher-opsd",
+        "target_hardware": "n/a (survey)",
+        "framework": "none",
+        "repo_url": "none found",
+        "pip_dependencies": [],
+        "tags": [
+          "recipe",
+          "opsd",
+          "survey"
+        ]
+      },
+      "body": "# OPSD Collapse Playbook (no code)\n\n## Hardware & Environment Setup\n- Survey only (`arXiv:2608.25936`). No repository.\n- Privileged-teacher first hop stays VISTA. Teacher-free stays OPSA. Pass@1 stays CISPO.\n\n## Quickstart Implementation\n\n```python\nLEVERS = (\n    \"where: token weights / keep-masks\",\n    \"what: privileged information shown to the teacher\",\n    \"when: teacher dynamics and guidance decay\",\n)\n\n\ndef route_opsd_collapse(has_gold_teacher: bool, has_labels: bool) -> str:\n    if has_labels and not has_gold_teacher:\n        return \"method:cispo\"\n    if has_gold_teacher:\n        return \"method:vista\"\n    return \"method:opsa\"\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Name which lever you are moving before adding another OPSD plug-in.\n- Do not treat GRPO entropy collapse and OPSD path collapse as interchangeable."
+    },
+    {
       "id": "recipe:f-adapter",
       "type": "recipe",
       "title": "F-Adapter (Frequency-Adaptive Fourier Operator PEFT) Recipe",
@@ -5189,8 +5298,10 @@
           "method:gspo",
           "method:qwen35-omni",
           "method:dr-grpo",
-          "method:grpo"
+          "method:grpo",
+          "method:rpb"
         ],
+        "last_reviewed": "2026-09-09",
         "tags": [
           "post-training",
           "reasoning",
@@ -5198,7 +5309,7 @@
           "sapo"
         ]
       },
-      "body": "# Mathematical and Code RL Reasoning (MoE Policies)\n\n## Problem Definition\nTraining sparse Mixture-of-Experts policies with reinforcement learning where dynamic expert routing introduces variance in token-level importance weights.\n\n## SOTA Recommendation (as of 2026-08-26)\n- **Primary Method**: **SAPO** (`method:sapo`, 2511.20347, ms-swift `loss_type=sapo`).\n- **Omni / Talker**: **GSPO** (`method:gspo`) only if training Qwen3.5-Omni Talker (`paper:qwen35-omni`)."
+      "body": "# Mathematical and Code RL Reasoning (MoE Policies)\n\n## Problem Definition\nTraining sparse Mixture-of-Experts policies with reinforcement learning where dynamic expert routing introduces variance in token-level importance weights.\n\n## SOTA Recommendation (as of 2026-08-26)\n- **Primary Method**: **SAPO** (`method:sapo`, 2511.20347, ms-swift `loss_type=sapo`).\n- **Omni / Talker**: **GSPO** (`method:gspo`) only if training Qwen3.5-Omni Talker (`paper:qwen35-omni`).\n- **Optional router soft-anchor**: `method:rpb` (`arXiv:2609.08115`). Active MoE post-train routing candidate. Does not replace SAPO."
     },
     {
       "id": "task:operator-fourier-adapt",
@@ -6745,7 +6856,9 @@
           "method:thinkprior",
           "method:datpo",
           "method:circuitlens",
-          "method:dataflex-rl"
+          "method:dataflex-rl",
+          "method:verpo",
+          "method:rlvr-group-correlation"
         ],
         "last_reviewed": "2026-09-09",
         "tags": [
@@ -6756,7 +6869,7 @@
           "cispo"
         ]
       },
-      "body": "# Mathematical and Code RL Reasoning (Dense Policies)\n\n## Problem Definition\nTraining dense language models to generate long chains of thought (CoT) and verifiable solutions for competitive math and coding problems.\n\n## SOTA Recommendation (as of 2026-09-09)\n- **Primary Method (Pass@1 labeled RLVR)**: **CISPO** (`method:cispo`, MiniMax-M1 2506.13585 + ScaleRL 2510.13786). Unchanged.\n- **Systems Reference**: DAPO stays as systems paper reference. GRPO stays retired.\n- **Related alternative (Pass@K / coverage / no-backward)**: `method:es-reasoning` (`arXiv:2608.27351`). Do not swap CISPO for ES or revive GRPO when the goal is Pass@1. Tree-rollout coverage sibling: `method:datpo` (`arXiv:2609.08650`) on `task:passk-reasoning-coverage`.\n- **Optional token-filter plug-in**: `method:gmts` (`arXiv:2608.30632`) when using GRPO/DAPO/CISPO-family token truncation. Does not replace CISPO.\n- **Optional example-reweight plug-in**: `method:diem` (`arXiv:2608.29252`) gradient-alignment batch reweight. Does not replace CISPO.\n- **Optional first-mistake process credit**: `method:cliff` (`arXiv:2609.02817`). Active plug-in, not a PRM, not a CISPO replacement. VeriGate remains the gated-PRM default.\n- **Optional sample-level recipe router**: `method:self-routing` (`arXiv:2609.01422`) GRPO / OPSD / REG / skip from rollout correctness+confidence. Does not replace CISPO or OPSA.\n- **Optional adaptive IS clip**: `method:gapo` (`arXiv:2609.00444`, EMNLP 2026 Main) widens the GRPO/GSPO clip on scarce-correct hard-problem rollouts. Active plug-in. Does not replace CISPO.\n- **Optional cold-start prompt prior**: `method:thinkprior` (`arXiv:2609.09075`) zero-rollout Beta difficulty prior. Cuts silent-group waste; no detected final-accuracy gain. Does not replace CISPO or GAPO.\n- **Optional circuit data-selection signal**: `method:circuitlens` (`arXiv:2609.07183`, EMNLP 2026 Findings). Low-engagement decile can win on 7B medium math; regime-dependent.\n- **Negative-result data-policy platform**: `method:dataflex-rl` (`arXiv:2609.06107`) — RLVR data policies do not beat uniform GRPO at 95% CI in that study.\n- **Related RLVR+self-OPD loop**: `method:rise` (`arXiv:2609.05295`) builds a synthetic teacher from the model's own RLVR trajectory. Does not replace CISPO, OPD, or OPSA.\n- **Optional verifier-grounded self-improvement**: `method:flowbalance` (`arXiv:2609.03241`) privileged same-model trajectory balance, sign-gated by group advantage. Does not replace CISPO, OPSA, OPD, VISTA, RISE, or CANOPY.\n- **Optional OPD teacher-reliability gate**: `method:tgopd` (`arXiv:2609.02998`) on `task:student-distillation`. Prompt-level probes then dense OPD or GRPO. Does not replace CISPO or OPD.\n- **Optional sparse OPD token mask**: `method:sparse-opd-supervision` (`arXiv:2609.04565`). Does not replace CISPO or OPD.\n- **Optional OPD-then-RL stack**: `method:opd-then-rlvr` (`arXiv:2609.04108`) when both OPD and RLVR will run; sequence them, do not fuse in one step. Stage-2 Pass@1 algorithm stays CISPO. Does not replace CISPO or OPD.\n- **No labels / no teacher**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace CISPO when labels exist.\n- **Gotcha**: group-relative magnitude can reward lucky guesses on bounded-answer / search-agent settings (`paper:spurious-advantage-grpo`). Do not promote SignBalance over CISPO."
+      "body": "# Mathematical and Code RL Reasoning (Dense Policies)\n\n## Problem Definition\nTraining dense language models to generate long chains of thought (CoT) and verifiable solutions for competitive math and coding problems.\n\n## SOTA Recommendation (as of 2026-09-09)\n- **Primary Method (Pass@1 labeled RLVR)**: **CISPO** (`method:cispo`, MiniMax-M1 2506.13585 + ScaleRL 2510.13786). Unchanged.\n- **Systems Reference**: DAPO stays as systems paper reference. GRPO stays retired.\n- **Related alternative (Pass@K / coverage / no-backward)**: `method:es-reasoning` (`arXiv:2608.27351`). Do not swap CISPO for ES or revive GRPO when the goal is Pass@1. Tree-rollout coverage sibling: `method:datpo` (`arXiv:2609.08650`) on `task:passk-reasoning-coverage`.\n- **Optional token-filter plug-in**: `method:gmts` (`arXiv:2608.30632`) when using GRPO/DAPO/CISPO-family token truncation. Does not replace CISPO.\n- **Optional example-reweight plug-in**: `method:diem` (`arXiv:2608.29252`) gradient-alignment batch reweight. Does not replace CISPO.\n- **Optional first-mistake process credit**: `method:cliff` (`arXiv:2609.02817`). Active plug-in, not a PRM, not a CISPO replacement. VeriGate remains the gated-PRM default.\n- **Optional sample-level recipe router**: `method:self-routing` (`arXiv:2609.01422`) GRPO / OPSD / REG / skip from rollout correctness+confidence. Does not replace CISPO or OPSA.\n- **Optional adaptive IS clip**: `method:gapo` (`arXiv:2609.00444`, EMNLP 2026 Main) widens the GRPO/GSPO clip on scarce-correct hard-problem rollouts. Active plug-in. Does not replace CISPO.\n- **Optional cold-start prompt prior**: `method:thinkprior` (`arXiv:2609.09075`) zero-rollout Beta difficulty prior. Cuts silent-group waste; no detected final-accuracy gain. Does not replace CISPO or GAPO.\n- **Optional circuit data-selection signal**: `method:circuitlens` (`arXiv:2609.07183`, EMNLP 2026 Findings). Low-engagement decile can win on 7B medium math; regime-dependent.\n- **Negative-result data-policy platform**: `method:dataflex-rl` (`arXiv:2609.06107`) — RLVR data policies do not beat uniform GRPO at 95% CI in that study.\n- **Related RLVR+self-OPD loop**: `method:rise` (`arXiv:2609.05295`) builds a synthetic teacher from the model's own RLVR trajectory. Does not replace CISPO, OPD, or OPSA.\n- **Optional verifier-grounded self-improvement**: `method:flowbalance` (`arXiv:2609.03241`) privileged same-model trajectory balance, sign-gated by group advantage. Does not replace CISPO, OPSA, OPD, VISTA, RISE, or CANOPY.\n- **Optional verified-evidence regularizer**: `method:verpo` (`arXiv:2609.06100`) on `task:privileged-teacher-opsd`. Evidence as a proposal, not CISPO.\n- **Gotcha**: group-relative magnitude can reward lucky guesses on bounded-answer / search-agent settings (`paper:spurious-advantage-grpo`). Do not promote SignBalance over CISPO.\n- **Gotcha (verifier ICC)**: within-group verifier errors are correlated (ρ≈0.53, Kish n_eff≈1.70 at k=8; `method:rlvr-group-correlation`, arXiv:2609.06386). Not an optimizer.\n- **Optional OPD teacher-reliability gate**: `method:tgopd` (`arXiv:2609.02998`) on `task:student-distillation`. Prompt-level probes then dense OPD or GRPO. Does not replace CISPO or OPD.\n- **Optional sparse OPD token mask**: `method:sparse-opd-supervision` (`arXiv:2609.04565`). Does not replace CISPO or OPD.\n- **Optional OPD-then-RL stack**: `method:opd-then-rlvr` (`arXiv:2609.04108`) when both OPD and RLVR will run; sequence them, do not fuse in one step. Stage-2 Pass@1 algorithm stays CISPO. Does not replace CISPO or OPD.\n- **No labels / no teacher**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace CISPO when labels exist."
     },
     {
       "id": "task:4bit-peft-quantization",
@@ -7188,9 +7301,10 @@
           "method:opd",
           "method:cispo",
           "method:rise",
-          "method:flowbalance"
+          "method:flowbalance",
+          "method:opsd-collapse-review"
         ],
-        "last_reviewed": "2026-09-08",
+        "last_reviewed": "2026-09-09",
         "tags": [
           "post-training",
           "on-policy",
@@ -7200,7 +7314,7 @@
           "opsa"
         ]
       },
-      "body": "# Teacher-Free Label-Free On-Policy Self-Adaptation\n\n## Problem Definition\nImprove a reasoning policy at train time using only on-policy rollouts and the policy's own token log-probabilities and entropies. No teacher logits, no verifiable outcome reward, no hint-conditioned self-teacher, and no majority-vote pseudo-solution. The typical failure of nearby methods is either requiring external supervision (OPD, RLVR) or collapsing Pass@K by sharpening around a consensus mode (TTRL-style self-reward).\n\n## Evaluation Protocol & Benchmarks\n- **Primary Benchmarks**: AIME24, AIME25, HMMT25 Avg@32 and Pass@32 on Qwen3 / Qwen3.5 non-thinking models trained on DAPO-17k questions only.\n- **Evaluation Pitfalls**: Do not treat OPSA wins over OPD as a reason to drop teachers when the actual goal is knowledge transfer. Do not swap CISPO for OPSA when labels exist.\n\n## SOTA Recommendation (as of 2026-09-08)\n- **Primary Method**: **OPSA** (`method:opsa`, `paper:opsa` `arXiv:2608.31046`) for supervision-free entropy-adaptive negative advantages on the lowest-logp tokens.\n- **Not This Task**: `method:cispo` remains labeled dense RLVR; `method:opd` remains single-teacher distillation; `method:u-opsd` remains unlabeled consensus distillation; `method:ttpo` remains test-time; `method:j-zero` remains data-free self-evolution; `method:self-opd` remains flow matching.\n- **Adjacent router (not this method)**: `method:self-routing` still needs a verifier and gold answers for its OPSD branch. It does not replace OPSA.\n- **Adjacent RLVR-grounded synthetic teacher (not this method)**: `method:rise` still needs outcome-verified RLVR. It does not replace OPSA.\n- **Adjacent verifier-grounded self-improvement (not this method)**: `method:flowbalance` needs a verifier and privileged hindsight. It does not replace OPSA."
+      "body": "# Teacher-Free Label-Free On-Policy Self-Adaptation\n\n## Problem Definition\nImprove a reasoning policy at train time using only on-policy rollouts and the policy's own token log-probabilities and entropies. No teacher logits, no verifiable outcome reward, no hint-conditioned self-teacher, and no majority-vote pseudo-solution. The typical failure of nearby methods is either requiring external supervision (OPD, RLVR) or collapsing Pass@K by sharpening around a consensus mode (TTRL-style self-reward).\n\n## Evaluation Protocol & Benchmarks\n- **Primary Benchmarks**: AIME24, AIME25, HMMT25 Avg@32 and Pass@32 on Qwen3 / Qwen3.5 non-thinking models trained on DAPO-17k questions only.\n- **Evaluation Pitfalls**: Do not treat OPSA wins over OPD as a reason to drop teachers when the actual goal is knowledge transfer. Do not swap CISPO for OPSA when labels exist.\n\n## SOTA Recommendation (as of 2026-09-08)\n- **Primary Method**: **OPSA** (`method:opsa`, `paper:opsa` `arXiv:2608.31046`) for supervision-free entropy-adaptive negative advantages on the lowest-logp tokens.\n- **Not This Task**: `method:cispo` remains labeled dense RLVR; `method:opd` remains single-teacher distillation; `method:u-opsd` remains unlabeled consensus distillation; `method:ttpo` remains test-time; `method:j-zero` remains data-free self-evolution; `method:self-opd` remains flow matching.\n- **Adjacent router (not this method)**: `method:self-routing` still needs a verifier and gold answers for its OPSD branch. It does not replace OPSA.\n- **Adjacent RLVR-grounded synthetic teacher (not this method)**: `method:rise` still needs outcome-verified RLVR. It does not replace OPSA.\n- **Adjacent verifier-grounded self-improvement (not this method)**: `method:flowbalance` needs a verifier and privileged hindsight. It does not replace OPSA.\n- **OPSD collapse playbook (survey, not this method)**: `method:opsd-collapse-review` (`arXiv:2608.25936`). Privileged-info collapse vs OPSA's teacher-free shelf."
     },
     {
       "id": "task:agent-harness-runtime",
@@ -7976,7 +8090,7 @@
           "opd"
         ]
       },
-      "body": "# Small Local Student Distillation from Strong Teacher\n\n## Problem Definition\nTraining small local students (1B–8B) from large teacher models (70B–405B) with generalized on-policy divergence matching.\n\n## SOTA Recommendation (as of 2026-09-09)\n- **Single-Teacher Distillation Default**: **OPD** (`method:opd`, `paper:opd` `arXiv:2604.13016`). Unchanged.\n- **Multi-Teacher Student Distillation Default**: **Open-MOPD** (`method:open-mopd`, `paper:open-mopd` `arXiv:2608.19098`) for token-share balancing, gap-aware dynamic budget allocation, and student reward refresh across specialized teacher models.\n- **Related alternative**: Use `method:vista` instead when the teacher is a privileged same-model copy that sees the gold solution (not a larger frozen teacher). OPD remains the student-distillation default.\n- **Optional teacher-OPD filter**: `method:ra-opd` (`arXiv:2608.27960`) keeps trajectories with sign-agree teacher return vs outcome reward. Does not replace OPD.\n- **Optional sampled-token entropy plug-in**: `method:ida-opd` (`arXiv:2608.29846`) keeps entropy-expanding $A_y$ and shrinks $\\mathcal{I}_H<0$ by $|q-p|/(q+p)$. Does not replace OPD or CISPO.\n- **Optional probability-transport plug-in**: `method:routeopd` (`arXiv:2609.08337`) pairwise log-odds transport vs sampled reverse-KL. Does not replace OPD.\n- **Optional TV-shaped stability plug-in**: `method:tv-opd` (`arXiv:2609.08341`) sign of token advantages plus a shared TV scale. Relate to RA-OPD / TrOPD / Stable-OPD without supersession.\n- **Optional reverse distillation (weak-to-strong)**: `method:oprd` (`arXiv:2609.08798`) amplifies verifier-supported student gradients along the teacher policy-shift. Distinct from `method:w2s-opd` (matching). Does not replace OPD or CISPO.\n- **Data-efficiency note**: `method:opd-one-example` (`arXiv:2609.04172`) — one query recovers most full-data OPD; ~16 diverse queries ≈ full-data / MOPD. Does not replace OPD.\n- **Data-selection sibling**: `method:opd-hard-cot-selection` (`arXiv:2609.05198`) — hard/long-CoT examples drive OPD gains (not high token entropy); 8 hard can match 17K. Does not replace OPD or OPD-II.\n- **Related self-extrapolating teacher**: `method:rise` (`arXiv:2609.05295`) synthesizes an OPD teacher from the student's RLVR trajectory. No external teacher. Does not replace OPD, CISPO, or OPSA.\n- **Tool-using OPKD**: `method:pta` (`arXiv:2609.04773`, EMNLP 2026 Main) — student-induced but teacher-committed rollouts; tool calls execute only after the teacher verifies the turn. Pre-RL distill for Search-R1 / DeepEyes. Does not replace OPD for text-only distillation.\n- **Optional prompt-level teacher gate**: `method:tgopd` (`arXiv:2609.02998`) admits dense OPD only after verifier-scored teacher probes pass; else GRPO. Sibling of RA-OPD / IDA-OPD / VISTA. Does not replace OPD, CISPO, OPSA, or Open-MOPD.\n- **Optional sparse token-budget plug-in**: `method:sparse-opd-supervision` (`arXiv:2609.04565`) supervises 1–2 tokens per trajectory (~0.05%) and can match/beat full-token OPD. Does not replace OPD or CISPO.\n- **Optional stacking order when both OPD and RLVR will run**: `method:opd-then-rlvr` (`arXiv:2609.04108`) — OPD then RL, not joint one-step fusion. Does not replace OPD or CISPO.\n- **No teacher / no labels**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace OPD when a strong teacher is the goal."
+      "body": "# Small Local Student Distillation from Strong Teacher\n\n## Problem Definition\nTraining small local students (1B–8B) from large teacher models (70B–405B) with generalized on-policy divergence matching.\n\n## SOTA Recommendation (as of 2026-09-09)\n- **Single-Teacher Distillation Default**: **OPD** (`method:opd`, `paper:opd` `arXiv:2604.13016`). Unchanged.\n- **Multi-Teacher Student Distillation Default**: **Open-MOPD** (`method:open-mopd`, `paper:open-mopd` `arXiv:2608.19098`) for token-share balancing, gap-aware dynamic budget allocation, and student reward refresh across specialized teacher models.\n- **Related alternative**: Use `method:vista` instead when the teacher is a privileged same-model copy that sees the gold solution (not a larger frozen teacher). OPD remains the student-distillation default.\n- **Optional teacher-OPD filter**: `method:ra-opd` (`arXiv:2608.27960`) keeps trajectories with sign-agree teacher return vs outcome reward. Does not replace OPD.\n- **Optional sampled-token entropy plug-in**: `method:ida-opd` (`arXiv:2608.29846`) keeps entropy-expanding $A_y$ and shrinks $\\mathcal{I}_H<0$ by $|q-p|/(q+p)$. Does not replace OPD or CISPO.\n- **Optional probability-transport plug-in**: `method:routeopd` (`arXiv:2609.08337`) pairwise log-odds transport vs sampled reverse-KL. Does not replace OPD.\n- **Optional TV-shaped stability plug-in**: `method:tv-opd` (`arXiv:2609.08341`) sign of token advantages plus a shared TV scale. Relate to RA-OPD / TrOPD / Stable-OPD without supersession.\n- **Optional reverse distillation (weak-to-strong)**: `method:oprd` (`arXiv:2609.08798`, code raymin0223/on_policy_reverse_distillation) amplifies verifier-supported student gradients along the teacher policy-shift. Distinct from `method:w2s-opd` (matching). Does not replace OPD or CISPO.\n- **Data-efficiency note**: `method:opd-one-example` (`arXiv:2609.04172`) — one query recovers most full-data OPD; ~16 diverse queries ≈ full-data / MOPD. Does not replace OPD.\n- **Data-selection sibling**: `method:opd-hard-cot-selection` (`arXiv:2609.05198`) — hard/long-CoT examples drive OPD gains (not high token entropy); 8 hard can match 17K. Does not replace OPD or OPD-II.\n- **Related self-extrapolating teacher**: `method:rise` (`arXiv:2609.05295`) synthesizes an OPD teacher from the student's RLVR trajectory. No external teacher. Does not replace OPD, CISPO, or OPSA.\n- **Tool-using OPKD**: `method:pta` (`arXiv:2609.04773`, EMNLP 2026 Main) — student-induced but teacher-committed rollouts; tool calls execute only after the teacher verifies the turn. Pre-RL distill for Search-R1 / DeepEyes. Does not replace OPD for text-only distillation.\n- **Optional prompt-level teacher gate**: `method:tgopd` (`arXiv:2609.02998`) admits dense OPD only after verifier-scored teacher probes pass; else GRPO. Sibling of RA-OPD / IDA-OPD / VISTA. Does not replace OPD, CISPO, OPSA, or Open-MOPD.\n- **Optional sparse token-budget plug-in**: `method:sparse-opd-supervision` (`arXiv:2609.04565`) supervises 1–2 tokens per trajectory (~0.05%) and can match/beat full-token OPD. Does not replace OPD or CISPO.\n- **Optional stacking order when both OPD and RLVR will run**: `method:opd-then-rlvr` (`arXiv:2609.04108`) — OPD then RL, not joint one-step fusion. Does not replace OPD or CISPO.\n- **No teacher / no labels**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace OPD when a strong teacher is the goal."
     },
     {
       "id": "task:learned-video-compression",
@@ -8286,9 +8400,11 @@
           "method:opd",
           "method:opdvr",
           "method:u-opsd",
-          "method:flowbalance"
+          "method:flowbalance",
+          "method:verpo",
+          "method:opsd-collapse-review"
         ],
-        "last_reviewed": "2026-09-08",
+        "last_reviewed": "2026-09-09",
         "tags": [
           "post-training",
           "distillation",
@@ -8298,7 +8414,7 @@
           "vista"
         ]
       },
-      "body": "# Privileged-Teacher On-Policy Self-Distillation\n\n## Problem Definition\nTrain a problem-only student on its own rollouts using dense token-level targets from a same-size teacher that also sees a gold reference solution. The teacher is a privileged copy of the student, not a larger frozen model. A deterministic outcome verifier is available. Vanilla OPSD treats that privileged distribution as a fixed target at every student prefix; the teacher can then over-support reference-specific tokens or suppress valid student continuations.\n\n## Evaluation Protocol\n- **Primary Benchmarks**: AIME 2024, AIME 2025, HMMT 2025 Avg@12 on Qwen3 instruct models.\n- **Evaluation Pitfalls**: Do not treat this task as single-teacher student distillation from a frontier model (`task:student-distillation` / `method:opd`) or as OPD+RLVR with an external teacher (`task:distill-reasoner-verifier` / `method:opdvr`).\n\n## SOTA Recommendation (as of 2026-09-08)\n- **Primary Method**: **VISTA** (`method:vista`, `paper:vista` `arXiv:2608.28306`) for verifier-informed student-to-teacher adaptation on privileged-teacher OPSD.\n- **Not This Task**: `method:opd` remains the single-teacher student-distillation default; `method:opdvr` remains the OPD+RLVR default; `method:u-opsd` remains the unlabeled/no-GT default.\n- **Adjacent inner-loop (not this method)**: `method:flowbalance` uses privileged hindsight as a stopped trajectory-balance feature, not a teacher update. VISTA stays this task's first hop."
+      "body": "# Privileged-Teacher On-Policy Self-Distillation\n\n## Problem Definition\nTrain a problem-only student on its own rollouts using dense token-level targets from a same-size teacher that also sees a gold reference solution. The teacher is a privileged copy of the student, not a larger frozen model. A deterministic outcome verifier is available. Vanilla OPSD treats that privileged distribution as a fixed target at every student prefix; the teacher can then over-support reference-specific tokens or suppress valid student continuations.\n\n## Evaluation Protocol\n- **Primary Benchmarks**: AIME 2024, AIME 2025, HMMT 2025 Avg@12 on Qwen3 instruct models.\n- **Evaluation Pitfalls**: Do not treat this task as single-teacher student distillation from a frontier model (`task:student-distillation` / `method:opd`) or as OPD+RLVR with an external teacher (`task:distill-reasoner-verifier` / `method:opdvr`).\n\n## SOTA Recommendation (as of 2026-09-08)\n- **Primary Method**: **VISTA** (`method:vista`, `paper:vista` `arXiv:2608.28306`) for verifier-informed student-to-teacher adaptation on privileged-teacher OPSD.\n- **Not This Task**: `method:opd` remains the single-teacher student-distillation default; `method:opdvr` remains the OPD+RLVR default; `method:u-opsd` remains the unlabeled/no-GT default.\n- **Adjacent inner-loop (not this method)**: `method:flowbalance` uses privileged hindsight as a stopped trajectory-balance feature, not a teacher update. VISTA stays this task's first hop.\n- **Optional evidence-regularized sibling**: `method:verpo` (`arXiv:2609.06100`). Treats privileged evidence as a proposal on an outcome objective. Does not replace VISTA or CISPO.\n- **Collapse playbook (survey)**: `method:opsd-collapse-review` (`arXiv:2608.25936`). Three levers; no code. Does not replace VISTA."
     },
     {
       "id": "task:training-data-attribution",
@@ -16484,7 +16600,7 @@
           "oprd"
         ]
       },
-      "body": "# Eliciting Weak-to-Strong Generalization with On-Policy Reverse Distillation\n\n## Abstract Summary\nWeak-to-strong generalization asks whether a stronger student can learn from a weaker supervisor and surpass it. Conventional distillation treats the weak teacher as an optimization target and can impose its ceiling. On-Policy Reverse Distillation (OPRD) evaluates the teacher's policy shift relative to its reference on student rollouts and amplifies the component of the student's verifier-driven policy gradient along that direction. Only verifier-supported updates are rescaled, so the stationary points of policy optimization are preserved while learning can continue past the teacher. On successive 4B→8B transfer, multi-teacher consolidation, and even strong-to-weak distillation, OPRD beats GRPO, OPD, KDRL, MOPD, and the paper's W2S-OPD reimplementation, with fewer student updates to GRPO's end-of-training level.\n\n## Key Contributions\n1. **Reverse distillation**: teacher shift as a direction for the student's verifier gradient, not a matching target.\n2. **Verifier gate**: amplify only reward-supported components; stationary points of RLVR stay.\n3. **Works across capacity order**: weak-to-strong, multi-teacher, and strong-to-weak.\n4. **Distinct from W2S-OPD**: Table 3 compares OPRD 60.81 vs W2S-OPD 49.22 on the paper's 4B→8B mix.\n\n## Empirical Highlights\n- 4B→8B math Mean@16 avg: OPRD 51.91 vs KDRL 43.99 vs OPD 39.44 vs GRPO 39.38 vs teacher 38.66 (Table 1). AIME'24 66.92 vs KDRL 53.46.\n- Reasoning Gym Pass@1 avg: OPRD 55.18 vs KDRL 44.38 vs OPD 42.83.\n- Multi-teacher 4×4B→8B: OPRD 58.77 vs Mix-RL 47.68 vs specialist mean 44.65 (Table 2).\n- Strong-to-weak avg: OPRD 41.49 vs KDRL 29.52 vs OPD 25.00.\n\n## Open Source Repository & Resources\n- No official GitHub as of 2026-09-09."
+      "body": "# Eliciting Weak-to-Strong Generalization with On-Policy Reverse Distillation\n\n## Abstract Summary\nWeak-to-strong generalization asks whether a stronger student can learn from a weaker supervisor and surpass it. Conventional distillation treats the weak teacher as an optimization target and can impose its ceiling. On-Policy Reverse Distillation (OPRD) evaluates the teacher's policy shift relative to its reference on student rollouts and amplifies the component of the student's verifier-driven policy gradient along that direction. Only verifier-supported updates are rescaled, so the stationary points of policy optimization are preserved while learning can continue past the teacher. On successive 4B→8B transfer, multi-teacher consolidation, and even strong-to-weak distillation, OPRD beats GRPO, OPD, KDRL, MOPD, and the paper's W2S-OPD reimplementation, with fewer student updates to GRPO's end-of-training level.\n\n## Key Contributions\n1. **Reverse distillation**: teacher shift as a direction for the student's verifier gradient, not a matching target.\n2. **Verifier gate**: amplify only reward-supported components; stationary points of RLVR stay.\n3. **Works across capacity order**: weak-to-strong, multi-teacher, and strong-to-weak.\n4. **Distinct from W2S-OPD**: Table 3 compares OPRD 60.81 vs W2S-OPD 49.22 on the paper's 4B→8B mix.\n\n## Empirical Highlights\n- 4B→8B math Mean@16 avg: OPRD 51.91 vs KDRL 43.99 vs OPD 39.44 vs GRPO 39.38 vs teacher 38.66 (Table 1). AIME'24 66.92 vs KDRL 53.46.\n- Reasoning Gym Pass@1 avg: OPRD 55.18 vs KDRL 44.38 vs OPD 42.83.\n- Multi-teacher 4×4B→8B: OPRD 58.77 vs Mix-RL 47.68 vs specialist mean 44.65 (Table 2).\n- Strong-to-weak avg: OPRD 41.49 vs KDRL 29.52 vs OPD 25.00.\n\n## Open Source Repository & Resources\n- Code: `https://github.com/raymin0223/on_policy_reverse_distillation`"
     },
     {
       "id": "paper:ace-moe-peft",
@@ -16764,6 +16880,160 @@
         ]
       },
       "body": "# Hyperparameter Scaling Laws Across MoE Sparsity\n\n## Abstract Summary\nOptimal LR and batch size for MoE shift with activation ratio and are not explained by total or activated parameter count alone. 1,800 pretrain runs, six activated-parameter scales, up to 6B non-embedding params, ~20T tokens, 200,000 H800-GPU-hours. Two regimes: at fixed sparsity, optimal batch size power-laws with tokens D while optimal LR scales with compute C (robust to size/data split); across sparsity, activation ratio A is an extra multiplicative power-law factor. Unified laws transfer; a held-out 12B total / 1/64 activated MoE stays near the predicted optima. Guidance for MoE pretrain HPs. Does not replace DeepSeek-V4 / Kimi-K3 architecture or Muon2.\n\n## Key Contributions\n1. **Sparsity-dependent HP transfer** beyond param-count laws.\n2. **Two regimes**: B*(D) at fixed sparsity; η*(C); A as a multiplicative factor.\n3. **Held-out 12B 1/64 MoE** near predicted optima.\n\n## Empirical Highlights\n- 1,800 runs / ~20T tokens / 200k H800-hours.\n- Predicted HPs remain close to observed optima on a held-out ultra-sparse 12B.\n\n## Open Source Repository & Resources\n- No official GitHub as of 2026-09-09."
+    },
+    {
+      "id": "paper:verpo",
+      "type": "paper",
+      "title": "VERPO: Verified Evidence Regularized Policy Optimization",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/papers/verpo.md",
+      "metadata": {
+        "id": "paper:verpo",
+        "type": "paper",
+        "title": "VERPO: Verified Evidence Regularized Policy Optimization",
+        "authors": [
+          "Haijiang Li",
+          "Chengyu Lv",
+          "Yi Zhang",
+          "Zhibing Zhang",
+          "Rui Qian",
+          "Yuchen Zhang",
+          "Xiaofan Zhang",
+          "Mingshan Wang",
+          "Xiaofei Jing",
+          "Yu Tong",
+          "Cangqi Zhou"
+        ],
+        "year": 2026,
+        "month": 9,
+        "arxiv_id": "2609.06100",
+        "url": "https://arxiv.org/abs/2609.06100",
+        "methods": [
+          "method:verpo"
+        ],
+        "cites": [
+          "paper:grpo",
+          "paper:vista"
+        ],
+        "tags": [
+          "post-training",
+          "opsd",
+          "privileged-teacher",
+          "verpo"
+        ]
+      },
+      "body": "# VERPO: Verified Evidence Regularized Policy Optimization\n\n## Abstract Summary\nSequence-level verifiable rewards do not say which tokens to keep. Evidence-conditioned teachers replay sampled trajectories with privileged feedback, but naive imitation copies formatting and style that do not support success. VERPO treats evidence as a *proposal* for policy correction while keeping the outcome objective. It splits evidence-free reference restoration from signed token-level evidence corrections, attenuates corrections along a Fisher evidence-presence direction, and uses a stopped token-wise ZPD controller so acceptance tracks local reward alignment and Fisher movement cost. The reference channel does not depend on acceptance.\n\n## Key Contributions\n1. **Proposal, not target**: privileged evidence proposes token corrections; the outcome objective stays.\n2. **Two channels**: evidence-free restoration vs signed evidence corrections.\n3. **Fisher Evidence Contrast + ZPD**: attenuate and gate which corrections are accepted.\n\n## Empirical Highlights\n- Five scientific-reasoning and tool-use tasks. Best variant vs strongest compared baseline, average score: Qwen3-4B 0.6826→0.6857; Qwen3-8B 0.6895→0.7058; Llama-3.2-1B 0.4751→0.5657.\n\n## Open Source Repository & Resources\n- No official GitHub as of 2026-09-09."
+    },
+    {
+      "id": "paper:rpb",
+      "type": "paper",
+      "title": "Router Prior Bias: Preserving Base Routing Structure in MoE Post-Training",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/papers/rpb.md",
+      "metadata": {
+        "id": "paper:rpb",
+        "type": "paper",
+        "title": "Router Prior Bias: Preserving Base Routing Structure in MoE Post-Training",
+        "authors": [
+          "Jaedeok Lee",
+          "Keonwoo Kim",
+          "Dongyoon Han",
+          "Sangdoo Yun",
+          "Yera Choi",
+          "Haanju Yoo"
+        ],
+        "year": 2026,
+        "month": 9,
+        "arxiv_id": "2609.08115",
+        "url": "https://arxiv.org/abs/2609.08115",
+        "methods": [
+          "method:rpb"
+        ],
+        "cites": [],
+        "tags": [
+          "post-training",
+          "moe",
+          "routing",
+          "rpb"
+        ]
+      },
+      "body": "# Router Prior Bias: Preserving Base Routing Structure in MoE Post-Training\n\n## Abstract Summary\nMoE pretraining uses a load-balancing loss to push expert utilization toward uniformity. Post-training inherits a different situation: the base router already encodes non-uniform expert co-activation, which a re-imposed uniformity objective flattens. Router Prior Bias (RPB) is a training-time bias that pulls router logits toward a prior read from the frozen base router while leaving the router trainable (soft router anchoring). Weight, logit, and output-distribution anchors perform comparably; the effect is the softness of the constraint. Hard assignment of the same prior preserves community structure but drops downstream accuracy.\n\n## Key Contributions\n1. **Soft router anchoring** as the post-train principle, vs re-applied LBL or unanchored FT.\n2. **RPB**: bias toward a frozen-base prior; router stays trainable.\n3. **Community structure is a footprint**, not the mechanism: hard assignment keeps communities and still loses.\n\n## Empirical Highlights\n- Moonlight-16B-A3B math post-train: RPB 45.77 in-domain vs re-applied LBL 31.91 vs unanchored FT 29.44; more OOD retained than either.\n- Ordering vs LBL reproduces on Qwen3-30B-A3B-Base; LBL gap also on an independently sourced corpus.\n\n## Open Source Repository & Resources\n- Claimed code: `https://github.com/naver-ai/rpb` (404 at 2026-09-09 ingest; paper says code will be released)."
+    },
+    {
+      "id": "paper:rlvr-group-correlation",
+      "type": "paper",
+      "title": "Are Verifier Errors Independent Within a GRPO Group? Evidence from Qwen2.5 Rollouts",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/papers/rlvr-group-correlation.md",
+      "metadata": {
+        "id": "paper:rlvr-group-correlation",
+        "type": "paper",
+        "title": "Are Verifier Errors Independent Within a GRPO Group? Evidence from Qwen2.5 Rollouts",
+        "authors": [
+          "Esther Xin"
+        ],
+        "year": 2026,
+        "month": 9,
+        "arxiv_id": "2609.06386",
+        "url": "https://arxiv.org/abs/2609.06386",
+        "methods": [
+          "method:rlvr-group-correlation",
+          "method:grpo",
+          "method:cispo"
+        ],
+        "cites": [
+          "paper:grpo"
+        ],
+        "tags": [
+          "post-training",
+          "rlvr",
+          "verifier",
+          "gotcha",
+          "rlvr-group-correlation"
+        ]
+      },
+      "body": "# Are Verifier Errors Independent Within a GRPO Group?\n\n## Abstract Summary\nGroup RLVR scores several completions per prompt with an automatic verifier. Analyses that treat verifier errors as independent miss dependence from shared answer form. On 24,998 groups of eight Qwen2.5-1.5B completions (MATH, GSM8K, DeepMath-103K), pooled within-group verifier-error correlation is 0.530 (95% CI 0.500–0.560), a Kish effective sample size of 1.70 for an eight-completion group. Fractions, radicals, symbolic expressions, and intervals cluster more than unit annotations and percent signs. Replaying group-relative advantages across four rule-based verifier configs finds at least one advantage-sign disagreement in up to 0.83% of groups. This is a hygiene / analysis result, not an optimizer.\n\n## Key Contributions\n1. **Within-group ICC**: ρ≈0.53 on real k=8 rollouts; n_eff≈1.70, not 8.\n2. **Answer-form dependence**: structurally complex forms cluster; whitespace/punctuation do not drive the headline ρ.\n3. **Advantage-sign replay**: verifier-config disagreements flip GRPO signs in <1% of groups in this corpus — still not independence.\n\n## Empirical Highlights\n- 24,998 groups, k=8, Qwen2.5-1.5B, MATH / GSM8K / DeepMath-103K.\n- ρ = 0.530, 95% CI [0.500, 0.560]; Kish n_eff = 1.70.\n- Part 2 of a series; Part 1 is *Where the Verifier Fails* (arXiv:2609.01354), not ingested here.\n\n## Open Source Repository & Resources\n- Code: `https://github.com/ethxin0011/rlvr_group_correlation`"
+    },
+    {
+      "id": "paper:opsd-collapse-review",
+      "type": "paper",
+      "title": "One Symptom, Three Levers: A Critical Review of On-Policy Self-Distillation",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/papers/opsd-collapse-review.md",
+      "metadata": {
+        "id": "paper:opsd-collapse-review",
+        "type": "paper",
+        "title": "One Symptom, Three Levers: A Critical Review of On-Policy Self-Distillation",
+        "authors": [
+          "Justin Robert",
+          "Raheel Qader"
+        ],
+        "year": 2026,
+        "month": 8,
+        "arxiv_id": "2608.25936",
+        "url": "https://arxiv.org/abs/2608.25936",
+        "methods": [
+          "method:opsd-collapse-review",
+          "method:vista",
+          "method:opsa",
+          "method:grpo"
+        ],
+        "cites": [
+          "paper:vista",
+          "paper:grpo"
+        ],
+        "tags": [
+          "post-training",
+          "opsd",
+          "survey",
+          "opsd-collapse-review"
+        ]
+      },
+      "body": "# One Symptom, Three Levers: A Critical Review of On-Policy Self-Distillation\n\n## Abstract Summary\nOn-policy distillation trains a model on its own generations while a teacher scores them token by token. OPSD removes the larger-teacher cost by using the same model with privileged information (reference solution, plan, environment feedback). Early results matched RL accuracy at fewer generated tokens, but the same asymmetry biases the signal. The dominant failure is collapse: progressive narrowing of reasoning paths. Collapse is not unique to OPSD; privileged information aggravates it. The review treats collapse as one symptom with three levers: (i) where the signal is applied (token weights), (ii) what the teacher is shown (privileged information), (iii) when the signal changes (teacher dynamics / guidance decay). Scope is mathematical reasoning. No new experiments.\n\n## Key Contributions\n1. **Shared vocabulary** for OPSD collapse vs GRPO entropy collapse vs OPSA-style self-adaptation.\n2. **Three levers** as a playbook, not a new optimizer.\n3. **Line between settled and disputed** — survey only.\n\n## Empirical Highlights\n- None original. Use as ontology for VISTA / OPSD / GRPO / OPSA routing, not as a bake-off.\n\n## Open Source Repository & Resources\n- No code (survey)."
     },
     {
       "id": "method:a2a-protocol",
@@ -18202,7 +18472,8 @@
         "papers": [
           "paper:minimax-m1",
           "paper:scalerl",
-          "paper:spurious-advantage-grpo"
+          "paper:spurious-advantage-grpo",
+          "paper:rlvr-group-correlation"
         ],
         "recipes": [
           "recipe:cispo"
@@ -18226,7 +18497,7 @@
           "sota"
         ]
       },
-      "body": "# CISPO (Clipped IS-weight Policy Optimization)\n\n## Method Overview\nCISPO (Clipped IS-weight Policy Optimization) establishes the state-of-the-art reinforcement learning standard for dense reasoning models:\n1. **Clipped IS-Weight Formulation**: Clips \\(\\text{sg}(\\text{clip}(\\rho))\\) directly on the importance sampling weight (with stop-gradient) rather than standard PPO-surrogate objective clipping, ensuring every token (including rare forks) receives a non-zero gradient.\n2. **Dense Reasoning Alignment**: Maximizes verifiable pass@1 accuracy across competitive math and programming benchmarks.\n\n## Implementation & Frameworks\n- Repository: `https://github.com/MiniMax-AI/MiniMax-M1`\n- Supported in NeMo-RL and ms-swift via `loss_type=cispo`.\n\n## When to Use\n- Default SOTA optimizer for dense model math and code reasoning RL.\n\n## Relation to Existing SOTA\n- Remains the dense math/code RLVR default for Pass@1 when labels exist. GRPO inside `method:j-zero` is that method's inner self-play optimizer, not a change to this default.\n- For Pass@K / reasoning coverage or a no-backward memory budget, use `method:es-reasoning` on `task:passk-reasoning-coverage`. That is not a GRPO revival and does not replace CISPO.\n- Optional token-filter plug-in: `method:gmts`. Example-reweight plug-in: `method:diem`. First-mistake process credit: `method:cliff` (not a PRM; does not replace VeriGate). Sample-level GRPO/OPSD router: `method:self-routing`. Adaptive IS clip: `method:gapo` (does not replace CISPO). RLVR+self-OPD loop: `method:rise` (does not replace CISPO, OPD, or OPSA). Tool-using pre-RL OPKD: `method:pta` (does not replace CISPO). Teacher-free unlabeled train-time self-adaptation: `method:opsa`. None of these replace CISPO when labels exist.\n\n## Supersession\n- Supersedes `method:dapo` as the dense RL default (DAPO remains as a systems reference).\n\n## Gotchas & Failure Modes\n- Group-relative magnitude $|\\hat{A}|=\\sqrt{n^-/n^+}$ can reward lucky guesses on bounded-answer items, bounded sub-cases inside open math (~56% of MATH-7.5K by answer shape), and search-agent trajectories that cash out via outcome-only exact match (`paper:spurious-advantage-grpo`). CISPO still clips IS weights, not this composition-dependent scale. Do not revive GRPO or promote SignBalance over CISPO."
+      "body": "# CISPO (Clipped IS-weight Policy Optimization)\n\n## Method Overview\nCISPO (Clipped IS-weight Policy Optimization) establishes the state-of-the-art reinforcement learning standard for dense reasoning models:\n1. **Clipped IS-Weight Formulation**: Clips \\(\\text{sg}(\\text{clip}(\\rho))\\) directly on the importance sampling weight (with stop-gradient) rather than standard PPO-surrogate objective clipping, ensuring every token (including rare forks) receives a non-zero gradient.\n2. **Dense Reasoning Alignment**: Maximizes verifiable pass@1 accuracy across competitive math and programming benchmarks.\n\n## Implementation & Frameworks\n- Repository: `https://github.com/MiniMax-AI/MiniMax-M1`\n- Supported in NeMo-RL and ms-swift via `loss_type=cispo`.\n\n## When to Use\n- Default SOTA optimizer for dense model math and code reasoning RL.\n\n## Relation to Existing SOTA\n- Remains the dense math/code RLVR default for Pass@1 when labels exist. GRPO inside `method:j-zero` is that method's inner self-play optimizer, not a change to this default.\n- For Pass@K / reasoning coverage or a no-backward memory budget, use `method:es-reasoning` on `task:passk-reasoning-coverage`. That is not a GRPO revival and does not replace CISPO.\n- Optional token-filter plug-in: `method:gmts`. Example-reweight plug-in: `method:diem`. First-mistake process credit: `method:cliff` (not a PRM; does not replace VeriGate). Sample-level GRPO/OPSD router: `method:self-routing`. Adaptive IS clip: `method:gapo` (does not replace CISPO). RLVR+self-OPD loop: `method:rise` (does not replace CISPO, OPD, or OPSA). Tool-using pre-RL OPKD: `method:pta` (does not replace CISPO). Teacher-free unlabeled train-time self-adaptation: `method:opsa`. None of these replace CISPO when labels exist.\n\n## Supersession\n- Supersedes `method:dapo` as the dense RL default (DAPO remains as a systems reference).\n\n## Gotchas & Failure Modes\n- Group-relative magnitude $|\\hat{A}|=\\sqrt{n^-/n^+}$ can reward lucky guesses on bounded-answer items, bounded sub-cases inside open math (~56% of MATH-7.5K by answer shape), and search-agent trajectories that cash out via outcome-only exact match (`paper:spurious-advantage-grpo`). CISPO still clips IS weights, not this composition-dependent scale. Do not revive GRPO or promote SignBalance over CISPO.\n- Within-group verifier errors are correlated (`method:rlvr-group-correlation`, ρ≈0.53, Kish n_eff≈1.70 at k=8). Hygiene, not a CISPO replacement."
     },
     {
       "id": "method:claude-computer-use",
@@ -20863,7 +21134,8 @@
           "paper:deepseek-r1",
           "paper:deepseek-math-paper",
           "paper:deepseek-r1-paper",
-          "paper:spurious-advantage-grpo"
+          "paper:spurious-advantage-grpo",
+          "paper:rlvr-group-correlation"
         ],
         "recipes": [
           "recipe:grpo-trl-training"
@@ -20886,7 +21158,7 @@
           "policy-gradient"
         ]
       },
-      "body": "# GRPO (Group Relative Policy Optimization)\n\n## Method Overview\nGroup Relative Policy Optimization (GRPO) simplifies and scales reinforcement learning for autoregressive language models by removing the need for a separate value/critic network.\n\nFor each query \\(q\\), the actor model samples a group of \\(G\\) candidate responses \\(\\{o_1, o_2, \\dots, o_G\\}\\). Reward scores \\(\\{r_1, r_2, \\dots, r_G\\}\\) are obtained using verifiable rule-based reward functions (e.g. mathematical correctness, code unit test pass, regex XML formatting). The baseline advantage for the \\(i\\)-th output is computed by standardizing rewards across the group:\n\\[\nA_i = \\frac{r_i - \\text{mean}(\\{r_j\\})}{\\text{std}(\\{r_j\\}) + \\epsilon}\n\\]\nThe policy is then updated using clipped surrogate objectives with a token-level KL divergence penalty against the reference model.\n\n## When to Use\n- **Reasoning RL**: Training models on math, competitive programming, and formal logic where deterministic verifiers can score outputs without human annotation.\n- **VRAM-Constrained RL**: When training multi-billion parameter models where instantiating a separate critic network would trigger OOM errors.\n\n## Gotchas & Failure Modes\n1. **Group Size (\\(G\\))**: \\(G\\) must be sufficiently large (typically \\(G \\geq 8\\) or \\(16\\)) to compute meaningful sample variance; small \\(G\\) produces noisy advantage estimates.\n2. **Reward Variance Collapse**: If all samples in a group produce the exact same reward (e.g. all fail or all succeed), the standard deviation is zero, resulting in zero gradient signal for that batch.\n3. **Length Explosion**: Models can develop degenerative verbose rambling to game rule penalties unless length caps or per-token penalties are enforced.\n4. **Spurious advantage** (`paper:spurious-advantage-grpo`, 2609.04063): within-group magnitude $|\\hat{A}^+|=\\sqrt{n^-/n^+}$ does not distinguish reasoning from guessing. Bounded-answer tasks (k-way choice), bounded shapes inside open math (55.95% of MATH-7.5K), and search agents with a large action budget all inflate lucky-correct rollouts. PPO clip bounds the importance ratio, not $|\\hat{A}|$. SignBalance is the paper's estimator; it is not a library method and does not retarget CISPO. Dense Pass@1 default remains `method:cispo`."
+      "body": "# GRPO (Group Relative Policy Optimization)\n\n## Method Overview\nGroup Relative Policy Optimization (GRPO) simplifies and scales reinforcement learning for autoregressive language models by removing the need for a separate value/critic network.\n\nFor each query \\(q\\), the actor model samples a group of \\(G\\) candidate responses \\(\\{o_1, o_2, \\dots, o_G\\}\\). Reward scores \\(\\{r_1, r_2, \\dots, r_G\\}\\) are obtained using verifiable rule-based reward functions (e.g. mathematical correctness, code unit test pass, regex XML formatting). The baseline advantage for the \\(i\\)-th output is computed by standardizing rewards across the group:\n\\[\nA_i = \\frac{r_i - \\text{mean}(\\{r_j\\})}{\\text{std}(\\{r_j\\}) + \\epsilon}\n\\]\nThe policy is then updated using clipped surrogate objectives with a token-level KL divergence penalty against the reference model.\n\n## When to Use\n- **Reasoning RL**: Training models on math, competitive programming, and formal logic where deterministic verifiers can score outputs without human annotation.\n- **VRAM-Constrained RL**: When training multi-billion parameter models where instantiating a separate critic network would trigger OOM errors.\n\n## Gotchas & Failure Modes\n1. **Group Size (\\(G\\))**: \\(G\\) must be sufficiently large (typically \\(G \\geq 8\\) or \\(16\\)) to compute meaningful sample variance; small \\(G\\) produces noisy advantage estimates.\n2. **Reward Variance Collapse**: If all samples in a group produce the exact same reward (e.g. all fail or all succeed), the standard deviation is zero, resulting in zero gradient signal for that batch.\n3. **Length Explosion**: Models can develop degenerative verbose rambling to game rule penalties unless length caps or per-token penalties are enforced.\n4. **Spurious advantage** (`paper:spurious-advantage-grpo`, 2609.04063): within-group magnitude $|\\hat{A}^+|=\\sqrt{n^-/n^+}$ does not distinguish reasoning from guessing. Bounded-answer tasks (k-way choice), bounded shapes inside open math (55.95% of MATH-7.5K), and search agents with a large action budget all inflate lucky-correct rollouts. PPO clip bounds the importance ratio, not $|\\hat{A}|$. SignBalance is the paper's estimator; it is not a library method and does not retarget CISPO. Dense Pass@1 default remains `method:cispo`.\n5. **Within-group verifier correlation** (`method:rlvr-group-correlation`, 2609.06386): pooled ICC ρ≈0.53 on 25k k=8 groups (Kish n_eff≈1.70). Analysis / recipe hygiene, not an optimizer."
     },
     {
       "id": "method:gspo",
@@ -27776,7 +28048,7 @@
           "sota"
         ]
       },
-      "body": "# VISTA (Verifier-Informed Student-to-Teacher Adaptation)\n\n## Method Overview\nVISTA keeps the standard on-policy self-distillation (OPSD; Zhao et al., arXiv:2601.18734) student update and adds selective student-to-teacher adaptation:\n1. **Privileged OPSD student update**: Problem-only student samples $y \\sim \\pi_S(\\cdot \\mid x)$. Privileged teacher $\\pi_T(\\cdot \\mid x, y^\\star)$ also sees the gold reference solution. Student loss is clipped full-vocab forward KL $D^{\\mathrm{clip}}_{\\mathcal{V},\\tau}(\\operatorname{sg}[P_t^T] \\| P_t^S)$ on every student prefix, with $\\tau=0.05$.\n2. **Outcome-verified teacher gate**: Teacher adaptation is enabled only when a deterministic verifier accepts the completed rollout. Fail-only (reverse) gating underperforms vanilla OPSD.\n3. **Top-$k$ teacher-first KL positions**: Within a verified rollout, update the teacher only at the $\\min(k, |y|)$ positions with largest $D_{\\mathrm{KL}}(P_t^T \\| P_t^S)$. Paper uses $k=32$ for 1.7B/4B and $k=16$ for 8B.\n4. **Reverse-KL teacher loss**: $L_T$ is reverse KL $D^{\\mathrm{clip}}_{\\mathcal{V},\\tau}(P_t^T \\| \\operatorname{sg}[P_t^S])$ (mode-seeking) with stop-grad on the student. Combined $L_{\\mathrm{total}} = L_S + \\lambda L_T$. Independent LoRA adapters ($r=64$, $\\alpha=128$); $\\eta_S=4\\times 10^{-6}$, $\\eta_T=3\\times 10^{-6}$ so $\\lambda=\\eta_T/\\eta_S=0.75$.\n5. **Inference**: Keep only the problem-only student. The privileged teacher is training-time only.\n\n## When to Use\n- When gold reference solutions and a deterministic outcome verifier are available, and the teacher is a privileged same-model copy that sees the gold solution — not a larger frozen teacher.\n- When vanilla OPSD's teacher-superiority assumption misdirects the student (reference-specific tokens, suppressed valid alternatives).\n\n## Relation to Existing SOTA\n- First-hop for `task:privileged-teacher-opsd` only. Does **not** replace `method:opd` (single-teacher student distillation), `method:open-mopd` (multi-teacher), `method:opdvr` (OPD + RLVR with a teacher model and ReLU correctness gating), `method:cispo` (dense math/code RLVR), or `method:u-opsd` (unlabeled / no ground truth).\n- Improves vanilla OPSD (Zhao et al. 2601.18734) in the privileged-teacher setting. VISTA does not supersede OPD.\n- Teacher-OPD trajectory filtering is `method:ra-opd`; teacher-free self-adaptation is `method:opsa`. Neither replaces VISTA in the privileged-teacher setting.\n\n## Gotchas & Failure Modes\n- Requires gold solutions plus a rule-based outcome verifier. Without both, this is the wrong shelf (`method:u-opsd` or `method:ttpo`).\n- Reverse (fail-only) teacher gating drops below OPSD (64.5 vs 64.8 on Qwen3-8B). Do not adapt the teacher on rejected rollouts.\n- $k$ too small under-adapts; $k$ too large (or all tokens) collapses the teacher toward the student and weakens later supervision. Stay in $\\{16, 32\\}$.\n- Independent student/teacher LoRA adapters are required; a shared adapter would mix the two stop-grad KL directions."
+      "body": "# VISTA (Verifier-Informed Student-to-Teacher Adaptation)\n\n## Method Overview\nVISTA keeps the standard on-policy self-distillation (OPSD; Zhao et al., arXiv:2601.18734) student update and adds selective student-to-teacher adaptation:\n1. **Privileged OPSD student update**: Problem-only student samples $y \\sim \\pi_S(\\cdot \\mid x)$. Privileged teacher $\\pi_T(\\cdot \\mid x, y^\\star)$ also sees the gold reference solution. Student loss is clipped full-vocab forward KL $D^{\\mathrm{clip}}_{\\mathcal{V},\\tau}(\\operatorname{sg}[P_t^T] \\| P_t^S)$ on every student prefix, with $\\tau=0.05$.\n2. **Outcome-verified teacher gate**: Teacher adaptation is enabled only when a deterministic verifier accepts the completed rollout. Fail-only (reverse) gating underperforms vanilla OPSD.\n3. **Top-$k$ teacher-first KL positions**: Within a verified rollout, update the teacher only at the $\\min(k, |y|)$ positions with largest $D_{\\mathrm{KL}}(P_t^T \\| P_t^S)$. Paper uses $k=32$ for 1.7B/4B and $k=16$ for 8B.\n4. **Reverse-KL teacher loss**: $L_T$ is reverse KL $D^{\\mathrm{clip}}_{\\mathcal{V},\\tau}(P_t^T \\| \\operatorname{sg}[P_t^S])$ (mode-seeking) with stop-grad on the student. Combined $L_{\\mathrm{total}} = L_S + \\lambda L_T$. Independent LoRA adapters ($r=64$, $\\alpha=128$); $\\eta_S=4\\times 10^{-6}$, $\\eta_T=3\\times 10^{-6}$ so $\\lambda=\\eta_T/\\eta_S=0.75$.\n5. **Inference**: Keep only the problem-only student. The privileged teacher is training-time only.\n\n## When to Use\n- When gold reference solutions and a deterministic outcome verifier are available, and the teacher is a privileged same-model copy that sees the gold solution — not a larger frozen teacher.\n- When vanilla OPSD's teacher-superiority assumption misdirects the student (reference-specific tokens, suppressed valid alternatives).\n\n## Relation to Existing SOTA\n- First-hop for `task:privileged-teacher-opsd` only. Does **not** replace `method:opd` (single-teacher student distillation), `method:open-mopd` (multi-teacher), `method:opdvr` (OPD + RLVR with a teacher model and ReLU correctness gating), `method:cispo` (dense math/code RLVR), or `method:u-opsd` (unlabeled / no ground truth).\n- Improves vanilla OPSD (Zhao et al. 2601.18734) in the privileged-teacher setting. VISTA does not supersede OPD.\n- Teacher-OPD trajectory filtering is `method:ra-opd`; teacher-free self-adaptation is `method:opsa`. Neither replaces VISTA in the privileged-teacher setting.\n- `method:verpo` is an active evidence-regularized sibling (proposal, not teacher update). Does not replace VISTA.\n- Collapse diagnosis: `method:opsd-collapse-review` (`arXiv:2608.25936`) — playbook, not a trainer.\n\n## Gotchas & Failure Modes\n- Requires gold solutions plus a rule-based outcome verifier. Without both, this is the wrong shelf (`method:u-opsd` or `method:ttpo`).\n- Reverse (fail-only) teacher gating drops below OPSD (64.5 vs 64.8 on Qwen3-8B). Do not adapt the teacher on rejected rollouts.\n- $k$ too small under-adapts; $k$ too large (or all tokens) collapses the teacher toward the student and weakens later supervision. Stay in $\\{16, 32\\}$.\n- Independent student/teacher LoRA adapters are required; a shared adapter would mix the two stop-grad KL directions."
     },
     {
       "id": "method:w2s-opd",
@@ -28525,7 +28797,7 @@
           "active"
         ]
       },
-      "body": "# OPRD (On-Policy Reverse Distillation)\n\n## Method Overview\nOPRD is **weak-to-strong reverse distillation**. OPD matches teacher logps on student prefixes and can stall at the weak teacher's ceiling. OPRD instead forms the teacher's policy-shift direction (teacher vs its reference) on student rollouts and rescales the student's verifier-driven gradient along that direction. Only verifier-supported components are amplified, so RLVR stationary points stay; the teacher accelerates rather than redirects.\n\n`method:w2s-opd` still matches a weak teacher. OPRD does not. Table 3 of this paper reports OPRD 60.81 vs a W2S-OPD reimplementation 49.22 on one mix — that is differentiation, not a library supersession of OPD or CISPO.\n\n## When to Use\n- A weaker (or same-family smaller) post-trained teacher should speed up a stronger student's RLVR without becoming the target.\n- Multi-specialist consolidation where matching MOPD plateaus at the specialist average.\n\n## When NOT to Use\n- Distill default (match a strong teacher) → `method:opd`.\n- Pass@1 without a teacher shift → `method:cispo`.\n- Explicit weak-policy matching → `method:w2s-opd`.\n- Multi-teacher token-share balancing → `method:open-mopd`.\n\n## Relation to Existing SOTA\n- Active on `task:student-distillation`. Does **not** supersede `method:opd`, `method:cispo`, `method:w2s-opd`, or `method:open-mopd`.\n- Distinct from VISTA (privileged same-size gold teacher) and RISE (self-extrapolated teacher).\n\n## Gotchas & Failure Modes\n- No official GitHub as of 2026-09-09.\n- Tables average five checkpoints; do not compare a single OPRD best ckpt to a GRPO last ckpt.\n- Needs a teacher reference policy and a verifier. No labels → OPSA, not this.\n- Cross-generation Qwen2.5→Qwen3 was out of the teacher's useful range in the paper's prelims."
+      "body": "# OPRD (On-Policy Reverse Distillation)\n\n## Method Overview\nOPRD is **weak-to-strong reverse distillation**. OPD matches teacher logps on student prefixes and can stall at the weak teacher's ceiling. OPRD instead forms the teacher's policy-shift direction (teacher vs its reference) on student rollouts and rescales the student's verifier-driven gradient along that direction. Only verifier-supported components are amplified, so RLVR stationary points stay; the teacher accelerates rather than redirects.\n\n`method:w2s-opd` still matches a weak teacher. OPRD does not. Table 3 of this paper reports OPRD 60.81 vs a W2S-OPD reimplementation 49.22 on one mix — that is differentiation, not a library supersession of OPD or CISPO.\n\n## When to Use\n- A weaker (or same-family smaller) post-trained teacher should speed up a stronger student's RLVR without becoming the target.\n- Multi-specialist consolidation where matching MOPD plateaus at the specialist average.\n\n## When NOT to Use\n- Distill default (match a strong teacher) → `method:opd`.\n- Pass@1 without a teacher shift → `method:cispo`.\n- Explicit weak-policy matching → `method:w2s-opd`.\n- Multi-teacher token-share balancing → `method:open-mopd`.\n\n## Relation to Existing SOTA\n- Active on `task:student-distillation`. Does **not** supersede `method:opd`, `method:cispo`, `method:w2s-opd`, or `method:open-mopd`.\n- Distinct from VISTA (privileged same-size gold teacher) and RISE (self-extrapolated teacher).\n\n## Gotchas & Failure Modes\n- Code: `https://github.com/raymin0223/on_policy_reverse_distillation` (early stub at 2026-09-09 ingest).\n- Tables average five checkpoints; do not compare a single OPRD best ckpt to a GRPO last ckpt.\n- Needs a teacher reference policy and a verifier. No labels → OPSA, not this.\n- Cross-generation Qwen2.5→Qwen3 was out of the teacher's useful range in the paper's prelims."
     },
     {
       "id": "method:ace-moe-peft",
@@ -29035,6 +29307,311 @@
         ]
       },
       "body": "# MoE Sparsity Hyperparameter Scaling\n\n## Method Overview\nUnified LR/batch scaling laws that include activation ratio A. At fixed sparsity, B* ~ D^α and η* ~ C^β; across sparsity, A is a multiplicative factor. Active pretrain guidance. Does not replace DeepSeek-V4 / Kimi-K3 or Muon2.\n\n## When to Use\n- Transferring LR/batch across MoE sparsity, including ultra-sparse (1/64) models.\n\n## When NOT to Use\n- Architecture default → `method:deepseek-v4` / `method:kimi-k3`. Dense optimizer → `method:muon2`.\n\n## Relation to Existing SOTA\n- Active on `task:pretrain-moe-frontier`. Does **not** enter `current_sota`.\n\n## Gotchas & Failure Modes\n- Paper scale is 6B (held-out 12B), not frontier 100B+. Treat as HP transfer, not an architecture win."
+    },
+    {
+      "id": "method:verpo",
+      "type": "method",
+      "title": "VERPO",
+      "domain": null,
+      "status": "active",
+      "file_path": "graph/methods/verpo.md",
+      "metadata": {
+        "id": "method:verpo",
+        "type": "method",
+        "title": "VERPO",
+        "category": "rl-alignment",
+        "status": "active",
+        "sota_for": [],
+        "supersedes": [],
+        "do_not_use_for": [
+          {
+            "when": "choosing the dense math/code Pass@1 RLVR default",
+            "reason": "VERPO regularizes privileged-evidence corrections; CISPO remains the Pass@1 kernel",
+            "use_instead": "method:cispo"
+          },
+          {
+            "when": "privileged same-size gold teacher with student-to-teacher adaptation",
+            "reason": "VISTA adapts the privileged teacher; VERPO keeps the outcome objective and gates evidence as a proposal",
+            "use_instead": "method:vista"
+          },
+          {
+            "when": "no teacher, no reward, no privileged evidence",
+            "reason": "OPSA is supervision-free",
+            "use_instead": "method:opsa"
+          },
+          {
+            "when": "single-teacher matching distillation without privileged replay",
+            "reason": "OPD remains the matching default",
+            "use_instead": "method:opd"
+          }
+        ],
+        "assumptions": [
+          "Host loop already has an outcome verifier. Privileged evidence (reference solution, tool trace, or environment feedback) is available at train time only.",
+          "Paper: five scientific-reasoning / tool-use tasks; Qwen3-4B/8B and Llama-3.2-1B. No official code as of 2026-09-09."
+        ],
+        "last_reviewed": "2026-09-09",
+        "papers": [
+          "paper:verpo"
+        ],
+        "recipes": [
+          "recipe:verpo"
+        ],
+        "claims": [
+          {
+            "benchmark": "Five scientific-reasoning / tool-use tasks, Qwen3-4B average",
+            "metric": "average score",
+            "value": 0.6857,
+            "baseline": "strongest compared baseline 0.6826",
+            "date": "2026-09-09",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.06100",
+            "notes": "Best variant on that backbone. Small lift; 8B and 1B lifts are larger."
+          },
+          {
+            "benchmark": "Same suite, Qwen3-8B average",
+            "metric": "average score",
+            "value": 0.7058,
+            "baseline": "strongest compared baseline 0.6895",
+            "date": "2026-09-09",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.06100"
+          },
+          {
+            "benchmark": "Same suite, Llama-3.2-1B average",
+            "metric": "average score",
+            "value": 0.5657,
+            "baseline": "strongest compared baseline 0.4751",
+            "date": "2026-09-09",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.06100"
+          }
+        ],
+        "tags": [
+          "post-training",
+          "opsd",
+          "privileged-teacher",
+          "verpo",
+          "active"
+        ]
+      },
+      "body": "# VERPO\n\n## Method Overview\nVERPO is **verified-evidence regularization** on top of an outcome RLVR loop. Privileged evidence (gold, tool feedback) is a proposal, not a matching target. Evidence-free restoration and signed token-level corrections are separate. Fisher Evidence Contrast shrinks corrections along an estimated evidence-presence direction. A stopped token-wise ZPD controller scales acceptance by local reward alignment and Fisher movement cost; the reference channel ignores that gate.\n\nSits beside VISTA (teacher adaptation on privileged OPSD) and FlowBalance (trajectory-balance self-guidance). Does not replace CISPO.\n\n## When to Use\n- Outcome RL plus a privileged evidence channel, when naive teacher imitation copies style that does not help the verifier.\n\n## When NOT to Use\n- Pass@1 kernel → `method:cispo`. Privileged-teacher OPSD default → `method:vista`. No labels → `method:opsa`.\n\n## Relation to Existing SOTA\n- Active on `task:privileged-teacher-opsd` and as a mention on `task:math-code-rl-dense`. Does **not** enter `current_sota`. Does **not** supersede VISTA, CISPO, OPD, or OPSA.\n\n## Gotchas & Failure Modes\n- No official GitHub as of 2026-09-09.\n- 4B average lift is small (0.6826→0.6857). Do not treat that as a CISPO bake-off.\n- Indiscriminate evidence imitation is the failure mode the paper is written against; do not drop the outcome term."
+    },
+    {
+      "id": "method:rpb",
+      "type": "method",
+      "title": "Router Prior Bias (RPB)",
+      "domain": null,
+      "status": "active",
+      "file_path": "graph/methods/rpb.md",
+      "metadata": {
+        "id": "method:rpb",
+        "type": "method",
+        "title": "Router Prior Bias (RPB)",
+        "category": "rl-alignment",
+        "status": "active",
+        "sota_for": [],
+        "supersedes": [],
+        "do_not_use_for": [
+          {
+            "when": "choosing the MoE/VL RLVR loss",
+            "reason": "RPB is a router soft-anchor during post-train; SAPO remains the MoE/VL algorithm default",
+            "use_instead": "method:sapo"
+          },
+          {
+            "when": "dense Pass@1 math/code RLVR",
+            "reason": "No MoE router to anchor; CISPO remains Pass@1",
+            "use_instead": "method:cispo"
+          },
+          {
+            "when": "choosing the frontier MoE architecture",
+            "reason": "RPB does not retarget DeepSeek-V4 / Kimi-K3",
+            "use_instead": "method:deepseek-v4"
+          }
+        ],
+        "assumptions": [
+          "Post-training an MoE whose pretrained router is already non-uniform. Paper: Moonlight-16B-A3B and Qwen3-30B-A3B-Base math post-train.",
+          "Do not re-impose a uniformity load-balancing loss. Do not freeze the router as a hard assignment."
+        ],
+        "last_reviewed": "2026-09-09",
+        "papers": [
+          "paper:rpb"
+        ],
+        "recipes": [
+          "recipe:rpb"
+        ],
+        "claims": [
+          {
+            "benchmark": "Moonlight-16B-A3B math post-training, in-domain accuracy",
+            "metric": "in-domain accuracy",
+            "value": 45.77,
+            "baseline": "re-applied LBL 31.91 / unanchored fine-tuning 29.44",
+            "date": "2026-09-09",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.08115",
+            "notes": "RPB also retains more OOD capability than LBL or unanchored FT. Active MoE post-train routing candidate; not a SAPO supersession."
+          },
+          {
+            "benchmark": "Qwen3-30B-A3B-Base math post-training",
+            "metric": "ordering vs re-applied LBL",
+            "value": "RPB beats LBL (ordering reproduces)",
+            "baseline": "re-applied LBL",
+            "date": "2026-09-09",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.08115",
+            "notes": "Anchor on weights, logits, or output distribution: no consistent ranking. Softness of the constraint is the effect."
+          }
+        ],
+        "tags": [
+          "post-training",
+          "moe",
+          "routing",
+          "rpb",
+          "active"
+        ]
+      },
+      "body": "# Router Prior Bias (RPB)\n\n## Method Overview\nRPB is **soft router anchoring** for MoE post-training. Read a prior from the frozen base router and add a training-time bias so live router logits stay near that prior while remaining trainable. Re-applying a pretrain load-balancing loss flattens inherited co-activation. Unanchored fine-tuning also loses. Hard-assigning the same prior keeps expert communities and still drops accuracy.\n\nActive MoE post-train routing candidate beside SAPO. Does not replace SAPO, CISPO, DeepSeek-V4, or Kimi-K3.\n\n## When to Use\n- Post-training an MoE whose base router already has non-uniform expert co-activation (math SFT/RL on Moonlight- / Qwen3-class MoE).\n\n## When NOT to Use\n- MoE/VL RLVR algorithm → `method:sapo`. Dense Pass@1 → `method:cispo`. Architecture choice → `method:deepseek-v4`.\n\n## Relation to Existing SOTA\n- Active on `task:math-code-rl-moe`. Does **not** enter `current_sota`. SAPO stays the MoE/VL loss default.\n\n## Gotchas & Failure Modes\n- Claimed GitHub `naver-ai/rpb` was 404 at 2026-09-09 ingest.\n- Do not treat expert-graph communities as the thing to optimize; they track the soft anchor, they are not the source.\n- Uniformity LBL is the wrong post-train regularizer even if it was right at pretrain."
+    },
+    {
+      "id": "method:rlvr-group-correlation",
+      "type": "method",
+      "title": "RLVR Group Verifier Correlation",
+      "domain": null,
+      "status": "niche",
+      "file_path": "graph/methods/rlvr-group-correlation.md",
+      "metadata": {
+        "id": "method:rlvr-group-correlation",
+        "type": "method",
+        "title": "RLVR Group Verifier Correlation",
+        "category": "rl-alignment",
+        "status": "niche",
+        "sota_for": [],
+        "supersedes": [],
+        "do_not_use_for": [
+          {
+            "when": "choosing the dense Pass@1 RLVR algorithm",
+            "reason": "This is an analysis of within-group verifier errors, not a loss",
+            "use_instead": "method:cispo"
+          },
+          {
+            "when": "group-relative magnitude rewarding lucky guesses",
+            "reason": "That gotcha is paper:spurious-advantage-grpo; this paper is verifier-error ICC",
+            "use_instead": "method:cispo"
+          }
+        ],
+        "assumptions": [
+          "You already run group RLVR (GRPO/CISPO-family) with an automatic verifier. This node does not change the optimizer.",
+          "Headline ρ is a pooled within-group ICC on Qwen2.5-1.5B k=8; it mixes prompt difficulty with shared answer form."
+        ],
+        "last_reviewed": "2026-09-09",
+        "papers": [
+          "paper:rlvr-group-correlation"
+        ],
+        "recipes": [
+          "recipe:rlvr-group-correlation"
+        ],
+        "claims": [
+          {
+            "benchmark": "24,998 k=8 groups, Qwen2.5-1.5B, MATH/GSM8K/DeepMath-103K",
+            "metric": "pooled within-group verifier-error ICC",
+            "value": 0.53,
+            "baseline": "independence (ρ=0) would give Kish n_eff=8",
+            "date": "2026-09-09",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.06386",
+            "notes": "95% CI [0.500, 0.560]. Kish n_eff=1.70. Not an optimizer."
+          },
+          {
+            "benchmark": "Same corpus, four rule-based verifier configs",
+            "metric": "groups with at least one GRPO advantage-sign disagreement",
+            "value": "up to 0.83%",
+            "baseline": "independent verifier-error analyses",
+            "date": "2026-09-09",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.06386"
+          }
+        ],
+        "tags": [
+          "post-training",
+          "rlvr",
+          "verifier",
+          "gotcha",
+          "rlvr-group-correlation",
+          "niche"
+        ]
+      },
+      "body": "# RLVR Group Verifier Correlation\n\n## Method Overview\nNot an optimizer. Measure whether verifier errors inside a GRPO group are independent. They are not: pooled ICC ρ≈0.53 on 25k k=8 groups, Kish n_eff≈1.70. Use answer-form-aware analyses instead of a single aggregate error rate. Sibling gotcha: `paper:spurious-advantage-grpo` (lucky-guess magnitude). CISPO remains Pass@1.\n\n## When to Use\n- Reporting verifier noise, effective group size, or GRPO advantage robustness on math rollouts.\n- Recipe hygiene: do not treat k=8 as eight independent verifier trials.\n\n## When NOT to Use\n- Choosing a train kernel → `method:cispo`. Lucky-guess magnitude → `paper:spurious-advantage-grpo`.\n\n## Relation to Existing SOTA\n- Niche analysis on `task:math-code-rl-dense`. Does **not** enter `current_sota`. Does **not** supersede CISPO or GRPO's retirement.\n\n## Gotchas & Failure Modes\n- ρ is marginal across prompts of varying difficulty; the paper does not separate difficulty from shared form.\n- Advantage-sign flips are rare (≤0.83%) in this corpus; do not over-read that as \"verifiers are interchangeable.\""
+    },
+    {
+      "id": "method:opsd-collapse-review",
+      "type": "method",
+      "title": "OPSD Collapse Levers",
+      "domain": null,
+      "status": "niche",
+      "file_path": "graph/methods/opsd-collapse-review.md",
+      "metadata": {
+        "id": "method:opsd-collapse-review",
+        "type": "method",
+        "title": "OPSD Collapse Levers",
+        "category": "distillation",
+        "status": "niche",
+        "sota_for": [],
+        "supersedes": [],
+        "do_not_use_for": [
+          {
+            "when": "choosing privileged-teacher OPSD",
+            "reason": "This is a survey playbook; VISTA remains the privileged-teacher first hop",
+            "use_instead": "method:vista"
+          },
+          {
+            "when": "teacher-free / label-free self-adaptation",
+            "reason": "OPSA remains that first hop; the review is not a substitute trainer",
+            "use_instead": "method:opsa"
+          },
+          {
+            "when": "labeled Pass@1 RLVR",
+            "reason": "CISPO remains the Pass@1 kernel; GRPO stays retired",
+            "use_instead": "method:cispo"
+          }
+        ],
+        "assumptions": [
+          "Mathematical reasoning OPSD/OPSD-adjacent literature. No new experiments in the paper."
+        ],
+        "last_reviewed": "2026-09-09",
+        "papers": [
+          "paper:opsd-collapse-review"
+        ],
+        "recipes": [
+          "recipe:opsd-collapse-review"
+        ],
+        "claims": [
+          {
+            "benchmark": "Survey of OPSD collapse in math reasoning (no new runs)",
+            "metric": "playbook coverage",
+            "value": "three levers: token weights / privileged info / teacher dynamics",
+            "baseline": "papers that name collapse differently without a shared vocabulary",
+            "date": "2026-09-09",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2608.25936",
+            "notes": "Ontology note, not a train kernel. Does not retarget VISTA, OPSA, or CISPO."
+          }
+        ],
+        "tags": [
+          "post-training",
+          "opsd",
+          "survey",
+          "opsd-collapse-review",
+          "niche"
+        ]
+      },
+      "body": "# OPSD Collapse Levers\n\n## Method Overview\nPlaybook, not a trainer. OPSD collapse (narrowing of reasoning paths) is one symptom with three levers:\n\n1. **Where** the signal is applied — token weights / keep-masks.\n2. **What** the teacher is shown — gold, plan, environment feedback.\n3. **When** the signal changes — teacher dynamics and guidance decay.\n\nPrivileged information aggravates collapse; GRPO-family entropy collapse is a cousin, not the same lever set. OPSA avoids a privileged teacher and is a different shelf. Use this node to route; do not train from it.\n\n## When to Use\n- Diagnosing OPSD / privileged-teacher runs that peaked then narrowed.\n- Writing a method node so VISTA / FlowBalance / Self-Routing sit on the right lever.\n\n## When NOT to Use\n- Privileged-teacher default → `method:vista`. No teacher → `method:opsa`. Pass@1 labels → `method:cispo`.\n\n## Relation to Existing SOTA\n- Niche ontology on `task:privileged-teacher-opsd` and `task:teacher-free-on-policy-self-adaptation`. Does **not** enter `current_sota`.\n\n## Gotchas & Failure Modes\n- No code, no new numbers. Do not cite this arXiv as a performance win.\n- Collapse is not uniquely OPSD; do not blame the student-teacher KL alone."
     }
   ],
   "edges": [
@@ -31325,6 +31902,24 @@
       "properties": {}
     },
     {
+      "source": "recipe:rpb",
+      "target": "method:rpb",
+      "relation": "implements",
+      "properties": {}
+    },
+    {
+      "source": "method:rpb",
+      "target": "recipe:rpb",
+      "relation": "implemented_by",
+      "properties": {}
+    },
+    {
+      "source": "recipe:rpb",
+      "target": "task:math-code-rl-moe",
+      "relation": "recipe_for_task",
+      "properties": {}
+    },
+    {
       "source": "recipe:quartet-ii",
       "target": "method:quartet-ii",
       "relation": "implements",
@@ -31847,6 +32442,24 @@
       "properties": {}
     },
     {
+      "source": "recipe:rlvr-group-correlation",
+      "target": "method:rlvr-group-correlation",
+      "relation": "implements",
+      "properties": {}
+    },
+    {
+      "source": "method:rlvr-group-correlation",
+      "target": "recipe:rlvr-group-correlation",
+      "relation": "implemented_by",
+      "properties": {}
+    },
+    {
+      "source": "recipe:rlvr-group-correlation",
+      "target": "task:math-code-rl-dense",
+      "relation": "recipe_for_task",
+      "properties": {}
+    },
+    {
       "source": "recipe:claude-computer-use",
       "target": "method:claude-computer-use",
       "relation": "implements",
@@ -31969,6 +32582,24 @@
     {
       "source": "recipe:ffno",
       "target": "task:operator-grid-pde",
+      "relation": "recipe_for_task",
+      "properties": {}
+    },
+    {
+      "source": "recipe:verpo",
+      "target": "method:verpo",
+      "relation": "implements",
+      "properties": {}
+    },
+    {
+      "source": "method:verpo",
+      "target": "recipe:verpo",
+      "relation": "implemented_by",
+      "properties": {}
+    },
+    {
+      "source": "recipe:verpo",
+      "target": "task:privileged-teacher-opsd",
       "relation": "recipe_for_task",
       "properties": {}
     },
@@ -32185,6 +32816,24 @@
     {
       "source": "recipe:lr-matters-lora",
       "target": "task:parameter-efficient-fine-tuning",
+      "relation": "recipe_for_task",
+      "properties": {}
+    },
+    {
+      "source": "recipe:opsd-collapse-review",
+      "target": "method:opsd-collapse-review",
+      "relation": "implements",
+      "properties": {}
+    },
+    {
+      "source": "method:opsd-collapse-review",
+      "target": "recipe:opsd-collapse-review",
+      "relation": "implemented_by",
+      "properties": {}
+    },
+    {
+      "source": "recipe:opsd-collapse-review",
+      "target": "task:privileged-teacher-opsd",
       "relation": "recipe_for_task",
       "properties": {}
     },
@@ -32410,6 +33059,18 @@
     },
     {
       "source": "method:grpo",
+      "target": "task:math-code-rl-moe",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:math-code-rl-moe",
+      "target": "method:rpb",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:rpb",
       "target": "task:math-code-rl-moe",
       "relation": "targets_task",
       "properties": {}
@@ -35789,6 +36450,30 @@
       "properties": {}
     },
     {
+      "source": "task:math-code-rl-dense",
+      "target": "method:verpo",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:verpo",
+      "target": "task:math-code-rl-dense",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:math-code-rl-dense",
+      "target": "method:rlvr-group-correlation",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:rlvr-group-correlation",
+      "target": "task:math-code-rl-dense",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
       "source": "task:4bit-peft-quantization",
       "target": "method:aqlora-q",
       "relation": "has_sota_method",
@@ -36684,6 +37369,18 @@
     },
     {
       "source": "method:flowbalance",
+      "target": "task:teacher-free-on-policy-self-adaptation",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:teacher-free-on-policy-self-adaptation",
+      "target": "method:opsd-collapse-review",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:opsd-collapse-review",
       "target": "task:teacher-free-on-policy-self-adaptation",
       "relation": "targets_task",
       "properties": {}
@@ -38822,6 +39519,30 @@
     },
     {
       "source": "method:flowbalance",
+      "target": "task:privileged-teacher-opsd",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:privileged-teacher-opsd",
+      "target": "method:verpo",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:verpo",
+      "target": "task:privileged-teacher-opsd",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:privileged-teacher-opsd",
+      "target": "method:opsd-collapse-review",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:opsd-collapse-review",
       "target": "task:privileged-teacher-opsd",
       "relation": "targets_task",
       "properties": {}
@@ -45180,6 +45901,174 @@
       "source": "method:moe-sparsity-hp-scaling",
       "target": "paper:moe-sparsity-hp-scaling",
       "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:verpo",
+      "target": "method:verpo",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:verpo",
+      "target": "paper:verpo",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:verpo",
+      "target": "paper:grpo",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:grpo",
+      "target": "paper:verpo",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:verpo",
+      "target": "paper:vista",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:vista",
+      "target": "paper:verpo",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:rpb",
+      "target": "method:rpb",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:rpb",
+      "target": "paper:rpb",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:rlvr-group-correlation",
+      "target": "method:rlvr-group-correlation",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:rlvr-group-correlation",
+      "target": "paper:rlvr-group-correlation",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:rlvr-group-correlation",
+      "target": "method:grpo",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:grpo",
+      "target": "paper:rlvr-group-correlation",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:rlvr-group-correlation",
+      "target": "method:cispo",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:cispo",
+      "target": "paper:rlvr-group-correlation",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:rlvr-group-correlation",
+      "target": "paper:grpo",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:grpo",
+      "target": "paper:rlvr-group-correlation",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:opsd-collapse-review",
+      "target": "method:opsd-collapse-review",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:opsd-collapse-review",
+      "target": "paper:opsd-collapse-review",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:opsd-collapse-review",
+      "target": "method:vista",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:vista",
+      "target": "paper:opsd-collapse-review",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:opsd-collapse-review",
+      "target": "method:opsa",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:opsa",
+      "target": "paper:opsd-collapse-review",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:opsd-collapse-review",
+      "target": "method:grpo",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:grpo",
+      "target": "paper:opsd-collapse-review",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:opsd-collapse-review",
+      "target": "paper:vista",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:vista",
+      "target": "paper:opsd-collapse-review",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:opsd-collapse-review",
+      "target": "paper:grpo",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:grpo",
+      "target": "paper:opsd-collapse-review",
+      "relation": "cited_by",
       "properties": {}
     },
     {

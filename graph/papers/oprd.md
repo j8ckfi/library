@@ -47,4 +47,4 @@ Weak-to-strong generalization asks whether a stronger student can learn from a w
 - Strong-to-weak avg: OPRD 41.49 vs KDRL 29.52 vs OPD 25.00.
 
 ## Open Source Repository & Resources
-- No official GitHub as of 2026-09-09.
+- Code: `https://github.com/raymin0223/on_policy_reverse_distillation`

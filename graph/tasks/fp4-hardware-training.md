@@ -22,7 +22,8 @@ methods:
   - method:mxfp4-mi355x
   - method:kimi-k3
   - method:gradcodes
-last_reviewed: "2026-09-01"
+  - method:kbbq
+last_reviewed: "2026-09-09"
 tags:
   - compression
   - quantization
@@ -35,3 +36,4 @@ tags:
 ## SOTA Recommendation (as of 2026-08-26)
 - **Primary Method**: **Quartet-II NVFP4** (`method:quartet-ii`, 2601.22813) / **MXFP4** (`method:mxfp4-mi355x`, 2605.09825) / **Kimi-K3 QAT**. Unchanged.
 - **Fully low-bit fine-tune of an already-quantized checkpoint**: `method:gradcodes` on `task:full-lowbit-finetune`. Not native FP4 hardware training.
+- **Optional W4A4 noise-law / spectrum-flattening note**: `method:kbbq` (`arXiv:2609.08135`). Active PTQ-style inference niche. Does not replace Quartet-II or MXFP4.

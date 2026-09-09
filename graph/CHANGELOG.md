@@ -6,6 +6,101 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-09 — ingest 2026-09-09 weekday SOTA sweep (Miles, NeoHorse-1, ThinkPrior, RouteOPD, TV-OPD, DATPO, OPRD + optionals)
+- Added two new first-hop tasks (`task:frontier-rl-posttrain-stack`, `task:agentic-rsi-routing-posttrain`) plus fifteen methods. No false supersessions of CISPO / Muon2 / OPD / OPSA / CANOPY / Poolside / SAO / ES-reasoning / mini-SWE-agent / Iris / Uno / W2S-OPD.
+- MUST: Miles, NeoHorse-1, ThinkPrior, RouteOPD, TV-OPD, DATPO, OPRD. OPTIONAL (all landed): ACE MoE PEFT, AnLR-LoRA, KBBQ, AF1, CircuitLens, Online Draft Co-Training, DataFlex-RL, MoE sparsity HP scaling. Skipped none of the requested optionals. Already-in-library items (TGOPD, Uno, FlowBalance, Iris, sparse-OPD, OPD-then-RLVR, GAPO, RISE, layer-dropout) were not re-ingested.
+- Scope checks: CISPO, Muon2, OPD, OPSA, CANOPY remain first hops on their tasks. Miles is sota only for the new frontier stack. NeoHorse-1 is sota only for the new RSI routing-harness task.
+
+### 2026-09-09 — ingest method:miles (new task:frontier-rl-posttrain-stack)
+- Added paper:miles (2609.08368), method:miles, recipe:miles, task:frontier-rl-posttrain-stack. Reverse redirects on task:industrial-model-building, task:agentic-async-rl, task:software-engineering-agent-harness, task:outcome-only-long-horizon-agent-rl.
+- Status sota for the production post-train engine only. Code: radixark/miles.
+- Evidence: GLM-5.2 744B-A40B Terminal-bench-2 64× GB300 median 263s (first 30 steps); KL 0.0369; reward 0.438→0.556 single run (Table 9 / Figure 5, arXiv:2609.08368); verified: true; evidence_level: preprint.
+- Scope checks: Poolside remains factory process; SAO remains async algorithm; CISPO remains Pass@1; Muon2 remains 7B optimizer; mini-SWE-agent remains the harness.
+
+### 2026-09-09 — ingest method:neohorse-1 (new task:agentic-rsi-routing-posttrain)
+- Added paper:neohorse-1 (2609.08183), method:neohorse-1, recipe:neohorse-1, task:agentic-rsi-routing-posttrain. Reverse redirects on SWE harness, SAO, CANOPY, Iris, CISPO, OPD shelves.
+- Status sota for routing-harness RSI post-train only. Code: TokenRhythm/NeoHorse. Weights: TokenRhythm/neohorse-1.
+- Evidence: 4B 58.94→64.87 and 9B 65.60→69.04 ten-bench macro vs Qwen3.5 same size (Table 1, arXiv:2609.08183); verified: true; evidence_level: preprint.
+- Scope checks: mini-SWE-agent remains the harness; SAO remains async; CANOPY remains AppWorld; Iris remains search-agent climbing; CISPO remains Pass@1; OPD remains text distill.
+
+### 2026-09-09 — ingest method:thinkprior (active RLVR data-policy plug-in; does not supersede method:cispo / method:gapo / method:verigate)
+- Added paper:thinkprior (2609.09075), method:thinkprior, recipe:thinkprior (stub; project page only). Wired to task:math-code-rl-dense; mention on task:all-zero-verifier-groups.
+- Status active. Zero-rollout Beta difficulty prior for GRPO cold-start prompt selection. Loss/optimizer unchanged.
+- Evidence: silent groups 23.8%→10.6%; ThinkPrior+DAPO 8256→7381 generated rollouts at 3840-update budget; accuracy +0.7 with CI crossing 0 (arXiv:2609.09075); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; GAPO remains clip-width; VeriGate remains PRM gating; DataFlex-RL is the accuracy-null cousin.
+
+### 2026-09-09 — ingest method:routeopd (active OPD plug-in; does not supersede method:opd)
+- Added paper:routeopd (2609.08337), method:routeopd, recipe:routeopd (stub; no official code). Wired to task:student-distillation.
+- Status active. Pairwise log-odds transport vs sampled reverse-KL OPD.
+- Evidence: four settings macro +2.70 Avg@16 vs sampled-RKL; JustRL-DeepSeek 65.53 vs 63.34 (Table 1, arXiv:2609.08337); verified: true; evidence_level: preprint.
+- Scope checks: OPD remains distill default; RA-OPD / IDA-OPD / TGOPD remain sibling plug-ins.
+
+### 2026-09-09 — ingest method:tv-opd (active OPD stability plug-in; does not supersede method:opd / method:ra-opd / method:tropd / method:stable-opd)
+- Added paper:tv-opd (2609.08341), method:tv-opd, recipe:tv-opd (stub; no official code). Wired to task:student-distillation.
+- Status active. Sign of token advantages ≈ full OPD; TV-shaped shared scale for late training.
+- Evidence: late AIME24 49.58 vs Raw 46.11; LateMean 43.06 vs 40.87 (Table 2, arXiv:2609.08341); verified: true; evidence_level: preprint.
+- Scope checks: OPD remains distill default; RA-OPD remains trajectory mask; TrOPD remains trust-region matching; Stable-OPD remains control variates.
+
+### 2026-09-09 — ingest method:datpo (active Pass@K sibling; does not supersede method:es-reasoning / method:cispo)
+- Added paper:datpo (2609.08650), method:datpo, recipe:datpo (GRPO-Zero host). Wired to task:passk-reasoning-coverage; mention on task:math-code-rl-dense.
+- Status active. Difficulty-adaptive sentence-entropy tree-structured PO.
+- Evidence: Qwen2.5-3B 22.4/54.9 avg@k/pass@k vs GRPO 20.7/48.2; Qwen3-4B 31.3/60.4 vs GRPO 30.1/58.3 (Table 2, arXiv:2609.08650); verified: true; evidence_level: preprint.
+- Scope checks: ES-reasoning remains Pass@K / no-backward first hop; CISPO remains Pass@1.
+
+### 2026-09-09 — ingest method:oprd (active reverse distill; does not supersede method:w2s-opd / method:opd / method:cispo)
+- Added paper:oprd (2609.08798), method:oprd, recipe:oprd (stub; no official code). Wired to task:student-distillation. Updated method:w2s-opd differentiation / do_not_use_for.
+- Status active. Weak-to-strong: amplify verifier-supported student gradient along teacher policy-shift. Not matching.
+- Evidence: 4B→8B math avg 51.91 vs KDRL 43.99 / OPD 39.44; multi-teacher 58.77 vs Mix-RL 47.68 (Tables 1/3, arXiv:2609.08798); verified: true; evidence_level: preprint.
+- Scope checks: W2S-OPD remains matching; OPD remains distill default; CISPO remains Pass@1. Table 3 vs W2S-OPD is differentiation, not a graph supersession.
+
+### 2026-09-09 — ingest method:ace-moe-peft (active MoE PEFT; does not supersede method:lr-matters-lora or method:ace)
+- Added paper:ace-moe-peft (2609.06072, EMNLP 2026), method:ace-moe-peft, recipe:ace-moe-peft. Wired to task:parameter-efficient-fine-tuning. Slug avoids collision with method:ace (Agentic Context Engineering).
+- Status active. Expert-adapter consolidation. Code: UbiquitousAILab/ACE.
+- Evidence: best mean on 3/4 MoE backbones; 1.31×–1.48× faster vs expert-wise LoRA (arXiv:2609.06072); verified: true; evidence_level: peer-reviewed.
+- Scope checks: lr-matters-lora remains 24GB quality default; method:ace remains agent memory.
+
+### 2026-09-09 — ingest method:anlr-lora (active LoRA LR plug-in; does not supersede method:lr-matters-lora / method:nora)
+- Added paper:anlr-lora (2609.05885), method:anlr-lora, recipe:anlr-lora (stub). Wired to task:lora-quality-tuning and task:parameter-efficient-fine-tuning.
+- Status active. Anisotropic per-rank learning rates, mean-normalized so the global LR is unchanged.
+- Evidence: lift vs uniform-LR LoRA on commonsense / NLG / visual instruction-tuning (arXiv:2609.05885); verified: true; evidence_level: preprint.
+- Scope checks: quality default remains vanilla LoRA + rsLoRA + LR sweep; NoRA remains rank-normalize A.
+
+### 2026-09-09 — ingest method:kbbq (active W4A4 niche; does not supersede method:quartet-ii / method:mxfp4-mi355x)
+- Added paper:kbbq (2609.08135), method:kbbq, recipe:kbbq (stub). Wired to task:fp4-hardware-training as a mention only.
+- Status active. Predictive noise law / spectrum-flattening limits for FP4 W4A4.
+- Evidence: outperforms prior flatten SOTA with no extra deploy-time compute (arXiv:2609.08135); verified: true; evidence_level: preprint.
+- Scope checks: Quartet-II / MXFP4 remain native FP4 hardware-training current_sota.
+
+### 2026-09-09 — ingest method:af1 (active 1-bit PTQ; does not supersede method:sparse-bitnet)
+- Added paper:af1 (2609.06161, EMNLP 2026 Main), method:af1, recipe:af1. Wired to task:1bit-extreme-quantization. Claimed GitHub Kishon-zzx/AF1 was 404 at ingest.
+- Status active. Genuine 1-bit PTQ of existing LLMs under a 1.0-BPW budget.
+- Evidence: best among compared binarization PTQ; ~2.5× inference vs BF16 (arXiv:2609.06161); verified: true; evidence_level: peer-reviewed.
+- Scope checks: Sparse-BitNet remains native 1.58-bit pretrain; ScaleQ-1.58 remains ternary post-train.
+
+### 2026-09-09 — ingest method:circuitlens (active RLVR data-selection signal; does not supersede method:cispo)
+- Added paper:circuitlens (2609.07183, EMNLP 2026 Findings), method:circuitlens, recipe:circuitlens (stub). Wired to task:math-code-rl-dense.
+- Status active. CRS circuit-engagement ranking; low-engagement decile wins on 7B medium math.
+- Evidence: lowest-CRS decile +2.0 / +1.6 / +2.9 pp vs random on GSM8K / OlympiadBench / Minerva (arXiv:2609.07183); verified: true; evidence_level: peer-reviewed.
+- Scope checks: CISPO remains Pass@1; ThinkPrior remains silent-group prior; DataFlex-RL remains the accuracy-null.
+
+### 2026-09-09 — ingest method:online-draft-cotrain (niche; does not supersede method:miles / method:uno)
+- Added paper:online-draft-cotrain (2609.07108), method:online-draft-cotrain, recipe:online-draft-cotrain. Wired to task:frontier-rl-posttrain-stack; mention + redirect from task:diffusion-augmented-ar.
+- Status niche. Speculative decoding co-train for long-context RL. Code: NVIDIA-NeMo/RL#3698.
+- Evidence: drafts track the policy through 122B / 256K CP with rollout and e2e speedups (arXiv:2609.07108); verified: true; evidence_level: preprint.
+- Scope checks: Miles remains the frontier stack; Uno remains diffusion-augmented AR serving; CISPO remains Pass@1.
+
+### 2026-09-09 — ingest method:dataflex-rl (active negative result; does not supersede method:cispo / method:thinkprior)
+- Added paper:dataflex-rl (2609.06107), method:dataflex-rl, recipe:dataflex-rl (stub). Wired to task:math-code-rl-dense.
+- Status active. Controlled finding: RLVR data policies do not beat uniform GRPO at 95% CI.
+- Evidence: uniform +7.76 pp vs untrained on Qwen2.5-7B-Base 12-bench; no selection method 95% CI vs uniform excludes 0 (arXiv:2609.06107); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; ThinkPrior remains the waste-cut prior (not an accuracy claim).
+
+### 2026-09-09 — ingest method:moe-sparsity-hp-scaling (active MoE HP guidance; does not supersede method:deepseek-v4 / method:kimi-k3)
+- Added paper:moe-sparsity-hp-scaling (2609.08690), method:moe-sparsity-hp-scaling, recipe:moe-sparsity-hp-scaling (stub). Wired to task:pretrain-moe-frontier.
+- Status active. LR/batch vs activation-ratio transfer laws.
+- Evidence: ~1,800 MoE pretrain runs; held-out 12B 1/64 predicted HPs close to observed optima (arXiv:2609.08690); verified: true; evidence_level: preprint.
+- Scope checks: DeepSeek-V4 / Kimi-K3 remain architecture current_sota; Muon2 remains dense optimizer.
+
 ### 2026-09-08 — catch-up ingest method:iris / method:sparse-opd-supervision / method:opd-then-rlvr (completes the weekday sweep to seven)
 - Completes the 2026-09-08 weekday sweep. Original four (FlowBalance, TGOPD, OT optimizer schedules, Uno) unchanged. Added Iris (new `task:web-search-agent-rl`), sparse OPD supervision, and OPD-then-RLVR. No false supersessions of CISPO / Muon2 / OPD / OPSA / CANOPY / RISE / GAPO / OPDVR / SAO / mini-SWE-agent / FoldGRPO.
 - Still skipped (WATCH): FactoSR, Refuse-without-Refusal, over-editing, CoSkill, ConsensusBench, Multi-Harness RL, Scale-QLoRA, Train-What-You-Deploy, OPSD survey 2608.25936, EmbodiedSkills, ENEAS, revision-propagation, 2609.04575, 2609.04453, 2609.05309, 2609.05274.

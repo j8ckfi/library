@@ -19,6 +19,8 @@ methods:
   - method:sherry
   - method:bitembed
   - method:bitnet-b158
+  - method:af1
+last_reviewed: "2026-09-09"
 tags:
   - compression
   - quantization
@@ -35,3 +37,4 @@ Training foundation models natively using ternary weights \(\{-1, 0, +1\}\), rep
 - **Native 1.58-Bit Pretrain**: **Sparse-BitNet** (`method:sparse-bitnet`, 2603.05168); keep 2B4T as dense baseline citation.
 - **Ternary Existing SOTA LLM**: **ScaleQ-1.58** (`method:scaleq-158`, 2608.01078).
 - **FP4 Hardware Train**: **Quartet-II NVFP4** (`method:quartet-ii`, 2601.22813) / **MXFP4** (`method:mxfp4-mi355x`, 2605.09825).
+- **Optional genuine 1-bit PTQ**: `method:af1` (`arXiv:2609.06161`, EMNLP 2026 Main). Existing-checkpoint binarization, not a Sparse-BitNet pretrain replacement.

@@ -38,7 +38,10 @@ methods:
   - method:tgopd
   - method:sparse-opd-supervision
   - method:opd-then-rlvr
-last_reviewed: "2026-09-08"
+  - method:routeopd
+  - method:tv-opd
+  - method:oprd
+last_reviewed: "2026-09-09"
 tags:
   - post-training
   - distillation
@@ -51,12 +54,15 @@ tags:
 ## Problem Definition
 Training small local students (1B–8B) from large teacher models (70B–405B) with generalized on-policy divergence matching.
 
-## SOTA Recommendation (as of 2026-09-08)
+## SOTA Recommendation (as of 2026-09-09)
 - **Single-Teacher Distillation Default**: **OPD** (`method:opd`, `paper:opd` `arXiv:2604.13016`). Unchanged.
 - **Multi-Teacher Student Distillation Default**: **Open-MOPD** (`method:open-mopd`, `paper:open-mopd` `arXiv:2608.19098`) for token-share balancing, gap-aware dynamic budget allocation, and student reward refresh across specialized teacher models.
 - **Related alternative**: Use `method:vista` instead when the teacher is a privileged same-model copy that sees the gold solution (not a larger frozen teacher). OPD remains the student-distillation default.
 - **Optional teacher-OPD filter**: `method:ra-opd` (`arXiv:2608.27960`) keeps trajectories with sign-agree teacher return vs outcome reward. Does not replace OPD.
 - **Optional sampled-token entropy plug-in**: `method:ida-opd` (`arXiv:2608.29846`) keeps entropy-expanding $A_y$ and shrinks $\mathcal{I}_H<0$ by $|q-p|/(q+p)$. Does not replace OPD or CISPO.
+- **Optional probability-transport plug-in**: `method:routeopd` (`arXiv:2609.08337`) pairwise log-odds transport vs sampled reverse-KL. Does not replace OPD.
+- **Optional TV-shaped stability plug-in**: `method:tv-opd` (`arXiv:2609.08341`) sign of token advantages plus a shared TV scale. Relate to RA-OPD / TrOPD / Stable-OPD without supersession.
+- **Optional reverse distillation (weak-to-strong)**: `method:oprd` (`arXiv:2609.08798`) amplifies verifier-supported student gradients along the teacher policy-shift. Distinct from `method:w2s-opd` (matching). Does not replace OPD or CISPO.
 - **Data-efficiency note**: `method:opd-one-example` (`arXiv:2609.04172`) — one query recovers most full-data OPD; ~16 diverse queries ≈ full-data / MOPD. Does not replace OPD.
 - **Data-selection sibling**: `method:opd-hard-cot-selection` (`arXiv:2609.05198`) — hard/long-CoT examples drive OPD gains (not high token entropy); 8 hard can match 17K. Does not replace OPD or OPD-II.
 - **Related self-extrapolating teacher**: `method:rise` (`arXiv:2609.05295`) synthesizes an OPD teacher from the student's RLVR trajectory. No external teacher. Does not replace OPD, CISPO, or OPSA.
@@ -65,3 +71,4 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Optional sparse token-budget plug-in**: `method:sparse-opd-supervision` (`arXiv:2609.04565`) supervises 1–2 tokens per trajectory (~0.05%) and can match/beat full-token OPD. Does not replace OPD or CISPO.
 - **Optional stacking order when both OPD and RLVR will run**: `method:opd-then-rlvr` (`arXiv:2609.04108`) — OPD then RL, not joint one-step fusion. Does not replace OPD or CISPO.
 - **No teacher / no labels**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace OPD when a strong teacher is the goal.
+

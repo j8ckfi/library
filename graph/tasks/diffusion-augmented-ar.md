@@ -10,6 +10,7 @@ out_of_scope:
   - "~7B dense pretrain optimizer (Muon2)"
   - "Pass@1 labeled math/code RLVR algorithm (CISPO)"
   - "Standalone discrete diffusion LMs that replace the AR distribution"
+  - "Speculative draft co-train inside long-context RL (Online Draft Co-Training / NeMo RL)"
 redirects:
   - when: "aligning text-to-image diffusion or flow models with rewards"
     to: "task:posttrain-diffusion"
@@ -17,6 +18,8 @@ redirects:
     to: "task:llm-pretraining-optimization"
   - when: "single-turn math/code Pass@1 RLVR"
     to: "task:math-code-rl-dense"
+  - when: "speculative draft co-train inside long-context RL (separate draft), not diffusion-augmented AR"
+    to: "task:frontier-rl-posttrain-stack"
 current_sota:
   - method: method:uno
     as_of: "2026-09-08"
@@ -26,7 +29,8 @@ current_sota:
     notes: "Uno (2609.04010). Does not replace DiffusionOPSD/Self-OPD, Muon2, or CISPO."
 methods:
   - method:uno
-last_reviewed: "2026-09-08"
+  - method:online-draft-cotrain
+last_reviewed: "2026-09-09"
 tags:
   - efficiency
   - inference

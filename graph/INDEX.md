@@ -120,7 +120,9 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when building a production engine (rewind, sandbox, remote, TUI) → `task:agent-harness-runtime`
   - when train outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) → `task:outcome-only-long-horizon-agent-rl`
   - when train a live-web multi-hop search agent (SFT-RL climbing) → `task:web-search-agent-rl`
-- **Out of scope**: Training an async agent policy (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Math/code RLVR (CISPO); GUI / OS desktop computer-use; Dumped 10M-token corpus prompt offload (RLM); Trajectory folding (FoldGRPO); Planner-coder-tester multi-agent theater for a single patch; Meta-agent search as the default design process; Training a live-web search policy (Iris)
+  - when production post-train stack rather than a SWE loop → `task:frontier-rl-posttrain-stack`
+  - when agentic RSI / routing-harness post-train rather than a SWE loop → `task:agentic-rsi-routing-posttrain`
+- **Out of scope**: Training an async agent policy (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Math/code RLVR (CISPO); GUI / OS desktop computer-use; Dumped 10M-token corpus prompt offload (RLM); Trajectory folding (FoldGRPO); Planner-coder-tester multi-agent theater for a single patch; Meta-agent search as the default design process; Training a live-web search policy (Iris); Frontier RL post-train engine (Miles); Routing-harness RSI post-train (NeoHorse-1)
 
 ## algorithms
 
@@ -173,7 +175,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when aligning text-to-image diffusion or flow models with rewards → `task:posttrain-diffusion`
   - when choosing the ~7B dense pretrain optimizer → `task:llm-pretraining-optimization`
   - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
-- **Out of scope**: Text-to-image / flow reward alignment (DiffusionOPSD / Self-OPD); ~7B dense pretrain optimizer (Muon2); Pass@1 labeled math/code RLVR algorithm (CISPO); Standalone discrete diffusion LMs that replace the AR distribution
+  - when speculative draft co-train inside long-context RL (separate draft), not diffusion-augmented AR → `task:frontier-rl-posttrain-stack`
+- **Out of scope**: Text-to-image / flow reward alignment (DiffusionOPSD / Self-OPD); ~7B dense pretrain optimizer (Muon2); Pass@1 labeled math/code RLVR algorithm (CISPO); Standalone discrete diffusion LMs that replace the AR distribution; Speculative draft co-train inside long-context RL (Online Draft Co-Training / NeMo RL)
 
 ### task:full-lowbit-finetune — Fully Low-Bit Fine-Tuning in Quantized Code Space
 - **Scope**: Deployment-faithful fine-tuning over quantization codes and scales (NF4 / INT4 / MXFP4) so the optimized state is the deployed state.
@@ -234,7 +237,27 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when build an agent rather than train a policy → `task:software-engineering-agent-harness`
   - when outcome-only long-horizon agent RL (coverage / anti-drift), not async stragglers → `task:outcome-only-long-horizon-agent-rl`
   - when train a live-web multi-hop search agent (SFT-RL climbing), not async stragglers → `task:web-search-agent-rl`
-- **Out of scope**: Building or choosing a software-engineering agent loop (mini-SWE-agent / CCA / OpenHands); Dumped long-prompt offload (RLM); GUI computer-use without policy training; Outcome-only long-horizon agent RL where the failure is signal starvation / policy drift, not async latency; Live-web multi-hop search-agent training (Iris SFT-RL climbing)
+  - when production post-train stack (SGLang / Megatron / LoRA RL / OPD), not the async algorithm → `task:frontier-rl-posttrain-stack`
+  - when agentic RSI / routing-harness post-train, not async stragglers → `task:agentic-rsi-routing-posttrain`
+- **Out of scope**: Building or choosing a software-engineering agent loop (mini-SWE-agent / CCA / OpenHands); Dumped long-prompt offload (RLM); GUI computer-use without policy training; Outcome-only long-horizon agent RL where the failure is signal starvation / policy drift, not async latency; Live-web multi-hop search-agent training (Iris SFT-RL climbing); Production post-train engine rather than the async algorithm (Miles); Routing-harness RSI post-train (NeoHorse-1)
+
+### task:agentic-rsi-routing-posttrain — Agentic RSI Routing-Harness Post-Training
+- **Scope**: Agentic post-training that converts routing-harness records (predicted demand, selected tier, interaction) into SFT curriculum and routing-guided OPD, then reallocates the next mix from capability feedback.
+- **SOTA**: `method:neohorse-1` `2609.08183` (as_of 2026-09-09) — 10-bench macro (agentic / coding / IF) vs Qwen3.5 same size: 4B 58.94→64.87; 9B 65.60→69.04
+  - do not use when build a SWE / issue-to-patch harness rather than post-train from routing traces → `method:mini-swe-agent`
+  - do not use when async stragglers / tool-latency replay is the bottleneck → `method:sao`
+  - do not use when outcome-only long-horizon agent RL (AppWorld coverage / anti-drift) → `method:canopy`
+  - do not use when train a live-web multi-hop search agent (SFT-RL climbing) → `method:iris`
+  - do not use when single-turn math/code Pass@1 RLVR → `method:cispo`
+  - do not use when single-teacher text distillation without a routing harness → `method:opd`
+- **Redirects**:
+  - when build a SWE / issue-to-patch harness rather than post-train from routing traces → `task:software-engineering-agent-harness`
+  - when variable environment latency / async stragglers, not RSI routing post-train → `task:agentic-async-rl`
+  - when outcome-only long-horizon agent RL (AppWorld coverage / anti-drift or rubric credit) → `task:outcome-only-long-horizon-agent-rl`
+  - when train a live-web multi-hop search agent (SFT-RL climbing) → `task:web-search-agent-rl`
+  - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
+  - when single-teacher text distillation without a routing harness → `task:student-distillation`
+- **Out of scope**: SWE issue-to-patch harness (mini-SWE-agent); Async tool-latency / straggler RL (SAO); AppWorld outcome-only coverage / anti-drift (CANOPY); Live-web multi-hop search-agent climbing (Iris); Single-turn dense math/code RLVR (CISPO); Text-only single-teacher distillation default (OPD)
 
 ### task:all-zero-verifier-groups — All-Zero Verifier Groups & Process Supervision
 - **SOTA**: `method:verigate` `2605.30451` (as_of 2026-08-26) — All-Zero Verifier Group Benchmarks / Process Supervision: Default SOTA for verifier gating
@@ -265,7 +288,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when outcome-only long-horizon interactive agent RL → `task:outcome-only-long-horizon-agent-rl`
   - when train asynchronous RL for a tool-use policy → `task:agentic-async-rl`
   - when train a live-web multi-hop search agent (SFT-RL climbing) → `task:web-search-agent-rl`
-- **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO); Live-web multi-hop search-agent training (Iris)
+  - when Pass@K / coverage / no-backward rather than Pass@1 → `task:passk-reasoning-coverage`
+- **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO); Live-web multi-hop search-agent training (Iris); Pass@K / coverage / no-backward (ES-reasoning / DATPO)
 
 ### task:math-code-rl-moe — Mathematical and Code RL Reasoning (MoE Policies)
 - **SOTA**: `method:sapo` `2511.20347` (as_of 2026-08-26) — Qwen3 MoE / MATH-500 MoE RL: Default SOTA for MoE/VL RL
@@ -287,6 +311,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when build an agent loop rather than train a policy → `task:software-engineering-agent-harness`
   - when production engine (rewind, sandbox, remote, TUI) → `task:agent-harness-runtime`
   - when train a live-web multi-hop search agent (SFT-RL climbing) → `task:web-search-agent-rl`
+  - when production post-train stack rather than sparse-outcome coverage → `task:frontier-rl-posttrain-stack`
+  - when agentic RSI / routing-harness post-train, not AppWorld coverage → `task:agentic-rsi-routing-posttrain`
 - **Out of scope**: Async straggler / tool-latency RL (SAO); Folding a long tool/web/SWE trajectory into a small active context (FoldGRPO); Single-turn dense math/code RLVR (CISPO); Building or choosing a SWE harness rather than training a policy (mini-SWE-agent); Production harness kernel (omp2); Live-web multi-hop search-agent training (Iris)
 
 ### task:passk-reasoning-coverage — Math/Code RLVR for Pass@K Coverage without Backward Pass
@@ -341,7 +367,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when build a SWE / issue-to-patch harness rather than train a search policy → `task:software-engineering-agent-harness`
   - when the problem is context folding of a long tool trajectory, not the search train recipe → `task:long-horizon-tool-agent`
   - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
-- **Out of scope**: AppWorld / outcome-only long-horizon coverage and anti-drift (CANOPY / DRACO); Async tool-latency / straggler RL (SAO); SWE issue-to-patch harness (mini-SWE-agent); Folding a long tool trajectory into a small active context (FoldGRPO); Single-turn dense math/code RLVR (CISPO)
+  - when agentic RSI / routing-harness post-train, not search-agent climbing → `task:agentic-rsi-routing-posttrain`
+- **Out of scope**: AppWorld / outcome-only long-horizon coverage and anti-drift (CANOPY / DRACO); Async tool-latency / straggler RL (SAO); SWE issue-to-patch harness (mini-SWE-agent); Folding a long tool trajectory into a small active context (FoldGRPO); Single-turn dense math/code RLVR (CISPO); Routing-harness RSI post-train (NeoHorse-1)
 
 ## pretraining
 
@@ -399,8 +426,32 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ## systems
 
+### task:frontier-rl-posttrain-stack — Frontier RL Post-Training Stack
+- **Scope**: Choosing and operating a production post-training stack (rollout engine, trainer backend, weight sync, LoRA RL / OPD / SFT / async agentic RL) at frontier MoE scale.
+- **SOTA**: `method:miles` `2609.08368` (as_of 2026-09-09) — GLM-5.2 744B-A40B async agentic RL on Terminal-bench-2, 64x GB300: 263s median (first 30 steps); KL mean 0.0369; reward 0.438→0.556 (single run)
+  - do not use when factory process / experiments-as-code / lineage is the job → `method:poolside-model-factory`
+  - do not use when async stragglers / tool-latency replay is the bottleneck → `method:sao`
+  - do not use when choosing the dense math/code Pass@1 loss → `method:cispo`
+  - do not use when choosing the ~7B dense pretrain optimizer → `method:muon2`
+  - do not use when build a SWE / issue-to-patch harness rather than run post-training → `method:mini-swe-agent`
+  - do not use when outcome-only long-horizon agent RL (AppWorld coverage / anti-drift) → `method:canopy`
+- **Redirects**:
+  - when factory process / experiments-as-code / lineage rather than the RL engine → `task:industrial-model-building`
+  - when variable environment latency / async stragglers, not the production stack → `task:agentic-async-rl`
+  - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
+  - when choosing the ~7B dense pretrain optimizer → `task:llm-pretraining-optimization`
+  - when build a SWE / issue-to-patch harness rather than run a post-train stack → `task:software-engineering-agent-harness`
+  - when outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) → `task:outcome-only-long-horizon-agent-rl`
+- **Out of scope**: Industrial factory process / experiments-as-code / lineage (Poolside); Async straggler algorithm (SAO); Dense math/code Pass@1 loss (CISPO); ~7B dense pretrain optimizer (Muon2); SWE issue-to-patch harness (mini-SWE-agent); AppWorld outcome-only coverage (CANOPY)
+
 ### task:industrial-model-building — Industrial Model Building (Model Factory Process)
+- **Scope**: Factory process: experiments-as-code, lineage, streamed mixes, shared train+infer codebase. Not the RL post-train engine and not a train kernel.
 - **SOTA**: `method:poolside-model-factory` `2605.27605` (as_of 2026-08) — Laguna XS.2 from-scratch factory cycle (Apache-2.0 release): five weeks
+- **Redirects**:
+  - when full-stack frontier RL post-train engine (SGLang rollouts, Megatron/FSDP, LoRA RL / OPD / async agentic RL), not factory lineage → `task:frontier-rl-posttrain-stack`
+  - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
+  - when choosing the ~7B dense pretrain optimizer → `task:llm-pretraining-optimization`
+- **Out of scope**: Frontier RL post-train stack / SGLang+Megatron engine (Miles); Dense optimizer (Muon2); Pass@1 RLVR loss (CISPO)
 
 ### task:train-moe-nvl72 — Train Mixture-of-Experts (MoE) on NVL72 Systems
 - **SOTA**: `method:mixture-of-kittens` (as_of 2026-08-26) — Production 512-GPU MoE Pretraining (GB300 NVL72): 1070.2 tok/s/GPU (1.41x vs DeepEP)

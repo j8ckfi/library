@@ -25,7 +25,11 @@ redirects:
     to: "task:agent-harness-runtime"
   - when: "train a live-web multi-hop search agent (SFT-RL climbing)"
     to: "task:web-search-agent-rl"
-last_reviewed: "2026-09-08"
+  - when: "production post-train stack rather than sparse-outcome coverage"
+    to: "task:frontier-rl-posttrain-stack"
+  - when: "agentic RSI / routing-harness post-train, not AppWorld coverage"
+    to: "task:agentic-rsi-routing-posttrain"
+last_reviewed: "2026-09-09"
 current_sota:
   - method: method:canopy
     as_of: "2026-09-04"
@@ -66,4 +70,4 @@ Two siblings share this task and are not substitutes:
 ## SOTA Recommendation (as of 2026-09-04)
 - **Primary Method (checker exists)**: **CANOPY** (`method:canopy`, `paper:canopy` `arXiv:2609.01245`).
 - **Outcome-blind / no checker**: **DRACO** (`method:draco`, `paper:draco` `arXiv:2609.04094`). Active, does not replace CANOPY when a verifier exists.
-- **Not This Task**: `method:sao` remains async-straggler RL; `method:foldgrpo` remains trajectory folding; `method:cispo` remains dense Pass@1; `method:mini-swe-agent` remains the harness; `method:omp2-harness` remains the production engine; `method:iris` remains live-web search-agent training.
+- **Not This Task**: `method:sao` remains async-straggler RL; `method:foldgrpo` remains trajectory folding; `method:cispo` remains dense Pass@1; `method:mini-swe-agent` remains the harness; `method:omp2-harness` remains the production engine; `method:iris` remains live-web search-agent training; `method:miles` remains the frontier post-train stack; `method:neohorse-1` remains routing-harness RSI.

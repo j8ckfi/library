@@ -16,7 +16,8 @@ methods:
   - method:dapo
   - method:cispo
   - method:cliff
-last_reviewed: "2026-09-04"
+  - method:thinkprior
+last_reviewed: "2026-09-09"
 tags:
   - post-training
   - reasoning
@@ -32,3 +33,4 @@ Handling hard reasoning problems where all sampled candidate rollouts fail (all-
 ## SOTA Recommendation (as of 2026-09-04)
 - **Primary Method**: **VeriGate** (`method:verigate`, 2605.30451). Unchanged.
 - **Optional first-mistake credit (not a PRM)**: `method:cliff` (`arXiv:2609.02817`) locates one Pitfall Step with an off-the-shelf teacher. Active plug-in. Does not replace VeriGate or CISPO.
+- **Optional cold-start silent-group prompt prior**: `method:thinkprior` (`arXiv:2609.09075`) ranks prompts before GRPO-family training. Cuts waste; not a VeriGate replacement and not a CISPO loss change.

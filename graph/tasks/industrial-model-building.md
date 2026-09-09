@@ -4,6 +4,18 @@ type: task
 title: "Industrial Model Building (Model Factory Process)"
 domain: "systems"
 summary: "Turn foundation-model development into a repeatable industrial process (versioned data, train, eval, infer) so iteration is a config change rather than a rewrite."
+scope: "Factory process: experiments-as-code, lineage, streamed mixes, shared train+infer codebase. Not the RL post-train engine and not a train kernel."
+out_of_scope:
+  - "Frontier RL post-train stack / SGLang+Megatron engine (Miles)"
+  - "Dense optimizer (Muon2)"
+  - "Pass@1 RLVR loss (CISPO)"
+redirects:
+  - when: "full-stack frontier RL post-train engine (SGLang rollouts, Megatron/FSDP, LoRA RL / OPD / async agentic RL), not factory lineage"
+    to: "task:frontier-rl-posttrain-stack"
+  - when: "single-turn math/code Pass@1 RLVR"
+    to: "task:math-code-rl-dense"
+  - when: "choosing the ~7B dense pretrain optimizer"
+    to: "task:llm-pretraining-optimization"
 current_sota:
   - method: method:poolside-model-factory
     as_of: "2026-08"
@@ -16,6 +28,8 @@ methods:
   - method:automixer
   - method:blender-streaming
   - method:hive-synth
+  - method:miles
+last_reviewed: "2026-09-09"
 tags:
   - systems
   - training-systems
@@ -46,4 +60,4 @@ Poolside's Laguna run used Muon (Moonlight) and CISPO **inside** the factory. Th
 - **Scale-down honesty**: few-GPU / small-lab operators keep the process ideas; they do not copy 10k-H200 machinery.
 
 ## SOTA Landscape
-As of 2026-08 the date-stamped process default is **Poolside Model Factory** (`method:poolside-model-factory`, Laguna M.1/XS.2 `arXiv:2605.27605` plus the 2025 factory blog series). Named machines (Dagster control plane, Iceberg/Spark assets, Blender, Titan, Atlas, Hive, AutoMixer, code-exec/Saucer, Podium) are closed internals except TorchTitan as Titan's public seed. Mixture-of-Kittens (`task:train-moe-nvl72`) remains the NVL72 megakernel SOTA; it is a different systems problem.
+As of 2026-08 the date-stamped process default is **Poolside Model Factory** (`method:poolside-model-factory`, Laguna M.1/XS.2 `arXiv:2605.27605` plus the 2025 factory blog series). Named machines (Dagster control plane, Iceberg/Spark assets, Blender, Titan, Atlas, Hive, AutoMixer, code-exec/Saucer, Podium) are closed internals except TorchTitan as Titan's public seed. Mixture-of-Kittens (`task:train-moe-nvl72`) remains the NVL72 megakernel SOTA; it is a different systems problem. The frontier RL **engine** (SGLang + Megatron/FSDP, LoRA RL / OPD / async agentic RL) is `task:frontier-rl-posttrain-stack` (`method:miles`); Miles does not replace this factory process.

@@ -55,6 +55,8 @@ task:software-engineering-agent-harness -> method:mini-swe-agent (2405.15793, 20
   when building a production engine (rewind, sandbox, remote, TUI) -> task:agent-harness-runtime
   when train outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) -> task:outcome-only-long-horizon-agent-rl
   when train a live-web multi-hop search agent (SFT-RL climbing) -> task:web-search-agent-rl
+  when production post-train stack rather than a SWE loop -> task:frontier-rl-posttrain-stack
+  when agentic RSI / routing-harness post-train rather than a SWE loop -> task:agentic-rsi-routing-posttrain
 task:directed-sssp-nonneg -> method:bmssp (2504.17033, 2026-08)
 task:1bit-extreme-quantization -> method:sparse-bitnet (2603.05168, 2026-08-26)
 task:fp4-hardware-training -> method:quartet-ii (2601.22813, 2026-08-26) + method:mxfp4-mi355x (2605.09825, 2026-08-26)
@@ -68,6 +70,7 @@ task:diffusion-augmented-ar -> method:uno (2609.04010, 2026-09-08)
   when aligning text-to-image diffusion or flow models with rewards -> task:posttrain-diffusion
   when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
+  when speculative draft co-train inside long-context RL (separate draft), not diffusion-augmented AR -> task:frontier-rl-posttrain-stack
 task:full-lowbit-finetune -> method:gradcodes (2608.30908, 2026-09-01)
   when memory must fit a 4-bit stack but a mixed-precision adapter at inference is acceptable -> task:4bit-peft-quantization
   when native FP4 forward/backward hardware training from scratch -> task:fp4-hardware-training
@@ -86,6 +89,15 @@ task:agentic-async-rl -> method:sao (2607.07508, 2026-08-26)
   when build an agent rather than train a policy -> task:software-engineering-agent-harness
   when outcome-only long-horizon agent RL (coverage / anti-drift), not async stragglers -> task:outcome-only-long-horizon-agent-rl
   when train a live-web multi-hop search agent (SFT-RL climbing), not async stragglers -> task:web-search-agent-rl
+  when production post-train stack (SGLang / Megatron / LoRA RL / OPD), not the async algorithm -> task:frontier-rl-posttrain-stack
+  when agentic RSI / routing-harness post-train, not async stragglers -> task:agentic-rsi-routing-posttrain
+task:agentic-rsi-routing-posttrain -> method:neohorse-1 (2609.08183, 2026-09-09)
+  when build a SWE / issue-to-patch harness rather than post-train from routing traces -> task:software-engineering-agent-harness
+  when variable environment latency / async stragglers, not RSI routing post-train -> task:agentic-async-rl
+  when outcome-only long-horizon agent RL (AppWorld coverage / anti-drift or rubric credit) -> task:outcome-only-long-horizon-agent-rl
+  when train a live-web multi-hop search agent (SFT-RL climbing) -> task:web-search-agent-rl
+  when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
+  when single-teacher text distillation without a routing harness -> task:student-distillation
 task:all-zero-verifier-groups -> method:verigate (2605.30451, 2026-08-26)
 task:data-free-self-evolution -> method:j-zero (2608.26582, 2026-08-31)
 task:direct-preference-alignment -> method:olmo-3 (2512.13961, 2026-08-26)
@@ -97,6 +109,7 @@ task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
   when outcome-only long-horizon interactive agent RL -> task:outcome-only-long-horizon-agent-rl
   when train asynchronous RL for a tool-use policy -> task:agentic-async-rl
   when train a live-web multi-hop search agent (SFT-RL climbing) -> task:web-search-agent-rl
+  when Pass@K / coverage / no-backward rather than Pass@1 -> task:passk-reasoning-coverage
 task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
 task:outcome-only-long-horizon-agent-rl -> method:canopy (2609.01245, 2026-09-04)
   when variable environment latency / async stragglers, not sparse-outcome coverage -> task:agentic-async-rl
@@ -105,6 +118,8 @@ task:outcome-only-long-horizon-agent-rl -> method:canopy (2609.01245, 2026-09-04
   when build an agent loop rather than train a policy -> task:software-engineering-agent-harness
   when production engine (rewind, sandbox, remote, TUI) -> task:agent-harness-runtime
   when train a live-web multi-hop search agent (SFT-RL climbing) -> task:web-search-agent-rl
+  when production post-train stack rather than sparse-outcome coverage -> task:frontier-rl-posttrain-stack
+  when agentic RSI / routing-harness post-train, not AppWorld coverage -> task:agentic-rsi-routing-posttrain
 task:passk-reasoning-coverage -> method:es-reasoning (2608.27351, 2026-08-31)
 task:privileged-teacher-opsd -> method:vista (2608.28306, 2026-08-31)
 task:reasoning-rl-alignment -> method:cispo (2506.13585, 2026-08-26) + method:sapo (2511.20347, 2026-08-26)
@@ -124,6 +139,7 @@ task:web-search-agent-rl -> method:iris (2609.04304, 2026-09-08)
   when build a SWE / issue-to-patch harness rather than train a search policy -> task:software-engineering-agent-harness
   when the problem is context folding of a long tool trajectory, not the search train recipe -> task:long-horizon-tool-agent
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
+  when agentic RSI / routing-harness post-train, not search-agent climbing -> task:agentic-rsi-routing-posttrain
 task:budget-consumer-pretrain -> method:puro-2b (2608.27370, 2026-08-31)
 task:linear-time-sequence-modeling -> method:mamba-2 (2405.21060, 2024-05)
 task:llm-pretraining-optimization -> method:muon2 (2604.09967, 2026-08-26)
@@ -139,7 +155,17 @@ task:operator-physics-informed -> method:pi-cvit (2606.06164, 2026-08-28)
 task:operator-weather -> method:fourcastnet-3 (2507.12144, 2026-08-28)
 task:snn-sequence-modeling -> method:longspike (2606.12895, 2026-08-26)
 task:spiking-neural-networks-training -> method:longspike (2606.12895, 2026-08-26) + method:a2sg (2606.11236, 2026-08-26)
+task:frontier-rl-posttrain-stack -> method:miles (2609.08368, 2026-09-09)
+  when factory process / experiments-as-code / lineage rather than the RL engine -> task:industrial-model-building
+  when variable environment latency / async stragglers, not the production stack -> task:agentic-async-rl
+  when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
+  when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
+  when build a SWE / issue-to-patch harness rather than run a post-train stack -> task:software-engineering-agent-harness
+  when outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) -> task:outcome-only-long-horizon-agent-rl
 task:industrial-model-building -> method:poolside-model-factory (2605.27605, 2026-08)
+  when full-stack frontier RL post-train engine (SGLang rollouts, Megatron/FSDP, LoRA RL / OPD / async agentic RL), not factory lineage -> task:frontier-rl-posttrain-stack
+  when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
+  when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
 task:train-moe-nvl72 -> method:mixture-of-kittens (2026-08-26)
 task:learned-video-compression -> method:dcvc-uf (2606.04410, 2026-08-26) + method:mlvc (2606.28027, 2026-08-26)
 task:neural-video-deploy -> method:mlvc (2606.28027, 2026-08-26)
@@ -156,7 +182,7 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 2. **Pretrain an MoE architecture**: Use **DeepSeek-V4** (`method:deepseek-v4`, `paper:deepseek-v4` `arXiv:2606.19348`) with **Kimi-K3** (`method:kimi-k3`, `paper:kimi-k3` `arXiv:2607.24653`) as co-default.
 3. **SFT a chat / instruct model**: **OLMo-3 Dolci stack** (`method:olmo-3`, `paper:olmo-3` `arXiv:2512.13961`); industrial alternative **Nemotron-Cascade 2** (`method:nemotron-cascade-2`, `paper:nemotron-cascade-2` `arXiv:2603.19220`).
 4. **RL a reasoner (math/code, verifiable)**: For dense models, use **CISPO** (`method:cispo`, MiniMax-M1 `paper:minimax-m1` `arXiv:2506.13585` + ScaleRL `paper:scalerl` `arXiv:2510.13786`). For MoE and Vision-Language models, use **SAPO** (`method:sapo`, `paper:sapo` `arXiv:2511.20347`, ms-swift `loss_type=sapo`); use **GSPO** (`method:gspo`) only for Qwen3.5-Omni Talker (`paper:qwen35-omni` `arXiv:2604.15804`). Gate process supervision with **VeriGate** (`method:verigate`, `paper:verigate` `arXiv:2605.30451`).
-5. **Agentic async RL**: Use **SAO** (`method:sao`, `paper:sao` `arXiv:2607.07508`) for asynchronous environment and tool-use reinforcement learning.
+5. **Agentic async RL**: Use **SAO** (`method:sao`, `paper:sao` `arXiv:2607.07508`) for asynchronous environment and tool-use reinforcement learning. The production post-train engine is **Miles** on `task:frontier-rl-posttrain-stack`, not this algorithm.
 6. **LoRA a local model on 24GB**: Quality default is **Vanilla LoRA + rsLoRA + LR sweep** (`method:lr-matters-lora`, `paper:lr-matters-lora` `arXiv:2602.04998`, `paper:lora-unified-study` `arXiv:2601.22708`) — NOT DoRA. If memory must fit on a 4-bit stack, use **AQLoRA-Q** (`method:aqlora-q`, `paper:aqlora` `arXiv:2608.23816`) or **AutoQRA** (`method:autoqra`, `paper:autoqra` `arXiv:2602.22268`). For memory-efficient full-parameter pretraining, use **SCALE** (`method:scale`, `paper:scale` `arXiv:2506.16659`, ICML 2026) — not GaLore.
 7. **Extreme compression / on-device**: For native 1.58-bit pretraining from scratch, use **Sparse-BitNet** (`method:sparse-bitnet`, `paper:sparse-bitnet` `arXiv:2603.05168`); keep 2B4T (`paper:bitnet-b158`) as dense citation. For post-training ternarization of existing pre-trained LLMs, use **ScaleQ-1.58** (`method:scaleq-158`, `paper:scaleq-158` `arXiv:2608.01078`). For native FP4 hardware training, use **Quartet-II NVFP4** (`method:quartet-ii`, `paper:quartet-ii` `arXiv:2601.22813`) or **MXFP4** (`method:mxfp4-mi355x`, `paper:mxfp4-mi355x` `arXiv:2605.09825`) / Kimi-K3 QAT.
 8. **Distill a student from a teacher**: Use **OPD** (`method:opd`, `paper:opd` `arXiv:2604.13016`) for single-teacher distillation and **Open-MOPD** (`method:open-mopd`, `paper:open-mopd` `arXiv:2608.19098`) for multi-teacher distillation.
@@ -177,7 +203,7 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 23. **Physics-informed neural operators (little/no labeled data)**: Use **PI-CViT** (`method:pi-cvit`, `paper:pi-cvit` `arXiv:2606.06164`) with GradNorm balancing, causal temporal weighting, and SOAP second-order optimizer — not a 2021 PINN / PINO.
 24. **Parameter-efficient fine-tuning for Fourier operators**: Use **F-Adapter** (`method:f-adapter`, `paper:f-adapter` `arXiv:2509.23173`, NeurIPS 2025) with ~2% trainable parameters. Hard rule: do NOT use vanilla LoRA on Fourier latent operators due to depth-amplified spectral error floors.
 25. **Global weather & climate forecasting neural operators**: Use **FourCastNet 3** (`method:fourcastnet-3`, `paper:fourcastnet-3` `arXiv:2507.12144`) spherical convolutional neural operator with calibrated probabilistic ensembles (weather forecasting engine, not CAD mesh CAE).
-26. **Industrial model-building / factory process**: Use **Poolside Model Factory** (`method:poolside-model-factory`, `paper:laguna-m1-xs2` `arXiv:2605.27605`). Process default, not a train-kernel default. Small lab: experiments-as-code + Dagster lineage + streamed mixes; skip custom FoundationDB scheduler / NCCL P2P / AutoMixer swarms / Titan megakernel. CISPO and Muon stay the train defaults (Laguna ran those on the factory stack).
+26. **Industrial model-building / factory process**: Use **Poolside Model Factory** (`method:poolside-model-factory`, `paper:laguna-m1-xs2` `arXiv:2605.27605`). Process default, not a train-kernel default. Small lab: experiments-as-code + Dagster lineage + streamed mixes; skip custom FoundationDB scheduler / NCCL P2P / AutoMixer swarms / Titan megakernel. CISPO and Muon stay the train defaults (Laguna ran those on the factory stack). Frontier RL **engine** (SGLang + Megatron/FSDP) is **Miles** on `task:frontier-rl-posttrain-stack`, not this process.
 27. **Privileged-teacher OPSD / gold-solution self-distillation**: Use **VISTA** (`method:vista`, `paper:vista` `arXiv:2608.28306`) when a same-size teacher is privileged with a gold reference solution and a deterministic outcome verifier. Keeps the OPSD student update and adapts the teacher on verified rollouts at top-k teacher-first KL positions. Does **not** replace `method:opd` (single-teacher student distillation), `method:open-mopd` (multi-teacher), `method:opdvr` (OPD+RLVR), `method:cispo` (dense RLVR), or `method:u-opsd` (unlabeled/no-GT).
 28. **Data-free self-evolution (verifiable and unverifiable)**: Use **J-Zero** (`method:j-zero`, `paper:j-zero` `arXiv:2608.26582`) for Challenger-Solver-Judge co-evolution from zero external data. Judge co-adapts from loop-structure preference pairs (role-asymmetry and subtask-amplification), not from its own scores. Does **not** replace `method:u-opsd` (unlabeled existing math problems), `method:ttpo` (test-time), or `method:cispo` / `method:sapo` / `method:sao` (labeled/agentic RL). GRPO here is the inner self-play optimizer, not the library's math/code RLVR default.
 29. **Budget ~1.5-2B dense pretrain on consumer GPUs**: Use **Puro-2B** (`method:puro-2b`, `paper:puro-2b` `arXiv:2608.27370`) for Qwen3-1.7B-arch ~2B from scratch on RTX 5090 (blockwise FP8, MuonH, CMA, Kaiyuan-Spark). Does **not** replace `method:muon2` + KL-SOAP as the 7B optimizer default, `method:olmo-3` as the open 7B/instruct data recipe, or `method:quartet-ii` as NVFP4. FP8 here is blockwise E4M3/MXFP8, not NVFP4.
@@ -211,6 +237,21 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 57. **Web search agent training**: **Iris** (`method:iris`, `arXiv:2609.04304`) reverse-constructed hyperlink tasks → traj/turn filter → SFT → live-search RL → SFT-RL climbing. First hop for `task:web-search-agent-rl`. Does **not** replace CANOPY, SAO, mini-SWE-agent, FoldGRPO, or CISPO.
 58. **Sparse OPD token budget**: **Sparse OPD supervision** (`method:sparse-opd-supervision`, `arXiv:2609.04565`) 1–2 tokens per trajectory (~0.05%) can match/beat full-token OPD. Active plug-in. Does **not** replace OPD or CISPO.
 59. **OPD-then-RLVR stacking order**: **OPD-then-RL** (`method:opd-then-rlvr`, `arXiv:2609.04108`) sequences OPD then RLVR; beats joint one-step fusion. Does **not** replace OPD, CISPO, or OPDVR.
+60. **Frontier RL post-train stack**: Use **Miles v0.1** (`method:miles`, `paper:miles` `arXiv:2609.08368`) on `task:frontier-rl-posttrain-stack`. slime-descended production engine (SGLang rollouts, Megatron/FSDP, LoRA RL / OPD / SFT / async agentic RL). Process/system default for that task. Does **not** replace Poolside factory, SAO, CISPO, Muon2, or mini-SWE-agent.
+61. **Agentic RSI / routing-harness post-train**: Use **NeoHorse-1** (`method:neohorse-1`, `paper:neohorse-1` `arXiv:2609.08183`) on `task:agentic-rsi-routing-posttrain`. Routing-guided OPD curriculum from harness traces. Does **not** replace mini-SWE-agent, SAO, CANOPY, or Iris.
+62. **RLVR cold-start silent-group prompt prior**: **ThinkPrior** (`method:thinkprior`, `arXiv:2609.09075`) zero-rollout Beta difficulty prior. Cuts silent-group waste; no detected final-accuracy gain. Active plug-in. Does **not** replace CISPO, GAPO, or VeriGate.
+63. **OPD probability transport**: **RouteOPD** (`method:routeopd`, `arXiv:2609.08337`) pairwise log-odds transport vs sampled reverse-KL. Active OPD plug-in. Does **not** replace OPD, RA-OPD, IDA-OPD, or TGOPD.
+64. **OPD late-training stability**: **TV-OPD** (`method:tv-opd`, `arXiv:2609.08341`) sign of token advantages plus a shared TV scale. Active. Relate to RA-OPD / TrOPD / Stable-OPD without supersession. Does **not** replace OPD.
+65. **Pass@K tree-rollout coverage**: **DATPO** (`method:datpo`, `arXiv:2609.08650`) difficulty-adaptive sentence-entropy trees. Active beside ES-reasoning. CISPO remains Pass@1; ES-reasoning remains the Pass@K / no-backward first hop.
+66. **Weak-to-strong reverse distillation**: **OPRD** (`method:oprd`, `arXiv:2609.08798`) amplifies verifier-supported student gradients along the teacher policy-shift. Distinct from `method:w2s-opd` (matching). Does **not** replace OPD or CISPO.
+67. **MoE PEFT adapter consolidation**: **ACE** (`method:ace-moe-peft`, `arXiv:2609.06072`, EMNLP 2026). Slug is `ace-moe-peft` because `method:ace` is Agentic Context Engineering. Active. Does **not** replace `method:lr-matters-lora`.
+68. **Anisotropic per-rank LoRA LR**: **AnLR-LoRA** (`method:anlr-lora`, `arXiv:2609.05885`). Active beside NoRA. Quality default remains vanilla LoRA + rsLoRA + LR sweep.
+69. **FP4 W4A4 noise law**: **KBBQ** (`method:kbbq`, `arXiv:2609.08135`). Active PTQ-style inference niche. Does **not** replace Quartet-II / MXFP4 hardware training.
+70. **Genuine 1-bit PTQ**: **AF1** (`method:af1`, `arXiv:2609.06161`, EMNLP 2026 Main). Existing-checkpoint binarization. Does **not** replace Sparse-BitNet pretrain.
+71. **Circuit-engagement RLVR data selection**: **CircuitLens** (`method:circuitlens`, `arXiv:2609.07183`, EMNLP 2026 Findings). Low-CRS decile can win on 7B medium math. Active. Does **not** replace CISPO.
+72. **Long-context RL speculative draft co-train**: **Online Draft Co-Training** (`method:online-draft-cotrain`, `arXiv:2609.07108`, NeMo RL). Niche systems. Does **not** replace Miles or Uno.
+73. **RLVR data-policy negative result**: **DataFlex-RL** (`method:dataflex-rl`, `arXiv:2609.06107`) — selection policies do not beat uniform GRPO at 95% CI in that study. Active note beside ThinkPrior. Does **not** replace CISPO.
+74. **MoE sparsity HP transfer**: **MoE sparsity hyperparameter scaling** (`method:moe-sparsity-hp-scaling`, `arXiv:2609.08690`) LR/batch vs activation ratio. Active pretrain guidance. Does **not** replace DeepSeek-V4 / Kimi-K3.
 
 ---
 
@@ -270,6 +311,21 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `iris` (2609.04304) is the first-hop for `task:web-search-agent-rl` only. It does not supersede `canopy`, `sao`, `mini-swe-agent`, `foldgrpo`, or `cispo`.
 - `sparse-opd-supervision` (2609.04565) is an active OPD token-budget plug-in. It does not supersede `opd` or `cispo`.
 - `opd-then-rlvr` (2609.04108) is active stacking-order guidance (OPD then RLVR, not joint one-step fusion). It does not supersede `opd`, `cispo`, or `opdvr`.
+- `miles` (2609.08368) is the first-hop for `task:frontier-rl-posttrain-stack` only. It does not supersede `poolside-model-factory`, `sao`, `cispo`, `muon2`, or `mini-swe-agent`.
+- `neohorse-1` (2609.08183) is the first-hop for `task:agentic-rsi-routing-posttrain` only. It does not supersede `mini-swe-agent`, `sao`, `canopy`, `iris`, `cispo`, or `opd`.
+- `thinkprior` (2609.09075) is an active RLVR prompt-selection plug-in. It does not supersede `cispo`, `gapo`, or `verigate`.
+- `routeopd` (2609.08337) is an active OPD transport plug-in. It does not supersede `opd`, `ra-opd`, `ida-opd`, or `tgopd`.
+- `tv-opd` (2609.08341) is an active OPD stability plug-in. It does not supersede `opd`, `ra-opd`, `tropd`, or `stable-opd`.
+- `datpo` (2609.08650) is an active Pass@K tree-rollout sibling. It does not supersede `es-reasoning` or `cispo`.
+- `oprd` (2609.08798) is active reverse distillation. It does not supersede `w2s-opd`, `opd`, or `cispo`.
+- `ace-moe-peft` (2609.06072) is active MoE PEFT consolidation. Distinct from `ace` (agent memory). It does not supersede `lr-matters-lora`.
+- `anlr-lora` (2609.05885) is an active per-rank LR plug-in. It does not supersede `lr-matters-lora` or `nora`.
+- `kbbq` (2609.08135) is an active W4A4 noise-law niche. It does not supersede `quartet-ii` or `mxfp4-mi355x`.
+- `af1` (2609.06161) is active 1-bit PTQ. It does not supersede `sparse-bitnet` or `scaleq-158`.
+- `circuitlens` (2609.07183) is an active RLVR data-selection signal. It does not supersede `cispo`.
+- `online-draft-cotrain` (2609.07108) is a niche speculative-draft RL systems path. It does not supersede `miles` or `uno`.
+- `dataflex-rl` (2609.06107) is an active negative-result note on RLVR data policies. It does not supersede `cispo` or `thinkprior`.
+- `moe-sparsity-hp-scaling` (2609.08690) is active MoE LR/batch vs sparsity guidance. It does not supersede `deepseek-v4` or `kimi-k3`.
 
 ---
 

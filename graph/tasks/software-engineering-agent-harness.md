@@ -15,6 +15,8 @@ out_of_scope:
   - "Planner-coder-tester multi-agent theater for a single patch"
   - "Meta-agent search as the default design process"
   - "Training a live-web search policy (Iris)"
+  - "Frontier RL post-train engine (Miles)"
+  - "Routing-harness RSI post-train (NeoHorse-1)"
 redirects:
   - when: "train asynchronous RL for a tool-use policy"
     to: "task:agentic-async-rl"
@@ -30,7 +32,11 @@ redirects:
     to: "task:outcome-only-long-horizon-agent-rl"
   - when: "train a live-web multi-hop search agent (SFT-RL climbing)"
     to: "task:web-search-agent-rl"
-last_reviewed: "2026-09-08"
+  - when: "production post-train stack rather than a SWE loop"
+    to: "task:frontier-rl-posttrain-stack"
+  - when: "agentic RSI / routing-harness post-train rather than a SWE loop"
+    to: "task:agentic-rsi-routing-posttrain"
+last_reviewed: "2026-09-09"
 current_sota:
   - method: method:mini-swe-agent
     as_of: "2026-09"

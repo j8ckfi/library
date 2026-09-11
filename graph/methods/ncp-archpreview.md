@@ -18,7 +18,7 @@ do_not_use_for:
     use_instead: "task:pretrain-dense-7b"
 assumptions:
   - "Joint NTP + Next Concept Prediction. Product-quantized concept vocab from hidden states. Paper: 8.9B on 5.73T Dolma-3 tokens."
-  - "Weights and eval are public; a from-scratch pretrain recipe is not. Serving: InternLM/lmdeploy and LuckySJTU vLLM ncp-archpreview fork."
+  - "Weights ArchSpace-Collection/NCP_ArchPreview_*; eval LUMIA-Group/ncp_olmo_eval. No official train GitHub (recipe code_status=partial). Serving: LuckySJTU/vllm_ncp_archpreview (obsolete; successor LuckySJTU/vllm dev/ncp-archpreview) and InternLM/lmdeploy."
 last_reviewed: "2026-09-11"
 papers:
   - paper:ncp-archpreview
@@ -85,6 +85,6 @@ Experimental latent-space LM architecture. Optimizer default stays Muon2. Data r
 - Experimental first hop on `task:latent-space-lm-pretrain` only. Does **not** retarget Muon2, OLMo-3, or DeepSeek-V4 / Kimi-K3.
 
 ## Gotchas & Failure Modes
-- No official from-scratch trainer in-repo; eval kit is `ncp_olmo_eval`, serving is fork-based.
+- No official from-scratch trainer; recipe is `code_status: partial`. Eval kit is LUMIA-Group/ncp_olmo_eval. Serving is LuckySJTU/vllm_ncp_archpreview (obsolete fork; use LuckySJTU/vllm `dev/ncp-archpreview`) plus InternLM/lmdeploy.
 - 8.9B vs OLMo-3-**7B** is not a matched-parameter bake-off; the paper also reports an 8.9B NTP compute comparison (85%).
 - Do not cite this as a Muon2 replacement.

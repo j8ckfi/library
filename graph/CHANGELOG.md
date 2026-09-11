@@ -6,6 +6,13 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-11 — wire verified artifact pointers on the 2026-09-11 sweep (no first-hop retarget)
+- NSD: collection slug is `PassionPrc/nsd-negative-self-distillation` (not bare `PassionPrc/nsd`); train/eval stay in-repo verl at Prongcan/NSD (`scripts/4B_NSD/`, `scripts/eval/`).
+- Nemotron IMO Gold: collection `nvidia/nemotron-labs-imo-2026`; dataset `nvidia/Nemotron-IMO-Bench`; Skills `recipes/nemotron-imo-tts`; NeMo-RL `imo-26-ultra-v3` guide; SFT/RL ckpts and Math-Proofs datasets already named.
+- NCP: `ArchSpace-Collection/NCP_ArchPreview_*`; eval LUMIA-Group/ncp_olmo_eval; serving LuckySJTU/vllm_ncp_archpreview (obsolete fork; successor LuckySJTU/vllm `dev/ncp-archpreview`). `recipe:ncp-archpreview` `code_status: partial` (no official train GitHub).
+- Revisiting traces: `https://github.com/naver-ai/revisiting-trace` confirmed. Harness on-policy correction stays niche stub (`repo_url: none found`).
+- First hops unchanged: VISTA / CISPO / Muon2 / OLMo-3 / mini-SWE-agent. Skipped AgentGrad / HyQuant / AdamX / OPD-gating-TweetEval.
+
 ### 2026-09-11 — ingest 2026-09-11 weekday SOTA sweep (NSD, Musec, Nemotron IMO Gold, NCP, harness on-policy correction, partial traces, MoE repetition, T1)
 - MUST 1–6 plus optional 7–8. Two new narrow tasks (`task:latent-space-lm-pretrain`, `task:olympiad-math-posttrain`). No false supersessions of CISPO / Muon2 / OPD / OPSA / VISTA / CANOPY / SAO / ES-reasoning / Miles / NeoHorse-1 / mini-SWE-agent / Iris / Poolside.
 - Skipped WATCH: AdamX 2609.11867, unified per-token OPD gating 2609.11768, AgentGrad, HyQuant, LILA, TF-IDF CE.

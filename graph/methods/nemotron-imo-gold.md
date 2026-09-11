@@ -18,7 +18,7 @@ do_not_use_for:
     use_instead: "method:olmo-3"
 assumptions:
   - "Start from Nemotron 3 Ultra GA (nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16). SFT max seq 425,984. Then RL specialist. TTC is generate–verify–refine over three checkpoints."
-  - "Released: nvidia/Nemotron-3-Labs-Ultra-Math-SFT and -RL; data nvidia/Nemotron-Math-Proofs-v3-SFT and -RL; NeMo-Skills recipes/nemotron-imo-tts; NeMo-RL imo-26-ultra-v3 guide."
+  - "Released collection nvidia/nemotron-labs-imo-2026: SFT/RL specialists, Nemotron-Math-Proofs-v3-{SFT,RL}, Nemotron-IMO-Bench. NeMo-Skills recipes/nemotron-imo-tts; NeMo-RL branch imo-26-ultra-v3 guide."
 last_reviewed: "2026-09-11"
 papers:
   - paper:nemotron-imo-gold
@@ -42,7 +42,7 @@ claims:
     verified: true
     evidence_level: "preprint"
     source_url: "https://arxiv.org/abs/2609.10712"
-    notes: "Eval set released with the recipe. Do not mix with AIME Pass@1 CISPO numbers."
+    notes: "https://huggingface.co/datasets/nvidia/Nemotron-IMO-Bench. Do not mix with AIME Pass@1 CISPO numbers."
 tags:
   - post-training
   - math

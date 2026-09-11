@@ -18,7 +18,7 @@ do_not_use_for:
     use_instead: "method:cispo"
 assumptions:
   - "Post-train on pre-collected reasoning trajectories (SFT primary; RL / on-policy distillation hosts also benefit). EMNLP 2026 Findings."
-  - "Code: naver-ai/revisiting-trace."
+  - "Code: https://github.com/naver-ai/revisiting-trace (confirmed)."
 last_reviewed: "2026-09-11"
 papers:
   - paper:partial-reasoning-traces

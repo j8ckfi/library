@@ -7,6 +7,7 @@ task: task:latent-space-lm-pretrain
 target_hardware: "8.9B pretrain on 5.73T Dolma-3 (paper cluster); eval on 8 GPU via ncp_olmo_eval"
 framework: "PyTorch / vLLM (ncp-archpreview fork) / lmdeploy"
 repo_url: "https://github.com/LUMIA-Group/ncp_olmo_eval"
+code_status: partial
 pip_dependencies:
   - "ncp-olmo-eval==0.1.1"
 tags:
@@ -19,10 +20,10 @@ tags:
 # NCP-ArchPreview Latent LM Pretrain
 
 ## Hardware & Environment Setup
-- Weights: `https://huggingface.co/collections/ArchSpace-Collection/ncp-archpreview`.
-- Eval: `https://github.com/LUMIA-Group/ncp_olmo_eval` (vLLM-only public runtime).
-- Serving forks: InternLM/lmdeploy; LuckySJTU vLLM `dev/ncp-archpreview`.
-- No official from-scratch trainer. Optimizer default stays Muon2. Data recipe stays OLMo-3 / Dolma-3.
+- Weights (prefix `ArchSpace-Collection/NCP_ArchPreview_*`): `https://huggingface.co/collections/ArchSpace-Collection/ncp-archpreview`. Named: `NCP_ArchPreview_dolma3_8.9B_Stage1`, `…_Stage2_v1` / `_v2` / `_v3`, `…_Stage2_DFlash2_NCPFlash`, plus Stage1 step checkpoints.
+- Eval: `https://github.com/LUMIA-Group/ncp_olmo_eval` (vLLM-only public runtime). No official from-scratch train GitHub (`code_status: partial`).
+- Community serving: `https://github.com/LuckySJTU/vllm_ncp_archpreview` (README marks this fork obsolete; successor branches live on `https://github.com/LuckySJTU/vllm` — `dev/ncp-archpreview` and `dev/ncp-archpreview-dflash`). InternLM/lmdeploy remains the other serving fork.
+- Optimizer default stays Muon2. Data recipe stays OLMo-3 / Dolma-3.
 
 ## Quickstart Implementation
 

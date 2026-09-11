@@ -36,7 +36,7 @@ NCP-ArchPreview jointly trains next-token prediction and Next Concept Prediction
 - DFlash2 mean accepted length +4.17%.
 
 ## Open Source Repository & Resources
-- Weights: `https://huggingface.co/collections/ArchSpace-Collection/ncp-archpreview`
+- Weights: `https://huggingface.co/collections/ArchSpace-Collection/ncp-archpreview` (`ArchSpace-Collection/NCP_ArchPreview_*`)
 - Eval: `https://github.com/LUMIA-Group/ncp_olmo_eval`
-- Serving forks: InternLM/lmdeploy; LuckySJTU/vllm (ncp-archpreview branch)
-- No official from-scratch pretrain recipe beyond the technical report as of 2026-09-11.
+- Serving: `https://github.com/LuckySJTU/vllm_ncp_archpreview` (obsolete fork; use LuckySJTU/vllm `dev/ncp-archpreview` / `dev/ncp-archpreview-dflash`); InternLM/lmdeploy
+- No official from-scratch train GitHub as of 2026-09-11 (`recipe:ncp-archpreview` `code_status: partial`).

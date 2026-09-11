@@ -21,7 +21,7 @@ do_not_use_for:
     use_instead: "method:opsa"
 assumptions:
   - "Reasoning post-train. Paper: Qwen3-1.7B/4B/8B, 2 epochs, α=0.01. Default negative condition is generated online without gold answers."
-  - "Official code: Prongcan/NSD (verl host). Checkpoints: PassionPrc/NSD-Qwen3-{1.7B,4B,8B}."
+  - "Official train/eval: Prongcan/NSD (in-repo verl; scripts/4B_NSD and scripts/eval). Collection: PassionPrc/nsd-negative-self-distillation. Checkpoints: PassionPrc/NSD-Qwen3-{1.7B,4B,8B}."
 last_reviewed: "2026-09-11"
 papers:
   - paper:nsd

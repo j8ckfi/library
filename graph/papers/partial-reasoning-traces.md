@@ -40,4 +40,4 @@ Long complete reasoning trajectories are the usual SFT target for reasoners. Pil
 - Intermediate-token removal does not collapse final reasoning quality in the paper's controlled studies.
 
 ## Open Source Repository & Resources
-- Code: `https://github.com/naver-ai/revisiting-trace`
+- Code (confirmed): `https://github.com/naver-ai/revisiting-trace`

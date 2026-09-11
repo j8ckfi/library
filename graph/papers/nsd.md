@@ -43,5 +43,6 @@ On-policy self-distillation (OPSD) can degrade complex reasoning: imitating a pr
 - Qwen3-4B reflection-token frequency 7.5 vs OPSD 2.2 vs Intuitor 0.8 (Table 2).
 
 ## Open Source Repository & Resources
-- Code: `https://github.com/Prongcan/NSD`
-- Checkpoints: `https://huggingface.co/collections/PassionPrc/nsd-negative-self-distillation`
+- Code / train / eval: `https://github.com/Prongcan/NSD` (in-repo verl; loss `verl/verl/trainer/distillation/losses.py`; train `scripts/4B_NSD/`; eval `scripts/eval/`)
+- Collection: `https://huggingface.co/collections/PassionPrc/nsd-negative-self-distillation` (slug `PassionPrc/nsd-negative-self-distillation`, not a bare `PassionPrc/nsd`)
+- Checkpoints: `https://huggingface.co/PassionPrc/NSD-Qwen3-1.7B`, `https://huggingface.co/PassionPrc/NSD-Qwen3-4B`, `https://huggingface.co/PassionPrc/NSD-Qwen3-8B`

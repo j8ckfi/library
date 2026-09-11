@@ -41,7 +41,9 @@ Starting from Nemotron 3 Ultra, the authors train two specialist checkpoints (SF
 - SFT max sequence length 425,984 tokens from `nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16`.
 
 ## Open Source Repository & Resources
+- Collection: `https://huggingface.co/collections/nvidia/nemotron-labs-imo-2026`
 - TTC / proofs: `https://github.com/NVIDIA-NeMo/Skills/tree/main/recipes/nemotron-imo-tts`
 - RL guide: `https://github.com/NVIDIA-NeMo/RL/blob/imo-26-ultra-v3/docs/guides/nemotron-3-ultra-imo.md`
-- Checkpoints: `nvidia/Nemotron-3-Labs-Ultra-Math-SFT`, `nvidia/Nemotron-3-Labs-Ultra-Math-RL`
-- Data: `nvidia/Nemotron-Math-Proofs-v3-SFT`, `nvidia/Nemotron-Math-Proofs-v3-RL`
+- Checkpoints: `https://huggingface.co/nvidia/Nemotron-3-Labs-Ultra-Math-SFT`, `https://huggingface.co/nvidia/Nemotron-3-Labs-Ultra-Math-RL`
+- Data: `https://huggingface.co/datasets/nvidia/Nemotron-Math-Proofs-v3-SFT`, `https://huggingface.co/datasets/nvidia/Nemotron-Math-Proofs-v3-RL`
+- Eval: `https://huggingface.co/datasets/nvidia/Nemotron-IMO-Bench`

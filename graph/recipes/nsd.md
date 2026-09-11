@@ -23,8 +23,10 @@ tags:
 # NSD Negative Self-Distillation
 
 ## Hardware & Environment Setup
-- Official code: `https://github.com/Prongcan/NSD`. Checkpoints: PassionPrc/NSD-Qwen3-{1.7B,4B,8B}.
-- Install the in-repo verl (`cd verl && pip install -e .`). CUDA 12.9. Loss lives in `verl/verl/trainer/distillation/losses.py` (`divergence_gated`, `divergence_gated_log`, `divergence_gated_sigmoid`).
+- Official train/eval: `https://github.com/Prongcan/NSD` (in-repo verl; do not swap a stock verl).
+- Collection (exact slug): `https://huggingface.co/collections/PassionPrc/nsd-negative-self-distillation` — PassionPrc/NSD-Qwen3-1.7B, PassionPrc/NSD-Qwen3-4B, PassionPrc/NSD-Qwen3-8B.
+- Install: `cd verl && pip install -e .`. CUDA 12.9. Loss: `verl/verl/trainer/distillation/losses.py` (`divergence_gated`, `divergence_gated_log`, `divergence_gated_sigmoid`).
+- Train: `scripts/4B_NSD/` (PG `*_pg_*`; supervised `*_supervised_*`; default online: `run_online_nsd_sol_aware_supervised.sh`). Eval: `scripts/eval/` (AIME / HMMT / MATH-500).
 - Privileged-teacher first hop stays VISTA. Pass@1 stays CISPO. Distill matching stays OPD.
 
 ## Quickstart Implementation

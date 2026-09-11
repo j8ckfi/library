@@ -20,9 +20,11 @@ tags:
 # Nemotron IMO Gold SFT+RL+TTC
 
 ## Hardware & Environment Setup
-- Base: `nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16` (`method:nemotron-3-ultra`).
-- Specialists: `nvidia/Nemotron-3-Labs-Ultra-Math-SFT`, `nvidia/Nemotron-3-Labs-Ultra-Math-RL`.
-- Data: `nvidia/Nemotron-Math-Proofs-v3-SFT`, `nvidia/Nemotron-Math-Proofs-v3-RL`.
+- Collection: `https://huggingface.co/collections/nvidia/nemotron-labs-imo-2026`.
+- Base: `https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16` (`method:nemotron-3-ultra`).
+- Specialists: `https://huggingface.co/nvidia/Nemotron-3-Labs-Ultra-Math-SFT`, `https://huggingface.co/nvidia/Nemotron-3-Labs-Ultra-Math-RL`.
+- Data: `https://huggingface.co/datasets/nvidia/Nemotron-Math-Proofs-v3-SFT`, `https://huggingface.co/datasets/nvidia/Nemotron-Math-Proofs-v3-RL`.
+- Eval: `https://huggingface.co/datasets/nvidia/Nemotron-IMO-Bench` (200 items).
 - TTC / submitted proofs: `https://github.com/NVIDIA-NeMo/Skills/tree/main/recipes/nemotron-imo-tts`.
 - RL guide: `https://github.com/NVIDIA-NeMo/RL/blob/imo-26-ultra-v3/docs/guides/nemotron-3-ultra-imo.md`.
 - Pass@1 kernel stays CISPO. This recipe is olympiad NL proofs + TTC.
@@ -59,4 +61,4 @@ def ttc_loop(problem: str, cfg: NemotronImoTtc) -> str:
 ## Critical Hyperparameters & Tuning Advice
 - SFT max length 425,984 is load-bearing. Do not compress proofs into short-CoT CISPO batches.
 - Keep a separate high-compute selection stage after iterative refine.
-- Nemotron-IMO-Bench (200) is the released eval; do not mix with AIME Pass@1.
+- Nemotron-IMO-Bench (`nvidia/Nemotron-IMO-Bench`, 200) is the released eval; do not mix with AIME Pass@1.

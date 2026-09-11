@@ -13,6 +13,8 @@ current_sota:
     notes: "Mixture-of-Kittens (MoK) fused dispatch + SwiGLU + combine megakernel on Blackwell NVL72s."
 methods:
   - method:mixture-of-kittens
+  - method:moe-data-repetition
+last_reviewed: "2026-09-11"
 tags:
   - systems
   - pretraining
@@ -35,3 +37,4 @@ Training massive sparse Mixture-of-Experts (MoE) models across hundreds or thous
 ## SOTA Recommendation (as of 2026-08-26)
 - **Primary Systems Megakernel**: **Mixture-of-Kittens (MoK)** (`method:mixture-of-kittens`, `paper:mixture-of-kittens`, `recipe:mixture-of-kittens`).
 - **Target Model Architectures**: **DeepSeek-V4** (`method:deepseek-v4`), **Kimi-K3** (`method:kimi-k3`), and **Nemotron-3 Super Latent MoE** (`method:nemotron-3-super-latentmoe`).
+- **Gotcha (data repeats)**: `method:moe-data-repetition` (`arXiv:2609.11917`). Does not replace MoK.

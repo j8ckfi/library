@@ -19,7 +19,8 @@ methods:
   - method:flowbalance
   - method:verpo
   - method:opsd-collapse-review
-last_reviewed: "2026-09-09"
+  - method:nsd
+last_reviewed: "2026-09-11"
 tags:
   - post-training
   - distillation
@@ -44,3 +45,4 @@ Train a problem-only student on its own rollouts using dense token-level targets
 - **Adjacent inner-loop (not this method)**: `method:flowbalance` uses privileged hindsight as a stopped trajectory-balance feature, not a teacher update. VISTA stays this task's first hop.
 - **Optional evidence-regularized sibling**: `method:verpo` (`arXiv:2609.06100`). Treats privileged evidence as a proposal on an outcome objective. Does not replace VISTA or CISPO.
 - **Collapse playbook (survey)**: `method:opsd-collapse-review` (`arXiv:2608.25936`). Three levers; no code. Does not replace VISTA.
+- **Actionable anti-collapse trainer (not this first hop)**: `method:nsd` (`arXiv:2609.11699`). Diverges from a self-generated negative condition instead of imitating privileged traces. Active sibling. VISTA stays this task's first hop.

@@ -11,6 +11,9 @@ current_sota:
     metric: "token efficiency"
     value: "~2x token efficiency vs AdamW"
     notes: "Muon2 (2604.09967) + KL-SOAP (2607.20548) if memory allows."
+redirects:
+  - when: "latent-space / next-concept LM architecture rather than dense NTP 7B"
+    to: "task:latent-space-lm-pretrain"
 methods:
   - method:muon2
   - method:soap-muon-scale
@@ -26,7 +29,9 @@ methods:
   - method:qwen38-next
   - method:layer-dropout
   - method:optimizer-memory-schedules
-last_reviewed: "2026-09-08"
+  - method:musec
+  - method:ncp-archpreview
+last_reviewed: "2026-09-11"
 tags:
   - pretraining
   - dense-lm
@@ -45,3 +50,5 @@ Training a ~7B dense language model from scratch requires optimizing billions of
 - **Adjacent hybrid residual / Qwen-style production architecture**: `method:qwen38-next`. Does not replace Muon2 as the 7B optimizer.
 - **Optional layer sparsity**: `method:layer-dropout` (`arXiv:2609.05275`). Does not replace Muon2.
 - **OT-horizon HP guidance**: `method:optimizer-memory-schedules` (`arXiv:2609.04577`). 51M–253M study; do not retarget this 7B optimizer.
+- **Optional Muon stability plug-in**: `method:musec` (`arXiv:2609.11655`). Does not replace Muon2.
+- **Latent-space LM architecture (not this task)**: `method:ncp-archpreview` on `task:latent-space-lm-pretrain`.

@@ -39,7 +39,8 @@ methods:
   - method:canopy
   - method:iris
   - method:opd
-last_reviewed: "2026-09-09"
+  - method:harness-onpolicy-correction
+last_reviewed: "2026-09-11"
 tags:
   - post-training
   - agentic
@@ -60,3 +61,4 @@ Recursive self-improvement needs a concrete loop: observe capability demand from
 ## SOTA Recommendation (as of 2026-09-09)
 - **Primary Method**: **NeoHorse-1** (`method:neohorse-1`, `paper:neohorse-1` `arXiv:2609.08183`). Code: TokenRhythm/NeoHorse. Weights: hf.co/collections/TokenRhythm/neohorse-1.
 - **Not This Task**: `method:mini-swe-agent` remains the SWE harness; `method:sao` remains async; `method:canopy` remains AppWorld; `method:iris` remains search-agent climbing; `method:cispo` remains Pass@1; `method:opd` remains text distill.
+- **Gotcha (evolved-harness full-traj SFT)**: `method:harness-onpolicy-correction` (`arXiv:2609.09134`). Does not replace NeoHorse-1.

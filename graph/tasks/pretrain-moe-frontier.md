@@ -30,7 +30,9 @@ methods:
   - method:qwen38-next
   - method:ce-moe
   - method:moe-sparsity-hp-scaling
-last_reviewed: "2026-09-09"
+  - method:moe-data-repetition
+  - method:nemotron-imo-gold
+last_reviewed: "2026-09-11"
 tags:
   - pretraining
   - moe
@@ -49,3 +51,5 @@ Training sparse Mixture-of-Experts models enables scaling parameter capacity int
 - **Adjacent Qwen-style hybrid residual recipe**: `method:qwen38-next` (`arXiv:2608.30320`). Does not replace DeepSeek-V4 / Kimi-K3 or Muon2.
 - **Optional communication-efficient layout**: `method:ce-moe` (`arXiv:2608.28511`) when expert-parallel all-to-all dominates. Layout niche only.
 - **Optional LR/batch vs activation-ratio transfer**: `method:moe-sparsity-hp-scaling` (`arXiv:2609.08690`). Pretrain HP guidance. Does not replace DeepSeek-V4 / Kimi-K3.
+- **Gotcha (repetition × sparsity)**: `method:moe-data-repetition` (`arXiv:2609.11917`). MoEs degrade from ~4× repeats; dense 80M tolerated 8×. Does not replace DeepSeek-V4 / Kimi-K3.
+- **Olympiad specialist post-train on Ultra (not this architecture task)**: `method:nemotron-imo-gold` on `task:olympiad-math-posttrain`.

@@ -40,7 +40,8 @@ methods:
   - method:iris
   - method:miles
   - method:neohorse-1
-last_reviewed: "2026-09-09"
+  - method:t1-terminal-rl
+last_reviewed: "2026-09-11"
 tags:
   - post-training
   - agentic
@@ -58,4 +59,4 @@ This is **policy training**. Building a software-engineering agent loop is `task
 ## SOTA Recommendation (as of 2026-09-08)
 - **Primary Method**: **SAO** (`method:sao`, 2607.07508). Unchanged.
 - **Related pre-RL tool OPKD (not this async-train default)**: `method:pta` (`arXiv:2609.04773`) teacher-commits tool turns before Search-R1 / DeepEyes RL. Lookahead fills idle distill capacity; it is not SAO's straggler replay.
-- **Not This Task**: sparse-outcome coverage / anti-drift on AppWorld-style agents is `task:outcome-only-long-horizon-agent-rl` (`method:canopy` / `method:draco`). Folding is `task:long-horizon-tool-agent`. Live-web search-agent climbing is `task:web-search-agent-rl` (`method:iris`). Production post-train engine is `task:frontier-rl-posttrain-stack` (`method:miles`). Routing-harness RSI post-train is `task:agentic-rsi-routing-posttrain` (`method:neohorse-1`).
+- **Not This Task**: sparse-outcome coverage / anti-drift on AppWorld-style agents is `task:outcome-only-long-horizon-agent-rl` (`method:canopy` / `method:draco`). Folding is `task:long-horizon-tool-agent`. Live-web search-agent climbing is `task:web-search-agent-rl` (`method:iris`). Production post-train engine is `task:frontier-rl-posttrain-stack` (`method:miles`). Routing-harness RSI post-train is `task:agentic-rsi-routing-posttrain` (`method:neohorse-1`). Terminal-MoE recipe `method:t1-terminal-rl` (`arXiv:2609.11042`) is not SAO.

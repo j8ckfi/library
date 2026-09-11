@@ -10,6 +10,7 @@ out_of_scope:
   - "Async tool-latency RL (SAO)"
   - "Live-web multi-hop search-agent training (Iris)"
   - "Pass@K / coverage / no-backward (ES-reasoning / DATPO)"
+  - "Olympiad NL proofs / IMO TTC (Nemotron IMO Gold)"
 redirects:
   - when: "outcome-only long-horizon interactive agent RL"
     to: "task:outcome-only-long-horizon-agent-rl"
@@ -19,6 +20,8 @@ redirects:
     to: "task:web-search-agent-rl"
   - when: "Pass@K / coverage / no-backward rather than Pass@1"
     to: "task:passk-reasoning-coverage"
+  - when: "olympiad-style natural-language proofs / IMO TTC rather than Pass@1"
+    to: "task:olympiad-math-posttrain"
 current_sota:
   - method: method:cispo
     as_of: "2026-08-26"
@@ -52,7 +55,9 @@ methods:
   - method:dataflex-rl
   - method:verpo
   - method:rlvr-group-correlation
-last_reviewed: "2026-09-09"
+  - method:nemotron-imo-gold
+  - method:partial-reasoning-traces
+last_reviewed: "2026-09-11"
 tags:
   - post-training
   - reasoning
@@ -87,4 +92,6 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Optional sparse OPD token mask**: `method:sparse-opd-supervision` (`arXiv:2609.04565`). Does not replace CISPO or OPD.
 - **Optional OPD-then-RL stack**: `method:opd-then-rlvr` (`arXiv:2609.04108`) when both OPD and RLVR will run; sequence them, do not fuse in one step. Stage-2 Pass@1 algorithm stays CISPO. Does not replace CISPO or OPD.
 - **No labels / no teacher**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace CISPO when labels exist.
+- **Olympiad NL proofs / IMO TTC (not this Pass@1 task)**: `method:nemotron-imo-gold` on `task:olympiad-math-posttrain`. Does not replace CISPO.
+- **Optional partial-trace SFT shaping**: `method:partial-reasoning-traces` (`arXiv:2609.07103`). Does not replace CISPO or OLMo-3.
 

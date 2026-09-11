@@ -6,6 +6,58 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-11 — ingest 2026-09-11 weekday SOTA sweep (NSD, Musec, Nemotron IMO Gold, NCP, harness on-policy correction, partial traces, MoE repetition, T1)
+- MUST 1–6 plus optional 7–8. Two new narrow tasks (`task:latent-space-lm-pretrain`, `task:olympiad-math-posttrain`). No false supersessions of CISPO / Muon2 / OPD / OPSA / VISTA / CANOPY / SAO / ES-reasoning / Miles / NeoHorse-1 / mini-SWE-agent / Iris / Poolside.
+- Skipped WATCH: AdamX 2609.11867, unified per-token OPD gating 2609.11768, AgentGrad, HyQuant, LILA, TF-IDF CE.
+
+### 2026-09-11 — ingest method:nsd (active sibling; does not supersede method:vista / method:cispo / method:opd / method:opsa)
+- Added paper:nsd (2609.11699), method:nsd, recipe:nsd. Code: Prongcan/NSD. Wired to task:privileged-teacher-opsd; mention on task:teacher-free-on-policy-self-adaptation and method:opsd-collapse-review.
+- Status active. Diverges from a self-generated negative condition instead of imitating privileged traces.
+- Evidence: Qwen3-1.7B/4B/8B ΔAvg +2.3 / +7.5 / +6.0 vs OPSD/Intuitor/TTRL (Table 1, arXiv:2609.11699); verified: true; evidence_level: preprint.
+- Scope checks: VISTA remains privileged-teacher first hop; CISPO remains Pass@1; OPD remains matching distill; OPSA remains teacher-free; opsd-collapse-review stays the niche survey.
+
+### 2026-09-11 — ingest method:musec (active Muon stability plug-in; does not supersede method:muon2 / method:muonclip-kimi-k2)
+- Added paper:musec (2609.11655), method:musec, recipe:musec (Soft Musec stub on kellerjordan/modded-nanogpt). Wired to task:llm-pretraining-optimization; mention on task:pretrain-dense-7b.
+- Status active. Spectral clip of momentum singular values vs Muon flattening.
+- Evidence: Soft Musec stays stable where Muon variants diverge on modded-nanogpt; matches them when already well-tuned (arXiv:2609.11655); verified: true; evidence_level: preprint.
+- Scope checks: Muon2 remains ~7B optimizer; MuonClip remains trillion-scale MoE recipe.
+
+### 2026-09-11 — ingest method:nemotron-imo-gold (new task:olympiad-math-posttrain; does not supersede method:cispo / method:nemotron-3-ultra)
+- Added paper:nemotron-imo-gold (2609.10712), method:nemotron-imo-gold, recipe:nemotron-imo-gold, task:olympiad-math-posttrain. Reverse redirect on task:math-code-rl-dense. Cross-link method:nemotron-3-ultra.
+- Status active. SFT+RL specialists + NL generate–verify–refine TTC. Artifacts: NVIDIA-NeMo/Skills recipes/nemotron-imo-tts; NeMo-RL imo-26-ultra-v3 guide; nvidia/Nemotron-3-Labs-Ultra-Math-{SFT,RL}.
+- Evidence: IMO 2026 30/42 gold threshold (arXiv:2609.10712); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; Ultra remains the base architecture; OLMo-3 remains instruct SFT.
+
+### 2026-09-11 — ingest method:ncp-archpreview (new task:latent-space-lm-pretrain; experimental; does not supersede method:muon2 / method:olmo-3)
+- Added paper:ncp-archpreview (2609.10715), method:ncp-archpreview, recipe:ncp-archpreview, task:latent-space-lm-pretrain. Reverse redirects on task:llm-pretraining-optimization / task:pretrain-dense-7b / task:open-data-recipe.
+- Status experimental. Joint NTP + Next Concept Prediction; 8.9B on 5.73T Dolma-3. Weights: ArchSpace-Collection/ncp-archpreview. Eval: LUMIA-Group/ncp_olmo_eval.
+- Evidence: 51.3% tokens to match OLMo-3-7B Stage-1 loss; +2.45 macro; +5.99 GSM8K (arXiv:2609.10715); verified: true; evidence_level: preprint.
+- Scope checks: Muon2 remains the optimizer; OLMo-3 remains the open mix.
+
+### 2026-09-11 — ingest method:harness-onpolicy-correction (niche gotcha; does not supersede method:mini-swe-agent / method:miles / method:neohorse-1)
+- Added paper:harness-onpolicy-correction (2609.09134), method:harness-onpolicy-correction, recipe:harness-onpolicy-correction (stub; no official code). Wired to task:software-engineering-agent-harness / task:agent-harness-runtime / task:agentic-rsi-routing-posttrain.
+- Status niche. Full expert-trajectory LoRA-SFT after model-specific harness evolution regresses (−4 to −30 pts); on-policy failing-turn rewrite is the fix.
+- Evidence: all seven enterprise tasks, Qwen3-Coder and Gemma 4 (arXiv:2609.09134); verified: true; evidence_level: preprint.
+- Scope checks: mini-SWE-agent remains the harness; Miles remains the stack; NeoHorse-1 remains RSI routing post-train.
+
+### 2026-09-11 — ingest method:partial-reasoning-traces (active SFT-data plug-in; does not supersede method:olmo-3 / method:nemotron-cascade-2)
+- Added paper:partial-reasoning-traces (2609.07103), method:partial-reasoning-traces, recipe:partial-reasoning-traces. Code: naver-ai/revisiting-trace. Wired to task:instruct-sft-alignment; mention on task:math-code-rl-dense.
+- Status active. Full long CoT SFT is overfed; partial/truncated traces work; intermediate tokens contribute little.
+- Evidence: EMNLP 2026 Findings; attention + token-removal studies (arXiv:2609.07103); verified: true; evidence_level: peer-reviewed.
+- Scope checks: OLMo-3 / Nemotron-Cascade 2 remain instruct defaults; CISPO remains Pass@1.
+
+### 2026-09-11 — ingest method:moe-data-repetition (niche gotcha; does not supersede method:deepseek-v4 / method:kimi-k3)
+- Added paper:moe-data-repetition (2609.11917), method:moe-data-repetition, recipe:moe-data-repetition (no code). Wired to task:pretrain-moe-frontier / task:train-moe-nvl72.
+- Status niche. MoEs degrade from ~4× repeats; dense 80M tolerated 8×; effect scales with total params.
+- Evidence: 80M–1B active / 8.5B total (arXiv:2609.11917); verified: true; evidence_level: preprint.
+- Scope checks: DeepSeek-V4 / Kimi-K3 remain MoE architecture defaults.
+
+### 2026-09-11 — ingest method:t1-terminal-rl (active; does not supersede method:canopy / method:sao / method:miles)
+- Added paper:t1-terminal-rl (2609.11042), method:t1-terminal-rl, recipe:t1-terminal-rl. Host: THUDM/slime v0.3.0. Project: jyyang26.github.io/t1. Wired as mention on task:outcome-only-long-horizon-agent-rl / task:frontier-rl-posttrain-stack / task:agentic-async-rl.
+- Status active. 122B MoE terminal RL, TITO + R3. Not a new first hop.
+- Evidence: Terminal-Bench 2.1 43.8%→64.0%; Long-Horizon Terminal Bench 27.9% (arXiv:2609.11042); verified: true; evidence_level: preprint.
+- Scope checks: CANOPY remains AppWorld coverage; SAO remains async algorithm; Miles remains the production stack.
+
 ### 2026-09-09 — refine 2026-09-09 sweep (OPRD code, VERPO, RPB, group-correlation, OPSD collapse review)
 - Corrections on the open PR: OPRD recipe now points at raymin0223/on_policy_reverse_distillation. ACE MoE PEFT was already ingested (`method:ace-moe-peft`, UbiquitousAILab/ACE). No CISPO / Muon2 / OPD / OPSA / CANOPY retarget.
 - Added method:verpo (2609.06100), method:rpb (2609.08115), method:rlvr-group-correlation (2609.06386), method:opsd-collapse-review (2608.25936). WATCH skipped: FEE EnvAsScaffold 2609.08404. AnLR-LoRA / MoE HP scaling / AF1 / DataFlex-RL already landed in the first commit.

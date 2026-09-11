@@ -110,7 +110,12 @@ task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
   when train asynchronous RL for a tool-use policy -> task:agentic-async-rl
   when train a live-web multi-hop search agent (SFT-RL climbing) -> task:web-search-agent-rl
   when Pass@K / coverage / no-backward rather than Pass@1 -> task:passk-reasoning-coverage
+  when olympiad-style natural-language proofs / IMO TTC rather than Pass@1 -> task:olympiad-math-posttrain
 task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
+task:olympiad-math-posttrain -> method:nemotron-imo-gold (2609.10712, 2026-09-11)
+  when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
+  when general chat / instruct SFT -> task:instruct-sft-alignment
+  when choosing the Nemotron 3 Ultra / frontier MoE architecture -> task:pretrain-moe-frontier
 task:outcome-only-long-horizon-agent-rl -> method:canopy (2609.01245, 2026-09-04)
   when variable environment latency / async stragglers, not sparse-outcome coverage -> task:agentic-async-rl
   when the problem is context folding of a long tool trajectory, not the RL signal -> task:long-horizon-tool-agent
@@ -141,11 +146,19 @@ task:web-search-agent-rl -> method:iris (2609.04304, 2026-09-08)
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
   when agentic RSI / routing-harness post-train, not search-agent climbing -> task:agentic-rsi-routing-posttrain
 task:budget-consumer-pretrain -> method:puro-2b (2608.27370, 2026-08-31)
+task:latent-space-lm-pretrain -> method:ncp-archpreview (2609.10715, 2026-09-11)
+  when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
+  when open pretrain mix / Dolma-3 recipe -> task:open-data-recipe
+  when standard dense ~7B NTP from scratch -> task:pretrain-dense-7b
+  when frontier MoE architecture -> task:pretrain-moe-frontier
+  when lossless multi-token / diffusion-augmented AR serving -> task:diffusion-augmented-ar
 task:linear-time-sequence-modeling -> method:mamba-2 (2405.21060, 2024-05)
 task:llm-pretraining-optimization -> method:muon2 (2604.09967, 2026-08-26)
   when lossless multi-token / diffusion-augmented AR serving rather than the pretrain optimizer -> task:diffusion-augmented-ar
+  when latent-space / next-concept LM architecture rather than the optimizer -> task:latent-space-lm-pretrain
 task:open-data-recipe -> method:olmo-3 (2512.13961, 2026-08-26)
 task:pretrain-dense-7b -> method:muon2 (2604.09967, 2026-08-26)
+  when latent-space / next-concept LM architecture rather than dense NTP 7B -> task:latent-space-lm-pretrain
 task:pretrain-moe-frontier -> method:deepseek-v4 (2606.19348, 2026-08-26) + method:kimi-k3 (2607.24653, 2026-08-26)
 task:operator-foundation -> method:poseidon (2405.19101, 2026-08-28) + method:unisolver (2405.17527, 2026-08-28)
 task:operator-fourier-adapt -> method:f-adapter (2509.23173, 2026-08-28)
@@ -256,6 +269,14 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 76. **MoE post-train router soft-anchor**: **RPB** (`method:rpb`, `arXiv:2609.08115`). Active MoE routing candidate. Does **not** replace SAPO.
 77. **GRPO group verifier ICC**: **RLVR group correlation** (`method:rlvr-group-correlation`, `arXiv:2609.06386`, ρ≈0.53 / Kish n_eff≈1.70 at k=8). Analysis hygiene, not an optimizer. Does **not** replace CISPO.
 78. **OPSD collapse playbook**: **One Symptom, Three Levers** (`method:opsd-collapse-review`, `arXiv:2608.25936`). Survey; no code. Does **not** replace VISTA, OPSA, or CISPO.
+79. **Negative Self-Distillation**: **NSD** (`method:nsd`, `arXiv:2609.11699`). Diverges from a self-generated negative condition instead of imitating privileged traces. Active anti-collapse sibling on `task:privileged-teacher-opsd`. Does **not** replace VISTA, CISPO, OPD, or OPSA.
+80. **Muon spectral-clip plug-in**: **Musec** (`method:musec`, `arXiv:2609.11655`). Clips momentum singular values instead of flattening them. Active. Does **not** replace Muon2 or MuonClip.
+81. **Olympiad NL proof recipe**: **Nemotron IMO Gold** (`method:nemotron-imo-gold`, `arXiv:2609.10712`) on `task:olympiad-math-posttrain`. IMO 2026 30/42. Does **not** replace CISPO as Pass@1.
+82. **Latent-space LM pretrain**: **NCP-ArchPreview** (`method:ncp-archpreview`, `arXiv:2609.10715`) on `task:latent-space-lm-pretrain`. Experimental. Does **not** replace Muon2 or OLMo-3.
+83. **Harness × weight-update gotcha**: **On-policy expert correction** (`method:harness-onpolicy-correction`, `arXiv:2609.09134`). Full expert-trajectory SFT after harness evolution regresses. Does **not** replace mini-SWE-agent, Miles, or NeoHorse-1.
+84. **Partial reasoning-trace SFT**: **Revisiting complete traces** (`method:partial-reasoning-traces`, `arXiv:2609.07103`). Prefer truncated traces. Does **not** replace OLMo-3 / Nemotron-Cascade 2.
+85. **MoE × data-repetition gotcha**: **MoE data-repetition overfit** (`method:moe-data-repetition`, `arXiv:2609.11917`). MoEs hurt from ~4× repeats. Does **not** replace DeepSeek-V4 / Kimi-K3.
+86. **122B terminal-MoE RL**: **T1** (`method:t1-terminal-rl`, `arXiv:2609.11042`) on slime. Active mention. Does **not** replace CANOPY, SAO, or Miles.
 
 ---
 
@@ -334,6 +355,14 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `rpb` (2609.08115) is an active MoE post-train router soft-anchor. It does not supersede `sapo`.
 - `rlvr-group-correlation` (2609.06386) is a niche verifier-ICC analysis. It does not supersede `cispo`.
 - `opsd-collapse-review` (2608.25936) is a niche OPSD collapse playbook. It does not supersede `vista`, `opsa`, or `cispo`.
+- `nsd` (2609.11699) is an active anti-collapse trainer (negative-condition divergence). It does not supersede `vista`, `cispo`, `opd`, or `opsa`.
+- `musec` (2609.11655) is an active Muon spectral-clip plug-in. It does not supersede `muon2` or `muonclip-kimi-k2`.
+- `nemotron-imo-gold` (2609.10712) is the first hop for `task:olympiad-math-posttrain` only. It does not supersede `cispo` or `nemotron-3-ultra`.
+- `ncp-archpreview` (2609.10715) is the experimental first hop for `task:latent-space-lm-pretrain` only. It does not supersede `muon2` or `olmo-3`.
+- `harness-onpolicy-correction` (2609.09134) is a niche harness×SFT gotcha. It does not supersede `mini-swe-agent`, `miles`, or `neohorse-1`.
+- `partial-reasoning-traces` (2609.07103) is an active SFT-data plug-in. It does not supersede `olmo-3` or `nemotron-cascade-2`.
+- `moe-data-repetition` (2609.11917) is a niche MoE repetition gotcha. It does not supersede `deepseek-v4` or `kimi-k3`.
+- `t1-terminal-rl` (2609.11042) is an active 122B terminal-MoE recipe on slime. It does not supersede `canopy`, `sao`, or `miles`.
 
 ---
 

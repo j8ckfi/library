@@ -30,3 +30,4 @@ Nemotron-3-Ultra structures large Mixture-of-Experts architectures around hardwa
 
 ## When to Use
 - Pretraining multi-hundred-billion parameter MoE models across large GPU clusters.
+- Olympiad specialist post-train on this base is `method:nemotron-imo-gold`, not a replacement of this architecture.

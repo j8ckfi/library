@@ -22,7 +22,7 @@ redirects:
     to: "task:long-context-prompt-offload"
   - when: "how to talk to tools/agents as a protocol"
     to: "task:agent-communication"
-last_reviewed: "2026-09-02"
+last_reviewed: "2026-09-11"
 current_sota:
   - method: method:omp2-harness
     as_of: "2026-09-02"
@@ -32,6 +32,7 @@ current_sota:
     notes: "Self-reported blog architecture, not a SWE-bench number. Does not replace mini-SWE-agent, CCA, OpenHands, SAO, FoldGRPO, RLM, MAGIC, CISPO, Muon2, MCP, or ACE."
 methods:
   - method:omp2-harness
+  - method:harness-onpolicy-correction
 tags:
   - agents
   - agent-harness
@@ -56,4 +57,5 @@ This is **not** the SWE-bench start/eval loop. Issue → patch / locked mini har
 ## SOTA Landscape
 - **Default (this task)**: **omp² harness** (`method:omp2-harness`, `paper:harness-playbook`). Spec for a production engine still being built; start with journal → session DOM.
 - **Not this task**: mini-SWE-agent (issue → patch / locked eval), CCA (equal-model Pro scaffold), OpenHands/CodeAct (production OSS SWE agent), SAO (train a policy), FoldGRPO (trajectory folding), RLM (dumped long prompt), MCP (agent↔tool protocol), ACE (agent memory), MAGIC / CISPO / Muon2 (training/eval kernels).
+- **Gotcha (evolved-harness SFT)**: `method:harness-onpolicy-correction` (`arXiv:2609.09134`). Does not replace omp2.
 - Related workflow, not this architecture: [prewalk](https://stencil.so/blog/prewalk) is a workflow on omp, not current_sota here.

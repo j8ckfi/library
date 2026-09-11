@@ -39,7 +39,8 @@ methods:
   - method:cispo
   - method:mini-swe-agent
   - method:online-draft-cotrain
-last_reviewed: "2026-09-09"
+  - method:t1-terminal-rl
+last_reviewed: "2026-09-11"
 tags:
   - systems
   - training-systems
@@ -61,3 +62,4 @@ Frontier post-training is a systems problem: multi-turn tool rollouts on trillio
 - **Primary Method**: **Miles v0.1** (`method:miles`, `paper:miles` `arXiv:2609.08368`). slime-descended; SGLang rollouts; Megatron or FSDP trainer. Code: radixark/miles.
 - **Not This Task**: `method:poolside-model-factory` remains the factory process; `method:sao` remains async stragglers; `method:cispo` remains Pass@1; `method:muon2` remains the 7B optimizer; `method:mini-swe-agent` remains the SWE harness.
 - **Optional long-context speculative draft path**: `method:online-draft-cotrain` (`arXiv:2609.07108`, NeMo RL). Niche systems. Does not replace Miles or Uno.
+- **Optional 122B terminal-MoE recipe on slime (not this stack default)**: `method:t1-terminal-rl` (`arXiv:2609.11042`). Does not replace Miles.

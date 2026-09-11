@@ -36,3 +36,4 @@ MuonClip adapts matrix-orthogonalized optimization for trillion-token sparse Mix
 
 ## Supersession
 - Supersedes `method:muon-scalable` at trillion scale.
+- `method:musec` is an optimizer-level momentum spectral clip (different mechanism). It does not replace MuonClip at trillion MoE scale.

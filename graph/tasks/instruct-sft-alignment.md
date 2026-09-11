@@ -25,6 +25,8 @@ methods:
   - method:nemotron-cascade
   - method:simpo
   - method:dpo
+  - method:partial-reasoning-traces
+last_reviewed: "2026-09-11"
 tags:
   - post-training
   - instruct
@@ -38,6 +40,7 @@ tags:
 ## Problem Definition
 Transforming base pre-trained models into safe, capable, instruction-following conversational assistants without degrading core knowledge.
 
-## SOTA Recommendation (as of 2026-08-26)
+## SOTA Recommendation (as of 2026-09-11)
 - **Primary Open Stack**: **OLMo-3 Dolci** (`method:olmo-3`, 2512.13961).
 - **Industrial Alternative**: **Nemotron-Cascade-2** (`method:nemotron-cascade-2`, 2603.19220).
+- **Optional reasoning-trace shaping**: `method:partial-reasoning-traces` (`arXiv:2609.07103`). Prefer partial/truncated CoT over dumping complete traces. Does not replace OLMo-3 / Cascade.

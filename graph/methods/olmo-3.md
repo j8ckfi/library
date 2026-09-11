@@ -43,6 +43,8 @@ OLMo-3 provides the comprehensive open foundation model pretraining and alignmen
 ## When to Use
 - Default SOTA open data pretraining recipe.
 - Default SOTA open instruct SFT and alignment pipeline.
+- Partial/truncated reasoning traces (`method:partial-reasoning-traces`) can shape reasoner SFT on top; they do not replace this stack.
+- NCP-ArchPreview trained on Dolma-3 (`method:ncp-archpreview`) does not replace this mix.
 
 ## Supersession
 - Supersedes `method:olmo-2-curriculum` for open data recipes.

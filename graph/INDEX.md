@@ -289,10 +289,23 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when train asynchronous RL for a tool-use policy → `task:agentic-async-rl`
   - when train a live-web multi-hop search agent (SFT-RL climbing) → `task:web-search-agent-rl`
   - when Pass@K / coverage / no-backward rather than Pass@1 → `task:passk-reasoning-coverage`
-- **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO); Live-web multi-hop search-agent training (Iris); Pass@K / coverage / no-backward (ES-reasoning / DATPO)
+  - when olympiad-style natural-language proofs / IMO TTC rather than Pass@1 → `task:olympiad-math-posttrain`
+- **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO); Live-web multi-hop search-agent training (Iris); Pass@K / coverage / no-backward (ES-reasoning / DATPO); Olympiad NL proofs / IMO TTC (Nemotron IMO Gold)
 
 ### task:math-code-rl-moe — Mathematical and Code RL Reasoning (MoE Policies)
 - **SOTA**: `method:sapo` `2511.20347` (as_of 2026-08-26) — Qwen3 MoE / MATH-500 MoE RL: Default SOTA for MoE/VL RL
+
+### task:olympiad-math-posttrain — Olympiad Proof Post-Training and Test-Time Compute
+- **Scope**: Hard olympiad / IMO-style natural-language proof post-train plus TTC (SFT+RL specialists, NL verify/refine, no formal prover required).
+- **SOTA**: `method:nemotron-imo-gold` `2609.10712` (as_of 2026-09-11) — IMO 2026 official contest: 30 (gold threshold)
+  - do not use when single-turn dense math/code Pass@1 RLVR → `method:cispo`
+  - do not use when choosing the Nemotron 3 Ultra pretrain architecture → `method:nemotron-3-ultra`
+  - do not use when general chat / instruct SFT → `method:olmo-3`
+- **Redirects**:
+  - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
+  - when general chat / instruct SFT → `task:instruct-sft-alignment`
+  - when choosing the Nemotron 3 Ultra / frontier MoE architecture → `task:pretrain-moe-frontier`
+- **Out of scope**: Single-turn dense math/code Pass@1 RLVR (CISPO); General chat / instruct SFT (OLMo-3 / Nemotron-Cascade 2); Nemotron 3 Ultra pretrain architecture choice; Formal Lean / prover-in-the-loop systems
 
 ### task:outcome-only-long-horizon-agent-rl — Outcome-Only Long-Horizon Agent RL
 - **Scope**: Policy training for multi-turn agents judged only at episode end, where the failure modes are signal starvation (all-success / all-fail groups) and policy drift on a small revisited task pool. Includes the outcome-blind rubric variant when no programmatic checker exists.
@@ -375,6 +388,20 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 ### task:budget-consumer-pretrain — Budget Consumer-GPU Dense Pretraining (~1.5-2B)
 - **SOTA**: `method:puro-2b` `2608.27370` (as_of 2026-08-31) — 15-task math/code/reasoning/knowledge aggregate vs Qwen2-1.5B / Qwen2.5-1.5B: Canonical ~$6.9K / 22.5k GPU-h approaches Qwen2.5-1.5B; uniform $4.4K run beats Qwen2-1.5B
 
+### task:latent-space-lm-pretrain — Latent-Space Language Model Pretraining
+- **Scope**: Latent-space / next-concept LM pretrain architecture (product-quantized concepts, concept module, joint NTP+NCP). Experimental first hop is NCP-ArchPreview.
+- **SOTA**: `method:ncp-archpreview` `2609.10715` (as_of 2026-09-11) — 8.9B NCP-ArchPreview vs OLMo-3-7B on Dolma-3 / downstream macro: 51.3% tokens to match OLMo-3-7B Stage-1 loss; +2.45 macro; +5.99 GSM8K
+  - do not use when choosing the ~7B dense pretrain optimizer → `method:muon2`
+  - do not use when choosing the open pretrain data mix → `method:olmo-3`
+  - do not use when standard dense ~7B NTP pretrain without a concept module → `task:pretrain-dense-7b`
+- **Redirects**:
+  - when choosing the ~7B dense pretrain optimizer → `task:llm-pretraining-optimization`
+  - when open pretrain mix / Dolma-3 recipe → `task:open-data-recipe`
+  - when standard dense ~7B NTP from scratch → `task:pretrain-dense-7b`
+  - when frontier MoE architecture → `task:pretrain-moe-frontier`
+  - when lossless multi-token / diffusion-augmented AR serving → `task:diffusion-augmented-ar`
+- **Out of scope**: ~7B dense NTP optimizer choice (Muon2); Open pretrain mix / Dolma-3 recipe (OLMo-3); Frontier MoE architecture (DeepSeek-V4 / Kimi-K3); Diffusion-augmented AR serving (Uno); Linear-time SSM sequence models (Mamba-2)
+
 ### task:linear-time-sequence-modeling — Linear-Time Sequence Modeling & Recurrent Architectures
 - **SOTA**: `method:mamba-2` `2405.21060` (as_of 2024-05) — Pile / FineWeb Token Perplexity & Throughput: 8x vs standard attention
 
@@ -382,12 +409,15 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 - **SOTA**: `method:muon2` `2604.09967` (as_of 2026-08-26) — Moonlight 7B Pretraining / FineWeb: ~2x token efficiency vs AdamW
 - **Redirects**:
   - when lossless multi-token / diffusion-augmented AR serving rather than the pretrain optimizer → `task:diffusion-augmented-ar`
+  - when latent-space / next-concept LM architecture rather than the optimizer → `task:latent-space-lm-pretrain`
 
 ### task:open-data-recipe — Open Foundation Data Recipe & Pretraining Mix
 - **SOTA**: `method:olmo-3` `2512.13961` (as_of 2026-08-26) — Dolma-3 Open Token Mix: Default SOTA open data recipe
 
 ### task:pretrain-dense-7b — Pretrain Dense ~7B Language Model from Scratch
 - **SOTA**: `method:muon2` `2604.09967` (as_of 2026-08-26) — Moonlight Scaling Laws / FineWeb Token Mix: ~2x token efficiency vs AdamW
+- **Redirects**:
+  - when latent-space / next-concept LM architecture rather than dense NTP 7B → `task:latent-space-lm-pretrain`
 
 ### task:pretrain-moe-frontier — Pretrain Mixture-of-Experts (MoE) Architecture at Scale
 - **SOTA**: `method:deepseek-v4` `2606.19348` (as_of 2026-08-26) — Frontier MoE Benchmarks & Throughput: Frontier Pareto SOTA

@@ -36,7 +36,6 @@ redirects:
     to: "task:frontier-rl-posttrain-stack"
   - when: "agentic RSI / routing-harness post-train rather than a SWE loop"
     to: "task:agentic-rsi-routing-posttrain"
-last_reviewed: "2026-09-09"
 current_sota:
   - method: method:mini-swe-agent
     as_of: "2026-09"
@@ -50,6 +49,8 @@ methods:
   - method:openhands-codeact
   - method:live-swe-agent
   - method:single-agent-plus-tools
+  - method:harness-onpolicy-correction
+last_reviewed: "2026-09-11"
 tags:
   - agents
   - agent
@@ -74,3 +75,4 @@ Choose the loop, ACI, and tools for repository-level software engineering (issue
 - **Active**: CCA when you need notes/context management; OpenHands/CodeAct as production OSS.
 - **Niche**: Live-SWE-agent (official JSON 79.2% tie).
 - **Not this task**: SAO, CISPO, RLM, FoldGRPO, OSWorld, Iris search-agent training. Production harness kernels (rewind/fork/remote/sandbox/TUI) are `task:agent-harness-runtime`.
+- **Gotcha (harness × LoRA-SFT)**: `method:harness-onpolicy-correction` (`arXiv:2609.09134`). After evolving a model-specific harness, full expert-trajectory SFT regresses; rewrite the failing student turn only. Does not replace mini-SWE-agent.

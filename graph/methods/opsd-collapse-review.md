@@ -58,6 +58,7 @@ Privileged information aggravates collapse; GRPO-family entropy collapse is a co
 
 ## When NOT to Use
 - Privileged-teacher default → `method:vista`. No teacher → `method:opsa`. Pass@1 labels → `method:cispo`.
+- Actionable anti-collapse trainer → `method:nsd` (this node stays the survey).
 
 ## Relation to Existing SOTA
 - Niche ontology on `task:privileged-teacher-opsd` and `task:teacher-free-on-policy-self-adaptation`. Does **not** enter `current_sota`.

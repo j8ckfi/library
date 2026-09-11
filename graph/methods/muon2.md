@@ -40,6 +40,7 @@ Muon2 is a second-generation matrix orthogonalization momentum optimizer designe
 - Qwen3.8-Next's Muon+AdamW split (`method:qwen38-next`) is a production architecture recipe, not a replacement of this 7B optimizer default.
 - Optional structured layer dropout (`method:layer-dropout`) is a residual-path regularizer, not a replacement of this optimizer.
 - Overtraining-axis HP guidance (`method:optimizer-memory-schedules`) does not change this method's `sota_for`. ADANA (`method:adana`) is a named baseline in that 51M–253M study, not a 7B default.
+- Optional spectral-clip Muon update (`method:musec`) is a stability plug-in. It does not change this method's `sota_for`.
 
 ## Gotchas & Failure Modes
 - Embedding tables, 1D vectors, and normalization scale factors should be optimized with standard AdamW rather than matrix orthogonalization.

@@ -92,6 +92,7 @@ This does not replace CISPO, Muon2, Poolside factory, SAO, CANOPY, or mini-SWE-a
 ## Relation to Existing SOTA
 - First hop for `task:frontier-rl-posttrain-stack` only. Does **not** supersede `method:poolside-model-factory`, `method:sao`, `method:cispo`, `method:muon2`, `method:canopy`, or `method:mini-swe-agent`.
 - Async scheduling here is an engine feature, not SAO's importance-corrected replay.
+- `method:t1-terminal-rl` is a 122B terminal-MoE recipe on slime v0.3.0. It does not replace Miles.
 
 ## Gotchas & Failure Modes
 - GLM-5.2 reference run leaves R3 off; routing replay is a per-recipe choice and is expensive on long agentic sequences (~60MB routing tensor example in the paper).

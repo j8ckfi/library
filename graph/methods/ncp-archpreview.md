@@ -16,6 +16,9 @@ do_not_use_for:
   - when: "standard dense ~7B NTP pretrain without a concept module"
     reason: "That remains task:pretrain-dense-7b / Muon2 + OLMo-3"
     use_instead: "task:pretrain-dense-7b"
+  - when: "recurrent CED-style architecture / all-token recurrence"
+    reason: "NCP is next-concept latent LM; RLT is the experimental recurrent CED hop"
+    use_instead: "method:recurrent-looped-transformer"
 assumptions:
   - "Joint NTP + Next Concept Prediction. Product-quantized concept vocab from hidden states. Paper: 8.9B on 5.73T Dolma-3 tokens."
   - "Weights ArchSpace-Collection/NCP_ArchPreview_*; eval LUMIA-Group/ncp_olmo_eval. No official train GitHub (recipe code_status=partial). Serving: LuckySJTU/vllm_ncp_archpreview (obsolete; successor LuckySJTU/vllm dev/ncp-archpreview) and InternLM/lmdeploy."

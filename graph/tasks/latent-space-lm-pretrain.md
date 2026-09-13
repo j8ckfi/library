@@ -11,6 +11,7 @@ out_of_scope:
   - "Frontier MoE architecture (DeepSeek-V4 / Kimi-K3)"
   - "Diffusion-augmented AR serving (Uno)"
   - "Linear-time SSM sequence models (Mamba-2)"
+  - "Recurrent CED-style architecture / all-token recurrence (RLT)"
 redirects:
   - when: "choosing the ~7B dense pretrain optimizer"
     to: "task:llm-pretraining-optimization"
@@ -22,6 +23,8 @@ redirects:
     to: "task:pretrain-moe-frontier"
   - when: "lossless multi-token / diffusion-augmented AR serving"
     to: "task:diffusion-augmented-ar"
+  - when: "recurrent CED-style architecture, not next-concept latent LM"
+    to: "task:recurrent-encoder-decoder-lm"
 current_sota:
   - method: method:ncp-archpreview
     as_of: "2026-09-11"
@@ -33,7 +36,7 @@ methods:
   - method:ncp-archpreview
   - method:muon2
   - method:olmo-3
-last_reviewed: "2026-09-11"
+last_reviewed: "2026-09-12"
 tags:
   - pretraining
   - architecture

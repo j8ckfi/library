@@ -31,6 +31,7 @@ task:agent-harness-runtime -> method:omp2-harness (2026-09-02)
   when outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) -> task:outcome-only-long-horizon-agent-rl
   when dumped long prompt -> task:long-context-prompt-offload
   when how to talk to tools/agents as a protocol -> task:agent-communication
+  when recurrent CED-style architecture, not a harness kernel -> task:recurrent-encoder-decoder-lm
 task:agent-memory -> method:ace (2510.04618, 2025-10)
   when dumped corpus ≫ window -> task:long-context-prompt-offload
   when SWE issue-to-patch without a playbook -> task:software-engineering-agent-harness
@@ -57,6 +58,8 @@ task:software-engineering-agent-harness -> method:mini-swe-agent (2405.15793, 20
   when train a live-web multi-hop search agent (SFT-RL climbing) -> task:web-search-agent-rl
   when production post-train stack rather than a SWE loop -> task:frontier-rl-posttrain-stack
   when agentic RSI / routing-harness post-train rather than a SWE loop -> task:agentic-rsi-routing-posttrain
+  when recurrent CED-style architecture, not a SWE harness -> task:recurrent-encoder-decoder-lm
+  when input-heavy agentic / KV-compressed CED serving rather than a SWE loop -> task:input-heavy-agentic-moe-serving
 task:directed-sssp-nonneg -> method:bmssp (2504.17033, 2026-08)
 task:1bit-extreme-quantization -> method:sparse-bitnet (2603.05168, 2026-08-26)
 task:fp4-hardware-training -> method:quartet-ii (2601.22813, 2026-08-26) + method:mxfp4-mi355x (2605.09825, 2026-08-26)
@@ -71,6 +74,7 @@ task:diffusion-augmented-ar -> method:uno (2609.04010, 2026-09-08)
   when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
   when speculative draft co-train inside long-context RL (separate draft), not diffusion-augmented AR -> task:frontier-rl-posttrain-stack
+  when input-heavy agentic / KV-compressed CED MoE serving -> task:input-heavy-agentic-moe-serving
 task:full-lowbit-finetune -> method:gradcodes (2608.30908, 2026-09-01)
   when memory must fit a 4-bit stack but a mixed-precision adapter at inference is acceptable -> task:4bit-peft-quantization
   when native FP4 forward/backward hardware training from scratch -> task:fp4-hardware-training
@@ -146,12 +150,20 @@ task:web-search-agent-rl -> method:iris (2609.04304, 2026-09-08)
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
   when agentic RSI / routing-harness post-train, not search-agent climbing -> task:agentic-rsi-routing-posttrain
 task:budget-consumer-pretrain -> method:puro-2b (2608.27370, 2026-08-31)
+task:compute-matched-moe-looped-pretrain -> method:smelt (2609.01343, 2026-09-01)
+  when choosing the frontier MoE architecture template -> task:pretrain-moe-frontier
+  when expert-parallel all-to-all layout rather than looping -> task:pretrain-moe-frontier
+  when NVL72 fused dispatch+SwiGLU+combine megakernel -> task:train-moe-nvl72
+  when recurrent CED-style architecture / all-token recurrence -> task:recurrent-encoder-decoder-lm
+  when input-heavy agentic / KV-compressed CED serving -> task:input-heavy-agentic-moe-serving
+  when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
 task:latent-space-lm-pretrain -> method:ncp-archpreview (2609.10715, 2026-09-11)
   when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
   when open pretrain mix / Dolma-3 recipe -> task:open-data-recipe
   when standard dense ~7B NTP from scratch -> task:pretrain-dense-7b
   when frontier MoE architecture -> task:pretrain-moe-frontier
   when lossless multi-token / diffusion-augmented AR serving -> task:diffusion-augmented-ar
+  when recurrent CED-style architecture, not next-concept latent LM -> task:recurrent-encoder-decoder-lm
 task:linear-time-sequence-modeling -> method:mamba-2 (2405.21060, 2024-05)
 task:llm-pretraining-optimization -> method:muon2 (2604.09967, 2026-08-26)
   when lossless multi-token / diffusion-augmented AR serving rather than the pretrain optimizer -> task:diffusion-augmented-ar
@@ -160,6 +172,19 @@ task:open-data-recipe -> method:olmo-3 (2512.13961, 2026-08-26)
 task:pretrain-dense-7b -> method:muon2 (2604.09967, 2026-08-26)
   when latent-space / next-concept LM architecture rather than dense NTP 7B -> task:latent-space-lm-pretrain
 task:pretrain-moe-frontier -> method:deepseek-v4 (2606.19348, 2026-08-26) + method:kimi-k3 (2607.24653, 2026-08-26)
+  when input-heavy agentic / KV-footprint / CED serving, not general MoE pretrain template -> task:input-heavy-agentic-moe-serving
+  when compute-matched looped MoE (middle layers twice), not V4/K3 architecture -> task:compute-matched-moe-looped-pretrain
+  when recurrent CED-style architecture (all-token recurrence / encoder memory / SWA decoder), not NTP MoE V4 -> task:recurrent-encoder-decoder-lm
+  when NVL72 fused dispatch+SwiGLU+combine megakernel -> task:train-moe-nvl72
+  when olympiad-style natural-language proofs / IMO TTC rather than architecture -> task:olympiad-math-posttrain
+task:recurrent-encoder-decoder-lm -> method:recurrent-looped-transformer (2026-09-12)
+  when standard dense ~7B NTP from scratch -> task:pretrain-dense-7b
+  when frontier MoE architecture / DeepSeek-V4 template -> task:pretrain-moe-frontier
+  when latent-space / next-concept LM architecture -> task:latent-space-lm-pretrain
+  when input-heavy agentic / KV-compressed CED serving rather than recurrent LM pretrain -> task:input-heavy-agentic-moe-serving
+  when GitHub issue to patch / SWE harness -> task:software-engineering-agent-harness
+  when building a production engine (rewind, sandbox, remote, TUI) -> task:agent-harness-runtime
+  when compute-matched looped MoE pretrain (middle layers twice) -> task:compute-matched-moe-looped-pretrain
 task:operator-foundation -> method:poseidon (2405.19101, 2026-08-28) + method:unisolver (2405.17527, 2026-08-28)
 task:operator-fourier-adapt -> method:f-adapter (2509.23173, 2026-08-28)
 task:operator-grid-pde -> method:cvit (2405.13998, 2026-08-28) + method:poseidon (2405.19101, 2026-08-28)
@@ -179,6 +204,13 @@ task:industrial-model-building -> method:poolside-model-factory (2605.27605, 202
   when full-stack frontier RL post-train engine (SGLang rollouts, Megatron/FSDP, LoRA RL / OPD / async agentic RL), not factory lineage -> task:frontier-rl-posttrain-stack
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
   when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
+task:input-heavy-agentic-moe-serving -> method:deepseek-v41-flash (2026-09-10)
+  when choosing the frontier MoE pretrain architecture template -> task:pretrain-moe-frontier
+  when GitHub issue to patch / SWE harness rather than serving architecture -> task:software-engineering-agent-harness
+  when production post-train stack rather than KV-compressed serving -> task:frontier-rl-posttrain-stack
+  when lossless multi-token / diffusion-augmented AR serving -> task:diffusion-augmented-ar
+  when recurrent CED-style LM architecture (all-token recurrence), not Flash serving -> task:recurrent-encoder-decoder-lm
+  when compute-matched looped MoE pretrain -> task:compute-matched-moe-looped-pretrain
 task:train-moe-nvl72 -> method:mixture-of-kittens (2026-08-26)
 task:learned-video-compression -> method:dcvc-uf (2606.04410, 2026-08-26) + method:mlvc (2606.28027, 2026-08-26)
 task:neural-video-deploy -> method:mlvc (2606.28027, 2026-08-26)
@@ -192,7 +224,7 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 ## 3. SOTA Map (What You Actually Pick Today — 2026-09-02)
 
 1. **Train a ~7B dense LM from scratch**: Use **Muon2** (`method:muon2`, `paper:muon2` `arXiv:2604.09967`) with **KL-SOAP** (`method:soap-muon-scale`, `paper:soap-muon-scale` `arXiv:2607.20548`) if GPU memory allows. Keep embeddings / `lm_head` on AdamW. Data: **OLMo-3 / Dolma-3** open data recipe (`method:olmo-3`, `paper:olmo-3` `arXiv:2512.13961`).
-2. **Pretrain an MoE architecture**: Use **DeepSeek-V4** (`method:deepseek-v4`, `paper:deepseek-v4` `arXiv:2606.19348`) with **Kimi-K3** (`method:kimi-k3`, `paper:kimi-k3` `arXiv:2607.24653`) as co-default.
+2. **Pretrain an MoE architecture**: Use **DeepSeek-V4** (`method:deepseek-v4`, `paper:deepseek-v4` `arXiv:2606.19348`) with **Kimi-K3** (`method:kimi-k3`, `paper:kimi-k3` `arXiv:2607.24653`) as co-default. **DeepSeek-V4.1-Flash CED** (`method:deepseek-v41-flash`) is a different family (input-heavy agentic / KV-compressed serving on `task:input-heavy-agentic-moe-serving`), not a replacement of this template. **SMELT** (`method:smelt`) is an optional compute-matched looped-MoE recipe. **RLT** (`method:recurrent-looped-transformer`) is experimental recurrent CED.
 3. **SFT a chat / instruct model**: **OLMo-3 Dolci stack** (`method:olmo-3`, `paper:olmo-3` `arXiv:2512.13961`); industrial alternative **Nemotron-Cascade 2** (`method:nemotron-cascade-2`, `paper:nemotron-cascade-2` `arXiv:2603.19220`).
 4. **RL a reasoner (math/code, verifiable)**: For dense models, use **CISPO** (`method:cispo`, MiniMax-M1 `paper:minimax-m1` `arXiv:2506.13585` + ScaleRL `paper:scalerl` `arXiv:2510.13786`). For MoE and Vision-Language models, use **SAPO** (`method:sapo`, `paper:sapo` `arXiv:2511.20347`, ms-swift `loss_type=sapo`); use **GSPO** (`method:gspo`) only for Qwen3.5-Omni Talker (`paper:qwen35-omni` `arXiv:2604.15804`). Gate process supervision with **VeriGate** (`method:verigate`, `paper:verigate` `arXiv:2605.30451`).
 5. **Agentic async RL**: Use **SAO** (`method:sao`, `paper:sao` `arXiv:2607.07508`) for asynchronous environment and tool-use reinforcement learning. The production post-train engine is **Miles** on `task:frontier-rl-posttrain-stack`, not this algorithm.
@@ -277,6 +309,9 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 84. **Partial reasoning-trace SFT**: **Revisiting complete traces** (`method:partial-reasoning-traces`, `arXiv:2609.07103`). Prefer truncated traces. Does **not** replace OLMo-3 / Nemotron-Cascade 2.
 85. **MoE × data-repetition gotcha**: **MoE data-repetition overfit** (`method:moe-data-repetition`, `arXiv:2609.11917`). MoEs hurt from ~4× repeats. Does **not** replace DeepSeek-V4 / Kimi-K3.
 86. **122B terminal-MoE RL**: **T1** (`method:t1-terminal-rl`, `arXiv:2609.11042`) on slime. Active mention. Does **not** replace CANOPY, SAO, or Miles.
+87. **Compute-matched looped MoE**: **SMELT** (`method:smelt`, `arXiv:2609.01343`) on `task:compute-matched-moe-looped-pretrain`. Loop middle 50% of MoE layers twice; match FLOPs / non-embedding params / KV. Active. Does **not** replace DeepSeek-V4 / Kimi-K3 / CE-MoE.
+88. **Input-heavy agentic / KV-compressed CED serving**: **DeepSeek-V4.1-Flash** (`method:deepseek-v41-flash`) on `task:input-heavy-agentic-moe-serving`. 552B CED, 8B prefill / 16B decode, ~890 B/token global KV. First hop for that serving task only. Does **not** replace DeepSeek-V4 / Kimi-K3 as the MoE pretrain co-default, mini-SWE-agent, Miles, or Uno.
+89. **Recurrent encoder-decoder LM**: **Recurrent Looped Transformer** (`method:recurrent-looped-transformer`) on `task:recurrent-encoder-decoder-lm`. Experimental. Causal encoder + all-token recurrent decoder; no measured results. Conceptual sibling of V4.1-Flash CED. Does **not** replace Muon2, NCP-ArchPreview, DeepSeek-V4 / Kimi-K3, or V4.1-Flash serving.
 
 ---
 
@@ -363,6 +398,9 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `partial-reasoning-traces` (2609.07103) is an active SFT-data plug-in. It does not supersede `olmo-3` or `nemotron-cascade-2`.
 - `moe-data-repetition` (2609.11917) is a niche MoE repetition gotcha. It does not supersede `deepseek-v4` or `kimi-k3`.
 - `t1-terminal-rl` (2609.11042) is an active 122B terminal-MoE recipe on slime. It does not supersede `canopy`, `sao`, or `miles`.
+- `smelt` (2609.01343) is the active first hop for `task:compute-matched-moe-looped-pretrain` only. It does not supersede `deepseek-v4`, `kimi-k3`, or `ce-moe`.
+- `deepseek-v41-flash` is the first hop for `task:input-heavy-agentic-moe-serving` only (KV-compressed CED serving). It does not supersede `deepseek-v4` or `kimi-k3` as the frontier MoE pretrain co-default, and does not supersede `mini-swe-agent`, `miles`, or `uno`.
+- `recurrent-looped-transformer` is the experimental first hop for `task:recurrent-encoder-decoder-lm` only. It does not supersede `muon2`, `ncp-archpreview`, `deepseek-v4` / `kimi-k3`, or `deepseek-v41-flash`.
 
 ---
 

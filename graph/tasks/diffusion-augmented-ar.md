@@ -11,6 +11,7 @@ out_of_scope:
   - "Pass@1 labeled math/code RLVR algorithm (CISPO)"
   - "Standalone discrete diffusion LMs that replace the AR distribution"
   - "Speculative draft co-train inside long-context RL (Online Draft Co-Training / NeMo RL)"
+  - "Input-heavy agentic / KV-compressed CED MoE serving (DeepSeek-V4.1-Flash)"
 redirects:
   - when: "aligning text-to-image diffusion or flow models with rewards"
     to: "task:posttrain-diffusion"
@@ -20,6 +21,8 @@ redirects:
     to: "task:math-code-rl-dense"
   - when: "speculative draft co-train inside long-context RL (separate draft), not diffusion-augmented AR"
     to: "task:frontier-rl-posttrain-stack"
+  - when: "input-heavy agentic / KV-compressed CED MoE serving"
+    to: "task:input-heavy-agentic-moe-serving"
 current_sota:
   - method: method:uno
     as_of: "2026-09-08"
@@ -30,7 +33,7 @@ current_sota:
 methods:
   - method:uno
   - method:online-draft-cotrain
-last_reviewed: "2026-09-09"
+last_reviewed: "2026-09-12"
 tags:
   - efficiency
   - inference

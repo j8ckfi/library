@@ -46,6 +46,7 @@ where \(\mathcal{H}_l^{\text{pre}} \in \mathbb{R}^{1 \times n}\) down-projects t
 - **mHC (`paper:mhc`, `2512.24880`)**: Widens the residual stream to \(n \times d\) and uses doubly stochastic static/learned manifold projections (Birkhoff polytope via Sinkhorn) to mix streams.
 - **AttnRes (`paper:attnres`, `2603.15031`)**: Employs content-dependent dynamic attention mechanisms over prior layer activation histories.
 - **Gated Residual in `method:qwen38-next`**: Widens to four branches and reads through an elementwise gate. Adjacent residual design, not a replacement of mHC's Sinkhorn constraint.
+- **Single-Pass mHC in `method:deepseek-v41-flash`**: Serving-kernel revision of residual-stream mixing (Mega-mHC) inside the V4.1-Flash CED stack. Does not supersede this mHC node or retarget DeepSeek-V4.
 
 ## When to Use
 - Pretraining deep transformer and MoE architectures (such as DeepSeek-V4) where widened residual topologies provide increased expressivity without destabilizing gradient flow.

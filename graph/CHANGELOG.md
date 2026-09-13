@@ -6,6 +6,24 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-12 — ingest method:recurrent-looped-transformer (experimental; does not supersede method:muon2 / method:deepseek-v4 / method:deepseek-v41-flash / method:ncp-archpreview)
+- Added paper:recurrent-looped-transformer (tech report 2026-09-12, no arXiv), method:recurrent-looped-transformer, recipe:recurrent-looped-transformer (`code_status: partial`; GitHub yifanzhang-pro/recurrent-looped-tranformer, note spelling), task:recurrent-encoder-decoder-lm. Reverse redirects from task:latent-space-lm-pretrain / task:pretrain-moe-frontier / task:software-engineering-agent-harness / task:agent-harness-runtime.
+- Status experimental. Causal encoder KV + all-token recurrent decoder; shared pretrain/SFT/sample/current-policy replay; 48+48 reference; no measured efficiency or scaling.
+- Evidence: mechanisms only; verified: false; evidence_level: self-reported.
+- Scope checks: Muon2 remains ~7B optimizer; NCP remains latent-space; DeepSeek-V4 / Kimi-K3 remain MoE pretrain; V4.1-Flash remains CED serving; mini-SWE-agent remains the harness.
+
+### 2026-09-12 — ingest method:smelt (active looped-MoE recipe; does not supersede method:deepseek-v4 / method:kimi-k3 / method:ce-moe)
+- Added paper:smelt (2609.01343), method:smelt, recipe:smelt (`repo_url: none found`), task:compute-matched-moe-looped-pretrain. Wired as sibling of method:ce-moe on task:pretrain-moe-frontier with reverse redirect.
+- Status active. Loop middle 50% of MoE layers twice; narrow width; raise experts; residual scale 1/2; match FLOPs / non-embedding params / KV. Scales to 54B non-embedding.
+- Evidence: 6.8–18.0% training FLOPs saved on the compute-optimal sparse-grid frontier; DCLM Completion 96/96; Code largest; second visit reduces attention sink (arXiv:2609.01343); verified: true; evidence_level: preprint.
+- Scope checks: DeepSeek-V4 / Kimi-K3 remain MoE architecture co-defaults; CE-MoE remains the communication-layout niche.
+
+### 2026-09-12 — ingest method:deepseek-v41-flash (new task:input-heavy-agentic-moe-serving; does not supersede method:deepseek-v4 / method:kimi-k3)
+- Added paper:deepseek-v41-flash (HF tech report, no arXiv), method:deepseek-v41-flash, recipe:deepseek-v41-flash (`code_status: partial`; HF weights + inference/ + deepseek-ai/deepseek-recipe). Reverse redirect on task:pretrain-moe-frontier. Cross-link method:mhc (Single-Pass mHC) and method:recurrent-looped-transformer (experimental conceptual sibling). No prior method:deepseek-v4-flash node.
+- Status sota for the serving task only. 552B CED 20+20; 8B prefill / 16B decode; CSA2; FP4 main KV ~890 B/token (~1/4 V4-Flash); SWA Bounded Replay (~1/8 persistent KV); Engram; DSpark. API news: V4-Flash / V4-Flash-Vision-Exp retired; V4-Pro routing to V4.1-Flash from 2026-09-14.
+- Evidence: vendor card Terminal-Bench 2.1 90.6 / DeepSWE v1.1 74.2 / 890 B/token (HF model card + DeepSeek_V41_Tech_Report.pdf); verified: true; evidence_level: self-reported.
+- Scope checks: DeepSeek-V4 / Kimi-K3 remain pretrain co-defaults. CISPO / Muon2 / OPD / VISTA / OPSA / CANOPY / SAO / Miles / NeoHorse-1 / mini-SWE-agent / Iris / Poolside / MAGIC / Nemotron IMO Gold / NCP-ArchPreview first hops unchanged.
+
 ### 2026-09-11 — wire verified artifact pointers on the 2026-09-11 sweep (no first-hop retarget)
 - NSD: collection slug is `PassionPrc/nsd-negative-self-distillation` (not bare `PassionPrc/nsd`); train/eval stay in-repo verl at Prongcan/NSD (`scripts/4B_NSD/`, `scripts/eval/`).
 - Nemotron IMO Gold: collection `nvidia/nemotron-labs-imo-2026`; dataset `nvidia/Nemotron-IMO-Bench`; Skills `recipes/nemotron-imo-tts`; NeMo-RL `imo-26-ultra-v3` guide; SFT/RL ckpts and Math-Proofs datasets already named.

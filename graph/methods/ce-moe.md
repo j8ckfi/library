@@ -13,6 +13,9 @@ do_not_use_for:
   - when: "NVL72 fused dispatch+SwiGLU+combine megakernel"
     reason: "Layout changes do not replace Mixture-of-Kittens"
     use_instead: "method:mixture-of-kittens"
+  - when: "compute-matched looped MoE (middle layers twice)"
+    reason: "Looping under FLOPs/params/KV matching is SMELT, not a communication layout"
+    use_instead: "method:smelt"
 assumptions:
   - "Training with expert parallelism where all-to-all dispatch/combine is a large fraction of step time."
   - "Matched total and activated parameter budget vs a full-MoE baseline on a 2B-31.5B ladder."
@@ -52,6 +55,7 @@ CE-MoE is a heterogeneous layer pattern, not a new router. Conventional MoE inte
 
 ## Relation to Existing SOTA
 - Layout niche beside DeepSeek-V4 / Kimi-K3. No supersession.
+- Sibling of `method:smelt` (compute-matched middle-layer looping) on `task:pretrain-moe-frontier`. Different axis: CE-MoE retile which layers are routed; SMELT reuses middle routed layers. Neither replaces V4 / K3.
 
 ## Gotchas & Failure Modes
 - Gains are communication-layout gains under expert parallelism; they do not automatically transfer to tensor-parallel-only dense FFNs.

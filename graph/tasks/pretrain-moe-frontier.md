@@ -4,6 +4,25 @@ type: task
 title: "Pretrain Mixture-of-Experts (MoE) Architecture at Scale"
 domain: "pretraining"
 summary: "Frontier pretraining of sparse Mixture-of-Experts (MoE) architectures with multi-head latent attention and multi-token prediction."
+scope: "Frontier MoE pretrain architecture template. Co-default is DeepSeek-V4 + Kimi-K3."
+out_of_scope:
+  - "Input-heavy agentic / KV-compressed CED serving (DeepSeek-V4.1-Flash)"
+  - "Compute-matched looped MoE (SMELT)"
+  - "Recurrent CED all-token recurrence (RLT)"
+  - "Communication-efficient expert layout as the architecture default (CE-MoE stays niche)"
+  - "NVL72 fused dispatch megakernel (Mixture-of-Kittens)"
+  - "Olympiad specialist post-train (Nemotron IMO Gold)"
+redirects:
+  - when: "input-heavy agentic / KV-footprint / CED serving, not general MoE pretrain template"
+    to: "task:input-heavy-agentic-moe-serving"
+  - when: "compute-matched looped MoE (middle layers twice), not V4/K3 architecture"
+    to: "task:compute-matched-moe-looped-pretrain"
+  - when: "recurrent CED-style architecture (all-token recurrence / encoder memory / SWA decoder), not NTP MoE V4"
+    to: "task:recurrent-encoder-decoder-lm"
+  - when: "NVL72 fused dispatch+SwiGLU+combine megakernel"
+    to: "task:train-moe-nvl72"
+  - when: "olympiad-style natural-language proofs / IMO TTC rather than architecture"
+    to: "task:olympiad-math-posttrain"
 current_sota:
   - method: method:deepseek-v4
     as_of: "2026-08-26"
@@ -32,7 +51,10 @@ methods:
   - method:moe-sparsity-hp-scaling
   - method:moe-data-repetition
   - method:nemotron-imo-gold
-last_reviewed: "2026-09-11"
+  - method:smelt
+  - method:deepseek-v41-flash
+  - method:recurrent-looped-transformer
+last_reviewed: "2026-09-12"
 tags:
   - pretraining
   - moe
@@ -50,6 +72,9 @@ Training sparse Mixture-of-Experts models enables scaling parameter capacity int
 - **NVL72 Systems Megakernel**: **Mixture-of-Kittens** (`method:mixture-of-kittens`, `task:train-moe-nvl72`).
 - **Adjacent Qwen-style hybrid residual recipe**: `method:qwen38-next` (`arXiv:2608.30320`). Does not replace DeepSeek-V4 / Kimi-K3 or Muon2.
 - **Optional communication-efficient layout**: `method:ce-moe` (`arXiv:2608.28511`) when expert-parallel all-to-all dominates. Layout niche only.
+- **Optional compute-matched looped MoE**: `method:smelt` (`arXiv:2609.01343`) on `task:compute-matched-moe-looped-pretrain`. Sibling of CE-MoE. Does not replace DeepSeek-V4 / Kimi-K3 / CE-MoE.
+- **Input-heavy agentic / KV-compressed CED serving (not this template)**: `method:deepseek-v41-flash` on `task:input-heavy-agentic-moe-serving`. Different family from the V4 MoE pretrain template.
+- **Experimental recurrent CED LM (not this template)**: `method:recurrent-looped-transformer` on `task:recurrent-encoder-decoder-lm`.
 - **Optional LR/batch vs activation-ratio transfer**: `method:moe-sparsity-hp-scaling` (`arXiv:2609.08690`). Pretrain HP guidance. Does not replace DeepSeek-V4 / Kimi-K3.
 - **Gotcha (repetition × sparsity)**: `method:moe-data-repetition` (`arXiv:2609.11917`). MoEs degrade from ~4× repeats; dense 80M tolerated 8×. Does not replace DeepSeek-V4 / Kimi-K3.
 - **Olympiad specialist post-train on Ultra (not this architecture task)**: `method:nemotron-imo-gold` on `task:olympiad-math-posttrain`.

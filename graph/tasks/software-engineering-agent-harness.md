@@ -17,6 +17,8 @@ out_of_scope:
   - "Training a live-web search policy (Iris)"
   - "Frontier RL post-train engine (Miles)"
   - "Routing-harness RSI post-train (NeoHorse-1)"
+  - "Recurrent CED-style architecture (RLT)"
+  - "Input-heavy agentic MoE serving / KV CED (DeepSeek-V4.1-Flash)"
 redirects:
   - when: "train asynchronous RL for a tool-use policy"
     to: "task:agentic-async-rl"
@@ -36,6 +38,10 @@ redirects:
     to: "task:frontier-rl-posttrain-stack"
   - when: "agentic RSI / routing-harness post-train rather than a SWE loop"
     to: "task:agentic-rsi-routing-posttrain"
+  - when: "recurrent CED-style architecture, not a SWE harness"
+    to: "task:recurrent-encoder-decoder-lm"
+  - when: "input-heavy agentic / KV-compressed CED serving rather than a SWE loop"
+    to: "task:input-heavy-agentic-moe-serving"
 current_sota:
   - method: method:mini-swe-agent
     as_of: "2026-09"
@@ -50,7 +56,7 @@ methods:
   - method:live-swe-agent
   - method:single-agent-plus-tools
   - method:harness-onpolicy-correction
-last_reviewed: "2026-09-11"
+last_reviewed: "2026-09-12"
 tags:
   - agents
   - agent

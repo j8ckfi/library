@@ -11,6 +11,7 @@ out_of_scope:
   - "Outcome-only long-horizon agent RL (CANOPY / DRACO)"
   - "Dumped 10M-token prompts (RLM)"
   - "MCP as the product protocol (MCP stays agent-communication)"
+  - "Recurrent CED-style architecture (RLT)"
 redirects:
   - when: "issue-to-patch / locked eval"
     to: "task:software-engineering-agent-harness"
@@ -22,7 +23,9 @@ redirects:
     to: "task:long-context-prompt-offload"
   - when: "how to talk to tools/agents as a protocol"
     to: "task:agent-communication"
-last_reviewed: "2026-09-11"
+  - when: "recurrent CED-style architecture, not a harness kernel"
+    to: "task:recurrent-encoder-decoder-lm"
+last_reviewed: "2026-09-12"
 current_sota:
   - method: method:omp2-harness
     as_of: "2026-09-02"

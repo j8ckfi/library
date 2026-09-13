@@ -117,6 +117,10 @@ class TestQueryEngine(unittest.TestCase):
 
         moe_arch = self.engine.sota("task:pretrain-moe-frontier")
         self.assertTrue(any(p["method"].id == "method:deepseek-v4" for p in moe_arch))
+        self.assertTrue(any(p["method"].id == "method:kimi-k3" for p in moe_arch))
+        self.assertFalse(any(p["method"].id == "method:deepseek-v41-flash" for p in moe_arch))
+        self.assertFalse(any(p["method"].id == "method:smelt" for p in moe_arch))
+        self.assertFalse(any(p["method"].id == "method:recurrent-looped-transformer" for p in moe_arch))
 
         instruct = self.engine.sota("task:instruct-sft-alignment")
         self.assertTrue(any(p["method"].id in ("method:olmo-3", "method:nemotron-cascade-2") for p in instruct))
@@ -210,6 +214,18 @@ class TestQueryEngine(unittest.TestCase):
 
         keyword_sssp = self.engine.sota("directed sssp")
         self.assertTrue(any(p["method"].id == "method:bmssp" for p in keyword_sssp))
+
+        flash_serving = self.engine.sota("task:input-heavy-agentic-moe-serving")
+        self.assertTrue(any(p["method"].id == "method:deepseek-v41-flash" for p in flash_serving))
+        self.assertFalse(any(p["method"].id in ("method:deepseek-v4", "method:kimi-k3") for p in flash_serving))
+
+        smelt_loop = self.engine.sota("task:compute-matched-moe-looped-pretrain")
+        self.assertTrue(any(p["method"].id == "method:smelt" for p in smelt_loop))
+        self.assertFalse(any(p["method"].id in ("method:deepseek-v4", "method:ce-moe") for p in smelt_loop))
+
+        rlt = self.engine.sota("task:recurrent-encoder-decoder-lm")
+        self.assertTrue(any(p["method"].id == "method:recurrent-looped-transformer" for p in rlt))
+        self.assertFalse(any(p["method"].id == "method:deepseek-v41-flash" for p in rlt))
 
     def test_bmssp_isolated_from_training_sota(self):
         training_tasks = (
@@ -888,6 +904,99 @@ class TestAgentsShelf(unittest.TestCase):
         self.assertEqual(ranked_loop[0].node.id, "task:software-engineering-agent-harness")
         ranked_engine = self.engine.route("building a production engine rewind sandbox remote TUI")
         self.assertEqual(ranked_engine[0].node.id, "task:agent-harness-runtime")
+
+
+class TestCedLoopedArchitectureShelf(unittest.TestCase):
+    """RLT / SMELT / V4.1-Flash must not retarget locked first hops."""
+
+    def setUp(self):
+        self.graph = load_graph(Path("graph"))
+        self.engine = QueryEngine(self.graph)
+
+    def _sota_ids(self, task_id: str):
+        task = self.graph.get_node(task_id)
+        self.assertIsNotNone(task, f"missing {task_id}")
+        return [entry["method"] for entry in task.metadata.get("current_sota", [])]
+
+    def test_moe_frontier_co_default_unchanged(self):
+        ids = self._sota_ids("task:pretrain-moe-frontier")
+        self.assertEqual(ids, ["method:deepseek-v4", "method:kimi-k3"])
+        v4 = self.graph.get_node("method:deepseek-v4")
+        k3 = self.graph.get_node("method:kimi-k3")
+        self.assertEqual(v4.status, "sota")
+        self.assertEqual(k3.status, "sota")
+        self.assertIn("task:pretrain-moe-frontier", v4.metadata.get("sota_for") or [])
+        self.assertEqual(v4.metadata.get("superseded_by"), None)
+
+    def test_v41_flash_is_serving_sota_only(self):
+        self.assertEqual(self._sota_ids("task:input-heavy-agentic-moe-serving"), ["method:deepseek-v41-flash"])
+        flash = self.graph.get_node("method:deepseek-v41-flash")
+        self.assertEqual(flash.status, "sota")
+        self.assertEqual(flash.metadata.get("sota_for"), ["task:input-heavy-agentic-moe-serving"])
+        self.assertEqual(flash.metadata.get("supersedes") or [], [])
+        self.assertNotIn("task:pretrain-moe-frontier", flash.metadata.get("sota_for") or [])
+        self.assertEqual(flash.metadata.get("category"), "architecture")
+
+    def test_smelt_is_active_looped_moe_not_v4(self):
+        self.assertEqual(self._sota_ids("task:compute-matched-moe-looped-pretrain"), ["method:smelt"])
+        smelt = self.graph.get_node("method:smelt")
+        self.assertEqual(smelt.status, "active")
+        self.assertEqual(smelt.metadata.get("sota_for") or [], [])
+        self.assertEqual(smelt.metadata.get("supersedes") or [], [])
+        ce = self.graph.get_node("method:ce-moe")
+        self.assertEqual(ce.status, "niche")
+        self.assertNotEqual(ce.metadata.get("superseded_by"), "method:smelt")
+
+    def test_rlt_is_experimental_without_metrics(self):
+        self.assertEqual(self._sota_ids("task:recurrent-encoder-decoder-lm"), ["method:recurrent-looped-transformer"])
+        rlt = self.graph.get_node("method:recurrent-looped-transformer")
+        self.assertEqual(rlt.status, "experimental")
+        self.assertEqual(rlt.metadata.get("sota_for") or [], [])
+        self.assertEqual(rlt.metadata.get("supersedes") or [], [])
+        claims = rlt.metadata.get("claims") or []
+        self.assertTrue(claims)
+        self.assertFalse(any(c.get("verified") for c in claims))
+
+    def test_new_methods_absent_from_locked_first_hops(self):
+        banned = (
+            "method:deepseek-v41-flash",
+            "method:smelt",
+            "method:recurrent-looped-transformer",
+        )
+        locked = {
+            "task:math-code-rl-dense": "method:cispo",
+            "task:pretrain-dense-7b": "method:muon2",
+            "task:student-distillation": "method:opd",
+            "task:privileged-teacher-opsd": "method:vista",
+            "task:teacher-free-on-policy-self-adaptation": "method:opsa",
+            "task:outcome-only-long-horizon-agent-rl": "method:canopy",
+            "task:agentic-async-rl": "method:sao",
+            "task:frontier-rl-posttrain-stack": "method:miles",
+            "task:agentic-rsi-routing-posttrain": "method:neohorse-1",
+            "task:software-engineering-agent-harness": "method:mini-swe-agent",
+            "task:web-search-agent-rl": "method:iris",
+            "task:industrial-model-building": "method:poolside-model-factory",
+            "task:training-data-attribution": "method:magic",
+            "task:olympiad-math-posttrain": "method:nemotron-imo-gold",
+            "task:latent-space-lm-pretrain": "method:ncp-archpreview",
+        }
+        for task_id, method_id in locked.items():
+            sota_ids = self._sota_ids(task_id)
+            self.assertIn(method_id, sota_ids, f"{task_id} lost {method_id}")
+            for banned_id in banned:
+                self.assertNotIn(banned_id, sota_ids, f"{banned_id} on {task_id}")
+
+    def test_ced_redirects_from_moe_and_harness(self):
+        moe = self.graph.get_node("task:pretrain-moe-frontier")
+        tos = [r["to"] for r in moe.metadata.get("redirects") or []]
+        self.assertIn("task:input-heavy-agentic-moe-serving", tos)
+        self.assertIn("task:compute-matched-moe-looped-pretrain", tos)
+        self.assertIn("task:recurrent-encoder-decoder-lm", tos)
+        swe = self.graph.get_node("task:software-engineering-agent-harness")
+        swe_tos = [r["to"] for r in swe.metadata.get("redirects") or []]
+        self.assertIn("task:recurrent-encoder-decoder-lm", swe_tos)
+        ranked = self.engine.route("build an agent")
+        self.assertEqual(ranked[0].node.id, "task:software-engineering-agent-harness")
 
 
 if __name__ == "__main__":

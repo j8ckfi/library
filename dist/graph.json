@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "node_count": 733,
-  "edge_count": 2823,
+  "node_count": 745,
+  "edge_count": 2882,
   "nodes": [
     {
       "id": "paper:qlora",
@@ -1009,6 +1009,46 @@
         ]
       },
       "body": "# AQLoRA: Accurate Quantized Low-Rank Adaptation for Large Language Models\n\n## Abstract Summary\nAQLoRA-Q introduces high-accuracy 4-bit quantized low-rank adaptation with optimized non-uniform quantization grids and accelerated dequantization kernels, superseding standard QLoRA in throughput and accuracy retention.\n\n## Key Contributions\n1. **Accurate 4-Bit Grid**: Minimizes residual quantization distortion on sensitive projection layers.\n2. **Speed & Recipe SOTA**: Superior wall-clock training speed and downstream task accuracy on 4-bit GPU stacks.\n\n## Open Source Repository\n- Implementation: `https://github.com/Romyull-Islam/AQLoRA`"
+    },
+    {
+      "id": "paper:smelt",
+      "type": "paper",
+      "title": "SMELT: Scaling Laws for Compute-Matched MoE Looped Transformers",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/papers/smelt.md",
+      "metadata": {
+        "id": "paper:smelt",
+        "type": "paper",
+        "title": "SMELT: Scaling Laws for Compute-Matched MoE Looped Transformers",
+        "authors": [
+          "Shaowen Wang",
+          "Ge Zhang",
+          "Kairong Luo",
+          "Yuhao Wu",
+          "Shaofan Liu",
+          "Jiaheng Liu",
+          "Wenhao Huang",
+          "Shen Yan",
+          "Jian Li"
+        ],
+        "year": 2026,
+        "month": 9,
+        "arxiv_id": "2609.01343",
+        "url": "https://arxiv.org/abs/2609.01343",
+        "methods": [
+          "method:smelt"
+        ],
+        "cites": [],
+        "tags": [
+          "architecture",
+          "moe",
+          "looped-transformer",
+          "smelt",
+          "scaling-laws"
+        ]
+      },
+      "body": "# SMELT: Scaling Laws for Compute-Matched MoE Looped Transformers\n\n## Abstract Summary\nLooped Transformers raise effective depth by repeating a shared block, but most comparisons hold parameter count fixed and let FLOPs and KV grow. SMELT (Sparse MoE Transformer, middle layers Loop Twice) loops the middle half of MoE layers twice while matching an unlooped Baseline on per-token FLOPs, total non-embedding parameters, and KV cache (narrow the hidden size, raise expert count, adjust GQA/head size; scale looped residuals by \\(1/2\\)). Separate Chinchilla-style surfaces on a sparse-grid ladder up to 54B non-embedding parameters show SMELT's loss dropping faster with compute, saving 6.8–18.0% of training FLOPs on the compute-optimal frontier. Downstream gains exceed what validation loss predicts, are largest on Code, and grow with sample length and in-context examples. A second visit reduces the attention sink and redirects mass toward content tokens.\n\n## Key Contributions\n1. **Three-budget matching** on MoE: FLOPs, non-embedding params, and KV simultaneously.\n2. **Locked recipe**: middle 50% span, two visits, larger effective depth-to-width than the Baseline.\n3. **Scaling laws** on a 100M–1.6B active / up to 54B non-embedding ladder with compute-equivalent sparsity \\(S \\approx 85\\%, 95\\%, 97\\%\\).\n4. **Mechanistic note**: second visit amplifies residual updates and reduces attention-sink mass.\n\n## Empirical Highlights\n- CE Gain 6.8–10.0% at \\(10^{20}\\) FLOPs and 14.7–18.0% at \\(10^{21}\\) FLOPs across the three sparse levels (cell-bootstrap intervals in the paper).\n- DCLM Completion wins 96/96 matched pairs; DCLM Core 83/96; MMLU 29/30 pairs with Baseline \\(\\geq 10\\) pp above chance.\n- Affiliations: Tsinghua, ByteDance Seed, M-A-P, TokenWave.AI.\n\n## Open Source Repository & Resources\n- arXiv HTML/PDF: `https://arxiv.org/abs/2609.01343`\n- No official training code as of 2026-09-12 (`recipe:smelt` `repo_url: none found`). Unrelated GitHub projects share the SMELT name."
     },
     {
       "id": "paper:nemotron-3-super-latentmoe",
@@ -2919,6 +2959,38 @@
         ]
       },
       "body": "# EfficientTDMPC: Accelerated Model-Predictive Control with Block Planning\n\n## Abstract Summary\nEfficientTDMPC advances model-based continuous reinforcement learning by introducing block-wise latent planning (built on BMPC principles), cutting online planning latency and outperforming TD-MPC2 across continuous control suites.\n\n## Key Contributions\n1. **Block Latent Planning**: Replaces single-step MPPI trajectory sampling with accelerated block-wise optimization.\n2. **Continuous Control SOTA**: SOTA sample efficiency and runtime default for continuous control world models.\n\n## Open Source Repository\n- Implementation: `none found` (Built on BMPC framework; code not released)"
+    },
+    {
+      "id": "paper:recurrent-looped-transformer",
+      "type": "paper",
+      "title": "Recurrent Looped Transformer",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/papers/recurrent-looped-transformer.md",
+      "metadata": {
+        "id": "paper:recurrent-looped-transformer",
+        "type": "paper",
+        "title": "Recurrent Looped Transformer",
+        "authors": [
+          "Yifan Zhang"
+        ],
+        "year": 2026,
+        "month": 9,
+        "arxiv_id": "",
+        "url": "https://github.com/yifanzhang-pro/recurrent-looped-tranformer",
+        "methods": [
+          "method:recurrent-looped-transformer"
+        ],
+        "cites": [],
+        "tags": [
+          "architecture",
+          "recurrent",
+          "encoder-decoder",
+          "rlt",
+          "tech-report"
+        ]
+      },
+      "body": "# Recurrent Looped Transformer\n\n## Abstract Summary\nRecurrent Looped Transformer (RLT) pairs a causal encoder with a recurrent decoder that carries its final hidden state and layerwise sliding-window attention (SWA) cache across every prompt and response token. The encoder constructs global key–value memory; the decoder extends a continuous latent computation as the sequence grows. Pretraining, SFT, sampling, and current-policy RL replay share one complete-state transition. \"Infinite temporal depth\" means the path length grows with the sequence (\\(t \\times L_D\\)), not infinite work inside a token. The report develops mechanisms; it does not report measured efficiency, scaling, or RL results.\n\n## Key Contributions\n1. **All-token recurrence**: decoder state \\(H_t = (s_t, C_t^D)\\) does not reset at the prompt–response boundary.\n2. **Causal encoder memory**: prefix-restricted global KV available before decoder replay; extended as new tokens arrive.\n3. **Shared transition**: the same update for prefill, generation, pretrain, SFT, and exact current-policy RL replay under current weights.\n4. **Reference config**: 48 encoder + 48 decoder layers, optional weight sharing across stages.\n\n## Empirical Highlights\n- None. The author states realized reasoning gains, hardware efficiency, and RL scaling remain to be established.\n- Priors discussed in prose only (YOCO, Feedback Transformer, Recurrent Transformer); those are not library nodes.\n\n## Open Source Repository & Resources\n- GitHub (repo name misspells \"transformer\"): `https://github.com/yifanzhang-pro/recurrent-looped-tranformer`\n- Site: `https://yifanzhang-pro.github.io/recurrent-looped-tranformer/`\n- English PDF: `https://github.com/yifanzhang-pro/recurrent-looped-tranformer/blob/master/Recurrent_Looped_Transformer.pdf`\n- No training code as of 2026-09-12 (`recipe:recurrent-looped-transformer` `code_status: partial`)."
     },
     {
       "id": "paper:lora-unified-study",
@@ -5801,6 +5873,42 @@
         ]
       },
       "body": "# NGN: Neuromorphic Gated Networks for Temporal Stream Processing\n\n## Abstract Summary\nNGN designs neuromorphic gating circuits that adaptively route continuous temporal streams across sparse spiking sub-networks based on event density.\n\n## Key Contributions\n1. **Event-Density Gating**: Modulates active spiking neurons according to incoming event burstiness.\n2. **Extreme Sparsity**: Cuts simulated synaptic operations by over 50% on audio and event-vision streams.\n\n## Open Source Repository\n- Implementation: `none found`"
+    },
+    {
+      "id": "paper:deepseek-v41-flash",
+      "type": "paper",
+      "title": "DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/papers/deepseek-v41-flash.md",
+      "metadata": {
+        "id": "paper:deepseek-v41-flash",
+        "type": "paper",
+        "title": "DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression",
+        "authors": [
+          "DeepSeek-AI"
+        ],
+        "year": 2026,
+        "month": 9,
+        "arxiv_id": "",
+        "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+        "methods": [
+          "method:deepseek-v41-flash"
+        ],
+        "cites": [
+          "paper:deepseek-v4",
+          "paper:mhc"
+        ],
+        "tags": [
+          "architecture",
+          "moe",
+          "serving",
+          "kv-cache",
+          "ced",
+          "deepseek-v41-flash"
+        ]
+      },
+      "body": "# DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression\n\n## Abstract Summary\nDeepSeek-V4.1-Flash is a 552B-backbone multimodal MoE with up to 1M context. It uses a Causal Encoder-Decoder (CED): 20-layer causal encoder plus 20-layer decoder (40 total). Decoder global KV is projected from final encoder hidden states rather than each decoder layer's own states, so prefill activates about 8B parameters per token and decode about 16B. Compressed Sparse Attention 2 (CSA2) assigns Full / Reindex / Reuse modes with a Hierarchical Sparse Indexer and FP4 main KV (~890 bytes/token global KV, about 1/4 of V4-Flash). SWA Bounded Replay rebuilds the last \\(n_{\\mathrm{win}}\\) tokens so persistent KV is about 1/8 of V4-Flash. Additional pieces: Single-Pass mHC, Engram conditional memory (196B, token lookup), DSpark speculative decoding. MoE: 1 shared + 384 routed experts, activate 6. Pretrained on 45T multimodal tokens. Post-train is standard SFT → RL → OPD; the data pipeline is what changed.\n\n## Key Contributions\n1. **CED serving architecture** for input-heavy agentic workloads (asymmetric 8B prefill / 16B decode).\n2. **CSA2 + FP4 main KV** to 890 bytes/token global KV.\n3. **SWA Bounded Replay** to cut persistent KV without storing SWA KV on SSD.\n4. **Open weights** and a reference inference / encoding stack on Hugging Face.\n\n## Empirical Highlights\n- Instruct, max reasoning effort (vendor card): Terminal-Bench 2.1 90.6 vs V4-Flash 82.7 vs V4-Pro 87.9; DeepSWE v1.1 74.2 vs 54.4 / 62.7; AutomationBench 54.8; Agent's Last Exam 31.8.\n- Base vs V4-Flash-Base / V4-Pro-Base on internal evals (same framework): MMLU-Pro 74.1 vs 68.3 / 73.5; HumanEval 79.4 vs 69.5 / 76.8.\n- API news (2026-09-10): `deepseek-flash` live; V4-Flash and V4-Flash-Vision-Exp retired (compat aliases route to V4.1-Flash); V4-Pro phased out (requests route to V4.1-Flash from 2026-09-14 04:00 UTC until V4.1-Pro).\n\n## Open Source Repository & Resources\n- Weights + tech report: `https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash` (`DeepSeek_V41_Tech_Report.pdf`)\n- Prompt encoding toolkit: `https://github.com/deepseek-ai/deepseek-recipe`\n- News: `https://www.deepseek.com/en/news/deepseek-v4-1-flash/`\n- No from-scratch pretrain trainer (`recipe:deepseek-v41-flash` `code_status: partial`)."
     },
     {
       "id": "paper:opsd-collapse-review",
@@ -9041,6 +9149,86 @@
       "body": "# 1-Bit / Ternary Extreme Weight Quantization\n\n## Problem Definition\nTraining foundation models natively using ternary weights \\(\\{-1, 0, +1\\}\\), replacing expensive floating-point multiplications with integer additions.\n\n## SOTA Recommendation (as of 2026-08-26)\n- **Native 1.58-Bit Pretrain**: **Sparse-BitNet** (`method:sparse-bitnet`, 2603.05168); keep 2B4T as dense baseline citation.\n- **Ternary Existing SOTA LLM**: **ScaleQ-1.58** (`method:scaleq-158`, 2608.01078).\n- **FP4 Hardware Train**: **Quartet-II NVFP4** (`method:quartet-ii`, 2601.22813) / **MXFP4** (`method:mxfp4-mi355x`, 2605.09825).\n- **Optional genuine 1-bit PTQ**: `method:af1` (`arXiv:2609.06161`, EMNLP 2026 Main). Existing-checkpoint binarization, not a Sparse-BitNet pretrain replacement."
     },
     {
+      "id": "task:recurrent-encoder-decoder-lm",
+      "type": "task",
+      "title": "Recurrent Encoder-Decoder Language Models",
+      "domain": "pretraining",
+      "status": null,
+      "file_path": "graph/tasks/recurrent-encoder-decoder-lm.md",
+      "metadata": {
+        "id": "task:recurrent-encoder-decoder-lm",
+        "type": "task",
+        "title": "Recurrent Encoder-Decoder Language Models",
+        "domain": "pretraining",
+        "summary": "Causal-encoder plus recurrent-decoder LMs with unbounded temporal depth, all-token recurrence across the prompt–response boundary, and exact current-policy RL replay under one state transition.",
+        "scope": "Recurrent CED-style LM architecture: causal encoder KV memory plus a recurrent decoder that carries hidden state and layerwise SWA cache across every prompt and response token. Experimental first hop is Recurrent Looped Transformer.",
+        "out_of_scope": [
+          "Standard dense ~7B NTP from scratch (Muon2 / OLMo-3)",
+          "Frontier MoE pretrain template (DeepSeek-V4 / Kimi-K3)",
+          "Latent-space / next-concept LM (NCP-ArchPreview)",
+          "Input-heavy agentic MoE serving / KV-compressed CED (DeepSeek-V4.1-Flash)",
+          "SWE issue-to-patch harness (mini-SWE-agent)",
+          "Production harness kernel (omp2)",
+          "Compute-matched MoE looping of middle layers (SMELT)"
+        ],
+        "redirects": [
+          {
+            "when": "standard dense ~7B NTP from scratch",
+            "to": "task:pretrain-dense-7b"
+          },
+          {
+            "when": "frontier MoE architecture / DeepSeek-V4 template",
+            "to": "task:pretrain-moe-frontier"
+          },
+          {
+            "when": "latent-space / next-concept LM architecture",
+            "to": "task:latent-space-lm-pretrain"
+          },
+          {
+            "when": "input-heavy agentic / KV-compressed CED serving rather than recurrent LM pretrain",
+            "to": "task:input-heavy-agentic-moe-serving"
+          },
+          {
+            "when": "GitHub issue to patch / SWE harness",
+            "to": "task:software-engineering-agent-harness"
+          },
+          {
+            "when": "building a production engine (rewind, sandbox, remote, TUI)",
+            "to": "task:agent-harness-runtime"
+          },
+          {
+            "when": "compute-matched looped MoE pretrain (middle layers twice)",
+            "to": "task:compute-matched-moe-looped-pretrain"
+          }
+        ],
+        "current_sota": [
+          {
+            "method": "method:recurrent-looped-transformer",
+            "as_of": "2026-09-12",
+            "benchmark": "Technical report (mechanisms only)",
+            "metric": "measured efficiency or scaling",
+            "value": "none reported",
+            "notes": "RLT (2026-09-12). Experimental. Report develops encoder memory + all-token recurrence; does not report measured results. Conceptual sibling of DeepSeek-V4.1-Flash CED, not a replacement."
+          }
+        ],
+        "methods": [
+          "method:recurrent-looped-transformer",
+          "method:deepseek-v41-flash",
+          "method:ncp-archpreview",
+          "method:deepseek-v4"
+        ],
+        "last_reviewed": "2026-09-12",
+        "tags": [
+          "pretraining",
+          "architecture",
+          "recurrent",
+          "encoder-decoder",
+          "rlt"
+        ]
+      },
+      "body": "# Recurrent Encoder-Decoder Language Models\n\n## Problem Definition\nTrain or specify a language model whose decoder carries complete state across every token, including the prompt–response boundary. The encoder builds prefix-restricted global KV; the decoder is recurrent (final hidden state plus layerwise sliding-window cache). This is not dense NTP 7B, not the V4 MoE pretrain template, and not a SWE harness.\n\n## Evaluation Protocol\n- **Primary Benchmarks**: none in the RLT report. Future work would need efficiency, scaling, and RL replay measurements.\n- **Evaluation Pitfalls**: Do not treat \"infinite temporal depth\" as infinite work per token. Do not cite V4.1-Flash serving numbers as RLT results. Do not retarget Muon2, DeepSeek-V4 / Kimi-K3, NCP, mini-SWE-agent, or V4.1-Flash serving SOTA.\n\n## SOTA Recommendation (as of 2026-09-12)\n- **Experimental first hop (this task only)**: **Recurrent Looped Transformer** (`method:recurrent-looped-transformer`, `paper:recurrent-looped-transformer`). Status `experimental`. No measured efficiency or scaling.\n- **Production CED serving (different task)**: `method:deepseek-v41-flash` on `task:input-heavy-agentic-moe-serving`.\n- **Not This Task**: `method:muon2` remains the ~7B optimizer; `method:deepseek-v4` / `method:kimi-k3` remain frontier MoE pretrain; `method:ncp-archpreview` remains latent-space LM; `method:mini-swe-agent` remains the SWE harness."
+    },
+    {
       "id": "task:math-code-rl-dense",
       "type": "task",
       "title": "Mathematical and Code RL Reasoning (Dense Policies)",
@@ -9698,6 +9886,81 @@
       "body": "# Parameter-Efficient Fine-Tuning for Fourier Operators\n\n## Problem Definition\nFine-tuning large pre-trained Fourier and spectral neural operators (e.g., FNO, DPOT) on downstream tasks (such as shifted Reynolds numbers, altered boundary conditions, or varied geometries) while updating only a small fraction of parameters without degrading high-frequency spectral accuracy.\n\n## SOTA Recommendation (as of 2026-08-28)\n- **Primary SOTA**: **F-Adapter** (`method:f-adapter`, 2509.23173, NeurIPS 2025).\n- **Critical Caution**: Do NOT apply vanilla LoRA to Fourier latent operators; vanilla LoRA causes depth-amplified spectral error floors."
     },
     {
+      "id": "task:compute-matched-moe-looped-pretrain",
+      "type": "task",
+      "title": "Compute-Matched MoE Looped Pretraining",
+      "domain": "pretraining",
+      "status": null,
+      "file_path": "graph/tasks/compute-matched-moe-looped-pretrain.md",
+      "metadata": {
+        "id": "task:compute-matched-moe-looped-pretrain",
+        "type": "task",
+        "title": "Compute-Matched MoE Looped Pretraining",
+        "domain": "pretraining",
+        "summary": "Loop a contiguous span of MoE Transformer layers while matching an unlooped baseline on per-token FLOPs, non-embedding parameters, and KV cache, then measure scaling-law compute savings.",
+        "scope": "Compute-matched looped MoE pretrain recipes (which layers to loop, how many visits, width/expert/KV matching). First hop is SMELT. Does not choose the frontier MoE architecture template.",
+        "out_of_scope": [
+          "Frontier MoE architecture template (DeepSeek-V4 / Kimi-K3)",
+          "Communication-efficient expert-layer layout (CE-MoE)",
+          "NVL72 fused dispatch megakernel (Mixture-of-Kittens)",
+          "Recurrent CED all-token recurrence (RLT)",
+          "Input-heavy agentic CED serving (DeepSeek-V4.1-Flash)",
+          "~7B dense NTP optimizer (Muon2)"
+        ],
+        "redirects": [
+          {
+            "when": "choosing the frontier MoE architecture template",
+            "to": "task:pretrain-moe-frontier"
+          },
+          {
+            "when": "expert-parallel all-to-all layout rather than looping",
+            "to": "task:pretrain-moe-frontier"
+          },
+          {
+            "when": "NVL72 fused dispatch+SwiGLU+combine megakernel",
+            "to": "task:train-moe-nvl72"
+          },
+          {
+            "when": "recurrent CED-style architecture / all-token recurrence",
+            "to": "task:recurrent-encoder-decoder-lm"
+          },
+          {
+            "when": "input-heavy agentic / KV-compressed CED serving",
+            "to": "task:input-heavy-agentic-moe-serving"
+          },
+          {
+            "when": "choosing the ~7B dense pretrain optimizer",
+            "to": "task:llm-pretraining-optimization"
+          }
+        ],
+        "current_sota": [
+          {
+            "method": "method:smelt",
+            "as_of": "2026-09-01",
+            "benchmark": "Chinchilla-style MoE scaling ladder, compute-optimal CE Gain vs unlooped Baseline",
+            "metric": "training FLOPs saved at matched loss",
+            "value": "6.8–18.0% on the fitted sparse-grid frontier (10^20–10^21 FLOPs)",
+            "notes": "SMELT (2609.01343). Active looped-MoE recipe. Does not replace DeepSeek-V4 / Kimi-K3 / CE-MoE."
+          }
+        ],
+        "methods": [
+          "method:smelt",
+          "method:ce-moe",
+          "method:deepseek-v4",
+          "method:kimi-k3"
+        ],
+        "last_reviewed": "2026-09-12",
+        "tags": [
+          "pretraining",
+          "moe",
+          "looped-transformer",
+          "smelt",
+          "scaling-laws"
+        ]
+      },
+      "body": "# Compute-Matched MoE Looped Pretraining\n\n## Problem Definition\nDecide whether looping MoE layers helps when you cannot spend extra FLOPs, extra stored parameters, or extra KV. Match all three budgets against an unlooped MoE baseline, then compare loss and downstream. This is not the V4 / K3 architecture default and not CE-MoE's communication layout.\n\n## Evaluation Protocol\n- **Primary Benchmarks**: compute-optimal validation-loss frontier (CE Gain); DCLM Core / Completion; MMLU; domain splits (Code largest in SMELT).\n- **Evaluation Pitfalls**: Iso-parameter looping that grows FLOPs and KV is a different comparison. Do not treat SMELT as a replacement of DeepSeek-V4 / Kimi-K3.\n\n## SOTA Recommendation (as of 2026-09-12)\n- **Primary Method (this task only)**: **SMELT** (`method:smelt`, `paper:smelt` `arXiv:2609.01343`). Status `active`. Loop the middle 50% of MoE layers twice; narrow width; raise experts; scale looped residuals by \\(1/2\\); match FLOPs / non-embedding params / KV.\n- **Not This Task**: `method:deepseek-v4` / `method:kimi-k3` remain frontier MoE co-defaults; `method:ce-moe` remains the communication-layout niche."
+    },
+    {
       "id": "task:parameter-efficient-fine-tuning",
       "type": "task",
       "title": "Parameter-Efficient Fine-Tuning (PEFT) & Low-Rank Adaptation",
@@ -10224,7 +10487,9 @@
           "Meta-agent search as the default design process",
           "Training a live-web search policy (Iris)",
           "Frontier RL post-train engine (Miles)",
-          "Routing-harness RSI post-train (NeoHorse-1)"
+          "Routing-harness RSI post-train (NeoHorse-1)",
+          "Recurrent CED-style architecture (RLT)",
+          "Input-heavy agentic MoE serving / KV CED (DeepSeek-V4.1-Flash)"
         ],
         "redirects": [
           {
@@ -10262,6 +10527,14 @@
           {
             "when": "agentic RSI / routing-harness post-train rather than a SWE loop",
             "to": "task:agentic-rsi-routing-posttrain"
+          },
+          {
+            "when": "recurrent CED-style architecture, not a SWE harness",
+            "to": "task:recurrent-encoder-decoder-lm"
+          },
+          {
+            "when": "input-heavy agentic / KV-compressed CED serving rather than a SWE loop",
+            "to": "task:input-heavy-agentic-moe-serving"
           }
         ],
         "current_sota": [
@@ -10282,7 +10555,7 @@
           "method:single-agent-plus-tools",
           "method:harness-onpolicy-correction"
         ],
-        "last_reviewed": "2026-09-11",
+        "last_reviewed": "2026-09-12",
         "tags": [
           "agents",
           "agent",
@@ -10446,7 +10719,8 @@
           "Open pretrain mix / Dolma-3 recipe (OLMo-3)",
           "Frontier MoE architecture (DeepSeek-V4 / Kimi-K3)",
           "Diffusion-augmented AR serving (Uno)",
-          "Linear-time SSM sequence models (Mamba-2)"
+          "Linear-time SSM sequence models (Mamba-2)",
+          "Recurrent CED-style architecture / all-token recurrence (RLT)"
         ],
         "redirects": [
           {
@@ -10468,6 +10742,10 @@
           {
             "when": "lossless multi-token / diffusion-augmented AR serving",
             "to": "task:diffusion-augmented-ar"
+          },
+          {
+            "when": "recurrent CED-style architecture, not next-concept latent LM",
+            "to": "task:recurrent-encoder-decoder-lm"
           }
         ],
         "current_sota": [
@@ -10485,7 +10763,7 @@
           "method:muon2",
           "method:olmo-3"
         ],
-        "last_reviewed": "2026-09-11",
+        "last_reviewed": "2026-09-12",
         "tags": [
           "pretraining",
           "architecture",
@@ -11124,6 +11402,84 @@
       "body": "# Open Foundation Data Recipe & Pretraining Mix\n\n## Problem Definition\nConstructing transparent, reproducible, and open multi-trillion token pretraining corpora with optimal domain mixing and staged annealing.\n\n## SOTA Recommendation (as of 2026-08-26)\n- **Primary Data Recipe**: **OLMo-3 / Dolma-3** (`method:olmo-3`, 2512.13961).\n- **Dynamic Mixing**: **DeMix** (`method:demix`, 2602.00747), **CausalMix** (`method:causalmix`, 2607.01104), **OP-Mix** (`method:op-mix`, 2605.15220).\n- **Not a 7B substitute**: Consumer-GPU ~2B pretrain with a proxy-guided mix is `method:puro-2b`, not a replacement for Dolma-3.\n- **Latent-space LM that used Dolma-3 (not this mix default)**: `method:ncp-archpreview` on `task:latent-space-lm-pretrain`."
     },
     {
+      "id": "task:input-heavy-agentic-moe-serving",
+      "type": "task",
+      "title": "Input-Heavy Agentic MoE Serving",
+      "domain": "systems",
+      "status": null,
+      "file_path": "graph/tasks/input-heavy-agentic-moe-serving.md",
+      "metadata": {
+        "id": "task:input-heavy-agentic-moe-serving",
+        "type": "task",
+        "title": "Input-Heavy Agentic MoE Serving",
+        "domain": "systems",
+        "summary": "Serve a large multimodal MoE under long, input-heavy agentic workloads by compressing global KV and activating fewer parameters on prefill than on decode (causal encoder-decoder).",
+        "scope": "KV-footprint / CED serving for input-heavy agentic MoE (encoder memory, decoder global KV from final encoder states, CSA2, SWA bounded replay). First hop is DeepSeek-V4.1-Flash.",
+        "out_of_scope": [
+          "Frontier MoE pretrain architecture template (DeepSeek-V4 / Kimi-K3)",
+          "SWE issue-to-patch harness (mini-SWE-agent)",
+          "Frontier RL post-train engine (Miles)",
+          "Diffusion-augmented AR serving / lossless multi-token decode (Uno)",
+          "Recurrent all-token CED LM pretrain (RLT; experimental)",
+          "Compute-matched looped MoE pretrain (SMELT)"
+        ],
+        "redirects": [
+          {
+            "when": "choosing the frontier MoE pretrain architecture template",
+            "to": "task:pretrain-moe-frontier"
+          },
+          {
+            "when": "GitHub issue to patch / SWE harness rather than serving architecture",
+            "to": "task:software-engineering-agent-harness"
+          },
+          {
+            "when": "production post-train stack rather than KV-compressed serving",
+            "to": "task:frontier-rl-posttrain-stack"
+          },
+          {
+            "when": "lossless multi-token / diffusion-augmented AR serving",
+            "to": "task:diffusion-augmented-ar"
+          },
+          {
+            "when": "recurrent CED-style LM architecture (all-token recurrence), not Flash serving",
+            "to": "task:recurrent-encoder-decoder-lm"
+          },
+          {
+            "when": "compute-matched looped MoE pretrain",
+            "to": "task:compute-matched-moe-looped-pretrain"
+          }
+        ],
+        "current_sota": [
+          {
+            "method": "method:deepseek-v41-flash",
+            "as_of": "2026-09-10",
+            "benchmark": "DeepSeek-V4.1-Flash instruct, max reasoning effort; Terminal-Bench 2.1 / DeepSWE v1.1 / global KV bytes",
+            "metric": "agentic Pass@1 + KV bytes/token",
+            "value": "TB2.1 90.6; DeepSWE 74.2; global KV 890 B/token (~1/4 of V4-Flash); persistent KV ~1/8 of V4-Flash",
+            "notes": "DeepSeek-V4.1-Flash CED (HF tech report, 2026-09-10). Vendor-reported. Does not replace DeepSeek-V4 / Kimi-K3 as the MoE pretrain co-default."
+          }
+        ],
+        "methods": [
+          "method:deepseek-v41-flash",
+          "method:deepseek-v4",
+          "method:kimi-k3",
+          "method:recurrent-looped-transformer",
+          "method:mhc",
+          "method:mini-swe-agent"
+        ],
+        "last_reviewed": "2026-09-12",
+        "tags": [
+          "systems",
+          "serving",
+          "kv-cache",
+          "moe",
+          "ced",
+          "deepseek-v41-flash"
+        ]
+      },
+      "body": "# Input-Heavy Agentic MoE Serving\n\n## Problem Definition\nServe a frontier multimodal MoE when prompts are long and agentic (tools, images, 1M context) and KV cache plus prefill FLOPs dominate cost. Causal encoder-decoder (CED) builds encoder memory once and projects decoder global KV from final encoder states, so prefill activates fewer parameters than decode.\n\n## Evaluation Protocol\n- **Primary Benchmarks**: agentic boards (Terminal-Bench, DeepSWE, AutomationBench) plus KV bytes/token and persistent KV vs V4-Flash.\n- **Evaluation Pitfalls**: Do not replace DeepSeek-V4 / Kimi-K3 as the *pretrain* architecture default. Do not treat Flash serving numbers as RLT measurements. Do not retarget mini-SWE-agent, Miles, or Uno.\n\n## SOTA Recommendation (as of 2026-09-12)\n- **Primary Method (this task only)**: **DeepSeek-V4.1-Flash** (`method:deepseek-v41-flash`, `paper:deepseek-v41-flash`). CED 20+20, CSA2, SWA Bounded Replay, Single-Pass mHC, Engram, DSpark. Weights: `deepseek-ai/DeepSeek-V4.1-Flash`.\n- **Not This Task**: `method:deepseek-v4` / `method:kimi-k3` remain MoE pretrain co-defaults; `method:mini-swe-agent` remains the SWE harness; `method:miles` remains the post-train engine; `method:uno` remains diffusion-augmented AR serving; `method:recurrent-looped-transformer` is the experimental all-token-recurrence sibling."
+    },
+    {
       "id": "task:agent-harness-runtime",
       "type": "task",
       "title": "Agent Harness Runtime",
@@ -11142,7 +11498,8 @@
           "Training an agent policy (SAO)",
           "Outcome-only long-horizon agent RL (CANOPY / DRACO)",
           "Dumped 10M-token prompts (RLM)",
-          "MCP as the product protocol (MCP stays agent-communication)"
+          "MCP as the product protocol (MCP stays agent-communication)",
+          "Recurrent CED-style architecture (RLT)"
         ],
         "redirects": [
           {
@@ -11164,9 +11521,13 @@
           {
             "when": "how to talk to tools/agents as a protocol",
             "to": "task:agent-communication"
+          },
+          {
+            "when": "recurrent CED-style architecture, not a harness kernel",
+            "to": "task:recurrent-encoder-decoder-lm"
           }
         ],
-        "last_reviewed": "2026-09-11",
+        "last_reviewed": "2026-09-12",
         "current_sota": [
           {
             "method": "method:omp2-harness",
@@ -11467,6 +11828,37 @@
         "title": "Pretrain Mixture-of-Experts (MoE) Architecture at Scale",
         "domain": "pretraining",
         "summary": "Frontier pretraining of sparse Mixture-of-Experts (MoE) architectures with multi-head latent attention and multi-token prediction.",
+        "scope": "Frontier MoE pretrain architecture template. Co-default is DeepSeek-V4 + Kimi-K3.",
+        "out_of_scope": [
+          "Input-heavy agentic / KV-compressed CED serving (DeepSeek-V4.1-Flash)",
+          "Compute-matched looped MoE (SMELT)",
+          "Recurrent CED all-token recurrence (RLT)",
+          "Communication-efficient expert layout as the architecture default (CE-MoE stays niche)",
+          "NVL72 fused dispatch megakernel (Mixture-of-Kittens)",
+          "Olympiad specialist post-train (Nemotron IMO Gold)"
+        ],
+        "redirects": [
+          {
+            "when": "input-heavy agentic / KV-footprint / CED serving, not general MoE pretrain template",
+            "to": "task:input-heavy-agentic-moe-serving"
+          },
+          {
+            "when": "compute-matched looped MoE (middle layers twice), not V4/K3 architecture",
+            "to": "task:compute-matched-moe-looped-pretrain"
+          },
+          {
+            "when": "recurrent CED-style architecture (all-token recurrence / encoder memory / SWA decoder), not NTP MoE V4",
+            "to": "task:recurrent-encoder-decoder-lm"
+          },
+          {
+            "when": "NVL72 fused dispatch+SwiGLU+combine megakernel",
+            "to": "task:train-moe-nvl72"
+          },
+          {
+            "when": "olympiad-style natural-language proofs / IMO TTC rather than architecture",
+            "to": "task:olympiad-math-posttrain"
+          }
+        ],
         "current_sota": [
           {
             "method": "method:deepseek-v4",
@@ -11499,16 +11891,19 @@
           "method:ce-moe",
           "method:moe-sparsity-hp-scaling",
           "method:moe-data-repetition",
-          "method:nemotron-imo-gold"
+          "method:nemotron-imo-gold",
+          "method:smelt",
+          "method:deepseek-v41-flash",
+          "method:recurrent-looped-transformer"
         ],
-        "last_reviewed": "2026-09-11",
+        "last_reviewed": "2026-09-12",
         "tags": [
           "pretraining",
           "moe",
           "frontier"
         ]
       },
-      "body": "# Pretrain Mixture-of-Experts (MoE) Architecture at Scale\n\n## Problem Definition\nTraining sparse Mixture-of-Experts models enables scaling parameter capacity into hundreds of billions of parameters while keeping active FLOPs per token bounded.\n\n## SOTA Recommendation (as of 2026-09-01)\n- **Architecture**: **DeepSeek-V4** (`method:deepseek-v4`, 2606.19348) + **Kimi-K3** (`method:kimi-k3`, 2607.24653). Unchanged.\n- **Optimizer**: **MuonClip** (`paper:muonclip-kimi-k2`) / **Muon2** (`method:muon2`).\n- **NVL72 Systems Megakernel**: **Mixture-of-Kittens** (`method:mixture-of-kittens`, `task:train-moe-nvl72`).\n- **Adjacent Qwen-style hybrid residual recipe**: `method:qwen38-next` (`arXiv:2608.30320`). Does not replace DeepSeek-V4 / Kimi-K3 or Muon2.\n- **Optional communication-efficient layout**: `method:ce-moe` (`arXiv:2608.28511`) when expert-parallel all-to-all dominates. Layout niche only.\n- **Optional LR/batch vs activation-ratio transfer**: `method:moe-sparsity-hp-scaling` (`arXiv:2609.08690`). Pretrain HP guidance. Does not replace DeepSeek-V4 / Kimi-K3.\n- **Gotcha (repetition × sparsity)**: `method:moe-data-repetition` (`arXiv:2609.11917`). MoEs degrade from ~4× repeats; dense 80M tolerated 8×. Does not replace DeepSeek-V4 / Kimi-K3.\n- **Olympiad specialist post-train on Ultra (not this architecture task)**: `method:nemotron-imo-gold` on `task:olympiad-math-posttrain`."
+      "body": "# Pretrain Mixture-of-Experts (MoE) Architecture at Scale\n\n## Problem Definition\nTraining sparse Mixture-of-Experts models enables scaling parameter capacity into hundreds of billions of parameters while keeping active FLOPs per token bounded.\n\n## SOTA Recommendation (as of 2026-09-01)\n- **Architecture**: **DeepSeek-V4** (`method:deepseek-v4`, 2606.19348) + **Kimi-K3** (`method:kimi-k3`, 2607.24653). Unchanged.\n- **Optimizer**: **MuonClip** (`paper:muonclip-kimi-k2`) / **Muon2** (`method:muon2`).\n- **NVL72 Systems Megakernel**: **Mixture-of-Kittens** (`method:mixture-of-kittens`, `task:train-moe-nvl72`).\n- **Adjacent Qwen-style hybrid residual recipe**: `method:qwen38-next` (`arXiv:2608.30320`). Does not replace DeepSeek-V4 / Kimi-K3 or Muon2.\n- **Optional communication-efficient layout**: `method:ce-moe` (`arXiv:2608.28511`) when expert-parallel all-to-all dominates. Layout niche only.\n- **Optional compute-matched looped MoE**: `method:smelt` (`arXiv:2609.01343`) on `task:compute-matched-moe-looped-pretrain`. Sibling of CE-MoE. Does not replace DeepSeek-V4 / Kimi-K3 / CE-MoE.\n- **Input-heavy agentic / KV-compressed CED serving (not this template)**: `method:deepseek-v41-flash` on `task:input-heavy-agentic-moe-serving`. Different family from the V4 MoE pretrain template.\n- **Experimental recurrent CED LM (not this template)**: `method:recurrent-looped-transformer` on `task:recurrent-encoder-decoder-lm`.\n- **Optional LR/batch vs activation-ratio transfer**: `method:moe-sparsity-hp-scaling` (`arXiv:2609.08690`). Pretrain HP guidance. Does not replace DeepSeek-V4 / Kimi-K3.\n- **Gotcha (repetition × sparsity)**: `method:moe-data-repetition` (`arXiv:2609.11917`). MoEs degrade from ~4× repeats; dense 80M tolerated 8×. Does not replace DeepSeek-V4 / Kimi-K3.\n- **Olympiad specialist post-train on Ultra (not this architecture task)**: `method:nemotron-imo-gold` on `task:olympiad-math-posttrain`."
     },
     {
       "id": "task:frontier-rl-posttrain-stack",
@@ -12240,7 +12635,8 @@
           "~7B dense pretrain optimizer (Muon2)",
           "Pass@1 labeled math/code RLVR algorithm (CISPO)",
           "Standalone discrete diffusion LMs that replace the AR distribution",
-          "Speculative draft co-train inside long-context RL (Online Draft Co-Training / NeMo RL)"
+          "Speculative draft co-train inside long-context RL (Online Draft Co-Training / NeMo RL)",
+          "Input-heavy agentic / KV-compressed CED MoE serving (DeepSeek-V4.1-Flash)"
         ],
         "redirects": [
           {
@@ -12258,6 +12654,10 @@
           {
             "when": "speculative draft co-train inside long-context RL (separate draft), not diffusion-augmented AR",
             "to": "task:frontier-rl-posttrain-stack"
+          },
+          {
+            "when": "input-heavy agentic / KV-compressed CED MoE serving",
+            "to": "task:input-heavy-agentic-moe-serving"
           }
         ],
         "current_sota": [
@@ -12274,7 +12674,7 @@
           "method:uno",
           "method:online-draft-cotrain"
         ],
-        "last_reviewed": "2026-09-09",
+        "last_reviewed": "2026-09-12",
         "tags": [
           "efficiency",
           "inference",
@@ -13336,6 +13736,100 @@
       "body": "# GeoTransolver (Geometry-Aware Physics Attention)\n\n## Method Overview\nGeoTransolver combines Physics-Attention slicing with multi-scale geometric latent embeddings:\n1. **GALE Latent Embedding**: Incorporates Geometry-Aware Latent Embedding (GALE) to encode local multi-scale surface curvature.\n2. **Multi-Scale Physics Slices**: Extends Transolver attention across hierarchical geometric levels.\n\n## When to Use\n- Active industrial alternative in the NVIDIA PhysicsNeMo ecosystem."
     },
     {
+      "id": "method:smelt",
+      "type": "method",
+      "title": "SMELT (Sparse MoE Transformer, Middle Layers Loop Twice)",
+      "domain": null,
+      "status": "active",
+      "file_path": "graph/methods/smelt.md",
+      "metadata": {
+        "id": "method:smelt",
+        "type": "method",
+        "title": "SMELT (Sparse MoE Transformer, Middle Layers Loop Twice)",
+        "category": "architecture",
+        "status": "active",
+        "sota_for": [],
+        "supersedes": [],
+        "do_not_use_for": [
+          {
+            "when": "choosing the frontier MoE architecture template",
+            "reason": "SMELT is a compute-matched looping recipe on an internal MoE baseline, not DeepSeek-V4 or Kimi-K3",
+            "use_instead": "method:deepseek-v4"
+          },
+          {
+            "when": "expert-parallel all-to-all layout / concentrating experts in fewer routed layers",
+            "reason": "That layout niche is CE-MoE, not looping",
+            "use_instead": "method:ce-moe"
+          },
+          {
+            "when": "NVL72 fused dispatch+SwiGLU+combine megakernel",
+            "reason": "Looping does not replace Mixture-of-Kittens",
+            "use_instead": "method:mixture-of-kittens"
+          },
+          {
+            "when": "recurrent CED all-token recurrence",
+            "reason": "SMELT is decoder-only MoE layer looping under budget matching; RLT is a different architecture",
+            "use_instead": "method:recurrent-looped-transformer"
+          }
+        ],
+        "assumptions": [
+          "Match per-token FLOPs, total non-embedding parameters, and KV cache against an unlooped MoE Baseline. Typical residual mismatch: FLOPs <4%, params <1%, KV <4%.",
+          "Locked recipe: loop middle 50% of layers twice; physical depth matches the Baseline; scale looped residuals by 1/r with r=2; narrow H and raise expert count; GQA/head-size for KV.",
+          "Paper ladder: 100M/200M/600M/1.6B active, up to 54B non-embedding, S≈85/95/97%. Internal corpus, AdamW WSD. No public code as of 2026-09-12."
+        ],
+        "last_reviewed": "2026-09-12",
+        "papers": [
+          "paper:smelt"
+        ],
+        "recipes": [
+          "recipe:smelt"
+        ],
+        "claims": [
+          {
+            "benchmark": "Compute-optimal frontier vs unlooped MoE Baseline (sparse-grid fit)",
+            "metric": "training FLOPs saved at matched validation loss (CE Gain)",
+            "value": "6.8–18.0%",
+            "baseline": "Unlooped MoE Baseline, matched FLOPs / non-embedding params / KV; S≈85/95/97%",
+            "date": "2026-09-01",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.01343",
+            "notes": "Table of CE Gain: 6.8–10.0% at 10^20 FLOPs; 14.7–18.0% at 10^21. 10^22 column is extrapolated. Cell-bootstrap 95% intervals in the paper. Separate Chinchilla-style surfaces; not a DeepSeek-V4 bake-off."
+          },
+          {
+            "benchmark": "SMELT scale-up ladder",
+            "metric": "largest non-embedding parameter count",
+            "value": "54B",
+            "baseline": "1.6B-active cell, S≈97%, matched Baseline",
+            "date": "2026-09-01",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.01343",
+            "notes": "Four active scales 100M / 200M / 600M / 1.6B. SMELT lower loss than Baseline in every sparse-grid cell of the paper."
+          },
+          {
+            "benchmark": "DCLM Completion / DCLM Core / MMLU vs matched Baseline",
+            "metric": "pairwise wins",
+            "value": "96/96 Completion; 83/96 Core; 29/30 MMLU (Baseline ≥10 pp above chance)",
+            "baseline": "Unlooped MoE Baseline at the same scale and sparsity",
+            "date": "2026-09-01",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.01343",
+            "notes": "Downstream lift exceeds a Baseline-calibrated loss-to-score map. Largest training-domain gain on Code. Second visit reduces attention sink."
+          }
+        ],
+        "tags": [
+          "architecture",
+          "moe",
+          "looped-transformer",
+          "smelt",
+          "scaling-laws"
+        ]
+      },
+      "body": "# SMELT (Sparse MoE Transformer, Middle Layers Loop Twice)\n\n## Method Overview\nLoop a contiguous middle span of a decoder-only MoE Transformer rather than stacking new layers. Extra visits cost FLOPs, so SMELT narrows hidden size \\(H\\), recovers stored parameters by raising per-layer expert count, and restores KV with head size / GQA. Looped residual updates are scaled by \\(1/r\\) (\\(r=2\\) ⇒ \\(1/2\\)) so tied visits do not inflate the stream.\n\nAblations lock three rules: (1) loop the middle 50% of layers, not the full stack; (2) keep physical depth at the Baseline optimum so effective depth-to-width is larger; (3) loop twice — a third or fourth visit thins the model under the FLOPs cap and regresses.\n\nSibling of `method:ce-moe` on the MoE shelf: CE-MoE retile *which layers are routed*; SMELT *reuses* middle routed layers under three-budget matching. Neither is the V4 / K3 template.\n\n## When to Use\n- You can retile an MoE pretrain run to loop the middle half twice and will match FLOPs, non-embedding params, and KV against the unlooped recipe.\n\n## When NOT to Use\n- Frontier architecture default → `method:deepseek-v4` / `method:kimi-k3`. Communication layout → `method:ce-moe`. NVL72 megakernel → `method:mixture-of-kittens`. All-token CED recurrence → `method:recurrent-looped-transformer`.\n\n## Relation to Existing SOTA\n- Active first hop on `task:compute-matched-moe-looped-pretrain` only. Mentioned beside CE-MoE on `task:pretrain-moe-frontier`. Does **not** replace DeepSeek-V4, Kimi-K3, or CE-MoE.\n\n## Gotchas & Failure Modes\n- No official code. Do not clone unrelated \"SMELT\" GitHub repos.\n- Matching is the claim. Iso-parameter looping that grows FLOPs/KV is the comparison SMELT argues against.\n- DCLM Core and validation loss can disagree on loop span; the paper selects span on validation loss.\n- Internal data and AdamW WSD; do not assume the CE Gain transfers onto a DeepSeek-V4 stack without a rematch."
+    },
+    {
       "id": "method:nemotron-3-super-latentmoe",
       "type": "method",
       "title": "Nemotron-3 Super Latent MoE",
@@ -14133,6 +14627,11 @@
             "when": "standard dense ~7B NTP pretrain without a concept module",
             "reason": "That remains task:pretrain-dense-7b / Muon2 + OLMo-3",
             "use_instead": "task:pretrain-dense-7b"
+          },
+          {
+            "when": "recurrent CED-style architecture / all-token recurrence",
+            "reason": "NCP is next-concept latent LM; RLT is the experimental recurrent CED hop",
+            "use_instead": "method:recurrent-looped-transformer"
           }
         ],
         "assumptions": [
@@ -15081,7 +15580,7 @@
           "sota"
         ]
       },
-      "body": "# DeepSeek-V4 MoE Architecture\n\n## Method Overview\nDeepSeek-V4 establishes the state-of-the-art sparse Mixture-of-Experts architecture:\n1. **Multi-Head Latent Attention (MLA)**: Low-rank key-value projection compression reducing KV cache footprint during generation.\n2. **Fine-Grained Expert Routing**: Expanded expert pool with auxiliary-loss-free load balancing.\n3. **Multi-Token Prediction**: Speculative prediction heads trained natively to accelerate inference throughput.\n4. **Manifold-Constrained Hyper-Connections (mHC)**: Residual stream expanded to \\(n \\times d\\) (\\(n=4\\)) with doubly stochastic Sinkhorn projection (`method:mhc`).\n\n## Systems & Megakernel Training\n- Distributed pretraining on Blackwell NVL72 clusters is accelerated using **Mixture-of-Kittens** (`method:mixture-of-kittens`), fusing dispatch, SwiGLU FFN, and combine into a single deterministic megakernel.\n\n## When to Use\n- Default SOTA architecture template for pretraining large-scale sparse MoE models. Co-default with Kimi-K3 for frontier deployments.\n\n## Relation to Existing SOTA\n- Remains the frontier MoE architecture co-default with `method:kimi-k3`. `method:qwen38-next` is an adjacent Qwen-style hybrid residual recipe; `method:ce-moe` is an optional expert-layout niche. Neither replaces DeepSeek-V4.\n\n## Supersession\n- Supersedes `method:deepseek-v3` as the canonical architecture template."
+      "body": "# DeepSeek-V4 MoE Architecture\n\n## Method Overview\nDeepSeek-V4 establishes the state-of-the-art sparse Mixture-of-Experts architecture:\n1. **Multi-Head Latent Attention (MLA)**: Low-rank key-value projection compression reducing KV cache footprint during generation.\n2. **Fine-Grained Expert Routing**: Expanded expert pool with auxiliary-loss-free load balancing.\n3. **Multi-Token Prediction**: Speculative prediction heads trained natively to accelerate inference throughput.\n4. **Manifold-Constrained Hyper-Connections (mHC)**: Residual stream expanded to \\(n \\times d\\) (\\(n=4\\)) with doubly stochastic Sinkhorn projection (`method:mhc`).\n\n## Systems & Megakernel Training\n- Distributed pretraining on Blackwell NVL72 clusters is accelerated using **Mixture-of-Kittens** (`method:mixture-of-kittens`), fusing dispatch, SwiGLU FFN, and combine into a single deterministic megakernel.\n\n## When to Use\n- Default SOTA architecture template for pretraining large-scale sparse MoE models. Co-default with Kimi-K3 for frontier deployments.\n\n## Relation to Existing SOTA\n- Remains the frontier MoE architecture co-default with `method:kimi-k3`. `method:qwen38-next` is an adjacent Qwen-style hybrid residual recipe; `method:ce-moe` is an optional expert-layout niche; `method:smelt` is a compute-matched looped-MoE recipe on `task:compute-matched-moe-looped-pretrain`. None of those replace DeepSeek-V4. `method:deepseek-v41-flash` is a different family (input-heavy agentic / KV-compressed CED serving), not a replacement of this pretrain template. `method:recurrent-looped-transformer` is an experimental recurrent CED LM, not this MoE stack.\n\n## Supersession\n- Supersedes `method:deepseek-v3` as the canonical architecture template."
     },
     {
       "id": "method:opd-hard-cot-selection",
@@ -16452,6 +16951,99 @@
         ]
       },
       "body": "# EfficientTDMPC (Continuous Control Family)\n\n## Method Overview\nEfficientTDMPC establishes the state-of-the-art framework for continuous robotic control and world-model reinforcement learning:\n1. **Block-Wise Latent Planning**: Replaces single-step MPPI trajectory sampling with accelerated block optimization (built on BMPC principles).\n2. **High Sample Efficiency**: Retains TD-MPC2 terminal Q-learning while slashing planning compute requirements.\n\n## When to Use\n- Default SOTA method for continuous control and learned world models (Dream-MPC remains the primary gradient planner alternative).\n\n## Supersession\n- Supersedes `method:td-mpc2` as the continuous control default."
+    },
+    {
+      "id": "method:recurrent-looped-transformer",
+      "type": "method",
+      "title": "Recurrent Looped Transformer (RLT)",
+      "domain": null,
+      "status": "experimental",
+      "file_path": "graph/methods/recurrent-looped-transformer.md",
+      "metadata": {
+        "id": "method:recurrent-looped-transformer",
+        "type": "method",
+        "title": "Recurrent Looped Transformer (RLT)",
+        "category": "architecture",
+        "status": "experimental",
+        "sota_for": [],
+        "supersedes": [],
+        "do_not_use_for": [
+          {
+            "when": "choosing the ~7B dense NTP pretrain optimizer",
+            "reason": "RLT is an experimental CED recurrence architecture, not an optimizer",
+            "use_instead": "method:muon2"
+          },
+          {
+            "when": "choosing the frontier MoE pretrain template",
+            "reason": "DeepSeek-V4 / Kimi-K3 remain the MoE co-default; RLT is not an MoE recipe",
+            "use_instead": "method:deepseek-v4"
+          },
+          {
+            "when": "input-heavy agentic / KV-compressed CED serving",
+            "reason": "V4.1-Flash is the serving CED; RLT has no measured serving numbers",
+            "use_instead": "method:deepseek-v41-flash"
+          },
+          {
+            "when": "latent-space / next-concept LM",
+            "reason": "NCP-ArchPreview is the latent-space first hop",
+            "use_instead": "method:ncp-archpreview"
+          },
+          {
+            "when": "GitHub issue to patch / SWE harness",
+            "reason": "Architecture card, not a harness",
+            "use_instead": "method:mini-swe-agent"
+          },
+          {
+            "when": "compute-matched looped MoE (middle layers twice)",
+            "reason": "SMELT loops MoE layers under FLOPs/params/KV matching; RLT is all-token CED recurrence",
+            "use_instead": "method:smelt"
+          }
+        ],
+        "assumptions": [
+          "Causal encoder builds global KV; recurrent decoder carries H_t=(s_t, C_t^D) across every prompt and response token with no boundary reset.",
+          "Reference config 48 encoder + 48 decoder layers; compatible attention/FFN weights may be shared across stages.",
+          "Report dated 2026-09-12. No measured efficiency, scaling, or RL results. GitHub has PDFs and a site, not a trainer."
+        ],
+        "last_reviewed": "2026-09-12",
+        "papers": [
+          "paper:recurrent-looped-transformer"
+        ],
+        "recipes": [
+          "recipe:recurrent-looped-transformer"
+        ],
+        "claims": [
+          {
+            "benchmark": "RLT technical report (mechanisms)",
+            "metric": "measured efficiency or scaling",
+            "value": "none reported",
+            "baseline": "not a bake-off; report develops mechanisms only",
+            "date": "2026-09-12",
+            "verified": false,
+            "evidence_level": "self-reported",
+            "source_url": "https://github.com/yifanzhang-pro/recurrent-looped-tranformer",
+            "notes": "Author states reasoning gains, hardware speedups, and RL scaling remain to be established. Do not treat as SOTA metrics."
+          },
+          {
+            "benchmark": "Reference depth",
+            "metric": "encoder / decoder layers",
+            "value": "48 / 48",
+            "baseline": "n/a (configuration, not a result)",
+            "date": "2026-09-12",
+            "verified": false,
+            "evidence_level": "self-reported",
+            "source_url": "https://yifanzhang-pro.github.io/recurrent-looped-tranformer/",
+            "notes": "Temporal path traverses 48t decoder blocks after t tokens. Per-token logical blocks = 96; decoder cross-attention means FLOPs are not 1:1 with encoder blocks."
+          }
+        ],
+        "tags": [
+          "architecture",
+          "recurrent",
+          "encoder-decoder",
+          "rlt",
+          "experimental"
+        ]
+      },
+      "body": "# Recurrent Looped Transformer (RLT)\n\n## Method Overview\nA causal encoder \\(E_\\theta\\) encodes observed tokens in parallel into prefix-restricted global KV memory \\(M_{\\le t}\\). A recurrent decoder \\(D_\\phi\\) of \\(L_D\\) layers updates complete state\n\n\\[\nH_t=(s_t,C_t^D),\\qquad H_0=(s_\\star,\\varnothing)\n\\]\n\n\\[\n(s_t,C_t^D)=D_\\phi\\!\\left(\\operatorname{Merge}(e_t,s_{t-1});M_{\\le t},C_{t-1}^D,t\\right)\n\\]\n\nwith next-token logits from \\(\\mathrm{RMSNorm}(s_t)\\). Orange path in the report's Figure 1 carries \\(H_t\\) across the prompt–response boundary without reset; only \\(s_t\\) enters the merge, while each SWA layer reads its own cached KV. Encoder memory is available before decoder replay and grows as tokens arrive.\n\n\"Infinite temporal depth\" is path length \\(t \\times L_D\\) at fixed blocks per token. The same transition is used for pretrain, SFT, sample, and exact current-policy RL replay (rebuild history, including SWA KV, under current weights). Full BPTT includes paths through recurrent outputs, decoder KV, and encoder memory; detaching any of these changes the gradient.\n\nYOCO, Feedback Transformer, and Recurrent Transformer appear as prose priors in the report; they are not library nodes.\n\n## When to Use\n- You want an experimental recurrent CED LM (encoder memory + all-token decoder recurrence + shared train/sample/replay semantics).\n\n## When NOT to Use\n- 7B optimizer → `method:muon2`. Frontier MoE pretrain → `method:deepseek-v4` / `method:kimi-k3`. KV-compressed agentic serving → `method:deepseek-v41-flash`. Latent-space LM → `method:ncp-archpreview`. SWE harness → `method:mini-swe-agent`. Compute-matched MoE looping → `method:smelt`.\n\n## Relation to Existing SOTA\n- Experimental first hop on `task:recurrent-encoder-decoder-lm` only. Conceptual sibling of DeepSeek-V4.1-Flash CED (encoder memory, SWA decoder) without Flash's measured KV/agentic numbers and without Flash's MoE serving stack. Does **not** retarget CISPO, Muon2, OPD/VISTA, OPSA, CANOPY, SAO, Miles, NeoHorse-1, mini-SWE-agent, Iris, Poolside, MAGIC, Nemotron IMO Gold, NCP-ArchPreview, or DeepSeek-V4 / Kimi-K3.\n\n## Gotchas & Failure Modes\n- No trainer. Recipe is a transition stub pointing at the GitHub (note the \"tranformer\" spelling).\n- Shared transitions remove structural prompt-boundary mismatch; they do not guarantee kernel parity or unbiased off-policy IS.\n- Optional stage-wise weight sharing is a configuration, not a measured win."
     },
     {
       "id": "method:lora-unified-study",
@@ -20466,7 +21058,7 @@
           "mhc"
         ]
       },
-      "body": "# mHC (Manifold-Constrained Hyper-Connections)\n\n## Method Overview\nManifold-Constrained Hyper-Connections (mHC) generalizes the standard residual stream by expanding its feature dimension from \\(d\\) to \\(n \\times d\\) (with stream expansion rate \\(n\\), e.g., \\(n=4\\) in DeepSeek-V4) and enabling learnable inter-stream mixing matrices constrained to the Birkhoff polytope.\n\nIn standard Hyper-Connections (HC), unconstrained mixing across parallel streams destroys the identity-mapping property of residual connections, causing unbounded signal amplification or attenuation across deep layers. mHC resolves this by projecting the residual mixing matrix \\(\\mathcal{H}_l^{\\text{res}} \\in \\mathbb{R}^{n \\times n}\\) to the manifold of doubly stochastic matrices using the Sinkhorn-Knopp algorithm.\n\nBecause row and column sums of doubly stochastic matrices equal 1:\n- \\(\\mathcal{H}_l^{\\text{res}} \\mathbf{x}_l\\) functions as a convex combination of stream representations.\n- Global feature mean is conserved and spectral norms are bounded by 1.\n- Matrix multiplication of doubly stochastic matrices is closed, preserving identity mapping across arbitrary depth \\(L - l\\).\n\nSingle-layer propagation is defined as:\n\\[\n\\mathbf{x}_{l+1} = \\mathcal{H}_l^{\\text{res}} \\mathbf{x}_l + \\mathcal{H}_l^{\\text{post}\\,\\top} \\mathcal{F}(\\mathcal{H}_l^{\\text{pre}} \\mathbf{x}_l, \\mathcal{W}_l)\n\\]\nwhere \\(\\mathcal{H}_l^{\\text{pre}} \\in \\mathbb{R}^{1 \\times n}\\) down-projects the \\(n \\times d\\) stream to \\(d\\) for layer computation \\(\\mathcal{F}\\), and \\(\\mathcal{H}_l^{\\text{post}} \\in \\mathbb{R}^{1 \\times n}\\) maps the output back onto the stream.\n\n## Distinction from AttnRes\n- **mHC (`paper:mhc`, `2512.24880`)**: Widens the residual stream to \\(n \\times d\\) and uses doubly stochastic static/learned manifold projections (Birkhoff polytope via Sinkhorn) to mix streams.\n- **AttnRes (`paper:attnres`, `2603.15031`)**: Employs content-dependent dynamic attention mechanisms over prior layer activation histories.\n- **Gated Residual in `method:qwen38-next`**: Widens to four branches and reads through an elementwise gate. Adjacent residual design, not a replacement of mHC's Sinkhorn constraint.\n\n## When to Use\n- Pretraining deep transformer and MoE architectures (such as DeepSeek-V4) where widened residual topologies provide increased expressivity without destabilizing gradient flow.\n- Mitigating gradient explosion or representation collapse in ultra-deep networks with multi-stream connections."
+      "body": "# mHC (Manifold-Constrained Hyper-Connections)\n\n## Method Overview\nManifold-Constrained Hyper-Connections (mHC) generalizes the standard residual stream by expanding its feature dimension from \\(d\\) to \\(n \\times d\\) (with stream expansion rate \\(n\\), e.g., \\(n=4\\) in DeepSeek-V4) and enabling learnable inter-stream mixing matrices constrained to the Birkhoff polytope.\n\nIn standard Hyper-Connections (HC), unconstrained mixing across parallel streams destroys the identity-mapping property of residual connections, causing unbounded signal amplification or attenuation across deep layers. mHC resolves this by projecting the residual mixing matrix \\(\\mathcal{H}_l^{\\text{res}} \\in \\mathbb{R}^{n \\times n}\\) to the manifold of doubly stochastic matrices using the Sinkhorn-Knopp algorithm.\n\nBecause row and column sums of doubly stochastic matrices equal 1:\n- \\(\\mathcal{H}_l^{\\text{res}} \\mathbf{x}_l\\) functions as a convex combination of stream representations.\n- Global feature mean is conserved and spectral norms are bounded by 1.\n- Matrix multiplication of doubly stochastic matrices is closed, preserving identity mapping across arbitrary depth \\(L - l\\).\n\nSingle-layer propagation is defined as:\n\\[\n\\mathbf{x}_{l+1} = \\mathcal{H}_l^{\\text{res}} \\mathbf{x}_l + \\mathcal{H}_l^{\\text{post}\\,\\top} \\mathcal{F}(\\mathcal{H}_l^{\\text{pre}} \\mathbf{x}_l, \\mathcal{W}_l)\n\\]\nwhere \\(\\mathcal{H}_l^{\\text{pre}} \\in \\mathbb{R}^{1 \\times n}\\) down-projects the \\(n \\times d\\) stream to \\(d\\) for layer computation \\(\\mathcal{F}\\), and \\(\\mathcal{H}_l^{\\text{post}} \\in \\mathbb{R}^{1 \\times n}\\) maps the output back onto the stream.\n\n## Distinction from AttnRes\n- **mHC (`paper:mhc`, `2512.24880`)**: Widens the residual stream to \\(n \\times d\\) and uses doubly stochastic static/learned manifold projections (Birkhoff polytope via Sinkhorn) to mix streams.\n- **AttnRes (`paper:attnres`, `2603.15031`)**: Employs content-dependent dynamic attention mechanisms over prior layer activation histories.\n- **Gated Residual in `method:qwen38-next`**: Widens to four branches and reads through an elementwise gate. Adjacent residual design, not a replacement of mHC's Sinkhorn constraint.\n- **Single-Pass mHC in `method:deepseek-v41-flash`**: Serving-kernel revision of residual-stream mixing (Mega-mHC) inside the V4.1-Flash CED stack. Does not supersede this mHC node or retarget DeepSeek-V4.\n\n## When to Use\n- Pretraining deep transformer and MoE architectures (such as DeepSeek-V4) where widened residual topologies provide increased expressivity without destabilizing gradient flow.\n- Mitigating gradient explosion or representation collapse in ultra-deep networks with multi-stream connections."
     },
     {
       "id": "method:deepseek-v3",
@@ -20792,6 +21384,114 @@
         ]
       },
       "body": "# NGN (Neuromorphic Gated Networks)\n\n## Method Overview\nNGN dynamically routes continuous temporal streams through sparse spiking sub-networks based on incoming event burstiness.\n\n## When to Use\n- Processing high-frequency asynchronous event camera and neuromorphic sensor streams."
+    },
+    {
+      "id": "method:deepseek-v41-flash",
+      "type": "method",
+      "title": "DeepSeek-V4.1-Flash (Causal Encoder-Decoder)",
+      "domain": null,
+      "status": "sota",
+      "file_path": "graph/methods/deepseek-v41-flash.md",
+      "metadata": {
+        "id": "method:deepseek-v41-flash",
+        "type": "method",
+        "title": "DeepSeek-V4.1-Flash (Causal Encoder-Decoder)",
+        "category": "architecture",
+        "status": "sota",
+        "sota_for": [
+          "task:input-heavy-agentic-moe-serving"
+        ],
+        "supersedes": [],
+        "do_not_use_for": [
+          {
+            "when": "choosing the frontier MoE pretrain architecture template",
+            "reason": "V4.1-Flash CED is an input-heavy serving family, not a silent replacement of the V4 MoE pretrain template",
+            "use_instead": "method:deepseek-v4"
+          },
+          {
+            "when": "GitHub issue to patch / SWE harness",
+            "reason": "This is a model + KV architecture; the harness default stays mini-SWE-agent",
+            "use_instead": "method:mini-swe-agent"
+          },
+          {
+            "when": "frontier RL post-train engine",
+            "reason": "Miles remains the production post-train stack",
+            "use_instead": "method:miles"
+          },
+          {
+            "when": "lossless multi-token / diffusion-augmented AR serving",
+            "reason": "DSpark is Flash's speculative path; Uno remains the diffusion-augmented AR first hop",
+            "use_instead": "method:uno"
+          },
+          {
+            "when": "recurrent all-token CED LM with exact RL replay semantics (experimental)",
+            "reason": "RLT is the experimental recurrence report; Flash does not claim all-token train/replay identity",
+            "use_instead": "method:recurrent-looped-transformer"
+          },
+          {
+            "when": "Pass@1 labeled math/code RLVR algorithm",
+            "reason": "Post-train recipe is SFT→RL→OPD; CISPO remains the dense Pass@1 kernel",
+            "use_instead": "method:cispo"
+          }
+        ],
+        "assumptions": [
+          "552B backbone MoE, 1 shared + 384 routed experts, activate 6. Prefill ~8B active/token; decode ~16B. Context up to 1M. Pretrained on 45T multimodal tokens (sparse attention at 64K; 1M extension at 34T).",
+          "CED: 20-layer causal encoder + 20-layer decoder. Decoder global KV from final encoder states. CSA2 Full/Reindex/Reuse + Hierarchical Sparse Indexer. FP4 main KV (E2M1, one E4M3 scale per 16 channels).",
+          "Weights and reference inference live on Hugging Face. No public from-scratch trainer. API model deepseek-flash. V4-Flash / V4-Flash-Vision-Exp retired (compat aliases). V4-Pro routed to V4.1-Flash from 2026-09-14 04:00 UTC until V4.1-Pro."
+        ],
+        "last_reviewed": "2026-09-12",
+        "papers": [
+          "paper:deepseek-v41-flash"
+        ],
+        "recipes": [
+          "recipe:deepseek-v41-flash"
+        ],
+        "claims": [
+          {
+            "benchmark": "Instruct DeepSeek-V4.1-Flash vs V4-Flash / V4-Pro, max reasoning effort",
+            "metric": "Terminal-Bench 2.1 Pass@1 / DeepSWE v1.1 Resolved",
+            "value": "90.6 / 74.2",
+            "baseline": "V4-Flash 82.7 / 54.4; V4-Pro 87.9 / 62.7; Opus-5.0 TB2.1 89.1 / DeepSWE 74.0",
+            "date": "2026-09-10",
+            "verified": true,
+            "evidence_level": "self-reported",
+            "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+            "notes": "Vendor card. DeepSWE uses mini-SWE harness in the official setup; TB2.1 uses DeepSeek Harness Minimal, 1M context. Not a mini-SWE-agent retarget."
+          },
+          {
+            "benchmark": "Global KV cache vs DeepSeek-V4-Flash",
+            "metric": "bytes per token",
+            "value": "890",
+            "baseline": "V4-Flash ~4× larger; persistent KV ~1/8 of V4-Flash after SWA Bounded Replay",
+            "date": "2026-09-10",
+            "verified": true,
+            "evidence_level": "self-reported",
+            "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+            "notes": "CSA2 + FP4 main KV → ~890 B/token global KV. SWA Bounded Replay reconstructs last n_win tokens so SWA KV is not persisted to SSD."
+          },
+          {
+            "benchmark": "CED activation",
+            "metric": "active parameters per token",
+            "value": "8B prefill / 16B decode",
+            "baseline": "V4-Flash-Base 13B activated (single figure on the card)",
+            "date": "2026-09-10",
+            "verified": true,
+            "evidence_level": "self-reported",
+            "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+            "notes": "552B backbone. Decoder global KV projected from final encoder states, not per-decoder-layer hidden states."
+          }
+        ],
+        "tags": [
+          "architecture",
+          "moe",
+          "serving",
+          "kv-cache",
+          "ced",
+          "deepseek-v41-flash",
+          "sota"
+        ]
+      },
+      "body": "# DeepSeek-V4.1-Flash (Causal Encoder-Decoder)\n\n## Method Overview\nCausal Encoder-Decoder (CED) for a 552B multimodal MoE. A 20-layer causal encoder writes global memory. A 20-layer decoder reads that memory and keeps local SWA. Decoder **global** KV is a projection of the *final encoder* states, so prefill can run the encoder path (~8B active) and decode the heavier path (~16B).\n\nComponents kept on this card (not separate graph methods):\n- **CSA2**: each attention layer is statically Full, Reindex, or Reuse (share main KV and indexer K; reuse Top-K indices). Hierarchical Sparse Indexer restricts later indexer layers to a candidate pool from the first Full layer.\n- **SWA Bounded Replay**: replay the last \\(n_{\\mathrm{win}}\\) tokens instead of persisting SWA KV.\n- **Single-Pass mHC**: residual-stream mixing with a Mega-mHC kernel; see `method:mhc` for the original Sinkhorn mHC. This is a serving-kernel revision, not a supersession of mHC.\n- **Engram**: 196B conditional memory via token lookup.\n- **DSpark**: semi-autoregressive draft with confidence-scheduled verification (not Uno).\n\nMoE: 1 shared + 384 routed, activate 6. Vision: DeepSeek-ViT from scratch + 2-layer MLP projector, joint with text from the start of pretrain. Post-train: SFT → RL → OPD with a larger agent-task data pipeline and a 1–100 reasoning-effort knob.\n\n## When to Use\n- Input-heavy agentic or long-context MoE serving where KV HBM/SSD and prefill FLOPs dominate, and you can consume `deepseek-ai/DeepSeek-V4.1-Flash` (or the `deepseek-flash` API).\n\n## When NOT to Use\n- Pretrain-template choice → `method:deepseek-v4` / `method:kimi-k3`. SWE loop → `method:mini-swe-agent`. Post-train engine → `method:miles`. Diffusion-augmented AR → `method:uno`. Experimental all-token recurrence → `method:recurrent-looped-transformer`.\n\n## Relation to Existing SOTA\n- First hop on `task:input-heavy-agentic-moe-serving` only. Does **not** supersede `method:deepseek-v4` or `method:kimi-k3`. Cross-link `method:recurrent-looped-transformer` as an experimental conceptual sibling (encoder memory + SWA decoder) without Flash's KV measurements. Cross-link `method:mhc` for Single-Pass mHC. No `method:deepseek-v4-flash` node existed to supersede; V4-Flash is a retired API alias in the news post.\n\n## Gotchas & Failure Modes\n- Agentic numbers are vendor-reported and harness-specific (DSH Minimal vs mini-SWE vs Claude Code). Do not mix boards.\n- Compat routing: `deepseek-v4-flash` and `deepseek-v4-flash-vision-exp` currently point at V4.1-Flash; V4-Pro follows on 2026-09-14 until V4.1-Pro.\n- No public pretrain code. Inference folder is a readable reference, not a production engine.\n- Engram adds 196B lookup parameters on top of the 552B backbone; do not quote 552B as the only stored size if you are sizing disks."
     },
     {
       "id": "method:opsd-collapse-review",
@@ -22037,6 +22737,11 @@
             "when": "NVL72 fused dispatch+SwiGLU+combine megakernel",
             "reason": "Layout changes do not replace Mixture-of-Kittens",
             "use_instead": "method:mixture-of-kittens"
+          },
+          {
+            "when": "compute-matched looped MoE (middle layers twice)",
+            "reason": "Looping under FLOPs/params/KV matching is SMELT, not a communication layout",
+            "use_instead": "method:smelt"
           }
         ],
         "assumptions": [
@@ -22069,7 +22774,7 @@
           "niche"
         ]
       },
-      "body": "# CE-MoE (Communication-Efficient Mixture-of-Experts Layout)\n\n## Method Overview\nCE-MoE is a heterogeneous layer pattern, not a new router. Conventional MoE interleaves a routed expert FFN after every token-mixing layer (attention or Mamba-2), so all-to-all volume scales with depth. CE-MoE concentrates expert capacity in a few routed MoE layers and restores depth with extra token-mixing and dense-FFN layers. Token-mixing depth and channel-mixing depth are decoupled; total and activated parameter counts stay matched to the full-MoE baseline.\n\n## When to Use\n- Optional `task:pretrain-moe-frontier` layout when expert-parallel all-to-all dominates step time and you can retile MoE vs dense FFN depth at matched params.\n\n## When NOT to Use\n- Do not replace `method:deepseek-v4` / `method:kimi-k3` as the MoE architecture default.\n- Do not use as an NVL72 megakernel (`method:mixture-of-kittens`).\n\n## Relation to Existing SOTA\n- Layout niche beside DeepSeek-V4 / Kimi-K3. No supersession.\n\n## Gotchas & Failure Modes\n- Gains are communication-layout gains under expert parallelism; they do not automatically transfer to tensor-parallel-only dense FFNs.\n- No public recipe; reimplement from the paper's layer re-configuration, do not invent a router."
+      "body": "# CE-MoE (Communication-Efficient Mixture-of-Experts Layout)\n\n## Method Overview\nCE-MoE is a heterogeneous layer pattern, not a new router. Conventional MoE interleaves a routed expert FFN after every token-mixing layer (attention or Mamba-2), so all-to-all volume scales with depth. CE-MoE concentrates expert capacity in a few routed MoE layers and restores depth with extra token-mixing and dense-FFN layers. Token-mixing depth and channel-mixing depth are decoupled; total and activated parameter counts stay matched to the full-MoE baseline.\n\n## When to Use\n- Optional `task:pretrain-moe-frontier` layout when expert-parallel all-to-all dominates step time and you can retile MoE vs dense FFN depth at matched params.\n\n## When NOT to Use\n- Do not replace `method:deepseek-v4` / `method:kimi-k3` as the MoE architecture default.\n- Do not use as an NVL72 megakernel (`method:mixture-of-kittens`).\n\n## Relation to Existing SOTA\n- Layout niche beside DeepSeek-V4 / Kimi-K3. No supersession.\n- Sibling of `method:smelt` (compute-matched middle-layer looping) on `task:pretrain-moe-frontier`. Different axis: CE-MoE retile which layers are routed; SMELT reuses middle routed layers. Neither replaces V4 / K3.\n\n## Gotchas & Failure Modes\n- Gains are communication-layout gains under expert parallelism; they do not automatically transfer to tensor-parallel-only dense FFNs.\n- No public recipe; reimplement from the paper's layer re-configuration, do not invent a router."
     },
     {
       "id": "method:adamw-optimizer",
@@ -26009,6 +26714,33 @@
       "body": "# AQLoRA-Q 4-Bit Training Recipe\n\n```python\nimport torch\n\nprint(\"AQLoRA-Q 4-bit quantized adapter training pipeline initialized\")\n```"
     },
     {
+      "id": "recipe:smelt",
+      "type": "recipe",
+      "title": "SMELT Compute-Matched Looped MoE Recipe",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/recipes/smelt.md",
+      "metadata": {
+        "id": "recipe:smelt",
+        "type": "recipe",
+        "title": "SMELT Compute-Matched Looped MoE Recipe",
+        "method": "method:smelt",
+        "task": "task:compute-matched-moe-looped-pretrain",
+        "target_hardware": "paper ladder 100M–1.6B active / up to 54B non-embedding (internal cluster)",
+        "framework": "decoder-only MoE Transformer (paper; AdamW WSD)",
+        "repo_url": "none found",
+        "code_status": "partial",
+        "pip_dependencies": [],
+        "tags": [
+          "recipe",
+          "smelt",
+          "moe",
+          "looped-transformer"
+        ]
+      },
+      "body": "# SMELT Compute-Matched Looped MoE Recipe\n\n## Hardware & Environment Setup\n- No official GitHub as of 2026-09-12 (`arXiv:2609.01343`). `repo_url: none found`.\n- Paper optimizer: AdamW, WSD, global batch 256 sequences (~1M tokens/step), packed 4096-token contexts.\n- Architecture default for frontier MoE stays DeepSeek-V4 / Kimi-K3. This recipe is the looping match, not that template.\n\n## Quickstart Implementation\n\n```python\nfrom dataclasses import dataclass\n\n\n@dataclass(frozen=True)\nclass SmeltLayout:\n    num_layers: int\n    loop_span_frac: float = 0.5\n    loop_count: int = 2\n    residual_scale: float = 0.5\n\n\ndef looped_layer_ids(layout: SmeltLayout) -> range:\n    span = int(round(layout.num_layers * layout.loop_span_frac))\n    start = (layout.num_layers - span) // 2\n    return range(start, start + span)\n\n\ndef execution_depth(layout: SmeltLayout) -> int:\n    span = len(looped_layer_ids(layout))\n    return layout.num_layers + (layout.loop_count - 1) * span\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Loop the middle 50% twice. Scale those residual updates by \\(1/2\\). Keep physical depth at the unlooped Baseline optimum.\n- Pay for extra visits by narrowing \\(H\\); recover non-embedding params by raising expert count uniformly; restore KV with head size / GQA. Target mismatch: FLOPs <4%, params <1%, KV <4%.\n- Two visits beat three or four under the FLOPs cap (thinner model).\n- Do not clone unrelated repositories named SMELT."
+    },
+    {
       "id": "recipe:nemotron-3-super-latentmoe",
       "type": "recipe",
       "title": "Nemotron-3 Super Latent MoE Recipe",
@@ -27124,6 +27856,33 @@
         ]
       },
       "body": "# EfficientTDMPC Continuous Control Recipe\n\n```python\nimport torch\n\nprint(\"EfficientTDMPC block planning world model loaded\")\n```"
+    },
+    {
+      "id": "recipe:recurrent-looped-transformer",
+      "type": "recipe",
+      "title": "Recurrent Looped Transformer Stub",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/recipes/recurrent-looped-transformer.md",
+      "metadata": {
+        "id": "recipe:recurrent-looped-transformer",
+        "type": "recipe",
+        "title": "Recurrent Looped Transformer Stub",
+        "method": "method:recurrent-looped-transformer",
+        "task": "task:recurrent-encoder-decoder-lm",
+        "target_hardware": "unspecified (report only; no trainer)",
+        "framework": "none (mechanisms report)",
+        "repo_url": "https://github.com/yifanzhang-pro/recurrent-looped-tranformer",
+        "code_status": "partial",
+        "pip_dependencies": [],
+        "tags": [
+          "recipe",
+          "rlt",
+          "recurrent",
+          "encoder-decoder"
+        ]
+      },
+      "body": "# Recurrent Looped Transformer Stub\n\n## Hardware & Environment Setup\n- GitHub (spelling is `tranformer`): `https://github.com/yifanzhang-pro/recurrent-looped-tranformer`\n- Site: `https://yifanzhang-pro.github.io/recurrent-looped-tranformer/`\n- English report: `Recurrent_Looped_Transformer.pdf` in that repo. No training or inference code as of 2026-09-12 (`code_status: partial`).\n- Reference depth: 48 encoder + 48 decoder layers. Optional sharing of compatible attention/FFN weights across stages.\n\n## Quickstart Implementation\n\n```python\nfrom dataclasses import dataclass\n\n\n@dataclass\nclass DecoderState:\n    hidden: object\n    swa_kv: object\n\n\ndef rlt_step(encoder_token, prev: DecoderState, encoder_memory, decoder, merge, t: int) -> DecoderState:\n    \"\"\"One token: merge encoder token with previous hidden; decoder reads prefix KV and layerwise SWA.\"\"\"\n    merged = merge(encoder_token, prev.hidden)\n    hidden, swa_kv = decoder(merged, encoder_memory, prev.swa_kv, t)\n    return DecoderState(hidden=hidden, swa_kv=swa_kv)\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Do not reset `DecoderState` at the prompt–response boundary.\n- Exact current-policy replay rebuilds encoder memory and SWA KV under current weights before scoring actions.\n- Full BPTT includes hidden, decoder KV, and encoder memory. Detaching any of these is an approximation.\n- This is not DeepSeek-V4.1-Flash serving and not SMELT looping."
     },
     {
       "id": "recipe:lora-unified-study",
@@ -28890,6 +29649,38 @@
         ]
       },
       "body": "# NGN Neuromorphic Gated Recipe\n\n```python\nimport torch\n\nprint(\"NGN neuromorphic gating initialized\")\n```"
+    },
+    {
+      "id": "recipe:deepseek-v41-flash",
+      "type": "recipe",
+      "title": "DeepSeek-V4.1-Flash CED Serving Recipe",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/recipes/deepseek-v41-flash.md",
+      "metadata": {
+        "id": "recipe:deepseek-v41-flash",
+        "type": "recipe",
+        "title": "DeepSeek-V4.1-Flash CED Serving Recipe",
+        "method": "method:deepseek-v41-flash",
+        "task": "task:input-heavy-agentic-moe-serving",
+        "target_hardware": "multi-node GPU inference (HF convert.py default MP=8); production serving unspecified",
+        "framework": "PyTorch reference inference + deepseek-recipe encoding",
+        "repo_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+        "code_status": "partial",
+        "pip_dependencies": [
+          "torch",
+          "safetensors",
+          "deepseek-recipe"
+        ],
+        "tags": [
+          "recipe",
+          "deepseek-v41-flash",
+          "serving",
+          "ced",
+          "kv-cache"
+        ]
+      },
+      "body": "# DeepSeek-V4.1-Flash CED Serving Recipe\n\n## Hardware & Environment Setup\n- Weights + tech report: `https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash` (`DeepSeek_V41_Tech_Report.pdf`).\n- Reference inference (convert + generate, not a production engine): `inference/` in that repo. Convert with `--expert-dtype fp4` and tensor-parallel rank files.\n- Prompts: `encoding/encoding.py` in the same repo, or `https://github.com/deepseek-ai/deepseek-recipe` (Rust + Python bindings). No Jinja chat template.\n- API: model `deepseek-flash`. V4-Flash and V4-Flash-Vision-Exp retired; aliases route here. V4-Pro routes here from 2026-09-14 04:00 UTC until V4.1-Pro.\n- No from-scratch pretrain trainer (`code_status: partial`).\n- Sampling on the card: temperature 1.0, top_p 0.95 or 1.0, context 1M, max_tokens ≥ 256K. Reasoning effort integer 1–100.\n\n## Quickstart Implementation\n\n```python\nfrom dataclasses import dataclass\n\n\n@dataclass(frozen=True)\nclass CedBudget:\n    backbone_params: int = 552_000_000_000\n    prefill_active: int = 8_000_000_000\n    decode_active: int = 16_000_000_000\n    global_kv_bytes: int = 890\n    shared_experts: int = 1\n    routed_experts: int = 384\n    activated_routed: int = 6\n    encoder_layers: int = 20\n    decoder_layers: int = 20\n\n\ndef persistent_kv_bytes(tokens: int, global_kv_bytes: int = 890) -> int:\n    \"\"\"Global KV only; SWA Bounded Replay does not persist SWA KV.\"\"\"\n    return tokens * global_kv_bytes\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Prefill is the encoder path; decode is ~2× active params. Size clusters for input-heavy agent traffic, not symmetric 13B-active V4-Flash.\n- CSA2 modes are static per layer (Full / Reindex / Reuse). Hierarchical Sparse Indexer cost is bounded by the first Full layer's candidate pool.\n- Single-Pass mHC is the residual mixer; do not drop `method:mhc` as a concept.\n- DSpark is Flash's speculative decoder, not Uno and not a separate draft model you train.\n- Agentic evals on the card mix DeepSeek Harness Minimal, mini-SWE, and Claude Code. Reproduce with the `evaluation/` folder rather than mixing boards."
     },
     {
       "id": "recipe:opsd-collapse-review",
@@ -31650,6 +32441,18 @@
       "properties": {}
     },
     {
+      "source": "paper:smelt",
+      "target": "method:smelt",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:smelt",
+      "target": "paper:smelt",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
       "source": "paper:nemotron-3-super-latentmoe",
       "target": "method:nemotron-3-super-latentmoe",
       "relation": "introduces",
@@ -33123,6 +33926,18 @@
       "source": "paper:td-mpc2",
       "target": "paper:efficienttdmpc",
       "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:recurrent-looped-transformer",
+      "target": "method:recurrent-looped-transformer",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:recurrent-looped-transformer",
+      "target": "paper:recurrent-looped-transformer",
+      "relation": "described_in",
       "properties": {}
     },
     {
@@ -35307,6 +36122,42 @@
       "source": "method:ngn",
       "target": "paper:ngn",
       "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:deepseek-v41-flash",
+      "target": "method:deepseek-v41-flash",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:deepseek-v41-flash",
+      "target": "paper:deepseek-v41-flash",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:deepseek-v41-flash",
+      "target": "paper:deepseek-v4",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:deepseek-v4",
+      "target": "paper:deepseek-v41-flash",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:deepseek-v41-flash",
+      "target": "paper:mhc",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:mhc",
+      "target": "paper:deepseek-v41-flash",
+      "relation": "cited_by",
       "properties": {}
     },
     {
@@ -38130,6 +38981,80 @@
       "properties": {}
     },
     {
+      "source": "task:recurrent-encoder-decoder-lm",
+      "target": "method:recurrent-looped-transformer",
+      "relation": "has_sota_method",
+      "properties": {
+        "method": "method:recurrent-looped-transformer",
+        "as_of": "2026-09-12",
+        "benchmark": "Technical report (mechanisms only)",
+        "metric": "measured efficiency or scaling",
+        "value": "none reported",
+        "notes": "RLT (2026-09-12). Experimental. Report develops encoder memory + all-token recurrence; does not report measured results. Conceptual sibling of DeepSeek-V4.1-Flash CED, not a replacement."
+      }
+    },
+    {
+      "source": "method:recurrent-looped-transformer",
+      "target": "task:recurrent-encoder-decoder-lm",
+      "relation": "sota_for",
+      "properties": {
+        "method": "method:recurrent-looped-transformer",
+        "as_of": "2026-09-12",
+        "benchmark": "Technical report (mechanisms only)",
+        "metric": "measured efficiency or scaling",
+        "value": "none reported",
+        "notes": "RLT (2026-09-12). Experimental. Report develops encoder memory + all-token recurrence; does not report measured results. Conceptual sibling of DeepSeek-V4.1-Flash CED, not a replacement."
+      }
+    },
+    {
+      "source": "task:recurrent-encoder-decoder-lm",
+      "target": "method:recurrent-looped-transformer",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:recurrent-looped-transformer",
+      "target": "task:recurrent-encoder-decoder-lm",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:recurrent-encoder-decoder-lm",
+      "target": "method:deepseek-v41-flash",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:deepseek-v41-flash",
+      "target": "task:recurrent-encoder-decoder-lm",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:recurrent-encoder-decoder-lm",
+      "target": "method:ncp-archpreview",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:ncp-archpreview",
+      "target": "task:recurrent-encoder-decoder-lm",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:recurrent-encoder-decoder-lm",
+      "target": "method:deepseek-v4",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:deepseek-v4",
+      "target": "task:recurrent-encoder-decoder-lm",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
       "source": "task:math-code-rl-dense",
       "target": "method:cispo",
       "relation": "has_sota_method",
@@ -39520,6 +40445,80 @@
     {
       "source": "method:f-adapter",
       "target": "task:operator-fourier-adapt",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:compute-matched-moe-looped-pretrain",
+      "target": "method:smelt",
+      "relation": "has_sota_method",
+      "properties": {
+        "method": "method:smelt",
+        "as_of": "2026-09-01",
+        "benchmark": "Chinchilla-style MoE scaling ladder, compute-optimal CE Gain vs unlooped Baseline",
+        "metric": "training FLOPs saved at matched loss",
+        "value": "6.8–18.0% on the fitted sparse-grid frontier (10^20–10^21 FLOPs)",
+        "notes": "SMELT (2609.01343). Active looped-MoE recipe. Does not replace DeepSeek-V4 / Kimi-K3 / CE-MoE."
+      }
+    },
+    {
+      "source": "method:smelt",
+      "target": "task:compute-matched-moe-looped-pretrain",
+      "relation": "sota_for",
+      "properties": {
+        "method": "method:smelt",
+        "as_of": "2026-09-01",
+        "benchmark": "Chinchilla-style MoE scaling ladder, compute-optimal CE Gain vs unlooped Baseline",
+        "metric": "training FLOPs saved at matched loss",
+        "value": "6.8–18.0% on the fitted sparse-grid frontier (10^20–10^21 FLOPs)",
+        "notes": "SMELT (2609.01343). Active looped-MoE recipe. Does not replace DeepSeek-V4 / Kimi-K3 / CE-MoE."
+      }
+    },
+    {
+      "source": "task:compute-matched-moe-looped-pretrain",
+      "target": "method:smelt",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:smelt",
+      "target": "task:compute-matched-moe-looped-pretrain",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:compute-matched-moe-looped-pretrain",
+      "target": "method:ce-moe",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:ce-moe",
+      "target": "task:compute-matched-moe-looped-pretrain",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:compute-matched-moe-looped-pretrain",
+      "target": "method:deepseek-v4",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:deepseek-v4",
+      "target": "task:compute-matched-moe-looped-pretrain",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:compute-matched-moe-looped-pretrain",
+      "target": "method:kimi-k3",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:kimi-k3",
+      "target": "task:compute-matched-moe-looped-pretrain",
       "relation": "targets_task",
       "properties": {}
     },
@@ -42402,6 +43401,104 @@
       "properties": {}
     },
     {
+      "source": "task:input-heavy-agentic-moe-serving",
+      "target": "method:deepseek-v41-flash",
+      "relation": "has_sota_method",
+      "properties": {
+        "method": "method:deepseek-v41-flash",
+        "as_of": "2026-09-10",
+        "benchmark": "DeepSeek-V4.1-Flash instruct, max reasoning effort; Terminal-Bench 2.1 / DeepSWE v1.1 / global KV bytes",
+        "metric": "agentic Pass@1 + KV bytes/token",
+        "value": "TB2.1 90.6; DeepSWE 74.2; global KV 890 B/token (~1/4 of V4-Flash); persistent KV ~1/8 of V4-Flash",
+        "notes": "DeepSeek-V4.1-Flash CED (HF tech report, 2026-09-10). Vendor-reported. Does not replace DeepSeek-V4 / Kimi-K3 as the MoE pretrain co-default."
+      }
+    },
+    {
+      "source": "method:deepseek-v41-flash",
+      "target": "task:input-heavy-agentic-moe-serving",
+      "relation": "sota_for",
+      "properties": {
+        "method": "method:deepseek-v41-flash",
+        "as_of": "2026-09-10",
+        "benchmark": "DeepSeek-V4.1-Flash instruct, max reasoning effort; Terminal-Bench 2.1 / DeepSWE v1.1 / global KV bytes",
+        "metric": "agentic Pass@1 + KV bytes/token",
+        "value": "TB2.1 90.6; DeepSWE 74.2; global KV 890 B/token (~1/4 of V4-Flash); persistent KV ~1/8 of V4-Flash",
+        "notes": "DeepSeek-V4.1-Flash CED (HF tech report, 2026-09-10). Vendor-reported. Does not replace DeepSeek-V4 / Kimi-K3 as the MoE pretrain co-default."
+      }
+    },
+    {
+      "source": "task:input-heavy-agentic-moe-serving",
+      "target": "method:deepseek-v41-flash",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:deepseek-v41-flash",
+      "target": "task:input-heavy-agentic-moe-serving",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:input-heavy-agentic-moe-serving",
+      "target": "method:deepseek-v4",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:deepseek-v4",
+      "target": "task:input-heavy-agentic-moe-serving",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:input-heavy-agentic-moe-serving",
+      "target": "method:kimi-k3",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:kimi-k3",
+      "target": "task:input-heavy-agentic-moe-serving",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:input-heavy-agentic-moe-serving",
+      "target": "method:recurrent-looped-transformer",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:recurrent-looped-transformer",
+      "target": "task:input-heavy-agentic-moe-serving",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:input-heavy-agentic-moe-serving",
+      "target": "method:mhc",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:mhc",
+      "target": "task:input-heavy-agentic-moe-serving",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:input-heavy-agentic-moe-serving",
+      "target": "method:mini-swe-agent",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:mini-swe-agent",
+      "target": "task:input-heavy-agentic-moe-serving",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
       "source": "task:agent-harness-runtime",
       "target": "method:omp2-harness",
       "relation": "has_sota_method",
@@ -43197,6 +44294,42 @@
     },
     {
       "source": "method:nemotron-imo-gold",
+      "target": "task:pretrain-moe-frontier",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:pretrain-moe-frontier",
+      "target": "method:smelt",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:smelt",
+      "target": "task:pretrain-moe-frontier",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:pretrain-moe-frontier",
+      "target": "method:deepseek-v41-flash",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:deepseek-v41-flash",
+      "target": "task:pretrain-moe-frontier",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:pretrain-moe-frontier",
+      "target": "method:recurrent-looped-transformer",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:recurrent-looped-transformer",
       "target": "task:pretrain-moe-frontier",
       "relation": "targets_task",
       "properties": {}
@@ -45026,6 +46159,18 @@
       "properties": {}
     },
     {
+      "source": "method:smelt",
+      "target": "recipe:smelt",
+      "relation": "implemented_by",
+      "properties": {}
+    },
+    {
+      "source": "recipe:smelt",
+      "target": "method:smelt",
+      "relation": "implements",
+      "properties": {}
+    },
+    {
       "source": "method:nemotron-3-super-latentmoe",
       "target": "recipe:nemotron-3-super-latentmoe",
       "relation": "implemented_by",
@@ -45856,6 +47001,18 @@
     {
       "source": "recipe:efficienttdmpc",
       "target": "method:efficienttdmpc",
+      "relation": "implements",
+      "properties": {}
+    },
+    {
+      "source": "method:recurrent-looped-transformer",
+      "target": "recipe:recurrent-looped-transformer",
+      "relation": "implemented_by",
+      "properties": {}
+    },
+    {
+      "source": "recipe:recurrent-looped-transformer",
+      "target": "method:recurrent-looped-transformer",
       "relation": "implements",
       "properties": {}
     },
@@ -46870,6 +48027,18 @@
     {
       "source": "recipe:ngn",
       "target": "method:ngn",
+      "relation": "implements",
+      "properties": {}
+    },
+    {
+      "source": "method:deepseek-v41-flash",
+      "target": "recipe:deepseek-v41-flash",
+      "relation": "implemented_by",
+      "properties": {}
+    },
+    {
+      "source": "recipe:deepseek-v41-flash",
+      "target": "method:deepseek-v41-flash",
       "relation": "implements",
       "properties": {}
     },
@@ -48008,6 +49177,12 @@
       "properties": {}
     },
     {
+      "source": "recipe:smelt",
+      "target": "task:compute-matched-moe-looped-pretrain",
+      "relation": "recipe_for_task",
+      "properties": {}
+    },
+    {
       "source": "recipe:nemotron-3-super-latentmoe",
       "target": "task:pretrain-moe-frontier",
       "relation": "recipe_for_task",
@@ -48238,6 +49413,12 @@
     {
       "source": "recipe:efficienttdmpc",
       "target": "task:continuous-control-world-model",
+      "relation": "recipe_for_task",
+      "properties": {}
+    },
+    {
+      "source": "recipe:recurrent-looped-transformer",
+      "target": "task:recurrent-encoder-decoder-lm",
       "relation": "recipe_for_task",
       "properties": {}
     },
@@ -48610,6 +49791,12 @@
     {
       "source": "recipe:ngn",
       "target": "task:spiking-neural-networks-training",
+      "relation": "recipe_for_task",
+      "properties": {}
+    },
+    {
+      "source": "recipe:deepseek-v41-flash",
+      "target": "task:input-heavy-agentic-moe-serving",
       "relation": "recipe_for_task",
       "properties": {}
     },

@@ -39,5 +39,8 @@ SAPO (Soft Adaptive Policy Optimization) introduces soft token-adaptive gating f
 ## When to Use
 - Default SOTA optimizer for mathematical and coding reinforcement learning on MoE and VL architectures (e.g. Qwen MoE / Qwen3-VL / DeepSeek MoE). Supported in ms-swift via `loss_type=sapo`.
 
+## Relation to Existing SOTA
+- Remains the MoE/VL RLVR loss default. `method:esrl` (`arXiv:2609.13058`) is an active rollout-routing exploration plug-in and does **not** replace SAPO. `method:rpb` remains the router soft-anchor candidate.
+
 ## Supersession
 - Supersedes `method:gspo` as the primary Qwen MoE/VL algorithm.

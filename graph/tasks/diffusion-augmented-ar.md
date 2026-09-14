@@ -23,6 +23,8 @@ redirects:
     to: "task:frontier-rl-posttrain-stack"
   - when: "input-heavy agentic / KV-compressed CED MoE serving"
     to: "task:input-heavy-agentic-moe-serving"
+  - when: "curriculum RL for a discrete diffusion LM (canvas anneal), not AR serving"
+    to: "task:posttrain-diffusion"
 current_sota:
   - method: method:uno
     as_of: "2026-09-08"
@@ -33,7 +35,7 @@ current_sota:
 methods:
   - method:uno
   - method:online-draft-cotrain
-last_reviewed: "2026-09-12"
+last_reviewed: "2026-09-14"
 tags:
   - efficiency
   - inference
@@ -53,4 +55,4 @@ AR next-token prediction is sequential. Speculative decoding needs a separate dr
 
 ## SOTA Recommendation (as of 2026-09-08)
 - **Primary Method**: **Uno** (`method:uno`, `paper:uno` `arXiv:2609.04010`) Diffusion Distillation + $\Psi$-Spec. Code: ifm-ai/uno.
-- **Not This Task**: `method:diffusion-opsd` / `method:self-opd` remain image/flow post-train; `method:muon2` remains the 7B optimizer; `method:cispo` remains Pass@1 RLVR.
+- **Not This Task**: `method:diffusion-opsd` / `method:self-opd` remain image/flow post-train; `method:canvasanneal` is discrete-dLM curriculum RL on that image/flow task, not this AR serving hop; `method:muon2` remains the 7B optimizer; `method:cispo` remains Pass@1 RLVR.

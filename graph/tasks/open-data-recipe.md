@@ -18,7 +18,11 @@ methods:
   - method:causalmix
   - method:op-mix
   - method:ncp-archpreview
-last_reviewed: "2026-09-11"
+  - method:tiny-aya-l2-thinker
+redirects:
+  - when: "in-language (L2) reasoning SFT rather than a pretrain mix"
+    to: "task:multilingual-l2-reasoning-sft"
+last_reviewed: "2026-09-14"
 tags:
   - pretraining
   - open-data
@@ -36,3 +40,4 @@ Constructing transparent, reproducible, and open multi-trillion token pretrainin
 - **Dynamic Mixing**: **DeMix** (`method:demix`, 2602.00747), **CausalMix** (`method:causalmix`, 2607.01104), **OP-Mix** (`method:op-mix`, 2605.15220).
 - **Not a 7B substitute**: Consumer-GPU ~2B pretrain with a proxy-guided mix is `method:puro-2b`, not a replacement for Dolma-3.
 - **Latent-space LM that used Dolma-3 (not this mix default)**: `method:ncp-archpreview` on `task:latent-space-lm-pretrain`.
+- **L2 reasoning SFT mix (not this pretrain mix)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.

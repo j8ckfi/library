@@ -20,10 +20,11 @@ current_sota:
 methods:
   - method:diffusion-opsd
   - method:self-opd
+  - method:canvasanneal
 redirects:
   - when: "lossless multi-token / diffusion-augmented AR serving, not image-policy alignment"
     to: "task:diffusion-augmented-ar"
-last_reviewed: "2026-09-08"
+last_reviewed: "2026-09-14"
 tags:
   - diffusion
   - post-training
@@ -36,7 +37,8 @@ tags:
 ## Problem Definition
 Aligning generative diffusion and flow models with downstream reward functions (aesthetic quality, text-image alignment, human preference ratings). Endpoint rewards create a structural mismatch because feedback is only observed on decoded final images, while the model operates across multi-step denoising trajectories.
 
-## SOTA Recommendation (as of 2026-09-08)
+## SOTA Recommendation (as of 2026-09-14)
 - **Primary Method (Reward/Self-Distill with Behavior Policy)**: **DiffusionOPSD** (`method:diffusion-opsd`, `paper:diffusion-opsd` `arXiv:2608.24646`) for on-policy self-distillation with bounded intermediate clean-output targets.
 - **Teacher-Free Flow Matching / Multi-Objective Alignment**: **Self-OPD** (`method:self-opd`, `paper:self-opd` `arXiv:2608.26872`) for stochastic SDE branching vs deterministic self-reference and reward-level multi-objective fusion without task-specific teachers.
+- **Niche discrete-diffusion-LM curriculum RL (not this first hop)**: `method:canvasanneal` (`arXiv:2609.13060`) anneals a teacher-trace canvas on LLaDA-8B. MATH500 +6.0 / +2.0 / +0.4 vs diffu-GRPO. Does not replace DiffusionOPSD, Self-OPD, or Uno.
 - **Not This Task**: lossless AR multi-token serving is `method:uno` on `task:diffusion-augmented-ar`. Does not replace this image/flow post-train default.

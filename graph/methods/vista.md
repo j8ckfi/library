@@ -59,6 +59,7 @@ VISTA keeps the standard on-policy self-distillation (OPSD; Zhao et al., arXiv:2
 
 ## Relation to Existing SOTA
 - First-hop for `task:privileged-teacher-opsd` only. Does **not** replace `method:opd` (single-teacher student distillation), `method:open-mopd` (multi-teacher), `method:opdvr` (OPD + RLVR with a teacher model and ReLU correctness gating), `method:cispo` (dense math/code RLVR), or `method:u-opsd` (unlabeled / no ground truth).
+- Active siblings on this task: `method:nsd` (anti-collapse divergence) and `method:scope-opsd` (Fisher-conditioned hidden residual). Neither enters `current_sota`.
 - Improves vanilla OPSD (Zhao et al. 2601.18734) in the privileged-teacher setting. VISTA does not supersede OPD.
 - Teacher-OPD trajectory filtering is `method:ra-opd`; teacher-free self-adaptation is `method:opsa`. Neither replaces VISTA in the privileged-teacher setting.
 - `method:verpo` is an active evidence-regularized sibling (proposal, not teacher update). Does not replace VISTA.

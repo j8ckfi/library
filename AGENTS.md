@@ -40,6 +40,7 @@ task:computer-use-agent -> method:claude-computer-use (2606.29537, 2026-06)
 task:long-context-prompt-offload -> method:rlm (2512.24601, 2025-12)
   when GitHub issue to patch without a dumped corpus -> task:software-engineering-agent-harness
   when long tool/web/SWE trajectory with folding -> task:long-horizon-tool-agent
+  when post-train sparse attention / context ranking under a fixed budget -> task:posttrain-attention-sparsification
 task:long-horizon-tool-agent -> method:foldgrpo (2510.11967, 2025-10)
   when dumped corpus much larger than the window -> task:long-context-prompt-offload
   when SWE harness without folding -> task:software-engineering-agent-harness
@@ -60,6 +61,7 @@ task:software-engineering-agent-harness -> method:mini-swe-agent (2405.15793, 20
   when agentic RSI / routing-harness post-train rather than a SWE loop -> task:agentic-rsi-routing-posttrain
   when recurrent CED-style architecture, not a SWE harness -> task:recurrent-encoder-decoder-lm
   when input-heavy agentic / KV-compressed CED serving rather than a SWE loop -> task:input-heavy-agentic-moe-serving
+  when post-train gated sparse attention under a fixed budget, not a SWE loop -> task:posttrain-attention-sparsification
 task:directed-sssp-nonneg -> method:bmssp (2504.17033, 2026-08)
 task:1bit-extreme-quantization -> method:sparse-bitnet (2603.05168, 2026-08-26)
 task:fp4-hardware-training -> method:quartet-ii (2601.22813, 2026-08-26) + method:mxfp4-mi355x (2605.09825, 2026-08-26)
@@ -75,6 +77,7 @@ task:diffusion-augmented-ar -> method:uno (2609.04010, 2026-09-08)
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
   when speculative draft co-train inside long-context RL (separate draft), not diffusion-augmented AR -> task:frontier-rl-posttrain-stack
   when input-heavy agentic / KV-compressed CED MoE serving -> task:input-heavy-agentic-moe-serving
+  when curriculum RL for a discrete diffusion LM (canvas anneal), not AR serving -> task:posttrain-diffusion
 task:full-lowbit-finetune -> method:gradcodes (2608.30908, 2026-09-01)
   when memory must fit a 4-bit stack but a mixed-precision adapter at inference is acceptable -> task:4bit-peft-quantization
   when native FP4 forward/backward hardware training from scratch -> task:fp4-hardware-training
@@ -82,6 +85,12 @@ task:full-lowbit-finetune -> method:gradcodes (2608.30908, 2026-09-01)
 task:full-param-memory-efficient-pretrain -> method:scale (2506.16659, 2026-08-26)
 task:lora-quality-tuning -> method:lr-matters-lora (2602.04998, 2026-08-26)
 task:parameter-efficient-fine-tuning -> method:lr-matters-lora (2602.04998, 2026-08-26) + method:aqlora-q (2608.23816, 2026-08-26)
+task:posttrain-attention-sparsification -> method:sas (2609.13141, 2026-09-14)
+  when dumped corpus ≫ window -> task:long-context-prompt-offload
+  when linear-time architecture from scratch (SSM / Mamba) -> task:linear-time-sequence-modeling
+  when lossless multi-token / diffusion-augmented AR serving -> task:diffusion-augmented-ar
+  when GitHub issue to patch / SWE harness -> task:software-engineering-agent-harness
+  when input-heavy agentic / KV-compressed CED MoE serving -> task:input-heavy-agentic-moe-serving
 task:mechanistic-interpretability-dictionaries -> method:sasa (2606.06333, 2026-08-26) + method:circuitsteer (2608.05732, 2026-08-26) + method:fega (2607.24645, 2026-08-26)
 task:sae-circuits -> method:circuitsteer (2608.05732, 2026-08-26)
 task:sae-effect-geometry -> method:fega (2607.24645, 2026-08-26)
@@ -107,6 +116,7 @@ task:data-free-self-evolution -> method:j-zero (2608.26582, 2026-08-31)
 task:direct-preference-alignment -> method:olmo-3 (2512.13961, 2026-08-26)
 task:distill-reasoner-verifier -> method:opdvr (2608.24696, 2026-08-27)
 task:instruct-sft-alignment -> method:olmo-3 (2512.13961, 2026-08-26) + method:nemotron-cascade-2 (2603.19220, 2026-08-26)
+  when in-language (L2) reasoning SFT rather than general instruct -> task:multilingual-l2-reasoning-sft
 task:label-free-reasoner-posttrain -> method:u-opsd (2608.06296, 2026-08-28)
 task:label-free-test-time-reasoner -> method:ttpo (2608.27448, 2026-08-28)
 task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
@@ -115,7 +125,13 @@ task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
   when train a live-web multi-hop search agent (SFT-RL climbing) -> task:web-search-agent-rl
   when Pass@K / coverage / no-backward rather than Pass@1 -> task:passk-reasoning-coverage
   when olympiad-style natural-language proofs / IMO TTC rather than Pass@1 -> task:olympiad-math-posttrain
+  when in-language (L2) reasoning SFT rather than Pass@1 -> task:multilingual-l2-reasoning-sft
 task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
+task:multilingual-l2-reasoning-sft -> method:tiny-aya-l2-thinker (2609.10445, 2026-09-14)
+  when open pretrain mix / Dolma-3 recipe -> task:open-data-recipe
+  when general chat / instruct SFT without L2 language fidelity -> task:instruct-sft-alignment
+  when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
+  when olympiad-style natural-language proofs / IMO TTC -> task:olympiad-math-posttrain
 task:olympiad-math-posttrain -> method:nemotron-imo-gold (2609.10712, 2026-09-11)
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
   when general chat / instruct SFT -> task:instruct-sft-alignment
@@ -129,6 +145,7 @@ task:outcome-only-long-horizon-agent-rl -> method:canopy (2609.01245, 2026-09-04
   when train a live-web multi-hop search agent (SFT-RL climbing) -> task:web-search-agent-rl
   when production post-train stack rather than sparse-outcome coverage -> task:frontier-rl-posttrain-stack
   when agentic RSI / routing-harness post-train, not AppWorld coverage -> task:agentic-rsi-routing-posttrain
+  when noisy pairwise preference labels (PLC-DPO), not outcome-only agent RL -> task:direct-preference-alignment
 task:passk-reasoning-coverage -> method:es-reasoning (2608.27351, 2026-08-31)
 task:privileged-teacher-opsd -> method:vista (2608.28306, 2026-08-31)
 task:reasoning-rl-alignment -> method:cispo (2506.13585, 2026-08-26) + method:sapo (2511.20347, 2026-08-26)
@@ -165,10 +182,12 @@ task:latent-space-lm-pretrain -> method:ncp-archpreview (2609.10715, 2026-09-11)
   when lossless multi-token / diffusion-augmented AR serving -> task:diffusion-augmented-ar
   when recurrent CED-style architecture, not next-concept latent LM -> task:recurrent-encoder-decoder-lm
 task:linear-time-sequence-modeling -> method:mamba-2 (2405.21060, 2024-05)
+  when post-train sparse attention on a dense Transformer under a fixed budget -> task:posttrain-attention-sparsification
 task:llm-pretraining-optimization -> method:muon2 (2604.09967, 2026-08-26)
   when lossless multi-token / diffusion-augmented AR serving rather than the pretrain optimizer -> task:diffusion-augmented-ar
   when latent-space / next-concept LM architecture rather than the optimizer -> task:latent-space-lm-pretrain
 task:open-data-recipe -> method:olmo-3 (2512.13961, 2026-08-26)
+  when in-language (L2) reasoning SFT rather than a pretrain mix -> task:multilingual-l2-reasoning-sft
 task:pretrain-dense-7b -> method:muon2 (2604.09967, 2026-08-26)
   when latent-space / next-concept LM architecture rather than dense NTP 7B -> task:latent-space-lm-pretrain
 task:pretrain-moe-frontier -> method:deepseek-v4 (2606.19348, 2026-08-26) + method:kimi-k3 (2607.24653, 2026-08-26)
@@ -312,6 +331,16 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 87. **Compute-matched looped MoE**: **SMELT** (`method:smelt`, `arXiv:2609.01343`) on `task:compute-matched-moe-looped-pretrain`. Loop middle 50% of MoE layers twice; match FLOPs / non-embedding params / KV. Active. Does **not** replace DeepSeek-V4 / Kimi-K3 / CE-MoE.
 88. **Input-heavy agentic / KV-compressed CED serving**: **DeepSeek-V4.1-Flash** (`method:deepseek-v41-flash`) on `task:input-heavy-agentic-moe-serving`. 552B CED, 8B prefill / 16B decode, ~890 B/token global KV. First hop for that serving task only. Does **not** replace DeepSeek-V4 / Kimi-K3 as the MoE pretrain co-default, mini-SWE-agent, Miles, or Uno.
 89. **Recurrent encoder-decoder LM**: **Recurrent Looped Transformer** (`method:recurrent-looped-transformer`) on `task:recurrent-encoder-decoder-lm`. Experimental. Causal encoder + all-token recurrent decoder; no measured results. Conceptual sibling of V4.1-Flash CED. Does **not** replace Muon2, NCP-ArchPreview, DeepSeek-V4 / Kimi-K3, or V4.1-Flash serving.
+90. **Privileged-OPSD Fisher subspace**: **SCOPE-OPSD** (`method:scope-opsd`, `arXiv:2609.12579`) on `task:privileged-teacher-opsd`. Active hidden-state auxiliary. Does **not** replace VISTA, NSD, OPSA, OPD, or CISPO.
+91. **Sparse local off-policy intervention RLVR**: **MInTRL** (`method:mintrl`, `arXiv:2609.12419`) on `task:math-code-rl-dense`. Active plug-in. Does **not** replace CISPO, SAPO, or SAO.
+92. **MoE RL routing exploration**: **ESRL** (`method:esrl`, `arXiv:2609.13058`) on `task:math-code-rl-moe`. Active beside SAPO. Does **not** replace SAPO.
+93. **Noisy-label DPO routing**: **PLC-DPO** (`method:plc-dpo`, `arXiv:2608.30597`, EMNLP 2026 Findings) on `task:direct-preference-alignment`. Active. Does **not** supersede OLMo-3 Dolci or SimPO.
+94. **Post-train gated sparse attention**: **SAS** (`method:sas`, `arXiv:2609.13141`) on `task:posttrain-attention-sparsification`. First hop for that narrow task only. Does **not** replace RLM, Mamba-2, Uno, or mini-SWE-agent.
+95. **Multilingual L2 reasoning SFT**: **Tiny Aya L2-Thinker** (`method:tiny-aya-l2-thinker`, `arXiv:2609.10445`) on `task:multilingual-l2-reasoning-sft`. First hop for in-language CoT only. Does **not** replace OLMo-3, Nemotron-Cascade 2, or CISPO.
+96. **Discrete DLM curriculum RL**: **CanvasAnneal** (`method:canvasanneal`, `arXiv:2609.13060`) on `task:posttrain-diffusion`. Active niche. Does **not** replace DiffusionOPSD, Self-OPD, or Uno.
+97. **Open-ended reward-system evolution**: **EvoRS** (`method:evors`, `arXiv:2609.12459`) beside CANOPY/DRACO. Active. Does **not** replace CANOPY or DRACO.
+98. **Successful-strategy coverage**: **DDO** (`method:ddo`, `arXiv:2609.10052`) on preference post-train with a mention on outcome-only agents. Active. Does **not** replace OLMo-3, SimPO, CANOPY, or DRACO.
+99. **Optimizer-shaped LoRA rank**: **Iso-LoRA** (`method:iso-lora`, `arXiv:2609.12123`) beside NoRA / AnLR-LoRA. Active. Does **not** supersede vanilla LoRA + rsLoRA + LR sweep.
 
 ---
 
@@ -401,6 +430,16 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `smelt` (2609.01343) is the active first hop for `task:compute-matched-moe-looped-pretrain` only. It does not supersede `deepseek-v4`, `kimi-k3`, or `ce-moe`.
 - `deepseek-v41-flash` is the first hop for `task:input-heavy-agentic-moe-serving` only (KV-compressed CED serving). It does not supersede `deepseek-v4` or `kimi-k3` as the frontier MoE pretrain co-default, and does not supersede `mini-swe-agent`, `miles`, or `uno`.
 - `recurrent-looped-transformer` is the experimental first hop for `task:recurrent-encoder-decoder-lm` only. It does not supersede `muon2`, `ncp-archpreview`, `deepseek-v4` / `kimi-k3`, or `deepseek-v41-flash`.
+- `scope-opsd` (2609.12579) is an active Fisher-subspace auxiliary on privileged OPSD. It does not supersede `vista`, `nsd`, `opsa`, `opd`, or `cispo`.
+- `mintrl` (2609.12419) is an active sparse-intervention plug-in on dense RLVR. It does not supersede `cispo`, `sapo`, or `sao`.
+- `esrl` (2609.13058) is an active MoE rollout-routing explorer. It does not supersede `sapo`.
+- `plc-dpo` (2608.30597) is an active noisy-label DPO router. It does not supersede `olmo-3` Dolci or `simpo`.
+- `sas` (2609.13141) is the first hop for `task:posttrain-attention-sparsification` only. It does not supersede `rlm`, `mamba-2`, `uno`, or `mini-swe-agent`.
+- `tiny-aya-l2-thinker` (2609.10445) is the first hop for `task:multilingual-l2-reasoning-sft` only. It does not supersede `olmo-3`, `nemotron-cascade-2`, or `cispo`.
+- `canvasanneal` (2609.13060) is an active discrete-DLM curriculum niche. It does not supersede `diffusion-opsd`, `self-opd`, or `uno`.
+- `evors` (2609.12459) is an active open-ended Reward-DAG evolver. It does not supersede `canopy` or `draco`.
+- `ddo` (2609.10052) is an active successful-strategy coverage regularizer. It does not supersede `olmo-3`, `simpo`, `canopy`, or `draco`.
+- `iso-lora` (2609.12123) is an active optimizer-shape / effective-rank LoRA note. It does not supersede `lr-matters-lora`, `nora`, or `anlr-lora`.
 
 ---
 

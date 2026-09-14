@@ -20,7 +20,8 @@ methods:
   - method:verpo
   - method:opsd-collapse-review
   - method:nsd
-last_reviewed: "2026-09-11"
+  - method:scope-opsd
+last_reviewed: "2026-09-14"
 tags:
   - post-training
   - distillation
@@ -46,3 +47,4 @@ Train a problem-only student on its own rollouts using dense token-level targets
 - **Optional evidence-regularized sibling**: `method:verpo` (`arXiv:2609.06100`). Treats privileged evidence as a proposal on an outcome objective. Does not replace VISTA or CISPO.
 - **Collapse playbook (survey)**: `method:opsd-collapse-review` (`arXiv:2608.25936`). Three levers; no code. Does not replace VISTA.
 - **Actionable anti-collapse trainer (not this first hop)**: `method:nsd` (`arXiv:2609.11699`). Diverges from a self-generated negative condition instead of imitating privileged traces. Active sibling. VISTA stays this task's first hop.
+- **Optional Fisher-subspace OPSD auxiliary (not this first hop)**: `method:scope-opsd` (`arXiv:2609.12579`). Projects the privileged residual onto a frozen rank-64 Fisher-sensitive subspace; matched Random control. Does not replace VISTA, NSD, OPSA, OPD, or CISPO.

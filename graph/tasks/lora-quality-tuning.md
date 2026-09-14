@@ -20,7 +20,8 @@ methods:
   - method:lora
   - method:nora
   - method:anlr-lora
-last_reviewed: "2026-09-09"
+  - method:iso-lora
+last_reviewed: "2026-09-14"
 tags:
   - efficiency
   - peft
@@ -34,3 +35,4 @@ tags:
 - Use **Vanilla LoRA + rsLoRA + LR sweep** (`method:lr-matters-lora`, 2602.04998, 2601.22708) — NOT DoRA. Unchanged.
 - **Recommended upgrade candidate** for RLVR-stable adapters: `method:nora` (`arXiv:2608.31036`). Status active; not a first-hop replacement of the LR-sweep quality default.
 - **Optional anisotropic per-rank LR**: `method:anlr-lora` (`arXiv:2609.05885`). Active beside NoRA. Does not replace the LR sweep.
+- **Active optimizer-shape / effective-rank note**: `method:iso-lora` (`arXiv:2609.12123`). AdamW vs SGD/Muon effective rank. Does not replace the LR-sweep quality default.

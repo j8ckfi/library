@@ -29,7 +29,9 @@ redirects:
     to: "task:frontier-rl-posttrain-stack"
   - when: "agentic RSI / routing-harness post-train, not AppWorld coverage"
     to: "task:agentic-rsi-routing-posttrain"
-last_reviewed: "2026-09-11"
+  - when: "noisy pairwise preference labels (PLC-DPO), not outcome-only agent RL"
+    to: "task:direct-preference-alignment"
+last_reviewed: "2026-09-14"
 current_sota:
   - method: method:canopy
     as_of: "2026-09-04"
@@ -46,6 +48,8 @@ methods:
   - method:mini-swe-agent
   - method:iris
   - method:t1-terminal-rl
+  - method:evors
+  - method:ddo
 tags:
   - post-training
   - agentic
@@ -73,3 +77,5 @@ Two siblings share this task and are not substitutes:
 - **Outcome-blind / no checker**: **DRACO** (`method:draco`, `paper:draco` `arXiv:2609.04094`). Active, does not replace CANOPY when a verifier exists.
 - **Not This Task**: `method:sao` remains async-straggler RL; `method:foldgrpo` remains trajectory folding; `method:cispo` remains dense Pass@1; `method:mini-swe-agent` remains the harness; `method:omp2-harness` remains the production engine; `method:iris` remains live-web search-agent training; `method:miles` remains the frontier post-train stack; `method:neohorse-1` remains routing-harness RSI.
 - **Optional 122B terminal-MoE recipe (not this first hop)**: `method:t1-terminal-rl` (`arXiv:2609.11042`) on slime. Terminal-Bench 2.1 43.8%→64.0%. Does not replace CANOPY, SAO, or Miles.
+- **Active open-ended reward-system evolution (not this first hop)**: `method:evors` (`arXiv:2609.12459`) co-evolves a reward model from on-policy traces. Does not replace CANOPY or DRACO.
+- **Active successful-strategy coverage regularizer (not this first hop)**: `method:ddo` (`arXiv:2609.10052`). Preference-pair primary; mention here for open-ended coverage. Does not replace CANOPY or DRACO.

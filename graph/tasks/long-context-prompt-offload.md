@@ -10,12 +10,15 @@ out_of_scope:
   - "Long tool/web trajectory folding (small active context)"
   - "Training SAO"
   - "Recursive summary as the only strategy"
+  - "Post-train sparse attention under a fixed budget (SAS)"
 redirects:
   - when: "GitHub issue to patch without a dumped corpus"
     to: "task:software-engineering-agent-harness"
   - when: "long tool/web/SWE trajectory with folding"
     to: "task:long-horizon-tool-agent"
-last_reviewed: "2026-09-01"
+  - when: "post-train sparse attention / context ranking under a fixed budget"
+    to: "task:posttrain-attention-sparsification"
+last_reviewed: "2026-09-14"
 current_sota:
   - method: method:rlm
     as_of: "2025-12"

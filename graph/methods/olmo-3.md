@@ -45,6 +45,8 @@ OLMo-3 provides the comprehensive open foundation model pretraining and alignmen
 - Default SOTA open instruct SFT and alignment pipeline.
 - Partial/truncated reasoning traces (`method:partial-reasoning-traces`) can shape reasoner SFT on top; they do not replace this stack.
 - NCP-ArchPreview trained on Dolma-3 (`method:ncp-archpreview`) does not replace this mix.
+- Noisy pairwise DPO (`method:plc-dpo`) and sequential-agent coverage (`method:ddo`) are active notes on `task:direct-preference-alignment`; they do not replace Dolci or SimPO.
+- In-language L2 reasoning SFT (`method:tiny-aya-l2-thinker`) is a different task; it does not replace this instruct stack.
 
 ## Supersession
 - Supersedes `method:olmo-2-curriculum` for open data recipes.

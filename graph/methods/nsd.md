@@ -87,7 +87,7 @@ Actionable anti-collapse trainer next to the `method:opsd-collapse-review` surve
 - Pass@1 labels → `method:cispo`. Frozen teacher matching → `method:opd`. Privileged-teacher OPSD that still works → `method:vista`. No negative teacher at all → `method:opsa`.
 
 ## Relation to Existing SOTA
-- Active sibling on `task:privileged-teacher-opsd`. Does **not** enter `current_sota`. VISTA remains the privileged-teacher first hop.
+- Active sibling on `task:privileged-teacher-opsd`. Does **not** enter `current_sota`. VISTA remains the privileged-teacher first hop. `method:scope-opsd` is a hidden-state auxiliary on vanilla OPSD, not an NSD replacement.
 - Mention on `task:teacher-free-on-policy-self-adaptation` as the anti-collapse trainer that still uses a negative condition. OPSA remains that task's first hop.
 - `method:opsd-collapse-review` stays the niche survey; NSD is the trainer you actually run.
 

@@ -17,6 +17,9 @@ methods:
   - method:tulu3-rlvr
   - method:simpo
   - method:dpo
+  - method:plc-dpo
+  - method:ddo
+last_reviewed: "2026-09-14"
 tags:
   - post-training
   - preference-alignment
@@ -24,5 +27,8 @@ tags:
 
 # Direct Preference Alignment & Offline Post-Training
 
-## SOTA Recommendation (as of 2026-08-26)
+## SOTA Recommendation (as of 2026-09-14)
 - **Primary Stack**: **OLMo-3 Dolci** (`method:olmo-3`, 2512.13961).
+- **Simple clean prefs (reference-free)**: **SimPO** (`method:simpo`) remains the offline DPO simplification; not displaced.
+- **Noisy / flipped / ambiguous pairs**: `method:plc-dpo` (`arXiv:2608.30597`, EMNLP 2026 Findings). Routes clean/flip/tie. Does **not** supersede Dolci or SimPO.
+- **Successful-strategy coverage for sequential agents**: `method:ddo` (`arXiv:2609.10052`). Offline preference, not CANOPY.

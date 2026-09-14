@@ -78,7 +78,7 @@ The intent is to put unit-norm directions in $A$ and let $B$ carry magnitude, al
 
 ## Relation to Existing SOTA
 - Status `active` on the PEFT shelf next to AQLoRA-Q / DoRA / vanilla+rsLoRA. **Not** a first-hop and **not** a supersession of `method:lr-matters-lora`.
-- Stronger RLVR-stable alternative than spectral LoRA inits.
+- Stronger RLVR-stable alternative than spectral LoRA inits. `method:iso-lora` spectrally couples \(BA\) updates; it does not replace rank-normalized \(A\).
 
 ## Gotchas & Failure Modes
 - Row-normalization (`Norm_k`) does not help; only rank-dimension column norms (`Norm_r`).

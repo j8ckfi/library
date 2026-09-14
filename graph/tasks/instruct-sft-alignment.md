@@ -26,7 +26,12 @@ methods:
   - method:simpo
   - method:dpo
   - method:partial-reasoning-traces
-last_reviewed: "2026-09-11"
+  - method:tiny-aya-l2-thinker
+  - method:plc-dpo
+redirects:
+  - when: "in-language (L2) reasoning SFT rather than general instruct"
+    to: "task:multilingual-l2-reasoning-sft"
+last_reviewed: "2026-09-14"
 tags:
   - post-training
   - instruct
@@ -44,3 +49,5 @@ Transforming base pre-trained models into safe, capable, instruction-following c
 - **Primary Open Stack**: **OLMo-3 Dolci** (`method:olmo-3`, 2512.13961).
 - **Industrial Alternative**: **Nemotron-Cascade-2** (`method:nemotron-cascade-2`, 2603.19220).
 - **Optional reasoning-trace shaping**: `method:partial-reasoning-traces` (`arXiv:2609.07103`). Prefer partial/truncated CoT over dumping complete traces. Does not replace OLMo-3 / Cascade.
+- **L2 in-language reasoning (not this general instruct task)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.
+- **Noisy preference labels**: `method:plc-dpo` on `task:direct-preference-alignment`. Does not replace Dolci.

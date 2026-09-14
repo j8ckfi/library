@@ -76,7 +76,7 @@ No learned attribution module. Gap tokens (tool echoes) get no credit.
 - Context folding -> `method:foldgrpo`.
 
 ## Relation to Existing SOTA
-- Active sibling on `task:outcome-only-long-horizon-agent-rl`. Does **not** supersede `method:canopy`, `method:sao`, `method:cispo`, or `method:foldgrpo`. CANOPY remains current_sota when a verifier exists.
+- Active sibling on `task:outcome-only-long-horizon-agent-rl`. Does **not** supersede `method:canopy`, `method:sao`, `method:cispo`, or `method:foldgrpo`. CANOPY remains current_sota when a verifier exists. `method:evors` evolves an open-ended Reward-DAG; it does not replace DRACO's frozen-judge step credit.
 
 ## Gotchas & Failure Modes
 - Judge cost is the practical tax (paper: GPT-5.4 at T=0.1 for generate+score). Self-judge is weaker on AppWorld, slightly stronger on τ-bench.

@@ -15,7 +15,11 @@ methods:
   - method:mamba-2
   - method:qwen38-next
   - method:gated-deltanet-2
-last_reviewed: "2026-09-01"
+  - method:sas
+redirects:
+  - when: "post-train sparse attention on a dense Transformer under a fixed budget"
+    to: "task:posttrain-attention-sparsification"
+last_reviewed: "2026-09-14"
 tags:
   - pretraining
   - architecture

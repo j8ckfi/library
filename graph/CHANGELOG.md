@@ -6,6 +6,70 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-14 — weekday SOTA sweep (SCOPE-OPSD, MInTRL, ESRL, PLC-DPO, SAS, Tiny Aya L2-Thinker, CanvasAnneal, EvoRS, DDO, Iso-LoRA)
+- MUST 1–6 plus optional 7–10. Two new narrow tasks (`task:posttrain-attention-sparsification`, `task:multilingual-l2-reasoning-sft`). No false supersessions of CISPO / SAPO / OLMo-3 / SimPO / VISTA / OPSA / Muon2 / Miles / DeepSeek-V4 / Kimi-K3.
+- Skipped: DataFlex-RL (already ingested), NSD / Musec / Nemotron IMO Gold / NCP / RLT / SMELT / V4.1-Flash (already in), COBRA-Skills, HyQuant, Thai TTS/OCR, robotics LIT. Weekend HF Daily 09-12/13 empty.
+
+### 2026-09-14 — ingest method:iso-lora (active optimizer-shape LoRA note; does not supersede method:lr-matters-lora / method:nora / method:anlr-lora)
+- Added paper:iso-lora (2609.12123), method:iso-lora, recipe:iso-lora (`code_status: partial`; `repo_url: none found`). Wired to task:lora-quality-tuning / task:parameter-efficient-fine-tuning.
+- Status active. Nominal LoRA rank is capacity; AdamW vs Muon shapes effective rank. Iso-LoRA spectrally couples BA updates.
+- Evidence: LLaMA-2-7B GSM8K rank-128 EM 61.87 vs Full FT 59.52 / LoRA-Pro 59.20 (arXiv:2609.12123); verified: true; evidence_level: preprint.
+- Scope checks: lr-matters-lora remains the 24GB quality default; NoRA remains RLVR-stable A; AnLR remains per-rank LR.
+
+### 2026-09-14 — ingest method:ddo (active successful-strategy coverage; does not supersede method:olmo-3 / method:simpo / method:canopy / method:draco)
+- Added paper:ddo (2609.10052), method:ddo, recipe:ddo. Code: koguma00/direct_diverse_optimization. Wired to task:direct-preference-alignment; mention on task:outcome-only-long-horizon-agent-rl.
+- Status active. DTC branch sets + RTO odds matching over successful alternatives.
+- Evidence: strongest among DPO / DivFreq / DivProb / TieDPO on BabyAI / BabaIsAI / WebShop (arXiv:2609.10052); verified: true; evidence_level: preprint.
+- Scope checks: Dolci / SimPO remain preference defaults; CANOPY / DRACO remain outcome-only first hops.
+
+### 2026-09-14 — ingest method:evors (active Reward-DAG evolution; does not supersede method:canopy / method:draco)
+- Added paper:evors (2609.12459), method:evors, recipe:evors (`code_status: partial`; `repo_url: none found`). Wired to task:outcome-only-long-horizon-agent-rl.
+- Status active. On-policy designer edits an executable Reward-DAG under success / anti-hack / health / informativeness guards. Writing/roleplay domain, not AppWorld TGC.
+- Evidence: WritingBench + CoSER three-judge average vs static and dynamic rubric RL (arXiv:2609.12459); verified: true; evidence_level: preprint.
+- Scope checks: CANOPY remains checker protocol; DRACO remains frozen-judge step credit.
+
+### 2026-09-14 — ingest method:canvasanneal (active discrete-DLM curriculum; does not supersede method:diffusion-opsd / method:self-opd / method:uno)
+- Added paper:canvasanneal (2609.13060), method:canvasanneal, recipe:canvasanneal (`code_status: partial`; `repo_url: none found`). Wired to task:posttrain-diffusion; reverse redirect from task:diffusion-augmented-ar.
+- Status active. Teacher-trace canvas anneal on LLaDA-7B-A1B-Instruct + diffu-GRPO.
+- Evidence: MATH500 +6.0 / +2.0 / +0.4 vs diffu-GRPO at gen 128/256/512; GSM8K mixed (arXiv:2609.13060); verified: true; evidence_level: preprint.
+- Scope checks: DiffusionOPSD / Self-OPD remain image/flow defaults; Uno remains AR serving.
+
+### 2026-09-14 — ingest method:tiny-aya-l2-thinker (new task:multilingual-l2-reasoning-sft; does not supersede method:olmo-3 / method:cispo)
+- Added paper:multilingual-bridges (2609.10445), method:tiny-aya-l2-thinker, recipe:tiny-aya-l2-thinker (`code_status: partial`; HF weights CohereLabs/tiny-aya-l2-thinker, no train GitHub), task:multilingual-l2-reasoning-sft. Reverse redirects from task:open-data-recipe / task:instruct-sft-alignment / task:math-code-rl-dense.
+- Status sota for the L2-fidelity task only. MR+NR+English reasoning mix; >93% L2 rate across 60 languages at 3.35B.
+- Evidence: L2 rate >93% on 6 benchmarks; PolyMath 11.1 vs Qwen3.5-4B 40.3 is a gotcha, not Pass@1 SOTA (arXiv:2609.10445); verified: true; evidence_level: preprint.
+- Scope checks: OLMo-3 remains open instruct / Dolma-3; CISPO remains Pass@1.
+
+### 2026-09-14 — ingest method:sas (new task:posttrain-attention-sparsification; does not supersede method:rlm / method:mamba-2 / method:uno)
+- Added paper:sas (2609.13141), method:sas, recipe:sas. Code: Tencent-Hunyuan/Simple-Attention-Sparsification (branch `release`); HF tencent/Simple-Attention-Sparsification. Reverse redirects from task:long-context-prompt-offload / task:linear-time-sequence-modeling / task:software-engineering-agent-harness.
+- Status sota for the narrow budgeted-selector task only. End-to-end LM-loss gates vs Top-K + dense-attention distillation.
+- Evidence: +6.0–7.7 MATH500 and +10.6–15.5 GPQA-Diamond vs SeerAttention-R at budget 1024 on Qwen3-4B/8B/14B (arXiv:2609.13141); verified: true; evidence_level: preprint.
+- Scope checks: RLM remains dumped-prompt offload; Mamba-2 remains SSM pretrain; Uno remains diffusion-augmented AR serving.
+
+### 2026-09-14 — ingest method:plc-dpo (active noisy-label DPO; does not supersede method:olmo-3 / method:simpo)
+- Added paper:plc-dpo (2608.30597), method:plc-dpo, recipe:plc-dpo. Code: VennTum99/PLC-DPO. Wired to task:direct-preference-alignment.
+- Status active. Routes each pair as clean / flip / tie from a calibrated policy-reference margin. EMNLP 2026 Findings.
+- Evidence: mean win rate 60.5 vs next-best 55.5 across 57 cells (arXiv:2608.30597); verified: true; evidence_level: peer-reviewed.
+- Scope checks: OLMo-3 Dolci remains the open stack; SimPO remains the clean reference-free baseline.
+
+### 2026-09-14 — ingest method:esrl (active MoE routing exploration; does not supersede method:sapo)
+- Added paper:esrl (2609.13058), method:esrl, recipe:esrl. Code: strawberrymaster111/ESRL-Release (slime + SGLang patches). Wired to task:math-code-rl-moe.
+- Status active. Anchored noisy expert sampling + entropy-adaptive noise + rollout expert-ID replay (R3).
+- Evidence: Qwen3-30B-A3B MATH avg Pass@1/Pass@8 42.1/64.2 vs GRPO 38.9/59.7 (arXiv:2609.13058); verified: true; evidence_level: preprint. Not a SAPO bake-off.
+- Scope checks: SAPO remains the MoE/VL loss default; RPB remains the router soft-anchor; CISPO remains dense Pass@1.
+
+### 2026-09-14 — ingest method:mintrl (active sparse-intervention RLVR plug-in; does not supersede method:cispo / method:sapo / method:sao)
+- Added paper:mintrl (2609.12419), method:mintrl, recipe:mintrl (`code_status: partial`; `repo_url: none found`). Wired to task:math-code-rl-dense.
+- Status active. Judge Keep/Revise on short suffixes inside otherwise on-policy rollouts; sequence-level advantage regression (no IS). Paper lists long-horizon agentic eval as future work.
+- Evidence: Qwen3-1.7B MInTRL-Const 35.45 math / 61.95 code vs stronger of GRPO and OPD (arXiv:2609.12419); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; SAPO remains MoE/VL; SAO remains async stragglers; CANOPY remains outcome-only agents.
+
+### 2026-09-14 — ingest method:scope-opsd (active Fisher-subspace OPSD auxiliary; does not supersede method:vista / method:nsd / method:opsa / method:opd / method:cispo)
+- Added paper:scope-opsd (2609.12579), method:scope-opsd, recipe:scope-opsd (`code_status: partial`; `repo_url: none found`). Wired to task:privileged-teacher-opsd beside VISTA / NSD.
+- Status active. Projects the privileged teacher-student residual onto a frozen rank-64 Fisher-sensitive factor; matched Random control; reuses OPSD forwards.
+- Evidence: Qwen3-1.7B/4B/8B step-75 Macro Avg@12 43.33 / 63.80 / 65.28 vs Pure OPSD 41.48 / 62.13 / 64.45 (arXiv:2609.12579); verified: true; evidence_level: preprint.
+- Scope checks: VISTA remains privileged-teacher first hop; NSD remains anti-collapse; OPSA remains teacher-free; OPD remains matching distill; CISPO remains Pass@1.
+
 ### 2026-09-12 — ingest method:recurrent-looped-transformer (experimental; does not supersede method:muon2 / method:deepseek-v4 / method:deepseek-v41-flash / method:ncp-archpreview)
 - Added paper:recurrent-looped-transformer (tech report 2026-09-12, no arXiv), method:recurrent-looped-transformer, recipe:recurrent-looped-transformer (`code_status: partial`; GitHub yifanzhang-pro/recurrent-looped-tranformer, note spelling), task:recurrent-encoder-decoder-lm. Reverse redirects from task:latent-space-lm-pretrain / task:pretrain-moe-frontier / task:software-engineering-agent-harness / task:agent-harness-runtime.
 - Status experimental. Causal encoder KV + all-token recurrent decoder; shared pretrain/SFT/sample/current-policy replay; 48+48 reference; no measured efficiency or scaling.

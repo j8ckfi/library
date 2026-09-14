@@ -69,7 +69,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 - **Redirects**:
   - when GitHub issue to patch without a dumped corpus → `task:software-engineering-agent-harness`
   - when long tool/web/SWE trajectory with folding → `task:long-horizon-tool-agent`
-- **Out of scope**: Ordinary SWE issue-to-patch without a dumped 10M prompt; Long tool/web trajectory folding (small active context); Training SAO; Recursive summary as the only strategy
+  - when post-train sparse attention / context ranking under a fixed budget → `task:posttrain-attention-sparsification`
+- **Out of scope**: Ordinary SWE issue-to-patch without a dumped 10M prompt; Long tool/web trajectory folding (small active context); Training SAO; Recursive summary as the only strategy; Post-train sparse attention under a fixed budget (SAS)
 
 ### task:long-horizon-tool-agent — Long-Horizon Tool Agent
 - **Scope**: Many sequential tool steps whose history must be folded. Not dumped-prompt offload and not the SWE harness without folding.
@@ -125,7 +126,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when agentic RSI / routing-harness post-train rather than a SWE loop → `task:agentic-rsi-routing-posttrain`
   - when recurrent CED-style architecture, not a SWE harness → `task:recurrent-encoder-decoder-lm`
   - when input-heavy agentic / KV-compressed CED serving rather than a SWE loop → `task:input-heavy-agentic-moe-serving`
-- **Out of scope**: Training an async agent policy (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Math/code RLVR (CISPO); GUI / OS desktop computer-use; Dumped 10M-token corpus prompt offload (RLM); Trajectory folding (FoldGRPO); Planner-coder-tester multi-agent theater for a single patch; Meta-agent search as the default design process; Training a live-web search policy (Iris); Frontier RL post-train engine (Miles); Routing-harness RSI post-train (NeoHorse-1); Recurrent CED-style architecture (RLT); Input-heavy agentic MoE serving / KV CED (DeepSeek-V4.1-Flash)
+  - when post-train gated sparse attention under a fixed budget, not a SWE loop → `task:posttrain-attention-sparsification`
+- **Out of scope**: Training an async agent policy (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Math/code RLVR (CISPO); GUI / OS desktop computer-use; Dumped 10M-token corpus prompt offload (RLM); Trajectory folding (FoldGRPO); Planner-coder-tester multi-agent theater for a single patch; Meta-agent search as the default design process; Training a live-web search policy (Iris); Frontier RL post-train engine (Miles); Routing-harness RSI post-train (NeoHorse-1); Recurrent CED-style architecture (RLT); Input-heavy agentic MoE serving / KV CED (DeepSeek-V4.1-Flash); Post-train gated sparse attention under a fixed budget (SAS)
 
 ## algorithms
 
@@ -180,6 +182,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
   - when speculative draft co-train inside long-context RL (separate draft), not diffusion-augmented AR → `task:frontier-rl-posttrain-stack`
   - when input-heavy agentic / KV-compressed CED MoE serving → `task:input-heavy-agentic-moe-serving`
+  - when curriculum RL for a discrete diffusion LM (canvas anneal), not AR serving → `task:posttrain-diffusion`
 - **Out of scope**: Text-to-image / flow reward alignment (DiffusionOPSD / Self-OPD); ~7B dense pretrain optimizer (Muon2); Pass@1 labeled math/code RLVR algorithm (CISPO); Standalone discrete diffusion LMs that replace the AR distribution; Speculative draft co-train inside long-context RL (Online Draft Co-Training / NeMo RL); Input-heavy agentic / KV-compressed CED MoE serving (DeepSeek-V4.1-Flash)
 
 ### task:full-lowbit-finetune — Fully Low-Bit Fine-Tuning in Quantized Code Space
@@ -203,6 +206,21 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 ### task:parameter-efficient-fine-tuning — Parameter-Efficient Fine-Tuning (PEFT) & Low-Rank Adaptation
 - **SOTA**: `method:lr-matters-lora` `2602.04998` (as_of 2026-08-26) — Single GPU PEFT / MMLU / GSM8k: Vanilla LoRA + rsLoRA + LR sweep SOTA (NOT DoRA)
 - **SOTA**: `method:aqlora-q` `2608.23816` (as_of 2026-08-26) — 4-Bit Single GPU PEFT: 4-Bit SOTA Speed/Recipe Default
+
+### task:posttrain-attention-sparsification — Post-Training Attention Sparsification
+- **Scope**: Post-train (or mid-train) gated / Top-K sparse attention on a frozen or lightly updated dense LM under a fixed attention budget. Context ranking aligned to LM loss.
+- **SOTA**: `method:sas` `2609.13141` (as_of 2026-09-14) — MATH500 / GPQA-Diamond at 1024-token budget, Qwen3-4B/8B/14B: +6.0 to +7.7 MATH500; +10.6 to +15.5 GPQA-Diamond
+  - do not use when dumped corpus much larger than the window → `method:rlm`
+  - do not use when linear-time architecture from scratch (SSM / Mamba) → `method:mamba-2`
+  - do not use when lossless multi-token AR serving / diffusion-augmented decode → `method:uno`
+  - do not use when GitHub issue to patch / SWE harness → `method:mini-swe-agent`
+- **Redirects**:
+  - when dumped corpus ≫ window → `task:long-context-prompt-offload`
+  - when linear-time architecture from scratch (SSM / Mamba) → `task:linear-time-sequence-modeling`
+  - when lossless multi-token / diffusion-augmented AR serving → `task:diffusion-augmented-ar`
+  - when GitHub issue to patch / SWE harness → `task:software-engineering-agent-harness`
+  - when input-heavy agentic / KV-compressed CED MoE serving → `task:input-heavy-agentic-moe-serving`
+- **Out of scope**: Dumped corpus much larger than the window (RLM prompt offload); Linear-time SSM / Mamba architecture from scratch; Lossless multi-token AR serving with diffusion adapters (Uno); SWE issue-to-patch harness; KV-compressed CED MoE serving (DeepSeek-V4.1-Flash)
 
 ## interpretability
 
@@ -278,6 +296,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 ### task:instruct-sft-alignment — Chat / Instruct SFT & General Alignment
 - **SOTA**: `method:olmo-3` `2512.13961` (as_of 2026-08-26) — AlpacaEval 2 / Arena-Hard / IFEval: Open SOTA Stack
 - **SOTA**: `method:nemotron-cascade-2` `2603.19220` (as_of 2026-08-26) — Arena-Hard / Multi-Stage SFT: Industrial SOTA Alt
+- **Redirects**:
+  - when in-language (L2) reasoning SFT rather than general instruct → `task:multilingual-l2-reasoning-sft`
 
 ### task:label-free-reasoner-posttrain — Unlabeled Reasoner Post-Training without Ground Truth
 - **SOTA**: `method:u-opsd` `2608.06296` (as_of 2026-08-28) — AIME24 / AIME25 / HMMT25 / MATH500 / AMC23 (Unlabeled): +8.5% to +10.7% over base; beats supervised OPSD by +2.3% to +3.2% on non-thinking
@@ -294,10 +314,24 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when train a live-web multi-hop search agent (SFT-RL climbing) → `task:web-search-agent-rl`
   - when Pass@K / coverage / no-backward rather than Pass@1 → `task:passk-reasoning-coverage`
   - when olympiad-style natural-language proofs / IMO TTC rather than Pass@1 → `task:olympiad-math-posttrain`
+  - when in-language (L2) reasoning SFT rather than Pass@1 → `task:multilingual-l2-reasoning-sft`
 - **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO); Live-web multi-hop search-agent training (Iris); Pass@K / coverage / no-backward (ES-reasoning / DATPO); Olympiad NL proofs / IMO TTC (Nemotron IMO Gold)
 
 ### task:math-code-rl-moe — Mathematical and Code RL Reasoning (MoE Policies)
 - **SOTA**: `method:sapo` `2511.20347` (as_of 2026-08-26) — Qwen3 MoE / MATH-500 MoE RL: Default SOTA for MoE/VL RL
+
+### task:multilingual-l2-reasoning-sft — Multilingual L2 Reasoning SFT
+- **Scope**: Data mixing and scheduling for in-language chain-of-thought SFT, including transfer to languages without reasoning supervision.
+- **SOTA**: `method:tiny-aya-l2-thinker` `2609.10445` (as_of 2026-09-14) — L2 reasoning rate, 60 languages, 6 benchmarks, 3.35B: >93%
+  - do not use when open pretrain mix / Dolma-3 recipe → `method:olmo-3`
+  - do not use when general chat / instruct SFT without an in-language CoT requirement → `method:olmo-3`
+  - do not use when single-turn math/code Pass@1 RLVR → `method:cispo`
+- **Redirects**:
+  - when open pretrain mix / Dolma-3 recipe → `task:open-data-recipe`
+  - when general chat / instruct SFT without L2 language fidelity → `task:instruct-sft-alignment`
+  - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
+  - when olympiad-style natural-language proofs / IMO TTC → `task:olympiad-math-posttrain`
+- **Out of scope**: Open pretrain mix / Dolma-3; General chat / instruct SFT without an in-language CoT requirement; Single-turn math/code Pass@1 RLVR; Olympiad NL proof TTC
 
 ### task:olympiad-math-posttrain — Olympiad Proof Post-Training and Test-Time Compute
 - **Scope**: Hard olympiad / IMO-style natural-language proof post-train plus TTC (SFT+RL specialists, NL verify/refine, no formal prover required).
@@ -330,6 +364,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when train a live-web multi-hop search agent (SFT-RL climbing) → `task:web-search-agent-rl`
   - when production post-train stack rather than sparse-outcome coverage → `task:frontier-rl-posttrain-stack`
   - when agentic RSI / routing-harness post-train, not AppWorld coverage → `task:agentic-rsi-routing-posttrain`
+  - when noisy pairwise preference labels (PLC-DPO), not outcome-only agent RL → `task:direct-preference-alignment`
 - **Out of scope**: Async straggler / tool-latency RL (SAO); Folding a long tool/web/SWE trajectory into a small active context (FoldGRPO); Single-turn dense math/code RLVR (CISPO); Building or choosing a SWE harness rather than training a policy (mini-SWE-agent); Production harness kernel (omp2); Live-web multi-hop search-agent training (Iris)
 
 ### task:passk-reasoning-coverage — Math/Code RLVR for Pass@K Coverage without Backward Pass
@@ -426,6 +461,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:linear-time-sequence-modeling — Linear-Time Sequence Modeling & Recurrent Architectures
 - **SOTA**: `method:mamba-2` `2405.21060` (as_of 2024-05) — Pile / FineWeb Token Perplexity & Throughput: 8x vs standard attention
+- **Redirects**:
+  - when post-train sparse attention on a dense Transformer under a fixed budget → `task:posttrain-attention-sparsification`
 
 ### task:llm-pretraining-optimization — Large Language Model Pretraining Optimization
 - **SOTA**: `method:muon2` `2604.09967` (as_of 2026-08-26) — Moonlight 7B Pretraining / FineWeb: ~2x token efficiency vs AdamW
@@ -435,6 +472,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:open-data-recipe — Open Foundation Data Recipe & Pretraining Mix
 - **SOTA**: `method:olmo-3` `2512.13961` (as_of 2026-08-26) — Dolma-3 Open Token Mix: Default SOTA open data recipe
+- **Redirects**:
+  - when in-language (L2) reasoning SFT rather than a pretrain mix → `task:multilingual-l2-reasoning-sft`
 
 ### task:pretrain-dense-7b — Pretrain Dense ~7B Language Model from Scratch
 - **SOTA**: `method:muon2` `2604.09967` (as_of 2026-08-26) — Moonlight Scaling Laws / FineWeb Token Mix: ~2x token efficiency vs AdamW

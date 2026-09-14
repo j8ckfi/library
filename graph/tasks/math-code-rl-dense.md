@@ -22,6 +22,8 @@ redirects:
     to: "task:passk-reasoning-coverage"
   - when: "olympiad-style natural-language proofs / IMO TTC rather than Pass@1"
     to: "task:olympiad-math-posttrain"
+  - when: "in-language (L2) reasoning SFT rather than Pass@1"
+    to: "task:multilingual-l2-reasoning-sft"
 current_sota:
   - method: method:cispo
     as_of: "2026-08-26"
@@ -57,7 +59,9 @@ methods:
   - method:rlvr-group-correlation
   - method:nemotron-imo-gold
   - method:partial-reasoning-traces
-last_reviewed: "2026-09-11"
+  - method:mintrl
+  - method:tiny-aya-l2-thinker
+last_reviewed: "2026-09-14"
 tags:
   - post-training
   - reasoning
@@ -94,4 +98,6 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **No labels / no teacher**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace CISPO when labels exist.
 - **Olympiad NL proofs / IMO TTC (not this Pass@1 task)**: `method:nemotron-imo-gold` on `task:olympiad-math-posttrain`. Does not replace CISPO.
 - **Optional partial-trace SFT shaping**: `method:partial-reasoning-traces` (`arXiv:2609.07103`). Does not replace CISPO or OLMo-3.
+- **Optional sparse local off-policy intervention**: `method:mintrl` (`arXiv:2609.12419`). Judge patches short suffixes inside otherwise on-policy RLVR. Active plug-in. Does not replace CISPO / SAPO / SAO. Long-horizon agentic eval is future work in that paper.
+- **L2 in-language reasoning SFT (not this Pass@1 task)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.
 

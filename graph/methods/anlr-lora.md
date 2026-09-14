@@ -52,7 +52,7 @@ AnLR-LoRA gives each LoRA rank-one component its own effective learning rate fro
 - 24GB quality protocol → `method:lr-matters-lora`. RLVR-stable A → `method:nora`.
 
 ## Relation to Existing SOTA
-- Active on `task:lora-quality-tuning` / `task:parameter-efficient-fine-tuning`. Does **not** supersede `method:lr-matters-lora` or `method:nora`.
+- Active on `task:lora-quality-tuning` / `task:parameter-efficient-fine-tuning`. Does **not** supersede `method:lr-matters-lora` or `method:nora`. `method:iso-lora` is a sibling optimizer-geometry note, not a per-rank LR substitute.
 
 ## Gotchas & Failure Modes
 - No official GitHub as of 2026-09-09.

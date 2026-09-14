@@ -19,6 +19,7 @@ out_of_scope:
   - "Routing-harness RSI post-train (NeoHorse-1)"
   - "Recurrent CED-style architecture (RLT)"
   - "Input-heavy agentic MoE serving / KV CED (DeepSeek-V4.1-Flash)"
+  - "Post-train gated sparse attention under a fixed budget (SAS)"
 redirects:
   - when: "train asynchronous RL for a tool-use policy"
     to: "task:agentic-async-rl"
@@ -42,6 +43,8 @@ redirects:
     to: "task:recurrent-encoder-decoder-lm"
   - when: "input-heavy agentic / KV-compressed CED serving rather than a SWE loop"
     to: "task:input-heavy-agentic-moe-serving"
+  - when: "post-train gated sparse attention under a fixed budget, not a SWE loop"
+    to: "task:posttrain-attention-sparsification"
 current_sota:
   - method: method:mini-swe-agent
     as_of: "2026-09"
@@ -56,7 +59,7 @@ methods:
   - method:live-swe-agent
   - method:single-agent-plus-tools
   - method:harness-onpolicy-correction
-last_reviewed: "2026-09-12"
+last_reviewed: "2026-09-14"
 tags:
   - agents
   - agent

@@ -315,10 +315,27 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when Pass@K / coverage / no-backward rather than Pass@1 → `task:passk-reasoning-coverage`
   - when olympiad-style natural-language proofs / IMO TTC rather than Pass@1 → `task:olympiad-math-posttrain`
   - when in-language (L2) reasoning SFT rather than Pass@1 → `task:multilingual-l2-reasoning-sft`
-- **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO); Live-web multi-hop search-agent training (Iris); Pass@K / coverage / no-backward (ES-reasoning / DATPO); Olympiad NL proofs / IMO TTC (Nemotron IMO Gold)
+  - when multimodal VL prompt scaffolding (not dense text Pass@1) → `task:mllm-rl-prompt-curriculum`
+- **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO); Live-web multi-hop search-agent training (Iris); Pass@K / coverage / no-backward (ES-reasoning / DATPO); Olympiad NL proofs / IMO TTC (Nemotron IMO Gold); Multimodal VL prompt scaffolding / online EPS curriculum (not dense text Pass@1)
 
 ### task:math-code-rl-moe — Mathematical and Code RL Reasoning (MoE Policies)
 - **SOTA**: `method:sapo` `2511.20347` (as_of 2026-08-26) — Qwen3 MoE / MATH-500 MoE RL: Default SOTA for MoE/VL RL
+
+### task:mllm-rl-prompt-curriculum — MLLM Online RL Prompt Curriculum
+- **Scope**: Online adaptive prompt selection and task-preserving teacher scaffolding for multimodal (image/VL) RL post-training. EPS from on-policy rollout rewards; GRPO-family host.
+- **SOTA**: `method:eps-prompt-scaffolding` `2609.15051` (as_of 2026-09-15) — Geometry3K / MMK12, Qwen3-VL-4B, GRPO 3000 steps: Geo3K 65.39 vs 60.57; MMK12 71.15 vs 68.05
+  - do not use when video annotation-as-rollout / fine-grained video perception RL → `method:orarl`
+  - do not use when single-turn dense text math/code Pass@1 RLVR → `method:cispo`
+  - do not use when MoE/VL RLVR loss rather than prompt curriculum → `method:sapo`
+  - do not use when static RLVR data-policy evaluation (uniform vs selection, not online scaffolding) → `method:dataflex-rl`
+  - do not use when RFT example-reweight without rewriting the prompt → `method:diem`
+  - do not use when outcome-only long-horizon agent RL → `method:canopy`
+- **Redirects**:
+  - when video annotation-as-rollout / fine-grained video perception RL → `task:rl-video-mllm`
+  - when single-turn dense text math/code Pass@1 RLVR → `task:math-code-rl-dense`
+  - when MoE/VL RLVR loss rather than prompt curriculum → `task:math-code-rl-moe`
+  - when outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) → `task:outcome-only-long-horizon-agent-rl`
+- **Out of scope**: Video annotation-as-rollout / fine-grained video perception RL (OraRL); Single-turn dense text math/code Pass@1 RLVR (CISPO); MoE/VL RLVR loss rather than prompt curriculum (SAPO); Static RLVR data-policy evaluation under uniform GRPO (DataFlex-RL); RFT example-reweight without prompt rewrite (DIEM); Outcome-only long-horizon agent RL (CANOPY / DRACO)
 
 ### task:multilingual-l2-reasoning-sft — Multilingual L2 Reasoning SFT
 - **Scope**: Data mixing and scheduling for in-language chain-of-thought SFT, including transfer to languages without reasoning supervision.
@@ -607,4 +624,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 ## video-mllm
 
 ### task:rl-video-mllm — Reinforcement Learning for Video Multimodal LLMs
+- **Scope**: Video MLLM RL for temporal grounding, tracking, segmentation, and video QA, especially annotation-as-rollout without costly CoT.
 - **SOTA**: `method:orarl` `2608.20492` (as_of 2026-08-27) — TimeLens / GOT-10k / RefCOCO / MeViS / VSI-Bench: Video-ORA-9B achieves 66.0 mIoU, 78.2 AO, 73.1 VSI-Bench at 2.2x SFT step time
+- **Redirects**:
+  - when general image/multimodal reasoning RL prompt curriculum (not video OraRL) → `task:mllm-rl-prompt-curriculum`
+- **Out of scope**: General image / multimodal reasoning RL prompt curriculum (not video annotation-as-rollout); Dense text Pass@1 RLVR

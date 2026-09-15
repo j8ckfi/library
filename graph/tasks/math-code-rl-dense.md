@@ -11,6 +11,7 @@ out_of_scope:
   - "Live-web multi-hop search-agent training (Iris)"
   - "Pass@K / coverage / no-backward (ES-reasoning / DATPO)"
   - "Olympiad NL proofs / IMO TTC (Nemotron IMO Gold)"
+  - "Multimodal VL prompt scaffolding / online EPS curriculum (not dense text Pass@1)"
 redirects:
   - when: "outcome-only long-horizon interactive agent RL"
     to: "task:outcome-only-long-horizon-agent-rl"
@@ -24,6 +25,8 @@ redirects:
     to: "task:olympiad-math-posttrain"
   - when: "in-language (L2) reasoning SFT rather than Pass@1"
     to: "task:multilingual-l2-reasoning-sft"
+  - when: "multimodal VL prompt scaffolding (not dense text Pass@1)"
+    to: "task:mllm-rl-prompt-curriculum"
 current_sota:
   - method: method:cispo
     as_of: "2026-08-26"
@@ -61,7 +64,8 @@ methods:
   - method:partial-reasoning-traces
   - method:mintrl
   - method:tiny-aya-l2-thinker
-last_reviewed: "2026-09-14"
+  - method:eps-prompt-scaffolding
+last_reviewed: "2026-09-15"
 tags:
   - post-training
   - reasoning
@@ -100,4 +104,5 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Optional partial-trace SFT shaping**: `method:partial-reasoning-traces` (`arXiv:2609.07103`). Does not replace CISPO or OLMo-3.
 - **Optional sparse local off-policy intervention**: `method:mintrl` (`arXiv:2609.12419`). Judge patches short suffixes inside otherwise on-policy RLVR. Active plug-in. Does not replace CISPO / SAPO / SAO. Long-horizon agentic eval is future work in that paper.
 - **L2 in-language reasoning SFT (not this Pass@1 task)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.
+- **Multimodal VL prompt scaffolding (not this Pass@1 task)**: `method:eps-prompt-scaffolding` on `task:mllm-rl-prompt-curriculum`. Online EPS from on-policy rewards plus teacher rewrites. DataFlex-RL remains the static-policy null under text GRPO; EPS is the online adaptive scaffolding path. Does not replace CISPO.
 

@@ -126,7 +126,13 @@ task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
   when Pass@K / coverage / no-backward rather than Pass@1 -> task:passk-reasoning-coverage
   when olympiad-style natural-language proofs / IMO TTC rather than Pass@1 -> task:olympiad-math-posttrain
   when in-language (L2) reasoning SFT rather than Pass@1 -> task:multilingual-l2-reasoning-sft
+  when multimodal VL prompt scaffolding (not dense text Pass@1) -> task:mllm-rl-prompt-curriculum
 task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
+task:mllm-rl-prompt-curriculum -> method:eps-prompt-scaffolding (2609.15051, 2026-09-15)
+  when video annotation-as-rollout / fine-grained video perception RL -> task:rl-video-mllm
+  when single-turn dense text math/code Pass@1 RLVR -> task:math-code-rl-dense
+  when MoE/VL RLVR loss rather than prompt curriculum -> task:math-code-rl-moe
+  when outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) -> task:outcome-only-long-horizon-agent-rl
 task:multilingual-l2-reasoning-sft -> method:tiny-aya-l2-thinker (2609.10445, 2026-09-14)
   when open pretrain mix / Dolma-3 recipe -> task:open-data-recipe
   when general chat / instruct SFT without L2 language fidelity -> task:instruct-sft-alignment
@@ -235,6 +241,7 @@ task:learned-video-compression -> method:dcvc-uf (2606.04410, 2026-08-26) + meth
 task:neural-video-deploy -> method:mlvc (2606.28027, 2026-08-26)
 task:neural-video-gpu -> method:dcvc-uf (2606.04410, 2026-08-26)
 task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
+  when general image/multimodal reasoning RL prompt curriculum (not video OraRL) -> task:mllm-rl-prompt-curriculum
 ```
 <!-- CHEAT-SHEET:END -->
 
@@ -258,7 +265,7 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 14. **Distill a reasoner with verifiable reward (OPD + RLVR)**: Use **OPDVR** (`method:opdvr`, `paper:opdvr` `arXiv:2608.24696`) for zero-extra-hyperparameter ReLU correctness gating.
 15. **Token-level advantages from 1 sample/prompt**: Use **BPCO** (`method:bpco`, `paper:bpco` `arXiv:2608.23566`) actor-critic optimization with DPPO, bounded value head, MC targets, and length-adaptive GAE.
 16. **Diffusion post-training & reward alignment**: Use **DiffusionOPSD** (`method:diffusion-opsd`, `paper:diffusion-opsd` `arXiv:2608.24646`) for on-policy self-distillation with bounded intermediate clean-output targets; use **Self-OPD** (`method:self-opd`, `paper:self-opd` `arXiv:2608.26872`) for teacher-free flow matching multi-objective alignment.
-17. **Video MLLM reinforcement learning**: Use **OraRL** (`method:orarl`, `paper:orarl` `arXiv:2608.20492`) for annotation-as-rollout with decoupled baseline and sign-balanced pruning without CoT overhead.
+17. **Video MLLM reinforcement learning**: Use **OraRL** (`method:orarl`, `paper:orarl` `arXiv:2608.20492`) for annotation-as-rollout with decoupled baseline and sign-balanced pruning without CoT overhead. Image/multimodal reasoning prompt curriculum is `method:eps-prompt-scaffolding` on `task:mllm-rl-prompt-curriculum`, not this video hop.
 18. **Label-free test-time reasoning (TTT)**: Use **TTPO** (`method:ttpo`, `paper:ttpo` `arXiv:2608.27448`) for asymmetric test-time policy optimization (agreeing rollout OPSD + disagreeing rollout Grouped RL).
 19. **Unlabeled math reasoner post-training (no GT)**: Use **u-OPSD** (`method:u-opsd`, `paper:u-opsd` `arXiv:2608.06296`) for unsupervised on-policy self-distillation via rollout consensus pseudo-solutions and disagreement targeting.
 20. **Neural operators for regular-grid PDEs**: Use **CViT** (`method:cvit`, `paper:cvit` `arXiv:2405.13998`, ICLR 2025) Continuous Vision Transformer; alternatively **Poseidon** (`method:poseidon`, `paper:poseidon` `arXiv:2405.19101`) fine-tuned for the target PDE family. FNO (`method:fno`) remains a classical baseline.
@@ -341,6 +348,7 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 97. **Open-ended reward-system evolution**: **EvoRS** (`method:evors`, `arXiv:2609.12459`) beside CANOPY/DRACO. Active. Does **not** replace CANOPY or DRACO.
 98. **Successful-strategy coverage**: **DDO** (`method:ddo`, `arXiv:2609.10052`) on preference post-train with a mention on outcome-only agents. Active. Does **not** replace OLMo-3, SimPO, CANOPY, or DRACO.
 99. **Optimizer-shaped LoRA rank**: **Iso-LoRA** (`method:iso-lora`, `arXiv:2609.12123`) beside NoRA / AnLR-LoRA. Active. Does **not** supersede vanilla LoRA + rsLoRA + LR sweep.
+100. **MLLM online RL prompt curriculum**: **EPS Prompt Scaffolding** (`method:eps-prompt-scaffolding`, `arXiv:2609.15051`) on `task:mllm-rl-prompt-curriculum`. First hop for that narrow task only. Does **not** replace OraRL, DataFlex-RL, CISPO, SAPO, GRPO, CANOPY, or DIEM.
 
 ---
 
@@ -413,7 +421,7 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `af1` (2609.06161) is active 1-bit PTQ. It does not supersede `sparse-bitnet` or `scaleq-158`.
 - `circuitlens` (2609.07183) is an active RLVR data-selection signal. It does not supersede `cispo`.
 - `online-draft-cotrain` (2609.07108) is a niche speculative-draft RL systems path. It does not supersede `miles` or `uno`.
-- `dataflex-rl` (2609.06107) is an active negative-result note on RLVR data policies. It does not supersede `cispo` or `thinkprior`.
+- `dataflex-rl` (2609.06107) is an active negative-result note on RLVR data policies. It does not supersede `cispo` or `thinkprior`. Online MLLM prompt scaffolding is `eps-prompt-scaffolding`, not a DataFlex overturn.
 - `moe-sparsity-hp-scaling` (2609.08690) is active MoE LR/batch vs sparsity guidance. It does not supersede `deepseek-v4` or `kimi-k3`.
 - `verpo` (2609.06100) is an active privileged-evidence regularizer. It does not supersede `vista` or `cispo`.
 - `rpb` (2609.08115) is an active MoE post-train router soft-anchor. It does not supersede `sapo`.
@@ -440,6 +448,7 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `evors` (2609.12459) is an active open-ended Reward-DAG evolver. It does not supersede `canopy` or `draco`.
 - `ddo` (2609.10052) is an active successful-strategy coverage regularizer. It does not supersede `olmo-3`, `simpo`, `canopy`, or `draco`.
 - `iso-lora` (2609.12123) is an active optimizer-shape / effective-rank LoRA note. It does not supersede `lr-matters-lora`, `nora`, or `anlr-lora`.
+- `eps-prompt-scaffolding` (2609.15051) is the first hop for `task:mllm-rl-prompt-curriculum` only. It does not supersede `orarl`, `dataflex-rl`, `cispo`, `sapo`, `grpo`, `canopy`, or `diem`.
 
 ---
 

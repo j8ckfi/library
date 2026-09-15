@@ -13,9 +13,12 @@ do_not_use_for:
   - when: "cold-start silent-group waste is the metric (not final accuracy)"
     reason: "ThinkPrior cuts early waste without claiming accuracy; DataFlex is the accuracy-null"
     use_instead: "method:thinkprior"
+  - when: "online adaptive prompt scaffolding for multimodal RL (not a static data-policy eval)"
+    reason: "DataFlex is the static-policy null under text GRPO; EPS scores on-policy rewards and rewrites low-utility VL prompts"
+    use_instead: "method:eps-prompt-scaffolding"
 assumptions:
   - "Qwen2.5-7B-Base, 12 seeds, 12-bench domain-balanced summary. GRPO recipe. Llama-3.1-8B-Base extension."
-last_reviewed: "2026-09-09"
+last_reviewed: "2026-09-15"
 papers:
   - paper:dataflex-rl
 recipes:
@@ -47,10 +50,11 @@ DataFlex-RL is a **negative-result evaluation platform**: under a shared GRPO re
 - Before adopting a clever RLVR data policy as an accuracy win. Demand paired CIs and a domain-balanced summary.
 
 ## When NOT to Use
-- As a training algorithm. Pass@1 → `method:cispo`. Silent-group waste → `method:thinkprior`.
+- As a training algorithm. Pass@1 → `method:cispo`. Silent-group waste → `method:thinkprior`. Online MLLM prompt scaffolding → `method:eps-prompt-scaffolding`.
 
 ## Relation to Existing SOTA
 - Active note on `task:math-code-rl-dense`. Does **not** supersede anyone. Does not demote ThinkPrior (different metric).
+- `method:eps-prompt-scaffolding` on `task:mllm-rl-prompt-curriculum` is the online adaptive scaffolding path for MLLM GRPO. DataFlex remains the static-policy null; EPS does not overturn that negative result.
 
 ## Gotchas & Failure Modes
 - A math-only 6-bench ranking can invert the 12-bench ranking (r=−0.33).

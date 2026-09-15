@@ -6,6 +6,15 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-15 — weekday SOTA sweep (EPS prompt scaffolding)
+- Ingested arXiv:2609.15051 (EMNLP 2026 main). New narrow task `task:mllm-rl-prompt-curriculum`. No false supersessions of CISPO / SAPO / OraRL / DataFlex / GRPO / CANOPY / DIEM.
+
+### 2026-09-15 — ingest method:eps-prompt-scaffolding (new task:mllm-rl-prompt-curriculum; does not supersede method:orarl / method:dataflex-rl / method:cispo / method:sapo / method:grpo / method:canopy / method:diem)
+- Added paper:eps-prompt-scaffolding (2609.15051), method:eps-prompt-scaffolding, recipe:eps-prompt-scaffolding (`code_status: partial`; `repo_url: none found`; project page only). Reverse redirects from task:rl-video-mllm / task:math-code-rl-dense. DataFlex mention: static-policy null vs online adaptive scaffolding.
+- Status sota for the multimodal prompt-curriculum task only. EPS from on-policy GRPO rewards; teacher task-preserving rewrites; dynamic pool.
+- Evidence: Qwen3-VL-4B Geo3K 65.39 vs GRPO 60.57; MMK12 71.15 vs 68.05; 2B MMK12 relatives +9.7% in-domain / +11.5% MathVision / +11.1% MMMU-Pro (arXiv:2609.15051); verified: true; evidence_level: peer-reviewed.
+- Scope checks: OraRL remains video annotation-as-rollout; CISPO remains Pass@1; SAPO remains MoE/VL loss; DataFlex remains the static-policy null; GRPO stays the host; CANOPY remains outcome-only agents; DIEM remains example-reweight.
+
 ### 2026-09-14 — weekday SOTA sweep (SCOPE-OPSD, MInTRL, ESRL, PLC-DPO, SAS, Tiny Aya L2-Thinker, CanvasAnneal, EvoRS, DDO, Iso-LoRA)
 - MUST 1–6 plus optional 7–10. Two new narrow tasks (`task:posttrain-attention-sparsification`, `task:multilingual-l2-reasoning-sft`). No false supersessions of CISPO / SAPO / OLMo-3 / SimPO / VISTA / OPSA / Muon2 / Miles / DeepSeek-V4 / Kimi-K3.
 - Skipped: DataFlex-RL (already ingested), NSD / Musec / Nemotron IMO Gold / NCP / RLT / SMELT / V4.1-Flash (already in), COBRA-Skills, HyQuant, Thai TTS/OCR, robotics LIT. Weekend HF Daily 09-12/13 empty.

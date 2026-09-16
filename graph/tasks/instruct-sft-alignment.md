@@ -28,10 +28,13 @@ methods:
   - method:partial-reasoning-traces
   - method:tiny-aya-l2-thinker
   - method:plc-dpo
+  - method:dco
 redirects:
   - when: "in-language (L2) reasoning SFT rather than general instruct"
     to: "task:multilingual-l2-reasoning-sft"
-last_reviewed: "2026-09-14"
+  - when: "24GB quality LoRA rather than drift-budget instruct FT"
+    to: "task:parameter-efficient-fine-tuning"
+last_reviewed: "2026-09-16"
 tags:
   - post-training
   - instruct
@@ -51,3 +54,4 @@ Transforming base pre-trained models into safe, capable, instruction-following c
 - **Optional reasoning-trace shaping**: `method:partial-reasoning-traces` (`arXiv:2609.07103`). Prefer partial/truncated CoT over dumping complete traces. Does not replace OLMo-3 / Cascade.
 - **L2 in-language reasoning (not this general instruct task)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.
 - **Noisy preference labels**: `method:plc-dpo` on `task:direct-preference-alignment`. Does not replace Dolci.
+- **Optional drift-budget instruct FT**: `method:dco` (`arXiv:2609.13680`) chooses update direction (layer-selective probe) under an anchored-KL budget. Reverses QA-only FT failure while keeping reasoning. Does not replace OLMo-3 / Cascade / Delta Learning / Open-MOPD / LoRA quality.

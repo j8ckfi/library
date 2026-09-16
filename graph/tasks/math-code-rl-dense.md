@@ -65,7 +65,8 @@ methods:
   - method:mintrl
   - method:tiny-aya-l2-thinker
   - method:eps-prompt-scaffolding
-last_reviewed: "2026-09-15"
+  - method:ngu
+last_reviewed: "2026-09-16"
 tags:
   - post-training
   - reasoning
@@ -103,6 +104,7 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Olympiad NL proofs / IMO TTC (not this Pass@1 task)**: `method:nemotron-imo-gold` on `task:olympiad-math-posttrain`. Does not replace CISPO.
 - **Optional partial-trace SFT shaping**: `method:partial-reasoning-traces` (`arXiv:2609.07103`). Does not replace CISPO or OLMo-3.
 - **Optional sparse local off-policy intervention**: `method:mintrl` (`arXiv:2609.12419`). Judge patches short suffixes inside otherwise on-policy RLVR. Active plug-in. Does not replace CISPO / SAPO / SAO. Long-horizon agentic eval is future work in that paper.
+- **Optional async adaptive sampler**: `method:ngu` (`arXiv:2609.13443`) keeps sampling a prompt until ≥1 correct (Matthew Effect / signal-efficiency fix). Does not replace CISPO / SAPO / GRPO loss. Distinct from ThinkPrior (cold-start prompt rank), DIEM/GMTS (example/token reweight), and DataFlex-RL (data-policy accuracy null).
 - **L2 in-language reasoning SFT (not this Pass@1 task)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.
 - **Multimodal VL prompt scaffolding (not this Pass@1 task)**: `method:eps-prompt-scaffolding` on `task:mllm-rl-prompt-curriculum`. Online EPS from on-policy rewards plus teacher rewrites. DataFlex-RL remains the static-policy null under text GRPO; EPS is the online adaptive scaffolding path. Does not replace CISPO.
 

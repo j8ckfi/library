@@ -6,6 +6,21 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-16 — weekday SOTA sweep (NGU, DCO)
+- MUST 1–2. Active plug-ins only. No new tasks. No false supersessions of CISPO / SAPO / GRPO / ThinkPrior / DIEM / GMTS / DataFlex-RL / NoRA / Iso-LoRA / lr-matters-lora / OLMo-3 / Delta Learning / Open-MOPD.
+
+### 2026-09-16 — ingest method:ngu (active async sampler; does not supersede method:cispo / method:sapo / method:grpo / method:thinkprior / method:diem / method:gmts / method:dataflex-rl / method:sao)
+- Added paper:ngu (2609.13443), method:ngu, recipe:ngu (`code_status: partial`; `repo_url: none found`; claimed `mnoukhov/never-give-up` HTTP 404 on 2026-09-16; blog `mnoukhov.github.io/posts/ngu`). Wired to task:math-code-rl-dense; mention on task:agentic-async-rl / task:reasoning-rl-alignment. Reverse redirect from agentic-async-rl for math/code until-correct sampling.
+- Status active. Not Pass@1 SOTA. Keep sampling a prompt until ≥1 correct; reallocates async compute off easy prompts onto hard ones (Matthew Effect / signal efficiency).
+- Evidence: Deepscaler Qwen3-4B-Base NGU p=0.875 avg pass@1 26.5±0.6 vs GRPO K=16 24.8±1.0, hard-subset Δ 4.3±1.2 vs 1.6±0.3; Manufactoria GRPO+NGU reaches all-tests solves where GRPO stalls (arXiv:2609.13443); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; SAPO remains MoE/VL; GRPO stays retired as the loss; ThinkPrior remains cold-start prompt select; DIEM/GMTS remain example/token reweight; DataFlex-RL remains the accuracy-null; SAO remains async stragglers.
+
+### 2026-09-16 — ingest method:dco (active drift-budget instruct FT; does not supersede method:olmo-3 / method:lr-matters-lora / method:nora / method:iso-lora / method:delta-learning / method:open-mopd)
+- Added paper:dco (2609.13680), method:dco, recipe:dco. Code: CONE-MT/DCO (LLaMA-Factory freeze LST; confirmed). HF collection LLaMAX/dco. Wired to task:instruct-sft-alignment; mention on task:parameter-efficient-fine-tuning. Cross-redirects PEFT ↔ instruct for drift-budget vs LoRA quality.
+- Status active. Not instruct SOTA. Optimize update direction (coarse layer-selective probe) under an anchored-KL budget; reverses QA-only FT failure while keeping reasoning; stronger RL init.
+- Evidence: Qwen3-8B LST b4t16 FLORES-101 xCOMET 52.66/55.60 vs ref 47.07/51.40 and Seed-X-PPO-7B 47.76/51.31; SmolInstruct FFT 59.65 dumps general avg 42.22→33.60 while LST b4t16 29.61 / 44.03 (arXiv:2609.13680); verified: true; evidence_level: preprint.
+- Scope checks: OLMo-3 remains open instruct; lr-matters-lora remains 24GB LoRA quality; NoRA / Iso-LoRA remain LoRA-geometry; Delta Learning remains activation-space deltas; Open-MOPD remains multi-teacher distill.
+
 ### 2026-09-15 — weekday SOTA sweep (EPS prompt scaffolding)
 - Ingested arXiv:2609.15051 (EMNLP 2026 main). New narrow task `task:mllm-rl-prompt-curriculum`. No false supersessions of CISPO / SAPO / OraRL / DataFlex / GRPO / CANOPY / DIEM.
 

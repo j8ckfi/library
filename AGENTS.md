@@ -85,6 +85,7 @@ task:full-lowbit-finetune -> method:gradcodes (2608.30908, 2026-09-01)
 task:full-param-memory-efficient-pretrain -> method:scale (2506.16659, 2026-08-26)
 task:lora-quality-tuning -> method:lr-matters-lora (2602.04998, 2026-08-26)
 task:parameter-efficient-fine-tuning -> method:lr-matters-lora (2602.04998, 2026-08-26) + method:aqlora-q (2608.23816, 2026-08-26)
+  when instruct FT under a behavioral-drift budget / layer-selective freeze of instruct models rather than LoRA quality -> task:instruct-sft-alignment
 task:posttrain-attention-sparsification -> method:sas (2609.13141, 2026-09-14)
   when dumped corpus ≫ window -> task:long-context-prompt-offload
   when linear-time architecture from scratch (SSM / Mamba) -> task:linear-time-sequence-modeling
@@ -104,6 +105,7 @@ task:agentic-async-rl -> method:sao (2607.07508, 2026-08-26)
   when train a live-web multi-hop search agent (SFT-RL climbing), not async stragglers -> task:web-search-agent-rl
   when production post-train stack (SGLang / Megatron / LoRA RL / OPD), not the async algorithm -> task:frontier-rl-posttrain-stack
   when agentic RSI / routing-harness post-train, not async stragglers -> task:agentic-rsi-routing-posttrain
+  when adaptive sampling until ≥1 correct on math/code prompts, not tool stragglers -> task:math-code-rl-dense
 task:agentic-rsi-routing-posttrain -> method:neohorse-1 (2609.08183, 2026-09-09)
   when build a SWE / issue-to-patch harness rather than post-train from routing traces -> task:software-engineering-agent-harness
   when variable environment latency / async stragglers, not RSI routing post-train -> task:agentic-async-rl
@@ -117,6 +119,7 @@ task:direct-preference-alignment -> method:olmo-3 (2512.13961, 2026-08-26)
 task:distill-reasoner-verifier -> method:opdvr (2608.24696, 2026-08-27)
 task:instruct-sft-alignment -> method:olmo-3 (2512.13961, 2026-08-26) + method:nemotron-cascade-2 (2603.19220, 2026-08-26)
   when in-language (L2) reasoning SFT rather than general instruct -> task:multilingual-l2-reasoning-sft
+  when 24GB quality LoRA rather than drift-budget instruct FT -> task:parameter-efficient-fine-tuning
 task:label-free-reasoner-posttrain -> method:u-opsd (2608.06296, 2026-08-28)
 task:label-free-test-time-reasoner -> method:ttpo (2608.27448, 2026-08-28)
 task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
@@ -349,6 +352,8 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 98. **Successful-strategy coverage**: **DDO** (`method:ddo`, `arXiv:2609.10052`) on preference post-train with a mention on outcome-only agents. Active. Does **not** replace OLMo-3, SimPO, CANOPY, or DRACO.
 99. **Optimizer-shaped LoRA rank**: **Iso-LoRA** (`method:iso-lora`, `arXiv:2609.12123`) beside NoRA / AnLR-LoRA. Active. Does **not** supersede vanilla LoRA + rsLoRA + LR sweep.
 100. **MLLM online RL prompt curriculum**: **EPS Prompt Scaffolding** (`method:eps-prompt-scaffolding`, `arXiv:2609.15051`) on `task:mllm-rl-prompt-curriculum`. First hop for that narrow task only. Does **not** replace OraRL, DataFlex-RL, CISPO, SAPO, GRPO, CANOPY, or DIEM.
+101. **Async RL adaptive sampling**: **Never Give Up (NGU)** (`method:ngu`, `arXiv:2609.13443`) on `task:math-code-rl-dense`. Keep sampling a prompt until ≥1 correct; reallocates async compute off easy prompts onto hard ones. Active plug-in. Does **not** replace CISPO, SAPO, GRPO, ThinkPrior, DIEM, GMTS, DataFlex-RL, or SAO.
+102. **Drift-budget instruct FT**: **DCO** (`method:dco`, `arXiv:2609.13680`) on `task:instruct-sft-alignment`. Optimize update direction (layer-selective probe) under an anchored-KL budget. Active plug-in. Does **not** replace OLMo-3, lr-matters-lora, NoRA, Iso-LoRA, Delta Learning, or Open-MOPD.
 
 ---
 
@@ -449,6 +454,8 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `ddo` (2609.10052) is an active successful-strategy coverage regularizer. It does not supersede `olmo-3`, `simpo`, `canopy`, or `draco`.
 - `iso-lora` (2609.12123) is an active optimizer-shape / effective-rank LoRA note. It does not supersede `lr-matters-lora`, `nora`, or `anlr-lora`.
 - `eps-prompt-scaffolding` (2609.15051) is the first hop for `task:mllm-rl-prompt-curriculum` only. It does not supersede `orarl`, `dataflex-rl`, `cispo`, `sapo`, `grpo`, `canopy`, or `diem`.
+- `ngu` (2609.13443) is an active async adaptive sampler on dense math/code RLVR. It does not supersede `cispo`, `sapo`, `grpo`, `thinkprior`, `diem`, `gmts`, `dataflex-rl`, or `sao`.
+- `dco` (2609.13680) is an active drift-budget instruct fine-tune (layer-selective probe). It does not supersede `olmo-3`, `lr-matters-lora`, `nora`, `iso-lora`, `delta-learning`, or `open-mopd`.
 
 ---
 

@@ -31,7 +31,8 @@ methods:
   - method:diem
   - method:self-routing
   - method:verigate
-last_reviewed: "2026-09-04"
+  - method:ngu
+last_reviewed: "2026-09-16"
 tags:
   - post-training
   - reinforcement-learning
@@ -44,5 +45,5 @@ tags:
 - **Dense Policies**: **CISPO** (`method:cispo`). Unchanged.
 - **MoE / VL Policies**: **SAPO** (`method:sapo`). Unchanged.
 - **Process Supervision**: **VeriGate** (`method:verigate`, 2605.30451). Unchanged.
-- **Optional plug-ins (do not steal current_sota)**: `method:cliff` (first-mistake credit, not a PRM), `method:diem` (example reweight), `method:self-routing` (sample-level GRPO/OPSD router).
+- **Optional plug-ins (do not steal current_sota)**: `method:cliff` (first-mistake credit, not a PRM), `method:diem` (example reweight), `method:self-routing` (sample-level GRPO/OPSD router), `method:ngu` (async sampler until ≥1 correct; not a CISPO/SAPO/GRPO loss).
 - **Gotcha**: `paper:spurious-advantage-grpo` on group-relative magnitude. Do not revive GRPO.

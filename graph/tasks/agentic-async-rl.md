@@ -13,6 +13,7 @@ out_of_scope:
   - "Live-web multi-hop search-agent training (Iris SFT-RL climbing)"
   - "Production post-train engine rather than the async algorithm (Miles)"
   - "Routing-harness RSI post-train (NeoHorse-1)"
+  - "Adaptive math/code sampling until ≥1 correct (NGU); that is a CISPO-host sampler, not SAO straggler replay"
 redirects:
   - when: "build an agent rather than train a policy"
     to: "task:software-engineering-agent-harness"
@@ -24,6 +25,8 @@ redirects:
     to: "task:frontier-rl-posttrain-stack"
   - when: "agentic RSI / routing-harness post-train, not async stragglers"
     to: "task:agentic-rsi-routing-posttrain"
+  - when: "adaptive sampling until ≥1 correct on math/code prompts, not tool stragglers"
+    to: "task:math-code-rl-dense"
 current_sota:
   - method: method:sao
     as_of: "2026-08-26"
@@ -41,7 +44,8 @@ methods:
   - method:miles
   - method:neohorse-1
   - method:t1-terminal-rl
-last_reviewed: "2026-09-11"
+  - method:ngu
+last_reviewed: "2026-09-16"
 tags:
   - post-training
   - agentic
@@ -59,4 +63,4 @@ This is **policy training**. Building a software-engineering agent loop is `task
 ## SOTA Recommendation (as of 2026-09-08)
 - **Primary Method**: **SAO** (`method:sao`, 2607.07508). Unchanged.
 - **Related pre-RL tool OPKD (not this async-train default)**: `method:pta` (`arXiv:2609.04773`) teacher-commits tool turns before Search-R1 / DeepEyes RL. Lookahead fills idle distill capacity; it is not SAO's straggler replay.
-- **Not This Task**: sparse-outcome coverage / anti-drift on AppWorld-style agents is `task:outcome-only-long-horizon-agent-rl` (`method:canopy` / `method:draco`). Folding is `task:long-horizon-tool-agent`. Live-web search-agent climbing is `task:web-search-agent-rl` (`method:iris`). Production post-train engine is `task:frontier-rl-posttrain-stack` (`method:miles`). Routing-harness RSI post-train is `task:agentic-rsi-routing-posttrain` (`method:neohorse-1`). Terminal-MoE recipe `method:t1-terminal-rl` (`arXiv:2609.11042`) is not SAO.
+- **Not This Task**: sparse-outcome coverage / anti-drift on AppWorld-style agents is `task:outcome-only-long-horizon-agent-rl` (`method:canopy` / `method:draco`). Folding is `task:long-horizon-tool-agent`. Live-web search-agent climbing is `task:web-search-agent-rl` (`method:iris`). Production post-train engine is `task:frontier-rl-posttrain-stack` (`method:miles`). Routing-harness RSI post-train is `task:agentic-rsi-routing-posttrain` (`method:neohorse-1`). Terminal-MoE recipe `method:t1-terminal-rl` (`arXiv:2609.11042`) is not SAO. Adaptive math/code sampling until ≥1 correct is `method:ngu` on `task:math-code-rl-dense` (uses async refill; not SAO).

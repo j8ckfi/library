@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "node_count": 781,
-  "edge_count": 3033,
+  "node_count": 787,
+  "edge_count": 3061,
   "nodes": [
     {
       "id": "paper:qlora",
@@ -6437,6 +6437,46 @@
       "body": "# Extremely Sparse Supervision Incentivizes Reasoning Ability\n\n## Abstract Summary\nOn-policy distillation admits a teacher advantage on every generated token. This paper sparsifies that mask. On Qwen3 math OPD, supervising one or two tokens per trajectory (keep-frac ~0.02%–0.05% of response tokens; abstract: ~0.05%) matches or beats full-token OPD on most of nine teacher–student families, and is checked on coding, Llama, and sparse PPO. Variants: `rand1tok` (one uniform token), `mintok` / `maxtok` (highest / lowest OPD-reward token; Table 2), `minmaxtok` (both extremes), `randmask 0.1%`, `pctltail 0.05%` (top and bottom 0.05% by reward). Best sparse students often raise reverse KL relative to plain OPD, so the gain is not \"imitate the teacher more closely.\" No official code as of 2026-09-08.\n\n## Key Contributions\n1. **Token mask on sampled-token OPD**: keep 1–2 tokens (or 0.05%–0.1% tails) per trajectory; same reverse-KL token loss on the kept positions.\n2. **Nine Qwen3 families** covering large-teacher/small-student, same-scale, and small-teacher/large-student.\n3. **Non-monotonic sparsity**: random 1-token still beats the base student; extreme-reward 1–2 tokens usually match/beat dense OPD.\n4. **Cross-checks**: coding (LiveCodeBench v6), Llama, and PPO with the same sparse masks.\n\n## Empirical Highlights\n- Family 8 (Qwen3-1.7B ← 30B-A3B-Instruct), Table 3 avg@8 mean AIME24/25/HMMT-Feb: student 8.7, plain OPD 27.5, `pctltail 0.05%` 30.1 (keep 0.138%), `maxtok` 29.0, `minmaxtok` 28.9, `rand1tok` 15.6.\n- Family 9 (Qwen3-8B ← 4B-Instruct-2507), Table 5: teacher 46.8, student 19.3, plain OPD 47.5, `minmaxtok` 49.3, `maxtok` 48.1 (revKL 1.116 vs plain 0.184).\n- Family 4 (4B-Base ← 4B-GRPO-5ep), Table 4: teacher 15.8, student 6.1, plain OPD 16.1, `maxtok` 16.4.\n- Across nine families the paper reports at least one sparse variant at 0.01%–0.1% keep matching or beating plain OPD.\n\n## Open Source Repository & Resources\n- No official GitHub as of 2026-09-08. Host loop is sampled-token OPD (`method:opd`) with a keep-mask."
     },
     {
+      "id": "paper:dco",
+      "type": "paper",
+      "title": "Drift-Constrained Optimization: Only Direction Matters in Fine-Tuning Instruct Models",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/papers/dco.md",
+      "metadata": {
+        "id": "paper:dco",
+        "type": "paper",
+        "title": "Drift-Constrained Optimization: Only Direction Matters in Fine-Tuning Instruct Models",
+        "authors": [
+          "Fei Yuan",
+          "Changjiang Gao",
+          "Yilei Tu",
+          "Yifeng Liu",
+          "Shujian Huang",
+          "Yu Qiao"
+        ],
+        "year": 2026,
+        "month": 9,
+        "arxiv_id": "2609.13680",
+        "url": "https://arxiv.org/abs/2609.13680",
+        "methods": [
+          "method:dco"
+        ],
+        "cites": [
+          "paper:delta-learning",
+          "paper:olmo-3"
+        ],
+        "tags": [
+          "post-training",
+          "instruct",
+          "sft",
+          "drift",
+          "dco"
+        ]
+      },
+      "body": "# Drift-Constrained Optimization: Only Direction Matters in Fine-Tuning Instruct Models\n\n## Abstract Summary\nInstruct fine-tuning often raises a target task while drifting away from the reference model and losing reasoning. DCO treats that drift as a budget $\\delta$ on anchored KL, not a post-hoc regularizer: $\\min T(\\theta)$ s.t. $D_{\\mathrm{ref}}(\\theta)\\le\\delta$. Locally the Fisher metric at $\\theta_0$ splits an update into radius (how far) and direction (how the budget is spent). Full FT, LoRA, and parameter-subset tuning then differ by feasible directions, not step size. A coarse layer-selective probe (LST: freeze most layers; split $b_n t_m$ trains bottom $n$ then top $m$) reverses QA-only FT failure on Qwen3-8B/14B: the model still generates CoT at inference while training on answer-only pairs. Split LST matches or beats Seed-X-PPO-7B / Tower-Plus-9B on FLORES-101 xCOMET over $>$100 languages and is a stronger RL initialization than the base instruct model. Code: LLaMA-Factory freeze scripts; weights on Hugging Face.\n\n## Key Contributions\n1. **Drift-first SFT**: anchored KL as the organizing constraint; shared Fisher coordinates $(\\rho, v)$ around the reference.\n2. **Fine-tuning as direction selection**: at matched radius, maximize directional efficiency $\\eta(u)=(-g^\\top u)/\\sqrt{u^\\top F u}$.\n3. **Layer-selective probe**: two-segment freeze $M=\\{1,\\ldots,l_1\\}\\cup\\{l_2,\\ldots,L\\}$ finds families of good directions without solving the full natural-gradient problem.\n4. **QA-only $\\to$ keep CoT**: reverses the MegaScience/SmolInstruct collapse of full FT while preserving AIME/LCB/BBEH general avg.\n\n## Empirical Highlights\n- FLORES-101 xCOMET, QA-only (Table 1): Qwen3-8B LST b4t16 $52.66$ / $55.60$ vs reference $47.07$ / $51.40$ (Seed-X-PPO-7B $47.76$ / $51.31$, Tower-Plus-9B $46.95$ / $52.44$). General avg $38.85$ vs $42.22$. b4t8 keeps general avg $42.32$ ($\\Delta$ $+0.10$) with $50.35$ / $53.67$.\n- Qwen3-14B LST b4t16: $56.51$ / $58.31$ vs reference $51.85$ / $55.21$; general avg $43.76$ vs $48.95$.\n- SmolInstruct (Table 2): Qwen3-8B FFT $59.65$ but general avg $33.60$ (from $42.22$); LST b4t16 $29.61$ with general $44.03$; b16 $35.15$ with general $42.20$.\n- Translation RL init (Figure 6b): Qwen3-8B+LST already beats Qwen3-8B+RL (WALAR) on every pivot; LST then RL is the strongest of the four.\n- Repo demo (BenchMAX FLORES spBLEU, b4t8, 1 epoch): en→zh $35.89$ vs $34.78$; zh→en $32.76$ vs $31.26$.\n\n## Open Source Repository & Resources\n- Code: `https://github.com/CONE-MT/DCO` (confirmed 2026-09-16). LLaMA-Factory `finetuning_type: freeze` two-stage LST; `specialist_distillation/*/lst_scripts/submit_lst.sh`.\n- Weights: `https://huggingface.co/collections/LLaMAX/dco` (DCO-Translation / DCO-Smol Qwen3-8B/14B b16, b4t8, b4t12, b4t16; GlotMAX-101 LST; `LLaMAX/bilingual_zh_en`)."
+    },
+    {
       "id": "paper:musec",
       "type": "paper",
       "title": "Musec: MomentUm SpEctral Clipping for Stable Muon-type Training",
@@ -7473,6 +7513,44 @@
         ]
       },
       "body": "# ACE: Adapter Consolidation across Experts for Parameter-Efficient Fine-Tuning of MoE LLMs\n\n## Abstract Summary\nExpert-wise LoRA on MoE splits capacity, sparse-routes gradients, and launches many small GEMMs. ACE (Adapter Consolidation across Experts) groups redundant experts and replaces per-expert adapters with group-shared higher-rank LoRA under the same PEFT budget, then runs grouped adapter GEMMs. Across 12 datasets and four MoE backbones (EMNLP 2026), ACE has the highest observed mean accuracy among parameter-matched PEFT methods on the three backbones with complete baseline coverage, with 1.31×–1.48× wall-clock training speedup over expert-wise LoRA and no extra peak memory. Distinct from `method:ace` (Agentic Context Engineering).\n\n## Key Contributions\n1. **Expert-adapter redundancy**: subsets of expert LoRAs become functionally similar.\n2. **Group-shared higher-rank LoRA** under a fixed PEFT budget.\n3. **Grouped GEMMs** instead of many tiny expert-wise kernels.\n\n## Empirical Highlights\n- Highest mean accuracy among parameter-matched PEFT on three of four MoE backbones with complete baselines.\n- 1.31× to 1.48× training speedup vs expert-wise LoRA; peak memory not increased.\n\n## Open Source Repository & Resources\n- Code: `https://github.com/UbiquitousAILab/ACE` (EMNLP 2026)."
+    },
+    {
+      "id": "paper:ngu",
+      "type": "paper",
+      "title": "Learning to Solve Hard Problems in RL for LLMs by Never Giving Up",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/papers/ngu.md",
+      "metadata": {
+        "id": "paper:ngu",
+        "type": "paper",
+        "title": "Learning to Solve Hard Problems in RL for LLMs by Never Giving Up",
+        "authors": [
+          "Michael Noukhovitch",
+          "Hamish Ivison",
+          "Nathan Lambert",
+          "Aaron Courville"
+        ],
+        "year": 2026,
+        "month": 9,
+        "arxiv_id": "2609.13443",
+        "url": "https://arxiv.org/abs/2609.13443",
+        "methods": [
+          "method:ngu"
+        ],
+        "cites": [
+          "paper:grpo",
+          "paper:dapo"
+        ],
+        "tags": [
+          "post-training",
+          "rlvr",
+          "adaptive-sampling",
+          "async-rl",
+          "ngu"
+        ]
+      },
+      "body": "# Learning to Solve Hard Problems in RL for LLMs by Never Giving Up\n\n## Abstract Summary\nRL on LLMs does not lift a dataset evenly. Easy prompts that the initial model already solves improve a lot; hard prompts barely move. The paper names this the Matthew Effect (\"the rich get richer\") and argues that fixed-$K$ GRPO-family sampling wastes compute on easy prompts (a rare wrong sample keeps them in the batch) instead of only undersampling hard ones. Never Give Up (NGU) is an asynchronous adaptive sampler: start at small $K$, stop if any completion is correct, otherwise put the prompt back on the generator with probability $p_{\\mathrm{NGU}}$ until a correct sample appears. Easy prompts filter quickly; hard prompts accumulate a larger group. On Deepscaler (Qwen3-4B-Base, ~120 H100 hours) NGU raises hard-subset and average pass@1 over compute-matched GRPO $K\\in\\{16,32,64\\}$. On Manufactoria, GRPO with a per-test reward stalls short of full-problem solves; GRPO+NGU keeps solving harder tests until all-tests pass. Loss is unchanged. Claimed GitHub `mnoukhov/never-give-up` was 404 at ingest (2026-09-16); blog is live.\n\n## Key Contributions\n1. **Matthew Effect in RL for LLMs**: gains scale with initial competence (Olmo 3.1 RL-Zero math, DeepCoder, DeepSWE).\n2. **Signal efficiency, not just signal loss**: smaller $K$ can beat larger $K$ under a fixed $N\\times K$ budget by filtering easy prompts faster.\n3. **NGU adaptive sampling** on async RL: geometric retry until $\\ge 1$ correct, with staleness cutoff $T$ and \"anchor positives\" GRPO baseline using stale negatives.\n4. **Harness-aware Matthew Effect** on coding tests: classify difficulty after prompt/harness adaptation, not only at step 0.\n\n## Empirical Highlights\n- Deepscaler (Qwen3-4B-Base, AIME 25 / BRUMO 25, three seeds, ~120 H100 hours): NGU $p=0.875$ average pass@1 $26.5\\pm0.6$ vs GRPO $N=8,K=16$ $24.8\\pm1.0$ / $N=4,K=32$ $25.3\\pm0.5$; hard-subset $\\Delta$pass@1 $4.3\\pm1.2$ vs $1.6\\pm0.3$ for $K=16$.\n- Manufactoria (Qwen3-4B-Instruct-2507, $p_{\\mathrm{NGU}}=0.95$): GRPO plateaus on hard tests and does not pass all tests on even one eval problem; NGU continues on hard tests and reaches all-tests solves.\n- GSM8k Platinum (Qwen2.5-0.5B-Instruct): $K=4$ + NGU $p=0.95$ beats GRPO $K\\in\\{4,8,16,32\\}$ on extra-hard; keep completions with age $T=4$, not $T\\ge8$.\n\n## Open Source Repository & Resources\n- Paper: `https://arxiv.org/abs/2609.13443`\n- Blog: `https://mnoukhov.github.io/posts/ngu`\n- Claimed code `https://github.com/mnoukhov/never-give-up` returned HTTP 404 on 2026-09-16. Recipe is a paper/blog stub (`code_status: partial`; `repo_url: none found`)."
     },
     {
       "id": "paper:draco",
@@ -9495,7 +9573,8 @@
           "Outcome-only long-horizon agent RL where the failure is signal starvation / policy drift, not async latency",
           "Live-web multi-hop search-agent training (Iris SFT-RL climbing)",
           "Production post-train engine rather than the async algorithm (Miles)",
-          "Routing-harness RSI post-train (NeoHorse-1)"
+          "Routing-harness RSI post-train (NeoHorse-1)",
+          "Adaptive math/code sampling until ≥1 correct (NGU); that is a CISPO-host sampler, not SAO straggler replay"
         ],
         "redirects": [
           {
@@ -9517,6 +9596,10 @@
           {
             "when": "agentic RSI / routing-harness post-train, not async stragglers",
             "to": "task:agentic-rsi-routing-posttrain"
+          },
+          {
+            "when": "adaptive sampling until ≥1 correct on math/code prompts, not tool stragglers",
+            "to": "task:math-code-rl-dense"
           }
         ],
         "current_sota": [
@@ -9538,9 +9621,10 @@
           "method:iris",
           "method:miles",
           "method:neohorse-1",
-          "method:t1-terminal-rl"
+          "method:t1-terminal-rl",
+          "method:ngu"
         ],
-        "last_reviewed": "2026-09-11",
+        "last_reviewed": "2026-09-16",
         "tags": [
           "post-training",
           "agentic",
@@ -9548,7 +9632,7 @@
           "sao"
         ]
       },
-      "body": "# Agentic Asynchronous Reinforcement Learning\n\n## Problem Definition\nTraining agentic foundation models to interact with multi-turn environments (bash shells, code execution sandboxes, web browsers) where variable environment latency causes severe worker straggler bottlenecks under synchronous group RL algorithms.\n\nThis is **policy training**. Building a software-engineering agent loop is `task:software-engineering-agent-harness` (`method:mini-swe-agent`), not this task.\n\n## SOTA Recommendation (as of 2026-09-08)\n- **Primary Method**: **SAO** (`method:sao`, 2607.07508). Unchanged.\n- **Related pre-RL tool OPKD (not this async-train default)**: `method:pta` (`arXiv:2609.04773`) teacher-commits tool turns before Search-R1 / DeepEyes RL. Lookahead fills idle distill capacity; it is not SAO's straggler replay.\n- **Not This Task**: sparse-outcome coverage / anti-drift on AppWorld-style agents is `task:outcome-only-long-horizon-agent-rl` (`method:canopy` / `method:draco`). Folding is `task:long-horizon-tool-agent`. Live-web search-agent climbing is `task:web-search-agent-rl` (`method:iris`). Production post-train engine is `task:frontier-rl-posttrain-stack` (`method:miles`). Routing-harness RSI post-train is `task:agentic-rsi-routing-posttrain` (`method:neohorse-1`). Terminal-MoE recipe `method:t1-terminal-rl` (`arXiv:2609.11042`) is not SAO."
+      "body": "# Agentic Asynchronous Reinforcement Learning\n\n## Problem Definition\nTraining agentic foundation models to interact with multi-turn environments (bash shells, code execution sandboxes, web browsers) where variable environment latency causes severe worker straggler bottlenecks under synchronous group RL algorithms.\n\nThis is **policy training**. Building a software-engineering agent loop is `task:software-engineering-agent-harness` (`method:mini-swe-agent`), not this task.\n\n## SOTA Recommendation (as of 2026-09-08)\n- **Primary Method**: **SAO** (`method:sao`, 2607.07508). Unchanged.\n- **Related pre-RL tool OPKD (not this async-train default)**: `method:pta` (`arXiv:2609.04773`) teacher-commits tool turns before Search-R1 / DeepEyes RL. Lookahead fills idle distill capacity; it is not SAO's straggler replay.\n- **Not This Task**: sparse-outcome coverage / anti-drift on AppWorld-style agents is `task:outcome-only-long-horizon-agent-rl` (`method:canopy` / `method:draco`). Folding is `task:long-horizon-tool-agent`. Live-web search-agent climbing is `task:web-search-agent-rl` (`method:iris`). Production post-train engine is `task:frontier-rl-posttrain-stack` (`method:miles`). Routing-harness RSI post-train is `task:agentic-rsi-routing-posttrain` (`method:neohorse-1`). Terminal-MoE recipe `method:t1-terminal-rl` (`arXiv:2609.11042`) is not SAO. Adaptive math/code sampling until ≥1 correct is `method:ngu` on `task:math-code-rl-dense` (uses async refill; not SAO)."
     },
     {
       "id": "task:1bit-extreme-quantization",
@@ -9765,9 +9849,10 @@
           "method:partial-reasoning-traces",
           "method:mintrl",
           "method:tiny-aya-l2-thinker",
-          "method:eps-prompt-scaffolding"
+          "method:eps-prompt-scaffolding",
+          "method:ngu"
         ],
-        "last_reviewed": "2026-09-15",
+        "last_reviewed": "2026-09-16",
         "tags": [
           "post-training",
           "reasoning",
@@ -9776,7 +9861,7 @@
           "cispo"
         ]
       },
-      "body": "# Mathematical and Code RL Reasoning (Dense Policies)\n\n## Problem Definition\nTraining dense language models to generate long chains of thought (CoT) and verifiable solutions for competitive math and coding problems.\n\n## SOTA Recommendation (as of 2026-09-09)\n- **Primary Method (Pass@1 labeled RLVR)**: **CISPO** (`method:cispo`, MiniMax-M1 2506.13585 + ScaleRL 2510.13786). Unchanged.\n- **Systems Reference**: DAPO stays as systems paper reference. GRPO stays retired.\n- **Related alternative (Pass@K / coverage / no-backward)**: `method:es-reasoning` (`arXiv:2608.27351`). Do not swap CISPO for ES or revive GRPO when the goal is Pass@1. Tree-rollout coverage sibling: `method:datpo` (`arXiv:2609.08650`) on `task:passk-reasoning-coverage`.\n- **Optional token-filter plug-in**: `method:gmts` (`arXiv:2608.30632`) when using GRPO/DAPO/CISPO-family token truncation. Does not replace CISPO.\n- **Optional example-reweight plug-in**: `method:diem` (`arXiv:2608.29252`) gradient-alignment batch reweight. Does not replace CISPO.\n- **Optional first-mistake process credit**: `method:cliff` (`arXiv:2609.02817`). Active plug-in, not a PRM, not a CISPO replacement. VeriGate remains the gated-PRM default.\n- **Optional sample-level recipe router**: `method:self-routing` (`arXiv:2609.01422`) GRPO / OPSD / REG / skip from rollout correctness+confidence. Does not replace CISPO or OPSA.\n- **Optional adaptive IS clip**: `method:gapo` (`arXiv:2609.00444`, EMNLP 2026 Main) widens the GRPO/GSPO clip on scarce-correct hard-problem rollouts. Active plug-in. Does not replace CISPO.\n- **Optional cold-start prompt prior**: `method:thinkprior` (`arXiv:2609.09075`) zero-rollout Beta difficulty prior. Cuts silent-group waste; no detected final-accuracy gain. Does not replace CISPO or GAPO.\n- **Optional circuit data-selection signal**: `method:circuitlens` (`arXiv:2609.07183`, EMNLP 2026 Findings). Low-engagement decile can win on 7B medium math; regime-dependent.\n- **Negative-result data-policy platform**: `method:dataflex-rl` (`arXiv:2609.06107`) — RLVR data policies do not beat uniform GRPO at 95% CI in that study.\n- **Related RLVR+self-OPD loop**: `method:rise` (`arXiv:2609.05295`) builds a synthetic teacher from the model's own RLVR trajectory. Does not replace CISPO, OPD, or OPSA.\n- **Optional verifier-grounded self-improvement**: `method:flowbalance` (`arXiv:2609.03241`) privileged same-model trajectory balance, sign-gated by group advantage. Does not replace CISPO, OPSA, OPD, VISTA, RISE, or CANOPY.\n- **Optional verified-evidence regularizer**: `method:verpo` (`arXiv:2609.06100`) on `task:privileged-teacher-opsd`. Evidence as a proposal, not CISPO.\n- **Gotcha**: group-relative magnitude can reward lucky guesses on bounded-answer / search-agent settings (`paper:spurious-advantage-grpo`). Do not promote SignBalance over CISPO.\n- **Gotcha (verifier ICC)**: within-group verifier errors are correlated (ρ≈0.53, Kish n_eff≈1.70 at k=8; `method:rlvr-group-correlation`, arXiv:2609.06386). Not an optimizer.\n- **Optional OPD teacher-reliability gate**: `method:tgopd` (`arXiv:2609.02998`) on `task:student-distillation`. Prompt-level probes then dense OPD or GRPO. Does not replace CISPO or OPD.\n- **Optional sparse OPD token mask**: `method:sparse-opd-supervision` (`arXiv:2609.04565`). Does not replace CISPO or OPD.\n- **Optional OPD-then-RL stack**: `method:opd-then-rlvr` (`arXiv:2609.04108`) when both OPD and RLVR will run; sequence them, do not fuse in one step. Stage-2 Pass@1 algorithm stays CISPO. Does not replace CISPO or OPD.\n- **No labels / no teacher**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace CISPO when labels exist.\n- **Olympiad NL proofs / IMO TTC (not this Pass@1 task)**: `method:nemotron-imo-gold` on `task:olympiad-math-posttrain`. Does not replace CISPO.\n- **Optional partial-trace SFT shaping**: `method:partial-reasoning-traces` (`arXiv:2609.07103`). Does not replace CISPO or OLMo-3.\n- **Optional sparse local off-policy intervention**: `method:mintrl` (`arXiv:2609.12419`). Judge patches short suffixes inside otherwise on-policy RLVR. Active plug-in. Does not replace CISPO / SAPO / SAO. Long-horizon agentic eval is future work in that paper.\n- **L2 in-language reasoning SFT (not this Pass@1 task)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.\n- **Multimodal VL prompt scaffolding (not this Pass@1 task)**: `method:eps-prompt-scaffolding` on `task:mllm-rl-prompt-curriculum`. Online EPS from on-policy rewards plus teacher rewrites. DataFlex-RL remains the static-policy null under text GRPO; EPS is the online adaptive scaffolding path. Does not replace CISPO."
+      "body": "# Mathematical and Code RL Reasoning (Dense Policies)\n\n## Problem Definition\nTraining dense language models to generate long chains of thought (CoT) and verifiable solutions for competitive math and coding problems.\n\n## SOTA Recommendation (as of 2026-09-09)\n- **Primary Method (Pass@1 labeled RLVR)**: **CISPO** (`method:cispo`, MiniMax-M1 2506.13585 + ScaleRL 2510.13786). Unchanged.\n- **Systems Reference**: DAPO stays as systems paper reference. GRPO stays retired.\n- **Related alternative (Pass@K / coverage / no-backward)**: `method:es-reasoning` (`arXiv:2608.27351`). Do not swap CISPO for ES or revive GRPO when the goal is Pass@1. Tree-rollout coverage sibling: `method:datpo` (`arXiv:2609.08650`) on `task:passk-reasoning-coverage`.\n- **Optional token-filter plug-in**: `method:gmts` (`arXiv:2608.30632`) when using GRPO/DAPO/CISPO-family token truncation. Does not replace CISPO.\n- **Optional example-reweight plug-in**: `method:diem` (`arXiv:2608.29252`) gradient-alignment batch reweight. Does not replace CISPO.\n- **Optional first-mistake process credit**: `method:cliff` (`arXiv:2609.02817`). Active plug-in, not a PRM, not a CISPO replacement. VeriGate remains the gated-PRM default.\n- **Optional sample-level recipe router**: `method:self-routing` (`arXiv:2609.01422`) GRPO / OPSD / REG / skip from rollout correctness+confidence. Does not replace CISPO or OPSA.\n- **Optional adaptive IS clip**: `method:gapo` (`arXiv:2609.00444`, EMNLP 2026 Main) widens the GRPO/GSPO clip on scarce-correct hard-problem rollouts. Active plug-in. Does not replace CISPO.\n- **Optional cold-start prompt prior**: `method:thinkprior` (`arXiv:2609.09075`) zero-rollout Beta difficulty prior. Cuts silent-group waste; no detected final-accuracy gain. Does not replace CISPO or GAPO.\n- **Optional circuit data-selection signal**: `method:circuitlens` (`arXiv:2609.07183`, EMNLP 2026 Findings). Low-engagement decile can win on 7B medium math; regime-dependent.\n- **Negative-result data-policy platform**: `method:dataflex-rl` (`arXiv:2609.06107`) — RLVR data policies do not beat uniform GRPO at 95% CI in that study.\n- **Related RLVR+self-OPD loop**: `method:rise` (`arXiv:2609.05295`) builds a synthetic teacher from the model's own RLVR trajectory. Does not replace CISPO, OPD, or OPSA.\n- **Optional verifier-grounded self-improvement**: `method:flowbalance` (`arXiv:2609.03241`) privileged same-model trajectory balance, sign-gated by group advantage. Does not replace CISPO, OPSA, OPD, VISTA, RISE, or CANOPY.\n- **Optional verified-evidence regularizer**: `method:verpo` (`arXiv:2609.06100`) on `task:privileged-teacher-opsd`. Evidence as a proposal, not CISPO.\n- **Gotcha**: group-relative magnitude can reward lucky guesses on bounded-answer / search-agent settings (`paper:spurious-advantage-grpo`). Do not promote SignBalance over CISPO.\n- **Gotcha (verifier ICC)**: within-group verifier errors are correlated (ρ≈0.53, Kish n_eff≈1.70 at k=8; `method:rlvr-group-correlation`, arXiv:2609.06386). Not an optimizer.\n- **Optional OPD teacher-reliability gate**: `method:tgopd` (`arXiv:2609.02998`) on `task:student-distillation`. Prompt-level probes then dense OPD or GRPO. Does not replace CISPO or OPD.\n- **Optional sparse OPD token mask**: `method:sparse-opd-supervision` (`arXiv:2609.04565`). Does not replace CISPO or OPD.\n- **Optional OPD-then-RL stack**: `method:opd-then-rlvr` (`arXiv:2609.04108`) when both OPD and RLVR will run; sequence them, do not fuse in one step. Stage-2 Pass@1 algorithm stays CISPO. Does not replace CISPO or OPD.\n- **No labels / no teacher**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace CISPO when labels exist.\n- **Olympiad NL proofs / IMO TTC (not this Pass@1 task)**: `method:nemotron-imo-gold` on `task:olympiad-math-posttrain`. Does not replace CISPO.\n- **Optional partial-trace SFT shaping**: `method:partial-reasoning-traces` (`arXiv:2609.07103`). Does not replace CISPO or OLMo-3.\n- **Optional sparse local off-policy intervention**: `method:mintrl` (`arXiv:2609.12419`). Judge patches short suffixes inside otherwise on-policy RLVR. Active plug-in. Does not replace CISPO / SAPO / SAO. Long-horizon agentic eval is future work in that paper.\n- **Optional async adaptive sampler**: `method:ngu` (`arXiv:2609.13443`) keeps sampling a prompt until ≥1 correct (Matthew Effect / signal-efficiency fix). Does not replace CISPO / SAPO / GRPO loss. Distinct from ThinkPrior (cold-start prompt rank), DIEM/GMTS (example/token reweight), and DataFlex-RL (data-policy accuracy null).\n- **L2 in-language reasoning SFT (not this Pass@1 task)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.\n- **Multimodal VL prompt scaffolding (not this Pass@1 task)**: `method:eps-prompt-scaffolding` on `task:mllm-rl-prompt-curriculum`. Online EPS from on-policy rewards plus teacher rewrites. DataFlex-RL remains the static-policy null under text GRPO; EPS is the online adaptive scaffolding path. Does not replace CISPO."
     },
     {
       "id": "task:directed-sssp-nonneg",
@@ -10246,15 +10331,20 @@
           "method:dpo",
           "method:partial-reasoning-traces",
           "method:tiny-aya-l2-thinker",
-          "method:plc-dpo"
+          "method:plc-dpo",
+          "method:dco"
         ],
         "redirects": [
           {
             "when": "in-language (L2) reasoning SFT rather than general instruct",
             "to": "task:multilingual-l2-reasoning-sft"
+          },
+          {
+            "when": "24GB quality LoRA rather than drift-budget instruct FT",
+            "to": "task:parameter-efficient-fine-tuning"
           }
         ],
-        "last_reviewed": "2026-09-14",
+        "last_reviewed": "2026-09-16",
         "tags": [
           "post-training",
           "instruct",
@@ -10263,7 +10353,7 @@
           "dolci"
         ]
       },
-      "body": "# Chat / Instruct SFT & General Alignment\n\n## Problem Definition\nTransforming base pre-trained models into safe, capable, instruction-following conversational assistants without degrading core knowledge.\n\n## SOTA Recommendation (as of 2026-09-11)\n- **Primary Open Stack**: **OLMo-3 Dolci** (`method:olmo-3`, 2512.13961).\n- **Industrial Alternative**: **Nemotron-Cascade-2** (`method:nemotron-cascade-2`, 2603.19220).\n- **Optional reasoning-trace shaping**: `method:partial-reasoning-traces` (`arXiv:2609.07103`). Prefer partial/truncated CoT over dumping complete traces. Does not replace OLMo-3 / Cascade.\n- **L2 in-language reasoning (not this general instruct task)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.\n- **Noisy preference labels**: `method:plc-dpo` on `task:direct-preference-alignment`. Does not replace Dolci."
+      "body": "# Chat / Instruct SFT & General Alignment\n\n## Problem Definition\nTransforming base pre-trained models into safe, capable, instruction-following conversational assistants without degrading core knowledge.\n\n## SOTA Recommendation (as of 2026-09-11)\n- **Primary Open Stack**: **OLMo-3 Dolci** (`method:olmo-3`, 2512.13961).\n- **Industrial Alternative**: **Nemotron-Cascade-2** (`method:nemotron-cascade-2`, 2603.19220).\n- **Optional reasoning-trace shaping**: `method:partial-reasoning-traces` (`arXiv:2609.07103`). Prefer partial/truncated CoT over dumping complete traces. Does not replace OLMo-3 / Cascade.\n- **L2 in-language reasoning (not this general instruct task)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.\n- **Noisy preference labels**: `method:plc-dpo` on `task:direct-preference-alignment`. Does not replace Dolci.\n- **Optional drift-budget instruct FT**: `method:dco` (`arXiv:2609.13680`) chooses update direction (layer-selective probe) under an anchored-KL budget. Reverses QA-only FT failure while keeping reasoning. Does not replace OLMo-3 / Cascade / Delta Learning / Open-MOPD / LoRA quality."
     },
     {
       "id": "task:industrial-model-building",
@@ -10544,9 +10634,16 @@
           "method:gradcodes",
           "method:ace-moe-peft",
           "method:anlr-lora",
-          "method:iso-lora"
+          "method:iso-lora",
+          "method:dco"
         ],
-        "last_reviewed": "2026-09-14",
+        "last_reviewed": "2026-09-16",
+        "redirects": [
+          {
+            "when": "instruct FT under a behavioral-drift budget / layer-selective freeze of instruct models rather than LoRA quality",
+            "to": "task:instruct-sft-alignment"
+          }
+        ],
         "tags": [
           "efficiency",
           "peft",
@@ -10554,7 +10651,7 @@
           "lora"
         ]
       },
-      "body": "# Parameter-Efficient Fine-Tuning (PEFT) & Low-Rank Adaptation\n\n## Problem Definition\nAdapting multi-billion parameter base models to downstream tasks with minimal trainable parameters on single GPU hardware.\n\n## SOTA Recommendation (as of 2026-09-01)\n- **LoRA Quality 24GB**: **Vanilla LoRA + rsLoRA + LR sweep** (`method:lr-matters-lora`, 2602.04998, 2601.22708) — NOT DoRA. Unchanged. `method:nora` (`arXiv:2608.31036`) is a recommended RLVR-stable adapter upgrade, not a completed supersession of that default. `method:anlr-lora` (`arXiv:2609.05885`) is an optional per-rank LR plug-in. `method:iso-lora` (`arXiv:2609.12123`) is an active optimizer-shape / effective-rank note; does not replace the LR sweep.\n- **MoE PEFT consolidation**: `method:ace-moe-peft` (`arXiv:2609.06072`, EMNLP 2026) groups expert adapters. Distinct from `method:ace` (agent memory). Does not replace the dense LoRA quality default.\n- **LoRA Must 4-Bit**: **AQLoRA-Q** (`method:aqlora-q`, 2608.23816) or **AutoQRA** (`method:autoqra`, 2602.22268). Fully low-bit checkpoints with no high-precision adapter: `method:gradcodes` on `task:full-lowbit-finetune`.\n- **Full-Parameter Memory-Efficient Pretrain**: **SCALE** (`method:scale`, 2506.16659) — not GaLore."
+      "body": "# Parameter-Efficient Fine-Tuning (PEFT) & Low-Rank Adaptation\n\n## Problem Definition\nAdapting multi-billion parameter base models to downstream tasks with minimal trainable parameters on single GPU hardware.\n\n## SOTA Recommendation (as of 2026-09-01)\n- **LoRA Quality 24GB**: **Vanilla LoRA + rsLoRA + LR sweep** (`method:lr-matters-lora`, 2602.04998, 2601.22708) — NOT DoRA. Unchanged. `method:nora` (`arXiv:2608.31036`) is a recommended RLVR-stable adapter upgrade, not a completed supersession of that default. `method:anlr-lora` (`arXiv:2609.05885`) is an optional per-rank LR plug-in. `method:iso-lora` (`arXiv:2609.12123`) is an active optimizer-shape / effective-rank note; does not replace the LR sweep. Drift-budget instruct layer-selective freeze is `method:dco` on `task:instruct-sft-alignment`, not a LoRA quality default.\n- **MoE PEFT consolidation**: `method:ace-moe-peft` (`arXiv:2609.06072`, EMNLP 2026) groups expert adapters. Distinct from `method:ace` (agent memory). Does not replace the dense LoRA quality default.\n- **LoRA Must 4-Bit**: **AQLoRA-Q** (`method:aqlora-q`, 2608.23816) or **AutoQRA** (`method:autoqra`, 2602.22268). Fully low-bit checkpoints with no high-precision adapter: `method:gradcodes` on `task:full-lowbit-finetune`.\n- **Full-Parameter Memory-Efficient Pretrain**: **SCALE** (`method:scale`, 2506.16659) — not GaLore."
     },
     {
       "id": "task:posttrain-diffusion",
@@ -12894,16 +12991,17 @@
           "method:cliff",
           "method:diem",
           "method:self-routing",
-          "method:verigate"
+          "method:verigate",
+          "method:ngu"
         ],
-        "last_reviewed": "2026-09-04",
+        "last_reviewed": "2026-09-16",
         "tags": [
           "post-training",
           "reinforcement-learning",
           "reasoning"
         ]
       },
-      "body": "# Reinforcement Learning & Reasoning Post-Training\n\n## SOTA Recommendation (as of 2026-09-04)\n- **Dense Policies**: **CISPO** (`method:cispo`). Unchanged.\n- **MoE / VL Policies**: **SAPO** (`method:sapo`). Unchanged.\n- **Process Supervision**: **VeriGate** (`method:verigate`, 2605.30451). Unchanged.\n- **Optional plug-ins (do not steal current_sota)**: `method:cliff` (first-mistake credit, not a PRM), `method:diem` (example reweight), `method:self-routing` (sample-level GRPO/OPSD router).\n- **Gotcha**: `paper:spurious-advantage-grpo` on group-relative magnitude. Do not revive GRPO."
+      "body": "# Reinforcement Learning & Reasoning Post-Training\n\n## SOTA Recommendation (as of 2026-09-04)\n- **Dense Policies**: **CISPO** (`method:cispo`). Unchanged.\n- **MoE / VL Policies**: **SAPO** (`method:sapo`). Unchanged.\n- **Process Supervision**: **VeriGate** (`method:verigate`, 2605.30451). Unchanged.\n- **Optional plug-ins (do not steal current_sota)**: `method:cliff` (first-mistake credit, not a PRM), `method:diem` (example reweight), `method:self-routing` (sample-level GRPO/OPSD router), `method:ngu` (async sampler until ≥1 correct; not a CISPO/SAPO/GRPO loss).\n- **Gotcha**: `paper:spurious-advantage-grpo` on group-relative magnitude. Do not revive GRPO."
     },
     {
       "id": "task:label-free-reasoner-posttrain",
@@ -23078,6 +23176,122 @@
       "body": "# Sparse OPD Supervision\n\n## Method Overview\nKeep the OPD token loss, drop almost every token. With mask $m_t \\in \\{0,1\\}$,\n\n\\[\n\\mathcal{L}_{\\mathrm{SOPD}}=\\mathbb{E}\\Big[\\frac{1}{|y|}\\sum_t \\ell_t(\\theta)\\,m_t\\Big],\n\\]\n\nwhere $\\ell_t$ is the usual PPO-clipped reverse-KL token loss and $A_t=\\log\\pi_T(y_t|h_t)-\\log\\pi_\\theta(y_t|h_t)$. Practical masks: one random token; the max and/or min $A_t$; or the top and bottom 0.05% of $A_t$ (`pctltail`). This is a plug-in on `method:opd`, not a new distill algorithm and not CISPO.\n\n`mintok` / `maxtok` follow Table 2 (highest / lowest reward). Do not trust Figure 1's swapped adjectives.\n\n## When to Use\n- Already running sampled-token OPD and token-level backward cost or teacher-noise is the complaint.\n- Diagnosing whether dense reverse-KL is doing the work (often it is not).\n\n## When NOT to Use\n- Distill default → `method:opd`.\n- Pass@1 labeled RLVR → `method:cispo`.\n- Entropy collapse on sampled-token OPD → `method:ida-opd`.\n- Prompt-set size → `method:opd-one-example` / `method:opd-hard-cot-selection`.\n\n## Relation to Existing SOTA\n- Active token-budget plug-in on `task:student-distillation`, beside `method:opd-hard-cot-selection`, `method:opd-one-example`, `method:ida-opd`, `method:tgopd`. Does **not** supersede `method:opd` or `method:cispo`.\n\n## Gotchas & Failure Modes\n- `maxtok` (lowest-reward token) can underperform plain OPD on large-teacher / small-base students (Family 1 mean 1.7 vs 4.6). Prefer `mintok` / `minmaxtok` / `pctltail` there.\n- Best sparse runs often *increase* reverse KL. Do not early-stop on teacher match.\n- Paper eval is avg@8 / pass@k with n=256, Qwen3 no-think, DAPO-Math-17K — not a CISPO bake-off."
     },
     {
+      "id": "method:dco",
+      "type": "method",
+      "title": "Drift-Constrained Optimization (DCO)",
+      "domain": null,
+      "status": "active",
+      "file_path": "graph/methods/dco.md",
+      "metadata": {
+        "id": "method:dco",
+        "type": "method",
+        "title": "Drift-Constrained Optimization (DCO)",
+        "category": "rl-alignment",
+        "status": "active",
+        "sota_for": [],
+        "supersedes": [],
+        "do_not_use_for": [
+          {
+            "when": "choosing the open instruct / chat SFT stack",
+            "reason": "DCO is a drift-budget direction probe on an existing instruct model; OLMo-3 Dolci remains the open instruct default",
+            "use_instead": "method:olmo-3"
+          },
+          {
+            "when": "24GB quality LoRA is the library task",
+            "reason": "Quality default remains vanilla LoRA + rsLoRA + LR sweep; DCO freezes layers under a KL budget",
+            "use_instead": "method:lr-matters-lora"
+          },
+          {
+            "when": "RLVR-stable rank-normalized LoRA A",
+            "reason": "NoRA normalizes adapter A; DCO is instruct layer-selective FT",
+            "use_instead": "method:nora"
+          },
+          {
+            "when": "optimizer-shape / effective-rank LoRA",
+            "reason": "Iso-LoRA spectrally couples BA; DCO does not retarget LoRA geometry",
+            "use_instead": "method:iso-lora"
+          },
+          {
+            "when": "activation-space directional deltas without a Fisher drift budget",
+            "reason": "Delta Learning shifts representations; DCO selects parameter-space directions under anchored KL",
+            "use_instead": "method:delta-learning"
+          },
+          {
+            "when": "multi-teacher on-policy distillation",
+            "reason": "Open-MOPD remains multi-teacher distill; DCO is single-model instruct FT",
+            "use_instead": "method:open-mopd"
+          }
+        ],
+        "assumptions": [
+          "Start from a strong instruct checkpoint. Paper: Qwen3-8B/14B, QA-only SmolInstruct 300k or Lego-MT ~2.8M, 8x H200. Inference still runs the model's reasoning path.",
+          "Operational probe is two-stage LST (bottom layers, then top) via LLaMA-Factory freeze. Freeze lm_head / embeddings; jointly updating them raised KL without helping accuracy.",
+          "Does not claim instruct SOTA. Does not replace OLMo-3 / Nemotron-Cascade 2 / LoRA quality / Delta Learning / Open-MOPD."
+        ],
+        "last_reviewed": "2026-09-16",
+        "papers": [
+          "paper:dco"
+        ],
+        "recipes": [
+          "recipe:dco"
+        ],
+        "claims": [
+          {
+            "benchmark": "FLORES-101 xCOMET, Qwen3-8B QA-only translation, lg→x / x→lg",
+            "metric": "xCOMET",
+            "value": "52.66 / 55.60 (LST b4t16)",
+            "baseline": "Qwen3-8B 47.07 / 51.40; Seed-X-PPO-7B 47.76 / 51.31; Tower-Plus-9B 46.95 / 52.44; FFT 42.05 / 47.02; LoRA rank-64 40.78 / 46.50",
+            "date": "2026-09",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.13680",
+            "notes": "Table 1. b4t8 keeps general avg 42.32 vs ref 42.22 with 50.35 / 53.67. b4t16 general avg 38.85. >100 languages, four pivots (en/zh/ne/ceb)."
+          },
+          {
+            "benchmark": "FLORES-101 xCOMET, Qwen3-14B QA-only, lg→x / x→lg",
+            "metric": "xCOMET",
+            "value": "56.51 / 58.31 (LST b4t16)",
+            "baseline": "Qwen3-14B 51.85 / 55.21; FFT 43.82 / 48.11",
+            "date": "2026-09",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.13680",
+            "notes": "Table 1. b4t8 53.85 / 56.60 with general avg 46.98 vs ref 48.95."
+          },
+          {
+            "benchmark": "SmolInstruct chemistry, Qwen3-8B QA-only",
+            "metric": "SmolInstruct overall / general avg (AIME+LCB+BBEH)",
+            "value": "LST b4t16 29.61 / 44.03; LST b16 35.15 / 42.20",
+            "baseline": "Qwen3-8B 19.34 / 42.22; FFT 59.65 / 33.60; LoRA 28.57 / 42.65",
+            "date": "2026-09",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.13680",
+            "notes": "Table 2. FFT wins the target by dumping general capability. Split LST is the drift-efficient family under a tight budget."
+          },
+          {
+            "benchmark": "Qwen3-8B translation RL init (WALAR pipeline)",
+            "metric": "xCOMET vs Qwen3-8B + RL",
+            "value": "LST already beats base+RL on every pivot; LST+RL is strongest",
+            "baseline": "Qwen3-8B and Qwen3-8B + RL (Liu et al. 2026 WALAR)",
+            "date": "2026-09",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.13680",
+            "notes": "Figure 6b. Stronger RL warm-start, not a CISPO/SAPO replacement."
+          }
+        ],
+        "tags": [
+          "post-training",
+          "instruct",
+          "sft",
+          "drift",
+          "dco",
+          "active"
+        ]
+      },
+      "body": "# Drift-Constrained Optimization (DCO)\n\n## Method Overview\nDCO fine-tunes an instruct model under an explicit behavioral-drift budget. Anchored KL $D_{\\mathrm{ref}}(\\theta)=\\mathbb{E}_{x\\sim D_{\\mathrm{general}}}\\mathrm{KL}(\\pi_{\\theta_0}(\\cdot|x)\\|\\pi_\\theta(\\cdot|x))$ is the constraint. Around $\\theta_0$ the Fisher metric makes radius $\\rho=\\sqrt{\\Delta\\theta^\\top F\\Delta\\theta}$ the spent budget and $v=\\Delta\\theta/\\rho$ the remaining degree of freedom. Locally the best direction is $-F^{-1}g$. The paper does not invert $F$; it probes feasible families by freezing layers (LST). Split $b_n t_m$ trains the bottom $n$ layers, then the top $m$, middle frozen. At matched KL, that family beats full FT and often LoRA/ASFT on the task–general plane, including QA-only training that must still emit CoT at inference.\n\n## When to Use\n- Domain FT of a strong instruct model (science, many-language translation) when full SFT wrecks reasoning.\n- You can freeze layers in LLaMA-Factory (`finetuning_type: freeze`) and sweep a few split configs (b4t8 / b4t12 / b4t16) under a KL budget.\n- You want a better SFT init before a later RL pass on the same target.\n\n## When NOT to Use\n- Open instruct stack $\\to$ `method:olmo-3`. 24GB LoRA quality $\\to$ `method:lr-matters-lora`. NoRA / Iso-LoRA stay LoRA-geometry tools. Activation-space deltas $\\to$ `method:delta-learning`. Multi-teacher distill $\\to$ `method:open-mopd`.\n\n## Relation to Existing SOTA\n- Active plug-in on `task:instruct-sft-alignment`. Mention on `task:parameter-efficient-fine-tuning` (layer freeze, not LoRA). Does **not** enter `current_sota`. Does **not** supersede `method:olmo-3`, `method:lr-matters-lora`, `method:nora`, `method:iso-lora`, `method:delta-learning`, or `method:open-mopd`.\n\n## Gotchas & Failure Modes\n- Continuous bottom-only b16 can look cheap in KL and still lose the target (translation Table 1). Split vs contiguous preference flips with the drift budget: split for low drift, contiguous when more drift is allowed.\n- Updating `lm_head` / embeddings with the selected layers raised KL and slightly hurt accuracy.\n- QA-only is the stress test. If you already have CoT traces, this is not an argument against them (`method:partial-reasoning-traces` is the trace-shaping plug-in).\n- Code lives under LLaMA-Factory freeze YAMLs, not a standalone trainer. HF collection: `LLaMAX/dco`."
+    },
+    {
       "id": "method:musec",
       "type": "method",
       "title": "Musec (MomentUm SpEctral Clipping)",
@@ -24905,6 +25119,116 @@
         ]
       },
       "body": "# ACE (Adapter Consolidation across Experts)\n\n## Method Overview\nACE groups redundant MoE experts and shares a higher-rank LoRA per group under the same adapter budget, then fuses expert-wise GEMMs into group GEMMs. It is **not** `method:ace` (Agentic Context Engineering).\n\nDoes not replace `method:lr-matters-lora` (dense 24GB quality) or `method:aqlora-q` (4-bit).\n\n## When to Use\n- PEFT on an MoE where expert-wise LoRA is slow and fragmented.\n\n## When NOT to Use\n- Dense LoRA quality → `method:lr-matters-lora`. Agent memory → `method:ace`. 4-bit → `method:aqlora-q`.\n\n## Relation to Existing SOTA\n- Active PEFT plug-in on `task:parameter-efficient-fine-tuning`. Does **not** supersede `method:lr-matters-lora` or `method:ace`.\n\n## Gotchas & Failure Modes\n- Name collision with ACE playbooks. Always use `method:ace-moe-peft`."
+    },
+    {
+      "id": "method:ngu",
+      "type": "method",
+      "title": "Never Give Up (NGU)",
+      "domain": null,
+      "status": "active",
+      "file_path": "graph/methods/ngu.md",
+      "metadata": {
+        "id": "method:ngu",
+        "type": "method",
+        "title": "Never Give Up (NGU)",
+        "category": "rl-alignment",
+        "status": "active",
+        "sota_for": [],
+        "supersedes": [],
+        "do_not_use_for": [
+          {
+            "when": "choosing the dense math/code Pass@1 RLVR loss",
+            "reason": "NGU is an async sampler; CISPO remains Pass@1",
+            "use_instead": "method:cispo"
+          },
+          {
+            "when": "MoE/VL RLVR loss",
+            "reason": "SAPO remains the MoE/VL algorithm; NGU does not change the surrogate",
+            "use_instead": "method:sapo"
+          },
+          {
+            "when": "cold-start prompt selection / silent-group waste before the first target-policy rollout",
+            "reason": "ThinkPrior ranks prompts with a zero-rollout Beta prior; NGU keeps resampling one prompt until ≥1 correct",
+            "use_instead": "method:thinkprior"
+          },
+          {
+            "when": "reweighting whole examples by gradient alignment",
+            "reason": "DIEM reweights a minibatch after rollouts exist; NGU changes how many samples a prompt gets",
+            "use_instead": "method:diem"
+          },
+          {
+            "when": "token-level truncation inside an already-computed GRPO/CISPO loss",
+            "reason": "GMTS filters tokens; NGU is a prompt sampler",
+            "use_instead": "method:gmts"
+          },
+          {
+            "when": "evaluating whether data policies beat uniform GRPO on final accuracy",
+            "reason": "DataFlex-RL is the accuracy-null platform; NGU is a compute-reallocation sampler, not a data-policy bake-off",
+            "use_instead": "method:dataflex-rl"
+          },
+          {
+            "when": "variable tool latency / async stragglers",
+            "reason": "SAO owns straggler replay; NGU only uses async so filtered easy prompts free generator time for hard ones",
+            "use_instead": "method:sao"
+          }
+        ],
+        "assumptions": [
+          "Host is GRPO-family RLVR with a verifier. Paper uses off-policy async RL (in-flight updates), Deepspeed + vLLM. NGU needs that async loop so dropping easy prompts reallocates compute.",
+          "Math: Qwen3-4B-Base on a 10k Deepscaler subset, eval AIME 2025 + BRUMO Nov 2025, ~120 H100 hours, three seeds. Code: Qwen3-4B-Instruct-2507 on Manufactoria, 2x8 H100, p_NGU=0.95.",
+          "Does not claim Pass@1 SOTA. Does not replace CISPO / SAPO / GRPO loss. Claimed GitHub was 404 as of 2026-09-16."
+        ],
+        "last_reviewed": "2026-09-16",
+        "papers": [
+          "paper:ngu"
+        ],
+        "recipes": [
+          "recipe:ngu"
+        ],
+        "claims": [
+          {
+            "benchmark": "Deepscaler, Qwen3-4B-Base, AIME 25 + BRUMO 25 average pass@1 (~120 H100 hours, 3 seeds)",
+            "metric": "pass@1",
+            "value": "26.5 ± 0.6 (NGU p=0.875 on N=8, K=16)",
+            "baseline": "GRPO N=8 K=16 24.8±1.0 / N=4 K=32 25.3±0.5 / N=2 K=64 24.5±0.5; Darling* 25.9 (different 10k subset)",
+            "date": "2026-09",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.13443",
+            "notes": "Table 2. Not a CISPO bake-off. AIME 25: NGU p=0.5 22.0±0.7 vs K=16 20.0±1.5."
+          },
+          {
+            "benchmark": "Deepscaler hard-subset Δpass@1 vs Qwen3-4B-Base (pass@64=0 at init)",
+            "metric": "pass@1 improvement",
+            "value": "4.3 ± 1.2 (NGU p=0.875)",
+            "baseline": "GRPO K=16 1.6±0.3 / K=32 2.5±1.1 / K=64 2.5±0.2; sampling curriculum 4.0±1.1 but easy Δ 22.7 vs NGU 26.8",
+            "date": "2026-09",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.13443",
+            "notes": "Table 3. NGU p=0.75 easy Δ 28.1±0.2, hard Δ 3.0±1.2. Compute-matched, not Pass@1 SOTA."
+          },
+          {
+            "benchmark": "Manufactoria, Qwen3-4B-Instruct-2507, per-test reward",
+            "metric": "all-tests pass vs GRPO stall",
+            "value": "NGU p=0.95 keeps solving harder tests until full-problem solves",
+            "baseline": "GRPO plateaus; ~80% tests solved but no all-tests pass on even one eval problem",
+            "date": "2026-09",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.13443",
+            "notes": "Figure 9. Per-test NGU from a stagnant GRPO ckpt matches restarting with all-tests reward (Figure 10). No scalar table."
+          }
+        ],
+        "tags": [
+          "post-training",
+          "rl-alignment",
+          "rlvr",
+          "adaptive-sampling",
+          "ngu",
+          "active"
+        ]
+      },
+      "body": "# Never Give Up (NGU)\n\n## Method Overview\nNGU is an **asynchronous adaptive sampler** for GRPO-family RLVR. Sample $K$ completions. All-correct $\\to$ drop (too easy). Mixed rewards $\\to$ train. All-wrong $\\to$ with probability $p_{\\mathrm{NGU}}$ put the prompt back on the generator and keep prior completions, else give up. Expected samples on an unsolved prompt are $K/(1-p)$. Keep completions younger than $T$ steps in the loss; older negatives can still enter the group baseline, with negative advantages rescaled so the update group still sums to zero (\"anchor positives\"). The host loss does not change.\n\nSits beside CISPO (loss), ThinkPrior (cold-start prompt rank), DIEM/GMTS (example/token reweight), and DataFlex-RL (data-policy accuracy null). Distinct from SAO (tool-latency stragglers).\n\n## When to Use\n- Async GRPO-family math/code RLVR where easy prompts hog the batch and hard prompts stay unsolved.\n- Coding with per-test rewards where the model oscillates on medium tests and never passes the hardest tests.\n\n## When NOT to Use\n- Pass@1 kernel $\\to$ `method:cispo`. MoE/VL loss $\\to$ `method:sapo`. Cold-start prompt pool $\\to$ `method:thinkprior`. Example/token reweight $\\to$ `method:diem` / `method:gmts`. Async tool stragglers $\\to$ `method:sao`.\n- If the pool is almost all unsolvable, NGU spends time retrying instead of moving on.\n\n## Relation to Existing SOTA\n- Active sampling plug-in on `task:math-code-rl-dense`. Mention on `task:agentic-async-rl` (async infrastructure only). Does **not** enter `current_sota`. Does **not** supersede `method:cispo`, `method:sapo`, `method:grpo`, `method:thinkprior`, `method:diem`, `method:gmts`, `method:dataflex-rl`, or `method:sao`.\n\n## Gotchas & Failure Modes\n- Claimed GitHub `mnoukhov/never-give-up` was HTTP 404 as of 2026-09-16. Blog: `https://mnoukhov.github.io/posts/ngu`.\n- Needs async refill. In a sync loop, retrying one hard prompt stalls the batch.\n- Stale negatives: $T=4$ helped; $T\\in\\{8,16\\}$ hurt. Downsampling negatives to 1:1 was worse than anchoring positives.\n- Curriculum that freezes $K$ from initial pass rate matches hard-subset gains but regresses easy prompts; difficulty moves during training.\n- NGU's sample-wait-sample loop is more off-policy than drawing $K/(1-p)$ up front."
     },
     {
       "id": "method:draco",
@@ -31595,6 +31919,37 @@
       "body": "# Sparse OPD Supervision Recipe\n\n## Hardware & Environment Setup\n- No official GitHub as of 2026-09-08. Add a keep-mask to sampled-token OPD (`method:opd`). Paper: veRL 0.8.0 native OPD, batch 128 prompts, n=1, max response 8192, AdamW $1\\times10^{-6}$, clip 0.2.\n- Host distill algorithm stays OPD. Pass@1 labeled RLVR stays CISPO.\n\n## Quickstart Implementation\n\n```python\nimport torch\n\n\ndef opd_token_advantage(teacher_logp: torch.Tensor, student_logp: torch.Tensor) -> torch.Tensor:\n    \"\"\"A_t = log π_T(y_t|h_t) − log π_θ(y_t|h_t). teacher_logp/student_logp: [T].\"\"\"\n    return teacher_logp - student_logp\n\n\ndef sparse_keep_mask(adv: torch.Tensor, kind: str = \"minmaxtok\") -> torch.Tensor:\n    \"\"\"Boolean [T] keep-mask. Table 2: mintok = max A_t, maxtok = min A_t.\"\"\"\n    t = adv.numel()\n    mask = torch.zeros(t, dtype=torch.bool, device=adv.device)\n    if t == 0:\n        return mask\n    if kind == \"rand1tok\":\n        mask[int(torch.randint(t, (1,), device=adv.device).item())] = True\n        return mask\n    if kind == \"mintok\":\n        mask[int(adv.argmax().item())] = True\n        return mask\n    if kind == \"maxtok\":\n        mask[int(adv.argmin().item())] = True\n        return mask\n    if kind == \"minmaxtok\":\n        mask[int(adv.argmax().item())] = True\n        mask[int(adv.argmin().item())] = True\n        return mask\n    if kind == \"pctltail\":\n        k = max(1, int(round(0.0005 * t)))\n        top = torch.topk(adv, k=min(k, t)).indices\n        bot = torch.topk(-adv, k=min(k, t)).indices\n        mask[top] = True\n        mask[bot] = True\n        return mask\n    raise ValueError(f\"unknown sparse OPD kind {kind!r}\")\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Default try `minmaxtok` or `pctltail`. Do not start from `maxtok` on a much-smaller base student.\n- Mean-normalize by $|y|$, including dropped tokens, matching Eq. (4.1).\n- Does not replace OPD, CISPO, or IDA-OPD."
     },
     {
+      "id": "recipe:dco",
+      "type": "recipe",
+      "title": "DCO Layer-Selective Instruct Fine-Tune",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/recipes/dco.md",
+      "metadata": {
+        "id": "recipe:dco",
+        "type": "recipe",
+        "title": "DCO Layer-Selective Instruct Fine-Tune",
+        "method": "method:dco",
+        "task": "task:instruct-sft-alignment",
+        "target_hardware": "8x NVIDIA H200 (paper); 8x GPU LLaMA-Factory freeze for the zh-en demo",
+        "framework": "PyTorch / LLaMA-Factory freeze SFT",
+        "repo_url": "https://github.com/CONE-MT/DCO",
+        "pip_dependencies": [
+          "torch>=2.5.0",
+          "llamafactory",
+          "deepspeed",
+          "transformers"
+        ],
+        "tags": [
+          "recipe",
+          "dco",
+          "sft",
+          "lst"
+        ]
+      },
+      "body": "# DCO Layer-Selective Instruct Fine-Tune\n\n## Hardware & Environment Setup\n- Official repo: `https://github.com/CONE-MT/DCO` (confirmed 2026-09-16). Weights: `https://huggingface.co/collections/LLaMAX/dco`.\n- Install LLaMA-Factory, then run two-stage freeze SFT (`finetuning_type: freeze`). Demo: `dco/qwen3_en_zh.sh` on `LLaMAX/bilingual_zh_en`. General launcher: `specialist_distillation/multilingualism/lst_scripts/submit_lst.sh` (`--bottom-layers 4 --top-layers 16`).\n- Instruct default stays OLMo-3 Dolci. LoRA quality stays vanilla LoRA + rsLoRA + LR sweep. This recipe only picks which layers move under a drift budget.\n\n## Quickstart Implementation\n\n```python\nfrom __future__ import annotations\n\n\ndef lst_freeze_spec(bottom: int, top: int, stage: int) -> dict[str, object]:\n    \"\"\"LLaMA-Factory freeze: negative N trains the first N layers; positive N the last N.\"\"\"\n    if stage == 1:\n        return {\n            \"finetuning_type\": \"freeze\",\n            \"freeze_trainable_layers\": -bottom,\n            \"freeze_trainable_modules\": \"all\",\n        }\n    if stage == 2:\n        return {\n            \"finetuning_type\": \"freeze\",\n            \"freeze_trainable_layers\": top,\n            \"freeze_trainable_modules\": \"all\",\n        }\n    raise ValueError(f\"stage must be 1 or 2, got {stage}\")\n\n\ndef directional_efficiency(delta_task: float, kl: float) -> float:\n    \"\"\"Paper's empirical η = ΔTask / sqrt(KL) at matched drift.\"\"\"\n    if kl <= 0:\n        raise ValueError(\"KL must be positive to compare directions\")\n    return delta_task / (kl ** 0.5)\n```\n\nTwo-stage train (from the repo scripts):\n\n```bash\ngit clone https://github.com/CONE-MT/DCO\n# After LlamaFactory is installed and bilingual_zh_en is registered:\nCUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 \\\n  bash dco/qwen3_en_zh.sh bilingual_zh_en 4 8 1 /path/to/Qwen3-8B 42 2048 4\n```\n\nDefaults: stage-1 first 4 layers, stage-2 last 8, 1 epoch, lr `5e-5`, seed 42. Paper translation probe also reports b4t12 / b4t16. Keep `lm_head` / embeddings frozen unless you are measuring that ablation.\n\n## Critical Hyperparameters & Tuning Advice\n- Sweep split families (b4t8, b4t12, b4t16) at matched anchored KL, not matched step count. Low-drift $\\to$ split; larger budget $\\to$ contiguous bottom blocks can win accuracy at worse efficiency.\n- QA-only data is allowed; keep the instruct chat template so inference still emits CoT.\n- Do not treat LST as a LoRA replacement. Do not retarget CISPO for the later RL pass; DCO is the SFT init."
+    },
+    {
       "id": "recipe:musec",
       "type": "recipe",
       "title": "Soft Musec Spectral Clipping",
@@ -32318,6 +32673,36 @@
         ]
       },
       "body": "# ACE MoE Adapter Consolidation\n\n## Hardware & Environment Setup\n- Code: `https://github.com/UbiquitousAILab/ACE`. EMNLP 2026.\n- Keep the global PEFT budget fixed. Raise rank inside a group as you merge experts.\n- Dense 24GB quality default stays `method:lr-matters-lora`. Do not confuse with `method:ace`.\n\n## Quickstart Implementation\n\n```python\nfrom collections import defaultdict\n\n\ndef group_shared_rank(n_experts: int, per_expert_rank: int, n_groups: int) -> int:\n    \"\"\"Move the same adapter budget into fewer, wider LoRAs.\"\"\"\n    if n_groups <= 0:\n        raise ValueError(\"n_groups must be positive\")\n    return max(1, (n_experts * per_expert_rank) // n_groups)\n\n\ndef experts_by_group(assignments: list[int]) -> dict[int, list[int]]:\n    grouped: dict[int, list[int]] = defaultdict(list)\n    for expert_id, group_id in enumerate(assignments):\n        grouped[int(group_id)].append(expert_id)\n    return dict(grouped)\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Group by adapter similarity during/after a short expert-wise warmup, then consolidate.\n- Measure wall-clock vs expert-wise LoRA; the paper's 1.31×–1.48× is the target band."
+    },
+    {
+      "id": "recipe:ngu",
+      "type": "recipe",
+      "title": "Never Give Up Adaptive Sampling",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/recipes/ngu.md",
+      "metadata": {
+        "id": "recipe:ngu",
+        "type": "recipe",
+        "title": "Never Give Up Adaptive Sampling",
+        "method": "method:ngu",
+        "task": "task:math-code-rl-dense",
+        "target_hardware": "math: ~8x H100 for Deepscaler-scale runs (~120 H100 hours compute-matched); code: 2x8 H100 Manufactoria (~28 hours / 3000 steps)",
+        "framework": "PyTorch / Deepspeed + vLLM async GRPO host",
+        "repo_url": "none found",
+        "code_status": "partial",
+        "pip_dependencies": [
+          "torch>=2.5.0",
+          "vllm"
+        ],
+        "tags": [
+          "recipe",
+          "ngu",
+          "rlvr",
+          "adaptive-sampling"
+        ]
+      },
+      "body": "# Never Give Up Adaptive Sampling\n\n## Hardware & Environment Setup\n- No verified GitHub as of 2026-09-16. Paper claims `https://github.com/mnoukhov/never-give-up` (HTTP 404). Blog: `https://mnoukhov.github.io/posts/ngu`. `repo_url: none found`.\n- Plug into an existing async GRPO-family loop. Host Pass@1 algorithm stays CISPO. MoE/VL stays SAPO. Async tool stragglers stay SAO.\n- Deepscaler paper HPs (Qwen3-4B-Base): KL $\\beta=0$, lr $1\\times10^{-6}$, $K=16$, $N=8$, async steps 4, clip-higher 0.272, response 8192. NGU $p\\in\\{0.5,0.75,0.875\\}$. GSM8k / Manufactoria used $p=0.95$.\n\n## Quickstart Implementation\n\n```python\nfrom __future__ import annotations\n\nimport random\nfrom dataclasses import dataclass, field\n\n\n@dataclass\nclass Sample:\n    completion: object\n    reward: float\n    age: int = 0\n\n\n@dataclass\nclass PromptState:\n    samples: list[Sample] = field(default_factory=list)\n    count: int = 0\n    baseline: float = 0.0\n\n\ndef ngu_on_group(\n    state: PromptState | None,\n    new_samples: list[Sample],\n    p_ngu: float,\n    max_age: int = 4,\n) -> tuple[str, PromptState | None, list[Sample], float]:\n    \"\"\"Return action in {drop, train, retry} plus buffer and GRPO baseline.\"\"\"\n    k = len(new_samples)\n    rbar = sum(s.reward for s in new_samples) / max(k, 1)\n    kept: list[Sample] = list(new_samples)\n    count = k\n    if state is not None:\n        rbar = (state.baseline * state.count + rbar * k) / (state.count + k)\n        count = state.count + k\n        kept.extend(s for s in state.samples if s.age <= max_age)\n    rewards = [s.reward for s in new_samples]\n    if rewards and all(r == 1.0 for r in rewards):\n        return \"drop\", None, kept, rbar\n    if any(s.reward > rbar for s in new_samples):\n        return \"train\", None, kept, rbar\n    if random.random() < p_ngu:\n        nxt = PromptState(samples=kept, count=count, baseline=rbar)\n        return \"retry\", nxt, kept, rbar\n    return \"drop\", None, kept, rbar\n\n\ndef age_samples(samples: list[Sample]) -> None:\n    for sample in samples:\n        sample.age += 1\n\n\ndef anchor_positive_advantages(rewards: list[float], baseline: float) -> list[float]:\n    \"\"\"Keep positive advantages; rescale remaining negatives so advantages sum to 0.\"\"\"\n    adv = [r - baseline for r in rewards]\n    pos = [a for a in adv if a > 0]\n    neg_idx = [i for i, a in enumerate(adv) if a <= 0]\n    if not pos or not neg_idx:\n        return adv\n    n_pos, n_neg = len(pos), len(neg_idx)\n    target = (n_pos / n_neg) * (1.0 - baseline)\n    for i in neg_idx:\n        adv[i] = -target\n    return adv\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Start with small $K$ (paper: 4 on GSM8k, 16 on Deepscaler) and $p_{\\mathrm{NGU}}$ so expected $K/(1-p)$ covers the hard tail. Raising $p$ trades easy-subset for hard-subset, like raising $K$, without oversampling easy failures as badly.\n- Filter loss tokens older than $T=4$ steps. Use the full history, including stale negatives, for the GRPO mean; rescale remaining negatives rather than downsampling to 1:1.\n- Do not change the CISPO/SAPO/GRPO loss. If the pool is almost all pass@k=0, NGU will spin on retries; give-up probability $1-p$ exists for that."
     },
     {
       "id": "recipe:draco",
@@ -38547,6 +38932,42 @@
       "properties": {}
     },
     {
+      "source": "paper:dco",
+      "target": "method:dco",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:dco",
+      "target": "paper:dco",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:dco",
+      "target": "paper:delta-learning",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:delta-learning",
+      "target": "paper:dco",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:dco",
+      "target": "paper:olmo-3",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:olmo-3",
+      "target": "paper:dco",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
       "source": "paper:musec",
       "target": "method:musec",
       "relation": "introduces",
@@ -39204,6 +39625,42 @@
       "source": "method:ace-moe-peft",
       "target": "paper:ace-moe-peft",
       "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:ngu",
+      "target": "method:ngu",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:ngu",
+      "target": "paper:ngu",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:ngu",
+      "target": "paper:grpo",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:grpo",
+      "target": "paper:ngu",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:ngu",
+      "target": "paper:dapo",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:dapo",
+      "target": "paper:ngu",
+      "relation": "cited_by",
       "properties": {}
     },
     {
@@ -41113,6 +41570,18 @@
       "properties": {}
     },
     {
+      "source": "task:agentic-async-rl",
+      "target": "method:ngu",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:ngu",
+      "target": "task:agentic-async-rl",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
       "source": "task:1bit-extreme-quantization",
       "target": "method:sparse-bitnet",
       "relation": "has_sota_method",
@@ -41690,6 +42159,18 @@
     },
     {
       "source": "method:eps-prompt-scaffolding",
+      "target": "task:math-code-rl-dense",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:math-code-rl-dense",
+      "target": "method:ngu",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:ngu",
       "target": "task:math-code-rl-dense",
       "relation": "targets_task",
       "properties": {}
@@ -42675,6 +43156,18 @@
       "properties": {}
     },
     {
+      "source": "task:instruct-sft-alignment",
+      "target": "method:dco",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:dco",
+      "target": "task:instruct-sft-alignment",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
       "source": "task:industrial-model-building",
       "target": "method:poolside-model-factory",
       "relation": "has_sota_method",
@@ -43210,6 +43703,18 @@
     },
     {
       "source": "method:iso-lora",
+      "target": "task:parameter-efficient-fine-tuning",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:parameter-efficient-fine-tuning",
+      "target": "method:dco",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:dco",
       "target": "task:parameter-efficient-fine-tuning",
       "relation": "targets_task",
       "properties": {}
@@ -47531,6 +48036,18 @@
       "properties": {}
     },
     {
+      "source": "task:reasoning-rl-alignment",
+      "target": "method:ngu",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:ngu",
+      "target": "task:reasoning-rl-alignment",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
       "source": "task:label-free-reasoner-posttrain",
       "target": "method:u-opsd",
       "relation": "has_sota_method",
@@ -50867,6 +51384,18 @@
       "properties": {}
     },
     {
+      "source": "method:dco",
+      "target": "recipe:dco",
+      "relation": "implemented_by",
+      "properties": {}
+    },
+    {
+      "source": "recipe:dco",
+      "target": "method:dco",
+      "relation": "implements",
+      "properties": {}
+    },
+    {
       "source": "method:musec",
       "target": "recipe:musec",
       "relation": "implemented_by",
@@ -51277,6 +51806,18 @@
     {
       "source": "recipe:ace-moe-peft",
       "target": "method:ace-moe-peft",
+      "relation": "implements",
+      "properties": {}
+    },
+    {
+      "source": "method:ngu",
+      "target": "recipe:ngu",
+      "relation": "implemented_by",
+      "properties": {}
+    },
+    {
+      "source": "recipe:ngu",
+      "target": "method:ngu",
       "relation": "implements",
       "properties": {}
     },
@@ -52655,6 +53196,12 @@
       "properties": {}
     },
     {
+      "source": "recipe:dco",
+      "target": "task:instruct-sft-alignment",
+      "relation": "recipe_for_task",
+      "properties": {}
+    },
+    {
       "source": "recipe:musec",
       "target": "task:llm-pretraining-optimization",
       "relation": "recipe_for_task",
@@ -52801,6 +53348,12 @@
     {
       "source": "recipe:ace-moe-peft",
       "target": "task:parameter-efficient-fine-tuning",
+      "relation": "recipe_for_task",
+      "properties": {}
+    },
+    {
+      "source": "recipe:ngu",
+      "target": "task:math-code-rl-dense",
       "relation": "recipe_for_task",
       "properties": {}
     },

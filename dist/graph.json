@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "node_count": 787,
-  "edge_count": 3061,
+  "node_count": 805,
+  "edge_count": 3149,
   "nodes": [
     {
       "id": "paper:qlora",
@@ -634,6 +634,49 @@
         ]
       },
       "body": "# LoRDS: Low-Rank Decomposition with Dynamic Sparsity\n\n## Abstract Summary\nLoRDS integrates dynamic magnitude sparsity into low-rank adapter updates, concentrating parameter updates on critical representation coordinates.\n\n## Key Contributions\n1. **Sparse Low-Rank Hybrid**: Combines low-rank projections with dynamic activation gating.\n2. **Efficient Updates**: Reduces active parameter updates during backward passes.\n\n## Open Source Repository\n- Implementation: `none found`"
+    },
+    {
+      "id": "paper:opd-eos",
+      "type": "paper",
+      "title": "When EOS Tokens Disagree: Understanding Length Inflation in On-Policy Distillation",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/papers/opd-eos.md",
+      "metadata": {
+        "id": "paper:opd-eos",
+        "type": "paper",
+        "title": "When EOS Tokens Disagree: Understanding Length Inflation in On-Policy Distillation",
+        "authors": [
+          "Yuxiao Yang",
+          "Tianrun Yu",
+          "Shangzhe Li",
+          "Kaixiang Zhao",
+          "Xuchao Zhang",
+          "Chetan Bansal",
+          "Huaxiu Yao",
+          "Taylor W. Killian",
+          "Weitong Zhang"
+        ],
+        "year": 2026,
+        "month": 9,
+        "arxiv_id": "2609.20511",
+        "url": "https://arxiv.org/abs/2609.20511",
+        "methods": [
+          "method:opd-eos",
+          "method:opd"
+        ],
+        "cites": [
+          "paper:opd"
+        ],
+        "tags": [
+          "post-training",
+          "distillation",
+          "opd",
+          "eos",
+          "gotcha"
+        ]
+      },
+      "body": "# When EOS Tokens Disagree: Understanding Length Inflation in On-Policy Distillation\n\n## Abstract Summary\nOn-policy distillation can inflate student length until the generation budget is exhausted. A load-bearing cause is **termination-token mismatch**: a base student and a post-trained teacher put stopping mass on different EOS ids even when their declared stop sets match (Qwen `<|endoftext|>` vs `<|im_end|>`; Llama one id vs three). The teacher is confident the turn is over on a token the student never samples, so that mass never gets a gradient, while the student's native stop gets no teacher support. Aligning the decoding stop set is not enough. Treating functionally equivalent EOS tokens as one semantic stop action removes most mismatch-driven inflation across Qwen3, Llama, and Gemma. A K2-Horizon stage sweep shows termination preference can flip during training, and a later inflation mode remains after alignment — mismatch is important, not exhaustive. Code: `https://github.com/UNCSciML/opd-eos`.\n\n## Key Contributions\n1. **Gotcha on OPD**: teacher/student EOS mismatch suppresses the student's stop action and inflates length.\n2. **Semantic-class stop** (`EOS_MODE=semantic_class`): score equivalent EOS ids as one action with summed teacher terminal mass.\n3. **Stage-dependent termination** on K2-Horizon; residual late inflation after alignment.\n\n## Empirical Highlights\n- Qwen3-1.7B-Base → Qwen3-4B: student stop probability at the actual stop position rises then collapses to ~0 by step 150 without the fix; length saturates the budget.\n- Gemma-3-4B (already aligned ids): isolates the loss; semantic class still helps vs other conditions.\n- Gemma with the fix: ~100% clip at 7168 → mean ~2000 tokens near the teacher's median, clipping near zero. Llama ~3500–4000 tokens and about half the clip rate.\n\n## Open Source Repository & Resources\n- Code: `https://github.com/UNCSciML/opd-eos` (verl vendored + `verl/utils/eos_semantics.py`; Slurm launchers).\n- This is a gotcha plus a niche fix on `method:opd`, not a new distill default."
     },
     {
       "id": "paper:unisolver",
@@ -3146,6 +3189,46 @@
       "body": "# A Unified Empirical Study of LoRA Variants and Rank Scaling Laws\n\n## Abstract Summary\nA large-scale empirical evaluation of over a dozen LoRA variants across multiple model families and downstream tasks, establishing reliable rank and alpha scaling laws for fine-tuning.\n\n## Key Contributions\n1. **Unified Evaluation**: Rigorous iso-compute comparison across LoRA variants.\n2. **Rank Scaling Guidance**: Practical scaling laws for adapter rank selection.\n\n## Open Source Repository\n- Implementation: `none found`"
     },
     {
+      "id": "paper:actobs",
+      "type": "paper",
+      "title": "Don't Mask the Environment: Observation Supervision Changes How Agents Explore Under RL",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/papers/actobs.md",
+      "metadata": {
+        "id": "paper:actobs",
+        "type": "paper",
+        "title": "Don't Mask the Environment: Observation Supervision Changes How Agents Explore Under RL",
+        "authors": [
+          "Juzheng Zhang",
+          "Disha Makhija",
+          "Manoj Ghuhan Arivazhagan",
+          "Vinayshekhar Bannihatti Kumar",
+          "Rashmi Gangadharaiah"
+        ],
+        "year": 2026,
+        "month": 9,
+        "arxiv_id": "2609.20715",
+        "url": "https://arxiv.org/abs/2609.20715",
+        "methods": [
+          "method:actobs"
+        ],
+        "cites": [
+          "paper:grpo",
+          "paper:sao",
+          "paper:mini-swe-agent"
+        ],
+        "tags": [
+          "post-training",
+          "agentic",
+          "sft",
+          "observation",
+          "actobs"
+        ]
+      },
+      "body": "# Don't Mask the Environment: Observation Supervision Changes How Agents Explore Under RL\n\n## Abstract Summary\nAgent traces record actions and what the environment returns. Standard SFT puts loss only on agent-authored action tokens and treats observations as context. ActObs also supervises the observation tokens already in each trajectory. Deployed agents never emit observations; predicting them is a consequence model that adds no data, parameters, sequence tokens, or extra forward passes. SFT numbers look similar; GRPO then diverges. On Qwen3-4B, GRPO from ActObs raises pass@k at every evaluated budget on Terminal-Bench 2.0 vs action-only SFT. On Qwen3-8B it trades some pass@1 for higher pass@k (+3.4 pp at pass@16) and more distinct tasks. The gap transfers to aider-polyglot (+4.2 pp pass@1 at 4B), unseen in SFT and RL. ActObs keeps more entropy during RL with less policy movement, staying closer to the SFT init. Action and observation gradients rapidly become orthogonal; action-only SFT leaves a large residual observation gradient and degrades environment prediction below the base model.\n\n## Key Contributions\n1. **Observation-token SFT** on traces that already contain environment text; no extra data or parameters.\n2. **SFT looks similar, GRPO does not**: exploration after RL is the measured difference.\n3. **Gradient geometry**: action vs observation grads go orthogonal; action-only training unlearns consequence prediction.\n\n## Empirical Highlights\n- Qwen3-4B Terminal-Bench 2.0: GRPO from ActObs beats action-only at every evaluated pass@k.\n- Qwen3-8B Terminal-Bench 2.0: +3.4 pp at pass@16; more distinct tasks; some pass@1 given up.\n- aider-polyglot (unseen): +4.2 pp pass@1 at 4B.\n\n## Open Source Repository & Resources\n- Paper: `https://arxiv.org/abs/2609.20715`\n- No official GitHub as of 2026-09-18 (`recipe:actobs` `code_status: none`)."
+    },
+    {
       "id": "paper:lr-matters-lora",
       "type": "paper",
       "title": "LR Matters in LoRA: Re-evaluating Low-Rank Fine-Tuning and DoRA",
@@ -4448,6 +4531,55 @@
       "body": "# AgentFold: Long-Horizon Web Agents with Proactive Context Management\n\n## Abstract Summary\nAgentFold folds web-agent history so a long browsing trajectory stays in a small active context. Active alternative on `task:long-horizon-tool-agent`. AgentFold-30B-A3B: BrowseComp **36.2%**. Not a dumped-prompt RLM and not a SWE harness.\n\n## Key Contributions\n1. Proactive folding of web-browsing history.\n2. AgentFold-30B-A3B BrowseComp 36.2%.\n\n## Empirical Highlights\n- AgentFold-30B-A3B BrowseComp: **36.2%**."
     },
     {
+      "id": "paper:sol-pi",
+      "type": "paper",
+      "title": "SoL-Pi: Recursively Scaling Auto-Research Loops for Efficient Agent Harness",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/papers/sol-pi.md",
+      "metadata": {
+        "id": "paper:sol-pi",
+        "type": "paper",
+        "title": "SoL-Pi: Recursively Scaling Auto-Research Loops for Efficient Agent Harness",
+        "authors": [
+          "Haozhe Liu",
+          "Tian Ye",
+          "Sensen Gao",
+          "Qihang Cao",
+          "Yitong Li",
+          "Mingchen Zhuge",
+          "Duomin Wang",
+          "Ruihua Zhang",
+          "Ping Luo",
+          "Jiawang Bian",
+          "Lei Zhu",
+          "Ligeng Zhu",
+          "Enze Xie",
+          "Song Han"
+        ],
+        "year": 2026,
+        "month": 9,
+        "arxiv_id": "2609.20519",
+        "url": "https://arxiv.org/abs/2609.20519",
+        "methods": [
+          "method:sol-pi"
+        ],
+        "cites": [
+          "paper:harness-playbook",
+          "paper:neohorse-1",
+          "paper:mini-swe-agent"
+        ],
+        "tags": [
+          "agents",
+          "agent-harness",
+          "rsi",
+          "token-efficiency",
+          "sol-pi"
+        ]
+      },
+      "body": "# SoL-Pi: Recursively Scaling Auto-Research Loops for Efficient Agent Harness\n\n## Abstract Summary\nUnattended coding agents spend tokens on long trajectories of reasoning, tools, and feedback. SoL-Pi runs RSI-inspired auto-research at the **harness** layer across many environments and keeps four mechanisms that transfer: Action Fusion (edit/write plus follow-up validation in one call), ObservationPack (large results as stable handles with paged recall), Evidence-Preserving Reducer (long logs → receipts whose quotations match the archive), and Online Context Compact (compact completed plan steps under economic/window checks). On 51-task EdgeBench, SoL-Pi matches Pi across GPT-5.6 Sol and Opus 5 while cutting recorded token traffic 44.7–49.0% and API cost about one third (about $8.75–$13.50/hour vs native Codex/Claude Code harnesses, $4.36–$5.71 vs Pi). Standalone Pi extension, MIT, not an official Pi distribution. Code: `https://github.com/NVlabs/SoL-Pi`.\n\n## Key Contributions\n1. **Harness-layer RSI**: scale auto-research loops to discover reusable efficiency mechanisms, not a new SWE start loop.\n2. **Four surviving Pi mechanisms**: Action Fusion, ObservationPack, Evidence-Preserving Reducer, Online Context Compact.\n3. **EdgeBench parity at much lower token traffic** on GPT-5.6 Sol and Opus 5.\n\n## Empirical Highlights\n- EdgeBench (51 tasks): Pi-comparable quality; token traffic −44.7–49.0%; API cost about −1/3.\n- Estimated hourly savings: $8.75–$13.50 vs Codex/Claude Code native harnesses; $4.36–$5.71 vs Pi.\n\n## Open Source Repository & Resources\n- Code: `https://github.com/NVlabs/SoL-Pi`\n- Project page: `https://nvlabs.github.io/SoL-Pi/`\n- Install: `pi install git:github.com/NVlabs/SoL-Pi` on `@earendil-works/pi-coding-agent@0.85.1`. Mechanisms default off."
+    },
+    {
       "id": "paper:live-swe-agent",
       "type": "paper",
       "title": "Live-SWE-agent: Can Software Engineering Agents Self-Evolve on the Fly?",
@@ -5669,6 +5801,53 @@
       "body": "# W2S-OPD: Weak-to-Strong On-Policy Distillation\n\n## Abstract Summary\nW2S-OPD demonstrates that on-policy distillation enables weak teachers to elicit superhuman latent reasoning capabilities in stronger base student models through iterative self-correction.\n\n## Key Contributions\n1. **Weak-to-Strong Generalization**: Distillation protocol eliciting latent student capabilities beyond weak teacher limits.\n2. **Iterative Bootstrapping**: Self-improving student-teacher co-evolution.\n\n## Open Source Repository\n- Implementation: `https://github.com/Yu-Fangxu/W2S-OPD` (claimed)"
     },
     {
+      "id": "paper:retireopd",
+      "type": "paper",
+      "title": "RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcement Learning",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/papers/retireopd.md",
+      "metadata": {
+        "id": "paper:retireopd",
+        "type": "paper",
+        "title": "RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcement Learning",
+        "authors": [
+          "Yan Yu",
+          "Zhengxi Lu",
+          "Yizhou Liu",
+          "Yichen Pan",
+          "Aozhe Wang",
+          "Qipeng Chen",
+          "Hua Yang",
+          "Wenqi Zhang",
+          "Weiming Lu",
+          "Qianglong Chen",
+          "Yongliang Shen"
+        ],
+        "year": 2026,
+        "month": 9,
+        "arxiv_id": "2609.20784",
+        "url": "https://arxiv.org/abs/2609.20784",
+        "methods": [
+          "method:retireopd"
+        ],
+        "cites": [
+          "paper:opd",
+          "paper:vista",
+          "paper:canopy",
+          "paper:sao"
+        ],
+        "tags": [
+          "post-training",
+          "agentic",
+          "distillation",
+          "opsd",
+          "retireopd"
+        ]
+      },
+      "body": "# RetireOPD: Self-Retiring On-Policy Distillation for Agentic Reinforcement Learning\n\n## Abstract Summary\nMulti-turn agents trained with RL get one scalar reward per trajectory. Self on-policy distillation (OPD) from a privileged skill-conditioned teacher can densify that signal, but two agentic facts break a fixed schedule: privilege does not always make the teacher reliable, and teacher supervision is stage-dependent. RetireOPD first trains a decoupled skill-conditioned teacher on environment rewards, then trains a skill-free student with RL plus OPD. Adaptive Retirement drops the teacher once student–teacher discrepancy stops shrinking and the student reaches a target fraction of the teacher's success rate; training then continues with RL alone. Across Qwen2.5 1.5B–7B, ALFWorld success rises 14.1–18.8% over RL and WebShop accuracy 11.8–19.0%; the student also surpasses its own skill-conditioned teacher in every reported setting.\n\n## Key Contributions\n1. **Decoupled privileged teacher**: skill-conditioned teacher optimized on environment rewards, then a skill-free student under joint RL+OPD.\n2. **Adaptive Retirement**: drop OPD when discrepancy stops shrinking and the student hits a fraction of teacher success; then pure RL.\n3. **Agentic evidence** that privilege alone is not reliability and that teacher value is stage-dependent.\n\n## Empirical Highlights\n- ALFWorld, Qwen2.5 1.5B–7B: +14.1% to +18.8% success vs RL.\n- WebShop: +11.8% to +19.0% accuracy vs RL.\n- Student beats its own skill-conditioned teacher in every reported setting.\n\n## Open Source Repository & Resources\n- Paper: `https://arxiv.org/abs/2609.20784`\n- No official GitHub as of 2026-09-18 (`recipe:retireopd` `code_status: none`)."
+    },
+    {
       "id": "paper:esrl",
       "type": "paper",
       "title": "Expert-Space Exploration in MoE Reinforcement Learning",
@@ -6052,8 +6231,8 @@
         ],
         "year": 2026,
         "month": 9,
-        "arxiv_id": "",
-        "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+        "arxiv_id": "2609.19969",
+        "url": "https://arxiv.org/abs/2609.19969",
         "methods": [
           "method:deepseek-v41-flash"
         ],
@@ -6070,7 +6249,7 @@
           "deepseek-v41-flash"
         ]
       },
-      "body": "# DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression\n\n## Abstract Summary\nDeepSeek-V4.1-Flash is a 552B-backbone multimodal MoE with up to 1M context. It uses a Causal Encoder-Decoder (CED): 20-layer causal encoder plus 20-layer decoder (40 total). Decoder global KV is projected from final encoder hidden states rather than each decoder layer's own states, so prefill activates about 8B parameters per token and decode about 16B. Compressed Sparse Attention 2 (CSA2) assigns Full / Reindex / Reuse modes with a Hierarchical Sparse Indexer and FP4 main KV (~890 bytes/token global KV, about 1/4 of V4-Flash). SWA Bounded Replay rebuilds the last \\(n_{\\mathrm{win}}\\) tokens so persistent KV is about 1/8 of V4-Flash. Additional pieces: Single-Pass mHC, Engram conditional memory (196B, token lookup), DSpark speculative decoding. MoE: 1 shared + 384 routed experts, activate 6. Pretrained on 45T multimodal tokens. Post-train is standard SFT → RL → OPD; the data pipeline is what changed.\n\n## Key Contributions\n1. **CED serving architecture** for input-heavy agentic workloads (asymmetric 8B prefill / 16B decode).\n2. **CSA2 + FP4 main KV** to 890 bytes/token global KV.\n3. **SWA Bounded Replay** to cut persistent KV without storing SWA KV on SSD.\n4. **Open weights** and a reference inference / encoding stack on Hugging Face.\n\n## Empirical Highlights\n- Instruct, max reasoning effort (vendor card): Terminal-Bench 2.1 90.6 vs V4-Flash 82.7 vs V4-Pro 87.9; DeepSWE v1.1 74.2 vs 54.4 / 62.7; AutomationBench 54.8; Agent's Last Exam 31.8.\n- Base vs V4-Flash-Base / V4-Pro-Base on internal evals (same framework): MMLU-Pro 74.1 vs 68.3 / 73.5; HumanEval 79.4 vs 69.5 / 76.8.\n- API news (2026-09-10): `deepseek-flash` live; V4-Flash and V4-Flash-Vision-Exp retired (compat aliases route to V4.1-Flash); V4-Pro phased out (requests route to V4.1-Flash from 2026-09-14 04:00 UTC until V4.1-Pro).\n\n## Open Source Repository & Resources\n- Weights + tech report: `https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash` (`DeepSeek_V41_Tech_Report.pdf`)\n- Prompt encoding toolkit: `https://github.com/deepseek-ai/deepseek-recipe`\n- News: `https://www.deepseek.com/en/news/deepseek-v4-1-flash/`\n- No from-scratch pretrain trainer (`recipe:deepseek-v41-flash` `code_status: partial`)."
+      "body": "# DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression\n\n## Abstract Summary\nDeepSeek-V4.1-Flash is a 552B-backbone multimodal MoE with up to 1M context. arXiv:2609.19969 (2026-09-17) is the tech-report preprint of the Hugging Face card. It uses a Causal Encoder-Decoder (CED): 20-layer causal encoder plus 20-layer decoder (40 total). Decoder global KV is projected from final encoder hidden states rather than each decoder layer's own states, so prefill activates about 8B parameters per token and decode about 16B. Compressed Sparse Attention 2 (CSA2) assigns Full / Reindex / Reuse modes with a Hierarchical Sparse Indexer and FP4 main KV (~890 bytes/token global KV, about 1/4 of V4-Flash). SWA Bounded Replay rebuilds the last \\(n_{\\mathrm{win}}\\) tokens so persistent KV is about 1/8 of V4-Flash. Additional pieces: Single-Pass mHC, Engram conditional memory (196B, token lookup), DSpark speculative decoding. MoE: 1 shared + 384 routed experts, activate 6. Pretrained on 45T multimodal tokens. Post-train is standard SFT → RL → OPD; the data pipeline is what changed.\n\n## Key Contributions\n1. **CED serving architecture** for input-heavy agentic workloads (asymmetric 8B prefill / 16B decode).\n2. **CSA2 + FP4 main KV** to 890 bytes/token global KV.\n3. **SWA Bounded Replay** to cut persistent KV without storing SWA KV on SSD.\n4. **Open weights** and a reference inference / encoding stack on Hugging Face.\n\n## Empirical Highlights\n- Instruct, max reasoning effort (vendor card): Terminal-Bench 2.1 90.6 vs V4-Flash 82.7 vs V4-Pro 87.9; DeepSWE v1.1 74.2 vs 54.4 / 62.7; AutomationBench 54.8; Agent's Last Exam 31.8.\n- Base vs V4-Flash-Base / V4-Pro-Base on internal evals (same framework): MMLU-Pro 74.1 vs 68.3 / 73.5; HumanEval 79.4 vs 69.5 / 76.8.\n- API news (2026-09-10): `deepseek-flash` live; V4-Flash and V4-Flash-Vision-Exp retired (compat aliases route to V4.1-Flash); V4-Pro phased out (requests route to V4.1-Flash from 2026-09-14 04:00 UTC until V4.1-Pro).\n\n## Open Source Repository & Resources\n- arXiv: `https://arxiv.org/abs/2609.19969`\n- Weights + tech report: `https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash` (`DeepSeek_V41_Tech_Report.pdf`)\n- Prompt encoding toolkit: `https://github.com/deepseek-ai/deepseek-recipe`\n- News: `https://www.deepseek.com/en/news/deepseek-v4-1-flash/`\n- No from-scratch pretrain trainer (`recipe:deepseek-v41-flash` `code_status: partial`)."
     },
     {
       "id": "paper:opsd-collapse-review",
@@ -7439,6 +7618,44 @@
       "body": "# Training Data Attribution via Approximate Unrolled Differentiation\n\n## Abstract Summary\nSOURCE connects implicit-differentiation influence functions with unrolled differentiation. It uses an influence-function-like formula over a small number of checkpoints (paper: C=6) to approximate unrolling without storing every optimizer step. It is motivated for non-converged models and multi-stage pipelines where classical influence assumptions fail. Bergson implements it as `bergson approxunrolling`.\n\n## Key Contributions\n1. **Approximate unroll**: unrolling benefits (optimizer, schedule, multi-stage, non-convergence) at influence-function cost, given intermediate checkpoints.\n2. **Fewer checkpoints than full unroll**: a handful of snapshots rather than all T gradient updates.\n3. **Counterfactual prediction**: outperforms implicit-differentiation TDA where those methods struggle.\n\n## Empirical Highlights\n- Bergson GPT-2 WikiText FT LDS (Table 1, Adam): Spearman 0.387 ± 0.039 / Pearson 0.431 ± 0.048.\n- Needs intermediate checkpoints; a final open-weight checkpoint alone is not enough.\n- Status in this library: `niche` relative to MAGIC (full unroll) and TrackStar (final-ckpt influence)."
     },
     {
+      "id": "paper:when2think",
+      "type": "paper",
+      "title": "When2Think: Learning Difficulty-Aware Length Control for Efficient Hybrid Reasoning Models",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/papers/when2think.md",
+      "metadata": {
+        "id": "paper:when2think",
+        "type": "paper",
+        "title": "When2Think: Learning Difficulty-Aware Length Control for Efficient Hybrid Reasoning Models",
+        "authors": [
+          "Jaejun Shim",
+          "HyunJin Kim",
+          "Young Jin Kim",
+          "JinYeong Bak"
+        ],
+        "year": 2026,
+        "month": 9,
+        "arxiv_id": "2609.19671",
+        "url": "https://arxiv.org/abs/2609.19671",
+        "methods": [
+          "method:when2think"
+        ],
+        "cites": [
+          "paper:minimax-m1",
+          "paper:grpo"
+        ],
+        "tags": [
+          "post-training",
+          "rlvr",
+          "hybrid-reasoning",
+          "length-control",
+          "when2think"
+        ]
+      },
+      "body": "# When2Think: Learning Difficulty-Aware Length Control for Efficient Hybrid Reasoning Models\n\n## Abstract Summary\nLarge reasoning models overthink easy problems and underthink hard ones. Uniform length penalties and rigid routers pay an efficiency tax: they save tokens on easy items by losing accuracy on hard ones. When2Think treats computation as instance-adaptive allocation. Instance-level Difficulty-Aware Control (IDAC) shapes rewards from pre-computed reference statistics (accuracy and token usage) so the policy learns System 1 (NoThink) on easy instances and System 2 (Think) on hard ones. Combined with verifier rewards and batch-wise standardized advantages, IDAC is critic-free and does not need a learned reward model or online reference queries. On AIME24, Pass@3 rises 10.0% while tokens fall 27.9% vs the base model; on AIME25, When2Think reaches 40.0% Pass@3 over compression and routing-only baselines.\n\n## Key Contributions\n1. **Hybrid Think / NoThink as a learned policy**, not a fixed router or a uniform length penalty.\n2. **IDAC**: reward shaping from offline reference accuracy and token-usage statistics.\n3. **Critic-free GRPO-family update** with verifier rewards and batch-standardized advantages.\n\n## Empirical Highlights\n- AIME24: Pass@3 +10.0% with token usage −27.9% vs the base model.\n- AIME25: 40.0% Pass@3, above compression and routing-only baselines.\n\n## Open Source Repository & Resources\n- Paper: `https://arxiv.org/abs/2609.19671`\n- Claimed code: `https://github.com/JJunShim/When2Think` (stub README as of 2026-09-18; `recipe:when2think` `code_status: partial`)."
+    },
+    {
       "id": "paper:ida-opd",
       "type": "paper",
       "title": "Influence-Directed Distillation: Solving the Diversity Bottleneck in Sampled-Token On-Policy Distillation",
@@ -8679,6 +8896,42 @@
       "body": "# TD-MPC2: Scalable Robust World Models for Continuous Control\n\n## Abstract Summary\nTD-MPC2 scales model-based reinforcement learning across 104 continuous control tasks using a single architecture, combining Model Predictive Path Integral (MPPI) planning in latent space with terminal Value-function estimation.\n\n## Open Source Repository\n- Implementation: `https://github.com/nicklashansen/tdmpc2`"
     },
     {
+      "id": "paper:bias-only-ttrl",
+      "type": "paper",
+      "title": "Label-free steering: Compressing test-time reinforcement learning into bias-only subspaces",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/papers/bias-only-ttrl.md",
+      "metadata": {
+        "id": "paper:bias-only-ttrl",
+        "type": "paper",
+        "title": "Label-free steering: Compressing test-time reinforcement learning into bias-only subspaces",
+        "authors": [
+          "Naveen Vakada",
+          "Mingyuan Li",
+          "Shaoxiong Ji"
+        ],
+        "year": 2026,
+        "month": 9,
+        "arxiv_id": "2609.18587",
+        "url": "https://arxiv.org/abs/2609.18587",
+        "methods": [
+          "method:bias-only-ttrl"
+        ],
+        "cites": [
+          "paper:ttpo",
+          "paper:u-opsd"
+        ],
+        "tags": [
+          "test-time-training",
+          "ttrl",
+          "label-free",
+          "bias-only"
+        ]
+      },
+      "body": "# Label-free steering: Compressing test-time reinforcement learning into bias-only subspaces\n\n## Abstract Summary\nTest-time RL can improve unlabeled reasoning, but usual TTRL updates a large slice of the network. Bias-only label-free TTRL keeps the backbone frozen and trains about 100K bias parameters with majority-vote pseudo-labels as rewards. On MATH-500 it reaches 76.67%, slightly above the authors' own labeled bias-steering reproduction, while using about 76,000× fewer trainable parameters than full-parameter TTRL. The same procedure helps vision-language and audio reasoning (MathVista, AI2D, LogicVista, MMAU). Learned steering vectors transfer to 4,500 held-out MATH problems. The paper attributes this to majority-vote reliability rising with rollout consensus and to bias subspaces with higher accessible gradient energy being more trainable. Niche compression of TTRL, not a replacement of TTPO.\n\n## Key Contributions\n1. **Bias-only TTRL**: ~100K bias parameters, frozen backbone, majority-vote rewards.\n2. **MATH-500 76.67%** at ~76,000× fewer trainable params than full TTRL.\n3. **Transfer** of steering vectors to 4,500 held-out MATH items; VL/audio transfer reported.\n\n## Empirical Highlights\n- MATH-500: 76.67%, slightly above labeled bias-steering in the same paper.\n- ~76,000× fewer trainable parameters than full-parameter TTRL.\n- Also reported: MathVista, AI2D, LogicVista, MMAU.\n\n## Open Source Repository & Resources\n- Paper: `https://arxiv.org/abs/2609.18587`\n- No official GitHub as of 2026-09-18 (`recipe:bias-only-ttrl` `code_status: none`)."
+    },
+    {
       "id": "paper:mac-meta-agent",
       "type": "paper",
       "title": "The Meta-Agent Challenge: Are Current Agents Capable of Autonomous Agent Development?",
@@ -9446,9 +9699,10 @@
           "method:verpo",
           "method:opsd-collapse-review",
           "method:nsd",
-          "method:scope-opsd"
+          "method:scope-opsd",
+          "method:retireopd"
         ],
-        "last_reviewed": "2026-09-14",
+        "last_reviewed": "2026-09-18",
         "tags": [
           "post-training",
           "distillation",
@@ -9458,7 +9712,7 @@
           "vista"
         ]
       },
-      "body": "# Privileged-Teacher On-Policy Self-Distillation\n\n## Problem Definition\nTrain a problem-only student on its own rollouts using dense token-level targets from a same-size teacher that also sees a gold reference solution. The teacher is a privileged copy of the student, not a larger frozen model. A deterministic outcome verifier is available. Vanilla OPSD treats that privileged distribution as a fixed target at every student prefix; the teacher can then over-support reference-specific tokens or suppress valid student continuations.\n\n## Evaluation Protocol\n- **Primary Benchmarks**: AIME 2024, AIME 2025, HMMT 2025 Avg@12 on Qwen3 instruct models.\n- **Evaluation Pitfalls**: Do not treat this task as single-teacher student distillation from a frontier model (`task:student-distillation` / `method:opd`) or as OPD+RLVR with an external teacher (`task:distill-reasoner-verifier` / `method:opdvr`).\n\n## SOTA Recommendation (as of 2026-09-08)\n- **Primary Method**: **VISTA** (`method:vista`, `paper:vista` `arXiv:2608.28306`) for verifier-informed student-to-teacher adaptation on privileged-teacher OPSD.\n- **Not This Task**: `method:opd` remains the single-teacher student-distillation default; `method:opdvr` remains the OPD+RLVR default; `method:u-opsd` remains the unlabeled/no-GT default.\n- **Adjacent inner-loop (not this method)**: `method:flowbalance` uses privileged hindsight as a stopped trajectory-balance feature, not a teacher update. VISTA stays this task's first hop.\n- **Optional evidence-regularized sibling**: `method:verpo` (`arXiv:2609.06100`). Treats privileged evidence as a proposal on an outcome objective. Does not replace VISTA or CISPO.\n- **Collapse playbook (survey)**: `method:opsd-collapse-review` (`arXiv:2608.25936`). Three levers; no code. Does not replace VISTA.\n- **Actionable anti-collapse trainer (not this first hop)**: `method:nsd` (`arXiv:2609.11699`). Diverges from a self-generated negative condition instead of imitating privileged traces. Active sibling. VISTA stays this task's first hop.\n- **Optional Fisher-subspace OPSD auxiliary (not this first hop)**: `method:scope-opsd` (`arXiv:2609.12579`). Projects the privileged residual onto a frozen rank-64 Fisher-sensitive subspace; matched Random control. Does not replace VISTA, NSD, OPSA, OPD, or CISPO."
+      "body": "# Privileged-Teacher On-Policy Self-Distillation\n\n## Problem Definition\nTrain a problem-only student on its own rollouts using dense token-level targets from a same-size teacher that also sees a gold reference solution. The teacher is a privileged copy of the student, not a larger frozen model. A deterministic outcome verifier is available. Vanilla OPSD treats that privileged distribution as a fixed target at every student prefix; the teacher can then over-support reference-specific tokens or suppress valid student continuations.\n\n## Evaluation Protocol\n- **Primary Benchmarks**: AIME 2024, AIME 2025, HMMT 2025 Avg@12 on Qwen3 instruct models.\n- **Evaluation Pitfalls**: Do not treat this task as single-teacher student distillation from a frontier model (`task:student-distillation` / `method:opd`) or as OPD+RLVR with an external teacher (`task:distill-reasoner-verifier` / `method:opdvr`).\n\n## SOTA Recommendation (as of 2026-09-08)\n- **Primary Method**: **VISTA** (`method:vista`, `paper:vista` `arXiv:2608.28306`) for verifier-informed student-to-teacher adaptation on privileged-teacher OPSD.\n- **Not This Task**: `method:opd` remains the single-teacher student-distillation default; `method:opdvr` remains the OPD+RLVR default; `method:u-opsd` remains the unlabeled/no-GT default.\n- **Adjacent inner-loop (not this method)**: `method:flowbalance` uses privileged hindsight as a stopped trajectory-balance feature, not a teacher update. VISTA stays this task's first hop.\n- **Optional evidence-regularized sibling**: `method:verpo` (`arXiv:2609.06100`). Treats privileged evidence as a proposal on an outcome objective. Does not replace VISTA or CISPO.\n- **Collapse playbook (survey)**: `method:opsd-collapse-review` (`arXiv:2608.25936`). Three levers; no code. Does not replace VISTA.\n- **Actionable anti-collapse trainer (not this first hop)**: `method:nsd` (`arXiv:2609.11699`). Diverges from a self-generated negative condition instead of imitating privileged traces. Active sibling. VISTA stays this task's first hop.\n- **Optional Fisher-subspace OPSD auxiliary (not this first hop)**: `method:scope-opsd` (`arXiv:2609.12579`). Projects the privileged residual onto a frozen rank-64 Fisher-sensitive subspace; matched Random control. Does not replace VISTA, NSD, OPSA, OPD, or CISPO.\n- **Not this task (agent RL retirement)**: `method:retireopd` (`arXiv:2609.20784`) on `task:outcome-only-long-horizon-agent-rl` — Adaptive Retirement of a privileged self-OPD teacher then pure RL on ALFWorld/WebShop. Does not replace VISTA."
     },
     {
       "id": "task:distill-reasoner-verifier",
@@ -9574,7 +9828,8 @@
           "Live-web multi-hop search-agent training (Iris SFT-RL climbing)",
           "Production post-train engine rather than the async algorithm (Miles)",
           "Routing-harness RSI post-train (NeoHorse-1)",
-          "Adaptive math/code sampling until ≥1 correct (NGU); that is a CISPO-host sampler, not SAO straggler replay"
+          "Adaptive math/code sampling until ≥1 correct (NGU); that is a CISPO-host sampler, not SAO straggler replay",
+          "Privileged self-OPD then Adaptive Retirement into pure agent RL (RetireOPD / ALFWorld/WebShop)"
         ],
         "redirects": [
           {
@@ -9600,6 +9855,10 @@
           {
             "when": "adaptive sampling until ≥1 correct on math/code prompts, not tool stragglers",
             "to": "task:math-code-rl-dense"
+          },
+          {
+            "when": "privileged self-OPD then retire to RL (ALFWorld/WebShop), not async stragglers",
+            "to": "task:outcome-only-long-horizon-agent-rl"
           }
         ],
         "current_sota": [
@@ -9622,9 +9881,11 @@
           "method:miles",
           "method:neohorse-1",
           "method:t1-terminal-rl",
-          "method:ngu"
+          "method:ngu",
+          "method:actobs",
+          "method:retireopd"
         ],
-        "last_reviewed": "2026-09-16",
+        "last_reviewed": "2026-09-18",
         "tags": [
           "post-training",
           "agentic",
@@ -9632,7 +9893,7 @@
           "sao"
         ]
       },
-      "body": "# Agentic Asynchronous Reinforcement Learning\n\n## Problem Definition\nTraining agentic foundation models to interact with multi-turn environments (bash shells, code execution sandboxes, web browsers) where variable environment latency causes severe worker straggler bottlenecks under synchronous group RL algorithms.\n\nThis is **policy training**. Building a software-engineering agent loop is `task:software-engineering-agent-harness` (`method:mini-swe-agent`), not this task.\n\n## SOTA Recommendation (as of 2026-09-08)\n- **Primary Method**: **SAO** (`method:sao`, 2607.07508). Unchanged.\n- **Related pre-RL tool OPKD (not this async-train default)**: `method:pta` (`arXiv:2609.04773`) teacher-commits tool turns before Search-R1 / DeepEyes RL. Lookahead fills idle distill capacity; it is not SAO's straggler replay.\n- **Not This Task**: sparse-outcome coverage / anti-drift on AppWorld-style agents is `task:outcome-only-long-horizon-agent-rl` (`method:canopy` / `method:draco`). Folding is `task:long-horizon-tool-agent`. Live-web search-agent climbing is `task:web-search-agent-rl` (`method:iris`). Production post-train engine is `task:frontier-rl-posttrain-stack` (`method:miles`). Routing-harness RSI post-train is `task:agentic-rsi-routing-posttrain` (`method:neohorse-1`). Terminal-MoE recipe `method:t1-terminal-rl` (`arXiv:2609.11042`) is not SAO. Adaptive math/code sampling until ≥1 correct is `method:ngu` on `task:math-code-rl-dense` (uses async refill; not SAO)."
+      "body": "# Agentic Asynchronous Reinforcement Learning\n\n## Problem Definition\nTraining agentic foundation models to interact with multi-turn environments (bash shells, code execution sandboxes, web browsers) where variable environment latency causes severe worker straggler bottlenecks under synchronous group RL algorithms.\n\nThis is **policy training**. Building a software-engineering agent loop is `task:software-engineering-agent-harness` (`method:mini-swe-agent`), not this task.\n\n## SOTA Recommendation (as of 2026-09-08)\n- **Primary Method**: **SAO** (`method:sao`, 2607.07508). Unchanged.\n- **Related pre-RL tool OPKD (not this async-train default)**: `method:pta` (`arXiv:2609.04773`) teacher-commits tool turns before Search-R1 / DeepEyes RL. Lookahead fills idle distill capacity; it is not SAO's straggler replay.\n- **Not This Task**: sparse-outcome coverage / anti-drift on AppWorld-style agents is `task:outcome-only-long-horizon-agent-rl` (`method:canopy` / `method:draco`). Folding is `task:long-horizon-tool-agent`. Live-web search-agent climbing is `task:web-search-agent-rl` (`method:iris`). Production post-train engine is `task:frontier-rl-posttrain-stack` (`method:miles`). Routing-harness RSI post-train is `task:agentic-rsi-routing-posttrain` (`method:neohorse-1`). Terminal-MoE recipe `method:t1-terminal-rl` (`arXiv:2609.11042`) is not SAO. Adaptive math/code sampling until ≥1 correct is `method:ngu` on `task:math-code-rl-dense` (uses async refill; not SAO). Privileged self-OPD then Adaptive Retirement is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl` (not SAO).\n- **Optional observation-token SFT init (not this async default)**: `method:actobs` (`arXiv:2609.20715`) supervises observation tokens before GRPO and changes later exploration (Terminal-Bench / aider-polyglot). Does not replace SAO."
     },
     {
       "id": "task:1bit-extreme-quantization",
@@ -9850,9 +10111,10 @@
           "method:mintrl",
           "method:tiny-aya-l2-thinker",
           "method:eps-prompt-scaffolding",
-          "method:ngu"
+          "method:ngu",
+          "method:when2think"
         ],
-        "last_reviewed": "2026-09-16",
+        "last_reviewed": "2026-09-18",
         "tags": [
           "post-training",
           "reasoning",
@@ -9861,7 +10123,7 @@
           "cispo"
         ]
       },
-      "body": "# Mathematical and Code RL Reasoning (Dense Policies)\n\n## Problem Definition\nTraining dense language models to generate long chains of thought (CoT) and verifiable solutions for competitive math and coding problems.\n\n## SOTA Recommendation (as of 2026-09-09)\n- **Primary Method (Pass@1 labeled RLVR)**: **CISPO** (`method:cispo`, MiniMax-M1 2506.13585 + ScaleRL 2510.13786). Unchanged.\n- **Systems Reference**: DAPO stays as systems paper reference. GRPO stays retired.\n- **Related alternative (Pass@K / coverage / no-backward)**: `method:es-reasoning` (`arXiv:2608.27351`). Do not swap CISPO for ES or revive GRPO when the goal is Pass@1. Tree-rollout coverage sibling: `method:datpo` (`arXiv:2609.08650`) on `task:passk-reasoning-coverage`.\n- **Optional token-filter plug-in**: `method:gmts` (`arXiv:2608.30632`) when using GRPO/DAPO/CISPO-family token truncation. Does not replace CISPO.\n- **Optional example-reweight plug-in**: `method:diem` (`arXiv:2608.29252`) gradient-alignment batch reweight. Does not replace CISPO.\n- **Optional first-mistake process credit**: `method:cliff` (`arXiv:2609.02817`). Active plug-in, not a PRM, not a CISPO replacement. VeriGate remains the gated-PRM default.\n- **Optional sample-level recipe router**: `method:self-routing` (`arXiv:2609.01422`) GRPO / OPSD / REG / skip from rollout correctness+confidence. Does not replace CISPO or OPSA.\n- **Optional adaptive IS clip**: `method:gapo` (`arXiv:2609.00444`, EMNLP 2026 Main) widens the GRPO/GSPO clip on scarce-correct hard-problem rollouts. Active plug-in. Does not replace CISPO.\n- **Optional cold-start prompt prior**: `method:thinkprior` (`arXiv:2609.09075`) zero-rollout Beta difficulty prior. Cuts silent-group waste; no detected final-accuracy gain. Does not replace CISPO or GAPO.\n- **Optional circuit data-selection signal**: `method:circuitlens` (`arXiv:2609.07183`, EMNLP 2026 Findings). Low-engagement decile can win on 7B medium math; regime-dependent.\n- **Negative-result data-policy platform**: `method:dataflex-rl` (`arXiv:2609.06107`) — RLVR data policies do not beat uniform GRPO at 95% CI in that study.\n- **Related RLVR+self-OPD loop**: `method:rise` (`arXiv:2609.05295`) builds a synthetic teacher from the model's own RLVR trajectory. Does not replace CISPO, OPD, or OPSA.\n- **Optional verifier-grounded self-improvement**: `method:flowbalance` (`arXiv:2609.03241`) privileged same-model trajectory balance, sign-gated by group advantage. Does not replace CISPO, OPSA, OPD, VISTA, RISE, or CANOPY.\n- **Optional verified-evidence regularizer**: `method:verpo` (`arXiv:2609.06100`) on `task:privileged-teacher-opsd`. Evidence as a proposal, not CISPO.\n- **Gotcha**: group-relative magnitude can reward lucky guesses on bounded-answer / search-agent settings (`paper:spurious-advantage-grpo`). Do not promote SignBalance over CISPO.\n- **Gotcha (verifier ICC)**: within-group verifier errors are correlated (ρ≈0.53, Kish n_eff≈1.70 at k=8; `method:rlvr-group-correlation`, arXiv:2609.06386). Not an optimizer.\n- **Optional OPD teacher-reliability gate**: `method:tgopd` (`arXiv:2609.02998`) on `task:student-distillation`. Prompt-level probes then dense OPD or GRPO. Does not replace CISPO or OPD.\n- **Optional sparse OPD token mask**: `method:sparse-opd-supervision` (`arXiv:2609.04565`). Does not replace CISPO or OPD.\n- **Optional OPD-then-RL stack**: `method:opd-then-rlvr` (`arXiv:2609.04108`) when both OPD and RLVR will run; sequence them, do not fuse in one step. Stage-2 Pass@1 algorithm stays CISPO. Does not replace CISPO or OPD.\n- **No labels / no teacher**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace CISPO when labels exist.\n- **Olympiad NL proofs / IMO TTC (not this Pass@1 task)**: `method:nemotron-imo-gold` on `task:olympiad-math-posttrain`. Does not replace CISPO.\n- **Optional partial-trace SFT shaping**: `method:partial-reasoning-traces` (`arXiv:2609.07103`). Does not replace CISPO or OLMo-3.\n- **Optional sparse local off-policy intervention**: `method:mintrl` (`arXiv:2609.12419`). Judge patches short suffixes inside otherwise on-policy RLVR. Active plug-in. Does not replace CISPO / SAPO / SAO. Long-horizon agentic eval is future work in that paper.\n- **Optional async adaptive sampler**: `method:ngu` (`arXiv:2609.13443`) keeps sampling a prompt until ≥1 correct (Matthew Effect / signal-efficiency fix). Does not replace CISPO / SAPO / GRPO loss. Distinct from ThinkPrior (cold-start prompt rank), DIEM/GMTS (example/token reweight), and DataFlex-RL (data-policy accuracy null).\n- **L2 in-language reasoning SFT (not this Pass@1 task)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.\n- **Multimodal VL prompt scaffolding (not this Pass@1 task)**: `method:eps-prompt-scaffolding` on `task:mllm-rl-prompt-curriculum`. Online EPS from on-policy rewards plus teacher rewrites. DataFlex-RL remains the static-policy null under text GRPO; EPS is the online adaptive scaffolding path. Does not replace CISPO."
+      "body": "# Mathematical and Code RL Reasoning (Dense Policies)\n\n## Problem Definition\nTraining dense language models to generate long chains of thought (CoT) and verifiable solutions for competitive math and coding problems.\n\n## SOTA Recommendation (as of 2026-09-09)\n- **Primary Method (Pass@1 labeled RLVR)**: **CISPO** (`method:cispo`, MiniMax-M1 2506.13585 + ScaleRL 2510.13786). Unchanged.\n- **Systems Reference**: DAPO stays as systems paper reference. GRPO stays retired.\n- **Related alternative (Pass@K / coverage / no-backward)**: `method:es-reasoning` (`arXiv:2608.27351`). Do not swap CISPO for ES or revive GRPO when the goal is Pass@1. Tree-rollout coverage sibling: `method:datpo` (`arXiv:2609.08650`) on `task:passk-reasoning-coverage`.\n- **Optional token-filter plug-in**: `method:gmts` (`arXiv:2608.30632`) when using GRPO/DAPO/CISPO-family token truncation. Does not replace CISPO.\n- **Optional example-reweight plug-in**: `method:diem` (`arXiv:2608.29252`) gradient-alignment batch reweight. Does not replace CISPO.\n- **Optional first-mistake process credit**: `method:cliff` (`arXiv:2609.02817`). Active plug-in, not a PRM, not a CISPO replacement. VeriGate remains the gated-PRM default.\n- **Optional sample-level recipe router**: `method:self-routing` (`arXiv:2609.01422`) GRPO / OPSD / REG / skip from rollout correctness+confidence. Does not replace CISPO or OPSA.\n- **Optional adaptive IS clip**: `method:gapo` (`arXiv:2609.00444`, EMNLP 2026 Main) widens the GRPO/GSPO clip on scarce-correct hard-problem rollouts. Active plug-in. Does not replace CISPO.\n- **Optional cold-start prompt prior**: `method:thinkprior` (`arXiv:2609.09075`) zero-rollout Beta difficulty prior. Cuts silent-group waste; no detected final-accuracy gain. Does not replace CISPO or GAPO.\n- **Optional circuit data-selection signal**: `method:circuitlens` (`arXiv:2609.07183`, EMNLP 2026 Findings). Low-engagement decile can win on 7B medium math; regime-dependent.\n- **Negative-result data-policy platform**: `method:dataflex-rl` (`arXiv:2609.06107`) — RLVR data policies do not beat uniform GRPO at 95% CI in that study.\n- **Related RLVR+self-OPD loop**: `method:rise` (`arXiv:2609.05295`) builds a synthetic teacher from the model's own RLVR trajectory. Does not replace CISPO, OPD, or OPSA.\n- **Optional verifier-grounded self-improvement**: `method:flowbalance` (`arXiv:2609.03241`) privileged same-model trajectory balance, sign-gated by group advantage. Does not replace CISPO, OPSA, OPD, VISTA, RISE, or CANOPY.\n- **Optional verified-evidence regularizer**: `method:verpo` (`arXiv:2609.06100`) on `task:privileged-teacher-opsd`. Evidence as a proposal, not CISPO.\n- **Gotcha**: group-relative magnitude can reward lucky guesses on bounded-answer / search-agent settings (`paper:spurious-advantage-grpo`). Do not promote SignBalance over CISPO.\n- **Gotcha (verifier ICC)**: within-group verifier errors are correlated (ρ≈0.53, Kish n_eff≈1.70 at k=8; `method:rlvr-group-correlation`, arXiv:2609.06386). Not an optimizer.\n- **Optional OPD teacher-reliability gate**: `method:tgopd` (`arXiv:2609.02998`) on `task:student-distillation`. Prompt-level probes then dense OPD or GRPO. Does not replace CISPO or OPD.\n- **Optional sparse OPD token mask**: `method:sparse-opd-supervision` (`arXiv:2609.04565`). Does not replace CISPO or OPD.\n- **Optional OPD-then-RL stack**: `method:opd-then-rlvr` (`arXiv:2609.04108`) when both OPD and RLVR will run; sequence them, do not fuse in one step. Stage-2 Pass@1 algorithm stays CISPO. Does not replace CISPO or OPD.\n- **No labels / no teacher**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace CISPO when labels exist.\n- **Olympiad NL proofs / IMO TTC (not this Pass@1 task)**: `method:nemotron-imo-gold` on `task:olympiad-math-posttrain`. Does not replace CISPO.\n- **Optional partial-trace SFT shaping**: `method:partial-reasoning-traces` (`arXiv:2609.07103`). Does not replace CISPO or OLMo-3.\n- **Optional sparse local off-policy intervention**: `method:mintrl` (`arXiv:2609.12419`). Judge patches short suffixes inside otherwise on-policy RLVR. Active plug-in. Does not replace CISPO / SAPO / SAO. Long-horizon agentic eval is future work in that paper.\n- **Optional async adaptive sampler**: `method:ngu` (`arXiv:2609.13443`) keeps sampling a prompt until ≥1 correct (Matthew Effect / signal-efficiency fix). Does not replace CISPO / SAPO / GRPO loss. Distinct from ThinkPrior (cold-start prompt rank), DIEM/GMTS (example/token reweight), and DataFlex-RL (data-policy accuracy null).\n- **Optional hybrid Think/NoThink length control**: `method:when2think` (`arXiv:2609.19671`) IDAC from offline reference accuracy/token stats. AIME24 Pass@3 +10.0% with tokens −27.9%. Does not replace CISPO.\n- **L2 in-language reasoning SFT (not this Pass@1 task)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.\n- **Multimodal VL prompt scaffolding (not this Pass@1 task)**: `method:eps-prompt-scaffolding` on `task:mllm-rl-prompt-curriculum`. Online EPS from on-policy rewards plus teacher rewrites. DataFlex-RL remains the static-policy null under text GRPO; EPS is the online adaptive scaffolding path. Does not replace CISPO."
     },
     {
       "id": "task:directed-sssp-nonneg",
@@ -10017,6 +10279,10 @@
           {
             "when": "single-teacher text distillation without a routing harness",
             "to": "task:student-distillation"
+          },
+          {
+            "when": "token-efficient Pi harness mechanisms from auto-research, not routing-harness OPD",
+            "to": "task:agent-harness-runtime"
           }
         ],
         "current_sota": [
@@ -10036,9 +10302,10 @@
           "method:canopy",
           "method:iris",
           "method:opd",
-          "method:harness-onpolicy-correction"
+          "method:harness-onpolicy-correction",
+          "method:sol-pi"
         ],
-        "last_reviewed": "2026-09-11",
+        "last_reviewed": "2026-09-18",
         "tags": [
           "post-training",
           "agentic",
@@ -10047,7 +10314,7 @@
           "neohorse"
         ]
       },
-      "body": "# Agentic RSI Routing-Harness Post-Training\n\n## Problem Definition\nRecursive self-improvement needs a concrete loop: observe capability demand from a deployed routing harness, convert traces into training examples, admit them, curriculum-train, then reallocate the next mix from evaluation. Nearby shelves (SWE harness, async stragglers, AppWorld coverage, live-web search, Pass@1 RLVR, plain OPD) do not own this loop.\n\n## Evaluation Protocol\n- **Primary Benchmarks**: harness agents (QwenClawBench, PinchBench, WorkBuddy, VitaBench, τ²-Bench), tool use (BFCL v4), coding (HumanEval, LiveCodeBench v6), instruction following (IFBench, IFEval). Macro-average vs same-size base.\n- **Evaluation Pitfalls**: Do not mix this with SWE-bench harness choice. Routing-guided OPD is a curriculum on OPD, not a replacement of `method:opd`.\n\n## SOTA Recommendation (as of 2026-09-09)\n- **Primary Method**: **NeoHorse-1** (`method:neohorse-1`, `paper:neohorse-1` `arXiv:2609.08183`). Code: TokenRhythm/NeoHorse. Weights: hf.co/collections/TokenRhythm/neohorse-1.\n- **Not This Task**: `method:mini-swe-agent` remains the SWE harness; `method:sao` remains async; `method:canopy` remains AppWorld; `method:iris` remains search-agent climbing; `method:cispo` remains Pass@1; `method:opd` remains text distill.\n- **Gotcha (evolved-harness full-traj SFT)**: `method:harness-onpolicy-correction` (`arXiv:2609.09134`). Does not replace NeoHorse-1."
+      "body": "# Agentic RSI Routing-Harness Post-Training\n\n## Problem Definition\nRecursive self-improvement needs a concrete loop: observe capability demand from a deployed routing harness, convert traces into training examples, admit them, curriculum-train, then reallocate the next mix from evaluation. Nearby shelves (SWE harness, async stragglers, AppWorld coverage, live-web search, Pass@1 RLVR, plain OPD) do not own this loop.\n\n## Evaluation Protocol\n- **Primary Benchmarks**: harness agents (QwenClawBench, PinchBench, WorkBuddy, VitaBench, τ²-Bench), tool use (BFCL v4), coding (HumanEval, LiveCodeBench v6), instruction following (IFBench, IFEval). Macro-average vs same-size base.\n- **Evaluation Pitfalls**: Do not mix this with SWE-bench harness choice. Routing-guided OPD is a curriculum on OPD, not a replacement of `method:opd`.\n\n## SOTA Recommendation (as of 2026-09-09)\n- **Primary Method**: **NeoHorse-1** (`method:neohorse-1`, `paper:neohorse-1` `arXiv:2609.08183`). Code: TokenRhythm/NeoHorse. Weights: hf.co/collections/TokenRhythm/neohorse-1.\n- **Not This Task**: `method:mini-swe-agent` remains the SWE harness; `method:sao` remains async; `method:canopy` remains AppWorld; `method:iris` remains search-agent climbing; `method:cispo` remains Pass@1; `method:opd` remains text distill.\n- **Gotcha (evolved-harness full-traj SFT)**: `method:harness-onpolicy-correction` (`arXiv:2609.09134`). Does not replace NeoHorse-1.\n- **Not this task (Pi token-efficiency extension)**: `method:sol-pi` (`arXiv:2609.20519`) on `task:agent-harness-runtime`. Harness RSI that yields Pi mechanisms, not a routing-guided weight curriculum."
     },
     {
       "id": "task:data-free-self-evolution",
@@ -11179,6 +11446,14 @@
           {
             "when": "post-train gated sparse attention under a fixed budget, not a SWE loop",
             "to": "task:posttrain-attention-sparsification"
+          },
+          {
+            "when": "SFT on observation tokens before GRPO (consequence prediction), not the SWE loop",
+            "to": "task:agentic-async-rl"
+          },
+          {
+            "when": "token-efficient Pi extension from harness RSI, not issue-to-patch",
+            "to": "task:agent-harness-runtime"
           }
         ],
         "current_sota": [
@@ -11197,9 +11472,11 @@
           "method:openhands-codeact",
           "method:live-swe-agent",
           "method:single-agent-plus-tools",
-          "method:harness-onpolicy-correction"
+          "method:harness-onpolicy-correction",
+          "method:actobs",
+          "method:sol-pi"
         ],
-        "last_reviewed": "2026-09-14",
+        "last_reviewed": "2026-09-18",
         "tags": [
           "agents",
           "agent",
@@ -11210,7 +11487,7 @@
           "react"
         ]
       },
-      "body": "# Build an Agent (Software Engineering Harness)\n\n## Problem Definition\nChoose the loop, ACI, and tools for repository-level software engineering (issue → patch). This is **not** training an agent policy. Agents are bad at designing agents (MAC 5/39; prior-design context hurts). First hop is the simple bash ReAct loop, not multi-agent and not SAO. Production engines that must rewind, sandbox, drive remotely, and serve a TUI belong on `task:agent-harness-runtime` (`method:omp2-harness`); this task's current_sota stays mini-SWE-agent.\n\n## Evaluation Protocol & Benchmarks\n- **Locked mini harness**: official SWE-bench Verified JSON; Scale SWE-bench Pro public; vals.ai locked mini. Label the board. Do not mix snapshots.\n- **Hazards**: mixing vals.ai 97% with official JSON 79.2%; treating OpenHands product numbers as locked-mini; promoting CCA as the default.\n\n## SOTA Landscape\n- **Default**: **mini-SWE-agent** (`method:mini-swe-agent`).\n- **Active**: CCA when you need notes/context management; OpenHands/CodeAct as production OSS.\n- **Niche**: Live-SWE-agent (official JSON 79.2% tie).\n- **Not this task**: SAO, CISPO, RLM, FoldGRPO, OSWorld, Iris search-agent training. Production harness kernels (rewind/fork/remote/sandbox/TUI) are `task:agent-harness-runtime`.\n- **Gotcha (harness × LoRA-SFT)**: `method:harness-onpolicy-correction` (`arXiv:2609.09134`). After evolving a model-specific harness, full expert-trajectory SFT regresses; rewrite the failing student turn only. Does not replace mini-SWE-agent."
+      "body": "# Build an Agent (Software Engineering Harness)\n\n## Problem Definition\nChoose the loop, ACI, and tools for repository-level software engineering (issue → patch). This is **not** training an agent policy. Agents are bad at designing agents (MAC 5/39; prior-design context hurts). First hop is the simple bash ReAct loop, not multi-agent and not SAO. Production engines that must rewind, sandbox, drive remotely, and serve a TUI belong on `task:agent-harness-runtime` (`method:omp2-harness`); this task's current_sota stays mini-SWE-agent.\n\n## Evaluation Protocol & Benchmarks\n- **Locked mini harness**: official SWE-bench Verified JSON; Scale SWE-bench Pro public; vals.ai locked mini. Label the board. Do not mix snapshots.\n- **Hazards**: mixing vals.ai 97% with official JSON 79.2%; treating OpenHands product numbers as locked-mini; promoting CCA as the default.\n\n## SOTA Landscape\n- **Default**: **mini-SWE-agent** (`method:mini-swe-agent`).\n- **Active**: CCA when you need notes/context management; OpenHands/CodeAct as production OSS.\n- **Niche**: Live-SWE-agent (official JSON 79.2% tie).\n- **Not this task**: SAO, CISPO, RLM, FoldGRPO, OSWorld, Iris search-agent training. Production harness kernels (rewind/fork/remote/sandbox/TUI) are `task:agent-harness-runtime`.\n- **Gotcha (harness × LoRA-SFT)**: `method:harness-onpolicy-correction` (`arXiv:2609.09134`). After evolving a model-specific harness, full expert-trajectory SFT regresses; rewrite the failing student turn only. Does not replace mini-SWE-agent.\n- **Not this task (observation-token SFT before GRPO)**: `method:actobs` on `task:agentic-async-rl`.\n- **Not this task (Pi token-efficiency extension)**: `method:sol-pi` on `task:agent-harness-runtime`."
     },
     {
       "id": "task:lora-quality-tuning",
@@ -12260,7 +12537,7 @@
             "to": "task:recurrent-encoder-decoder-lm"
           }
         ],
-        "last_reviewed": "2026-09-12",
+        "last_reviewed": "2026-09-18",
         "current_sota": [
           {
             "method": "method:omp2-harness",
@@ -12273,7 +12550,8 @@
         ],
         "methods": [
           "method:omp2-harness",
-          "method:harness-onpolicy-correction"
+          "method:harness-onpolicy-correction",
+          "method:sol-pi"
         ],
         "tags": [
           "agents",
@@ -12284,7 +12562,7 @@
           "stencil"
         ]
       },
-      "body": "# Agent Harness Runtime\n\n## Problem Definition\nBuild the **harness kernel** for a durable coding-agent engine: one authoritative session, a trusted control plane, bounded cancellable work, explicit model/provider compatibility, and views that are projections. The four envelope tests (Stencil Harness Playbook, 2026-09-02) are the architecture bar: multiplexed local workspace, remote driver, spectator, and untrusted autonomous factory (Factorio).\n\nThis is **not** the SWE-bench start/eval loop. Issue → patch / locked mini harness remains `task:software-engineering-agent-harness` (`method:mini-swe-agent`).\n\n## Evaluation Protocol & Benchmarks\n- **Envelope tests**, not SWE-bench: multiplexed workspace, remote driver, spectator, Factorio. A design that only works for the first case smuggles the controller into the TUI.\n- **Journal honesty**: rewind, fork, resume, replication, and inspection must derive from one journaled session. Pi official examples: 78 total, 60 stateless, 17 stateful, 2 correct (Appendix A).\n- **Hazards**: treating this card as a SWE-bench ranking scaffold; stuffing MCP into the permanent tool grammar; copying Pi's three-callback tool API (`renderCall` / `execute` / `renderResult`) or dual authorities.\n\n## SOTA Landscape\n- **Default (this task)**: **omp² harness** (`method:omp2-harness`, `paper:harness-playbook`). Spec for a production engine still being built; start with journal → session DOM.\n- **Not this task**: mini-SWE-agent (issue → patch / locked eval), CCA (equal-model Pro scaffold), OpenHands/CodeAct (production OSS SWE agent), SAO (train a policy), FoldGRPO (trajectory folding), RLM (dumped long prompt), MCP (agent↔tool protocol), ACE (agent memory), MAGIC / CISPO / Muon2 (training/eval kernels).\n- **Gotcha (evolved-harness SFT)**: `method:harness-onpolicy-correction` (`arXiv:2609.09134`). Does not replace omp2.\n- Related workflow, not this architecture: [prewalk](https://stencil.so/blog/prewalk) is a workflow on omp, not current_sota here."
+      "body": "# Agent Harness Runtime\n\n## Problem Definition\nBuild the **harness kernel** for a durable coding-agent engine: one authoritative session, a trusted control plane, bounded cancellable work, explicit model/provider compatibility, and views that are projections. The four envelope tests (Stencil Harness Playbook, 2026-09-02) are the architecture bar: multiplexed local workspace, remote driver, spectator, and untrusted autonomous factory (Factorio).\n\nThis is **not** the SWE-bench start/eval loop. Issue → patch / locked mini harness remains `task:software-engineering-agent-harness` (`method:mini-swe-agent`).\n\n## Evaluation Protocol & Benchmarks\n- **Envelope tests**, not SWE-bench: multiplexed workspace, remote driver, spectator, Factorio. A design that only works for the first case smuggles the controller into the TUI.\n- **Journal honesty**: rewind, fork, resume, replication, and inspection must derive from one journaled session. Pi official examples: 78 total, 60 stateless, 17 stateful, 2 correct (Appendix A).\n- **Hazards**: treating this card as a SWE-bench ranking scaffold; stuffing MCP into the permanent tool grammar; copying Pi's three-callback tool API (`renderCall` / `execute` / `renderResult`) or dual authorities.\n\n## SOTA Landscape\n- **Default (this task)**: **omp² harness** (`method:omp2-harness`, `paper:harness-playbook`). Spec for a production engine still being built; start with journal → session DOM.\n- **Not this task**: mini-SWE-agent (issue → patch / locked eval), CCA (equal-model Pro scaffold), OpenHands/CodeAct (production OSS SWE agent), SAO (train a policy), FoldGRPO (trajectory folding), RLM (dumped long prompt), MCP (agent↔tool protocol), ACE (agent memory), MAGIC / CISPO / Muon2 (training/eval kernels).\n- **Gotcha (evolved-harness SFT)**: `method:harness-onpolicy-correction` (`arXiv:2609.09134`). Does not replace omp2.\n- **Active token-efficient Pi sibling (not this first hop)**: `method:sol-pi` (`arXiv:2609.20519`). Harness-layer RSI → Action Fusion / ObservationPack / Evidence-Preserving Reducer / Online Context Compact. EdgeBench parity at −44.7–49% token traffic. Does not replace omp2, mini-SWE-agent, or NeoHorse-1.\n- Related workflow, not this architecture: [prewalk](https://stencil.so/blog/prewalk) is a workflow on omp, not current_sota here."
     },
     {
       "id": "task:all-zero-verifier-groups",
@@ -12386,7 +12664,7 @@
             "to": "task:direct-preference-alignment"
           }
         ],
-        "last_reviewed": "2026-09-14",
+        "last_reviewed": "2026-09-18",
         "current_sota": [
           {
             "method": "method:canopy",
@@ -12407,7 +12685,9 @@
           "method:iris",
           "method:t1-terminal-rl",
           "method:evors",
-          "method:ddo"
+          "method:ddo",
+          "method:retireopd",
+          "method:actobs"
         ],
         "tags": [
           "post-training",
@@ -12418,7 +12698,7 @@
           "draco"
         ]
       },
-      "body": "# Outcome-Only Long-Horizon Agent RL\n\n## Problem Definition\nTrain a multi-turn interactive policy (AppWorld-style application operation, SWE repair, similar) when the only trustworthy label is end-of-episode verification — or, when no checker exists, a rubric scored once per trajectory. The typical failure of nearby methods is compensating around the policy (dense step rewards, SFT priors, skill libraries, orchestration) instead of restoring coverage and stopping drift.\n\nTwo siblings share this task and are not substitutes:\n- **CANOPY**: programmatic checker exists; scale same-task exploration and KL-anchor so sparse outcome RL suffices.\n- **DRACO**: no programmatic checker; dynamic rubrics plus closed-form step credit redistribution.\n\n## Evaluation Protocol\n- **Primary Benchmarks**: AppWorld TGC/SGC (Test-Normal, Test-Challenge); SWE-bench Verified resolve rate when transferring the same design principles; τ-bench for outcome-blind transfer.\n- **Evaluation Pitfalls**: Do not mix training-free frontier harness numbers (HCL-GP / ASSAY) with trained-policy TGC. Do not treat AppWorld leaderboard wins as a reason to drop SAO for async training or mini-SWE-agent for the harness.\n\n## SOTA Recommendation (as of 2026-09-04)\n- **Primary Method (checker exists)**: **CANOPY** (`method:canopy`, `paper:canopy` `arXiv:2609.01245`).\n- **Outcome-blind / no checker**: **DRACO** (`method:draco`, `paper:draco` `arXiv:2609.04094`). Active, does not replace CANOPY when a verifier exists.\n- **Not This Task**: `method:sao` remains async-straggler RL; `method:foldgrpo` remains trajectory folding; `method:cispo` remains dense Pass@1; `method:mini-swe-agent` remains the harness; `method:omp2-harness` remains the production engine; `method:iris` remains live-web search-agent training; `method:miles` remains the frontier post-train stack; `method:neohorse-1` remains routing-harness RSI.\n- **Optional 122B terminal-MoE recipe (not this first hop)**: `method:t1-terminal-rl` (`arXiv:2609.11042`) on slime. Terminal-Bench 2.1 43.8%→64.0%. Does not replace CANOPY, SAO, or Miles.\n- **Active open-ended reward-system evolution (not this first hop)**: `method:evors` (`arXiv:2609.12459`) co-evolves a reward model from on-policy traces. Does not replace CANOPY or DRACO.\n- **Active successful-strategy coverage regularizer (not this first hop)**: `method:ddo` (`arXiv:2609.10052`). Preference-pair primary; mention here for open-ended coverage. Does not replace CANOPY or DRACO."
+      "body": "# Outcome-Only Long-Horizon Agent RL\n\n## Problem Definition\nTrain a multi-turn interactive policy (AppWorld-style application operation, SWE repair, similar) when the only trustworthy label is end-of-episode verification — or, when no checker exists, a rubric scored once per trajectory. The typical failure of nearby methods is compensating around the policy (dense step rewards, SFT priors, skill libraries, orchestration) instead of restoring coverage and stopping drift.\n\nTwo siblings share this task and are not substitutes:\n- **CANOPY**: programmatic checker exists; scale same-task exploration and KL-anchor so sparse outcome RL suffices.\n- **DRACO**: no programmatic checker; dynamic rubrics plus closed-form step credit redistribution.\n\n## Evaluation Protocol\n- **Primary Benchmarks**: AppWorld TGC/SGC (Test-Normal, Test-Challenge); SWE-bench Verified resolve rate when transferring the same design principles; τ-bench for outcome-blind transfer.\n- **Evaluation Pitfalls**: Do not mix training-free frontier harness numbers (HCL-GP / ASSAY) with trained-policy TGC. Do not treat AppWorld leaderboard wins as a reason to drop SAO for async training or mini-SWE-agent for the harness.\n\n## SOTA Recommendation (as of 2026-09-04)\n- **Primary Method (checker exists)**: **CANOPY** (`method:canopy`, `paper:canopy` `arXiv:2609.01245`).\n- **Outcome-blind / no checker**: **DRACO** (`method:draco`, `paper:draco` `arXiv:2609.04094`). Active, does not replace CANOPY when a verifier exists.\n- **Not This Task**: `method:sao` remains async-straggler RL; `method:foldgrpo` remains trajectory folding; `method:cispo` remains dense Pass@1; `method:mini-swe-agent` remains the harness; `method:omp2-harness` remains the production engine; `method:iris` remains live-web search-agent training; `method:miles` remains the frontier post-train stack; `method:neohorse-1` remains routing-harness RSI.\n- **Optional 122B terminal-MoE recipe (not this first hop)**: `method:t1-terminal-rl` (`arXiv:2609.11042`) on slime. Terminal-Bench 2.1 43.8%→64.0%. Does not replace CANOPY, SAO, or Miles.\n- **Active open-ended reward-system evolution (not this first hop)**: `method:evors` (`arXiv:2609.12459`) co-evolves a reward model from on-policy traces. Does not replace CANOPY or DRACO.\n- **Active successful-strategy coverage regularizer (not this first hop)**: `method:ddo` (`arXiv:2609.10052`). Preference-pair primary; mention here for open-ended coverage. Does not replace CANOPY or DRACO.\n- **Active privileged self-OPD then retirement (not this first hop)**: `method:retireopd` (`arXiv:2609.20784`). Adaptive Retirement drops the privileged teacher when discrepancy stops shrinking and the student hits a fraction of teacher success, then pure RL. ALFWorld +14.1–18.8% SR vs RL; WebShop +11.8–19.0%. Does not replace CANOPY, SAO, OPD, or VISTA.\n- **Related SFT init (not this first hop)**: `method:actobs` (`arXiv:2609.20715`) on `task:agentic-async-rl` — observation-token SFT before GRPO. Does not replace CANOPY."
     },
     {
       "id": "task:sae-effect-geometry",
@@ -12935,9 +13215,10 @@
           "method:j-zero",
           "method:opdvr",
           "method:cispo",
-          "method:opsa"
+          "method:opsa",
+          "method:bias-only-ttrl"
         ],
-        "last_reviewed": "2026-09-01",
+        "last_reviewed": "2026-09-18",
         "tags": [
           "test-time-training",
           "reasoning",
@@ -12945,7 +13226,7 @@
           "ttt"
         ]
       },
-      "body": "# Label-Free Test-Time Reasoning and Policy Optimization\n\n## Problem Definition\nAdapting reasoning language models at inference / test time on unlabeled query distributions without access to ground-truth answers, external reward models, or golden verification pipelines. Standard majority-vote pseudo-labeling suffers from error propagation when incorrect consensus votes corrupt supervisory signals.\n\n## SOTA Recommendation (as of 2026-08-28)\n- **Primary Method**: **TTPO** (`method:ttpo`, `paper:ttpo` `arXiv:2608.27448`) for asymmetric test-time policy optimization (agreeing rollout OPSD + disagreeing rollout Grouped RL).\n- **Complementary Work**: `method:u-opsd` for train-time unlabeled post-training; `method:opdvr` when ground-truth verifiers and external teachers exist; `method:j-zero` for data-free train-time Challenger–Solver–Judge co-evolution (not test-time). Train-time teacher-free self-adaptation without consensus labels is `method:opsa`, not TTPO."
+      "body": "# Label-Free Test-Time Reasoning and Policy Optimization\n\n## Problem Definition\nAdapting reasoning language models at inference / test time on unlabeled query distributions without access to ground-truth answers, external reward models, or golden verification pipelines. Standard majority-vote pseudo-labeling suffers from error propagation when incorrect consensus votes corrupt supervisory signals.\n\n## SOTA Recommendation (as of 2026-08-28)\n- **Primary Method**: **TTPO** (`method:ttpo`, `paper:ttpo` `arXiv:2608.27448`) for asymmetric test-time policy optimization (agreeing rollout OPSD + disagreeing rollout Grouped RL).\n- **Complementary Work**: `method:u-opsd` for train-time unlabeled post-training; `method:opdvr` when ground-truth verifiers and external teachers exist; `method:j-zero` for data-free train-time Challenger–Solver–Judge co-evolution (not test-time). Train-time teacher-free self-adaptation without consensus labels is `method:opsa`, not TTPO.\n- **Niche bias-only TTRL (not this first hop)**: `method:bias-only-ttrl` (`arXiv:2609.18587`) majority-vote rewards on ~100K bias parameters; MATH-500 76.67%; ~76,000× fewer params than full TTRL. Does not replace TTPO."
     },
     {
       "id": "task:reasoning-rl-alignment",
@@ -13098,9 +13379,11 @@
           "method:opd-then-rlvr",
           "method:routeopd",
           "method:tv-opd",
-          "method:oprd"
+          "method:oprd",
+          "method:opd-eos",
+          "method:retireopd"
         ],
-        "last_reviewed": "2026-09-09",
+        "last_reviewed": "2026-09-18",
         "tags": [
           "post-training",
           "distillation",
@@ -13108,7 +13391,7 @@
           "opd"
         ]
       },
-      "body": "# Small Local Student Distillation from Strong Teacher\n\n## Problem Definition\nTraining small local students (1B–8B) from large teacher models (70B–405B) with generalized on-policy divergence matching.\n\n## SOTA Recommendation (as of 2026-09-09)\n- **Single-Teacher Distillation Default**: **OPD** (`method:opd`, `paper:opd` `arXiv:2604.13016`). Unchanged.\n- **Multi-Teacher Student Distillation Default**: **Open-MOPD** (`method:open-mopd`, `paper:open-mopd` `arXiv:2608.19098`) for token-share balancing, gap-aware dynamic budget allocation, and student reward refresh across specialized teacher models.\n- **Related alternative**: Use `method:vista` instead when the teacher is a privileged same-model copy that sees the gold solution (not a larger frozen teacher). OPD remains the student-distillation default.\n- **Optional teacher-OPD filter**: `method:ra-opd` (`arXiv:2608.27960`) keeps trajectories with sign-agree teacher return vs outcome reward. Does not replace OPD.\n- **Optional sampled-token entropy plug-in**: `method:ida-opd` (`arXiv:2608.29846`) keeps entropy-expanding $A_y$ and shrinks $\\mathcal{I}_H<0$ by $|q-p|/(q+p)$. Does not replace OPD or CISPO.\n- **Optional probability-transport plug-in**: `method:routeopd` (`arXiv:2609.08337`) pairwise log-odds transport vs sampled reverse-KL. Does not replace OPD.\n- **Optional TV-shaped stability plug-in**: `method:tv-opd` (`arXiv:2609.08341`) sign of token advantages plus a shared TV scale. Relate to RA-OPD / TrOPD / Stable-OPD without supersession.\n- **Optional reverse distillation (weak-to-strong)**: `method:oprd` (`arXiv:2609.08798`, code raymin0223/on_policy_reverse_distillation) amplifies verifier-supported student gradients along the teacher policy-shift. Distinct from `method:w2s-opd` (matching). Does not replace OPD or CISPO.\n- **Data-efficiency note**: `method:opd-one-example` (`arXiv:2609.04172`) — one query recovers most full-data OPD; ~16 diverse queries ≈ full-data / MOPD. Does not replace OPD.\n- **Data-selection sibling**: `method:opd-hard-cot-selection` (`arXiv:2609.05198`) — hard/long-CoT examples drive OPD gains (not high token entropy); 8 hard can match 17K. Does not replace OPD or OPD-II.\n- **Related self-extrapolating teacher**: `method:rise` (`arXiv:2609.05295`) synthesizes an OPD teacher from the student's RLVR trajectory. No external teacher. Does not replace OPD, CISPO, or OPSA.\n- **Tool-using OPKD**: `method:pta` (`arXiv:2609.04773`, EMNLP 2026 Main) — student-induced but teacher-committed rollouts; tool calls execute only after the teacher verifies the turn. Pre-RL distill for Search-R1 / DeepEyes. Does not replace OPD for text-only distillation.\n- **Optional prompt-level teacher gate**: `method:tgopd` (`arXiv:2609.02998`) admits dense OPD only after verifier-scored teacher probes pass; else GRPO. Sibling of RA-OPD / IDA-OPD / VISTA. Does not replace OPD, CISPO, OPSA, or Open-MOPD.\n- **Optional sparse token-budget plug-in**: `method:sparse-opd-supervision` (`arXiv:2609.04565`) supervises 1–2 tokens per trajectory (~0.05%) and can match/beat full-token OPD. Does not replace OPD or CISPO.\n- **Optional stacking order when both OPD and RLVR will run**: `method:opd-then-rlvr` (`arXiv:2609.04108`) — OPD then RL, not joint one-step fusion. Does not replace OPD or CISPO.\n- **No teacher / no labels**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace OPD when a strong teacher is the goal."
+      "body": "# Small Local Student Distillation from Strong Teacher\n\n## Problem Definition\nTraining small local students (1B–8B) from large teacher models (70B–405B) with generalized on-policy divergence matching.\n\n## SOTA Recommendation (as of 2026-09-09)\n- **Single-Teacher Distillation Default**: **OPD** (`method:opd`, `paper:opd` `arXiv:2604.13016`). Unchanged.\n- **Multi-Teacher Student Distillation Default**: **Open-MOPD** (`method:open-mopd`, `paper:open-mopd` `arXiv:2608.19098`) for token-share balancing, gap-aware dynamic budget allocation, and student reward refresh across specialized teacher models.\n- **Related alternative**: Use `method:vista` instead when the teacher is a privileged same-model copy that sees the gold solution (not a larger frozen teacher). OPD remains the student-distillation default.\n- **Optional teacher-OPD filter**: `method:ra-opd` (`arXiv:2608.27960`) keeps trajectories with sign-agree teacher return vs outcome reward. Does not replace OPD.\n- **Optional sampled-token entropy plug-in**: `method:ida-opd` (`arXiv:2608.29846`) keeps entropy-expanding $A_y$ and shrinks $\\mathcal{I}_H<0$ by $|q-p|/(q+p)$. Does not replace OPD or CISPO.\n- **Optional probability-transport plug-in**: `method:routeopd` (`arXiv:2609.08337`) pairwise log-odds transport vs sampled reverse-KL. Does not replace OPD.\n- **Optional TV-shaped stability plug-in**: `method:tv-opd` (`arXiv:2609.08341`) sign of token advantages plus a shared TV scale. Relate to RA-OPD / TrOPD / Stable-OPD without supersession.\n- **Optional reverse distillation (weak-to-strong)**: `method:oprd` (`arXiv:2609.08798`, code raymin0223/on_policy_reverse_distillation) amplifies verifier-supported student gradients along the teacher policy-shift. Distinct from `method:w2s-opd` (matching). Does not replace OPD or CISPO.\n- **Data-efficiency note**: `method:opd-one-example` (`arXiv:2609.04172`) — one query recovers most full-data OPD; ~16 diverse queries ≈ full-data / MOPD. Does not replace OPD.\n- **Data-selection sibling**: `method:opd-hard-cot-selection` (`arXiv:2609.05198`) — hard/long-CoT examples drive OPD gains (not high token entropy); 8 hard can match 17K. Does not replace OPD or OPD-II.\n- **Related self-extrapolating teacher**: `method:rise` (`arXiv:2609.05295`) synthesizes an OPD teacher from the student's RLVR trajectory. No external teacher. Does not replace OPD, CISPO, or OPSA.\n- **Tool-using OPKD**: `method:pta` (`arXiv:2609.04773`, EMNLP 2026 Main) — student-induced but teacher-committed rollouts; tool calls execute only after the teacher verifies the turn. Pre-RL distill for Search-R1 / DeepEyes. Does not replace OPD for text-only distillation.\n- **Optional prompt-level teacher gate**: `method:tgopd` (`arXiv:2609.02998`) admits dense OPD only after verifier-scored teacher probes pass; else GRPO. Sibling of RA-OPD / IDA-OPD / VISTA. Does not replace OPD, CISPO, OPSA, or Open-MOPD.\n- **Optional sparse token-budget plug-in**: `method:sparse-opd-supervision` (`arXiv:2609.04565`) supervises 1–2 tokens per trajectory (~0.05%) and can match/beat full-token OPD. Does not replace OPD or CISPO.\n- **Optional stacking order when both OPD and RLVR will run**: `method:opd-then-rlvr` (`arXiv:2609.04108`) — OPD then RL, not joint one-step fusion. Does not replace OPD or CISPO.\n- **No teacher / no labels**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace OPD when a strong teacher is the goal.\n- **Gotcha (EOS mismatch)**: `method:opd-eos` / `paper:opd-eos` (`arXiv:2609.20511`). Teacher/student stop ids can disagree even when declared stop sets match; length inflates under OPD. Semantic-class EOS is the fix. Does not replace OPD.\n- **Not this task**: Adaptive Retirement of a privileged self-OPD teacher in agent RL is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl`."
     },
     {
       "id": "task:continuous-control-world-model",
@@ -14293,6 +14576,84 @@
         ]
       },
       "body": "# LoRDS (Low-Rank Decomposition with Dynamic Sparsity)\n\n## Method Overview\nLoRDS combines low-rank adapter projections with dynamic magnitude sparsity, focusing gradient updates on high-magnitude coordinate directions.\n\n## When to Use\n- Resource-constrained fine-tuning requiring sparse gradient memory."
+    },
+    {
+      "id": "method:opd-eos",
+      "type": "method",
+      "title": "OPD EOS Termination Fix",
+      "domain": null,
+      "status": "niche",
+      "file_path": "graph/methods/opd-eos.md",
+      "metadata": {
+        "id": "method:opd-eos",
+        "type": "method",
+        "title": "OPD EOS Termination Fix",
+        "category": "distillation",
+        "status": "niche",
+        "sota_for": [],
+        "supersedes": [],
+        "do_not_use_for": [
+          {
+            "when": "choosing the single-teacher student-distillation default",
+            "reason": "This is an EOS-mismatch gotcha and a semantic-class stop patch on OPD, not a new distill kernel",
+            "use_instead": "method:opd"
+          },
+          {
+            "when": "teacher-free unlabeled self-adaptation",
+            "reason": "OPSA has no teacher EOS to mismatch",
+            "use_instead": "method:opsa"
+          },
+          {
+            "when": "privileged-teacher math OPSD with gold solutions",
+            "reason": "VISTA remains that first hop; this paper is base-student vs post-trained-teacher stop ids",
+            "use_instead": "method:vista"
+          }
+        ],
+        "assumptions": [
+          "OPD with a base (or earlier-stage) student and a post-trained teacher whose stop ids may differ. Paper: Qwen3, Llama-3.2, Gemma-3, K2-Horizon; verl + sampled-token OPD; DAPO-Math-17k TTRL prompts.",
+          "Decoding-stop alignment alone is the insufficient control. Semantic-class scoring is the fix."
+        ],
+        "last_reviewed": "2026-09-18",
+        "papers": [
+          "paper:opd-eos"
+        ],
+        "recipes": [
+          "recipe:opd-eos"
+        ],
+        "claims": [
+          {
+            "benchmark": "Qwen3-1.7B-Base student / Qwen3-4B teacher, sampled-token OPD, 200 updates",
+            "metric": "stop-mass at the student's actual stop / clip rate",
+            "value": "without fix, stop-mass → ~0 by step 150 and clip rate → ~100%",
+            "baseline": "native student EOS (condition A) vs two-stop decoding (B)",
+            "date": "2026-09-17",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.20511",
+            "notes": "Gotcha on method:opd. Semantic-class stop (condition D) restores termination. Not an OPD replacement."
+          },
+          {
+            "benchmark": "Gemma-3-4B-pt → 4B-it, 7168 response budget",
+            "metric": "mean response length / clip rate",
+            "value": "budget-saturating ~100% clip → mean ~2000 tokens, clipping near zero",
+            "baseline": "unaligned / decoding-only stop alignment",
+            "date": "2026-09-17",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.20511",
+            "notes": "Llama lands ~3500–4000 tokens and about half the clip rate. K2-Horizon still shows a late inflation mode after alignment."
+          }
+        ],
+        "tags": [
+          "post-training",
+          "distillation",
+          "opd",
+          "eos",
+          "gotcha",
+          "niche"
+        ]
+      },
+      "body": "# OPD EOS Termination Fix\n\n## Method Overview\nNot a new distill default. OPD scores the student's own tokens with the teacher. If the two models put EOS mass on different ids, terminating is an action the student can sample that the teacher will not support, and the teacher's stop id never appears in rollouts. Length then inflates into the budget. The fix treats equivalent EOS tokens as one semantic stop and scores that class with the teacher's summed terminal mass (`EOS_MODE=semantic_class` in `UNCSciML/opd-eos`). Aligning decode stop ids without changing the loss is not enough. A later K2-Horizon inflation mode can remain after alignment.\n\n## When to Use\n- OPD runs that grow to the max length with correct answers, especially base student + instruct/post-trained teacher.\n\n## When NOT to Use\n- Choosing a distill kernel → `method:opd`. No teacher → `method:opsa`. Privileged math OPSD → `method:vista`.\n\n## Relation to Existing SOTA\n- Niche gotcha on `task:student-distillation`. Wired onto `method:opd` / `recipe:opd` the same way `paper:spurious-advantage-grpo` is wired onto CISPO/GRPO. Does **not** enter `current_sota`. Does **not** supersede `method:opd`.\n\n## Gotchas & Failure Modes\n- Declared stop sets can match while sampled stop ids do not.\n- Termination preference can flip across training stages (K2-Horizon). Re-check ids after SFT/RL, not only at init.\n- Semantic-class stop is not a complete theory of OPD length; late inflation can persist."
     },
     {
       "id": "method:unisolver",
@@ -18164,6 +18525,101 @@
       "body": "# Unified LoRA Rank Scaling\n\n## Method Overview\nUnified empirical scaling laws establishing stable rank selection, alpha scaling, and learning rate transfer across base model architectures.\n\n## When to Use\n- Determining adapter rank and hyperparameter search grids for new base models."
     },
     {
+      "id": "method:actobs",
+      "type": "method",
+      "title": "ActObs (Observation-Token SFT before GRPO)",
+      "domain": null,
+      "status": "active",
+      "file_path": "graph/methods/actobs.md",
+      "metadata": {
+        "id": "method:actobs",
+        "type": "method",
+        "title": "ActObs (Observation-Token SFT before GRPO)",
+        "category": "rl-alignment",
+        "status": "active",
+        "sota_for": [],
+        "supersedes": [],
+        "do_not_use_for": [
+          {
+            "when": "variable tool latency / async stragglers is the bottleneck",
+            "reason": "SAO remains the async algorithm; ActObs is an SFT initialization that changes later GRPO exploration",
+            "use_instead": "method:sao"
+          },
+          {
+            "when": "build a SWE / issue-to-patch harness rather than train a policy",
+            "reason": "mini-SWE-agent is the loop; ActObs trains on observation tokens inside traces",
+            "use_instead": "method:mini-swe-agent"
+          },
+          {
+            "when": "outcome-only long-horizon coverage / anti-drift",
+            "reason": "CANOPY remains that protocol; ActObs is SFT+GRPO exploration on terminal/code agents",
+            "use_instead": "method:canopy"
+          },
+          {
+            "when": "single-turn math/code Pass@1 RLVR",
+            "reason": "CISPO remains Pass@1; ActObs is agent-trace SFT",
+            "use_instead": "method:cispo"
+          }
+        ],
+        "assumptions": [
+          "You have agent trajectories that already include environment observation tokens. SFT then GRPO (paper). No extra sequence tokens at train or serve time.",
+          "Paper: Qwen3-4B/8B. Terminal-Bench 2.0 and aider-polyglot (the latter unseen in SFT/RL).",
+          "No official GitHub as of 2026-09-18."
+        ],
+        "last_reviewed": "2026-09-18",
+        "papers": [
+          "paper:actobs"
+        ],
+        "recipes": [
+          "recipe:actobs"
+        ],
+        "claims": [
+          {
+            "benchmark": "Terminal-Bench 2.0, Qwen3-4B, GRPO after SFT",
+            "metric": "pass@k vs action-only SFT then GRPO",
+            "value": "higher pass@k at every evaluated sampling budget",
+            "baseline": "action-only SFT (observations as context, loss on actions)",
+            "date": "2026-09-17",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.20715",
+            "notes": "Abstract. SFT metrics are similar; the split appears after GRPO. Not a SAO bake-off."
+          },
+          {
+            "benchmark": "Terminal-Bench 2.0, Qwen3-8B, GRPO after SFT",
+            "metric": "pass@16",
+            "value": "+3.4 pp vs action-only; more distinct tasks",
+            "baseline": "action-only SFT then GRPO (higher pass@1, lower pass@k)",
+            "date": "2026-09-17",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.20715",
+            "notes": "Trades some pass@1 reliability for coverage. Entropy stays higher; policy moves less from the SFT init."
+          },
+          {
+            "benchmark": "aider-polyglot, Qwen3-4B (unseen in SFT and RL)",
+            "metric": "pass@1",
+            "value": "+4.2 pp vs action-only",
+            "baseline": "action-only SFT then GRPO",
+            "date": "2026-09-17",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.20715",
+            "notes": "Cross-domain code editing transfer."
+          }
+        ],
+        "tags": [
+          "post-training",
+          "agentic",
+          "sft",
+          "observation",
+          "actobs",
+          "active"
+        ]
+      },
+      "body": "# ActObs (Observation-Token SFT before GRPO)\n\n## Method Overview\nActObs is SFT on the observation tokens that already sit in agent traces, not only on action tokens. The deployed policy still samples actions; predicting observations is a train-time consequence model. After SFT the two inits look similar. After GRPO they do not: ActObs explores more (higher entropy, less policy drift from the SFT checkpoint) and raises pass@k. Action-only SFT leaves a residual observation gradient and can make environment prediction worse than the base model.\n\n## When to Use\n- Tool/terminal agents where you already log observations and the next stage is GRPO-family RL.\n\n## When NOT to Use\n- Async stragglers → `method:sao`. SWE harness → `method:mini-swe-agent`. AppWorld coverage → `method:canopy`. Pass@1 math → `method:cispo`.\n\n## Relation to Existing SOTA\n- Active plug-in on `task:agentic-async-rl`. Mentions on `task:software-engineering-agent-harness` and `task:outcome-only-long-horizon-agent-rl`. Does **not** enter `current_sota`. Does **not** supersede `method:sao`, `method:mini-swe-agent`, or `method:canopy`.\n\n## Gotchas & Failure Modes\n- Do not judge the method at the SFT checkpoint. The paper's split is after GRPO.\n- Qwen3-8B gives up some pass@1 for pass@k. Measure the budget you actually serve.\n- No public trainer as of 2026-09-18."
+    },
+    {
       "id": "method:lr-matters-lora",
       "type": "method",
       "title": "Vanilla LoRA + rsLoRA + LR Sweep",
@@ -20157,6 +20613,79 @@
       "body": "# AgentFold\n\n## Method Overview\nAgentFold (2510.24699) proactively folds web-agent history. Active on `task:long-horizon-tool-agent`. AgentFold-30B-A3B BrowseComp **36.2%**. FoldGRPO remains current_sota.\n\n## When to Use\n- Web browsing trajectories that need history compression.\n\n## When NOT to Use\n- Dumped prompt → `method:rlm`. Default folded-tool SOTA → `method:foldgrpo`."
     },
     {
+      "id": "method:sol-pi",
+      "type": "method",
+      "title": "SoL-Pi",
+      "domain": null,
+      "status": "active",
+      "file_path": "graph/methods/sol-pi.md",
+      "metadata": {
+        "id": "method:sol-pi",
+        "type": "method",
+        "title": "SoL-Pi",
+        "category": "agent-harness",
+        "status": "active",
+        "sota_for": [],
+        "supersedes": [],
+        "do_not_use_for": [
+          {
+            "when": "production harness kernel (rewind, sandbox, remote, TUI / journal → session DOM)",
+            "reason": "omp² remains the architecture spec; SoL-Pi is a token-efficiency extension on Pi",
+            "use_instead": "method:omp2-harness"
+          },
+          {
+            "when": "SWE-bench start/eval loop or GitHub issue → patch",
+            "reason": "mini-SWE-agent remains the locked ranking scaffold",
+            "use_instead": "method:mini-swe-agent"
+          },
+          {
+            "when": "routing-harness RSI post-train of model weights",
+            "reason": "NeoHorse-1 remains that first hop; SoL-Pi searches harness mechanisms, not a weight curriculum",
+            "use_instead": "method:neohorse-1"
+          },
+          {
+            "when": "train an async agent policy",
+            "reason": "this is a harness extension, not SAO",
+            "use_instead": "method:sao"
+          }
+        ],
+        "assumptions": [
+          "You run Pi (`@earendil-works/pi-coding-agent` 0.85.1). SoL-Pi is a standalone extension; every mechanism is opt-in and off by default.",
+          "EdgeBench 51 tasks with GPT-5.6 Sol and Opus 5 in the paper. Not a SWE-bench locked-mini number.",
+          "Evidence-Preserving Reducer may send logs to a reducer model; review SECURITY.md before enabling."
+        ],
+        "last_reviewed": "2026-09-18",
+        "papers": [
+          "paper:sol-pi"
+        ],
+        "recipes": [
+          "recipe:sol-pi"
+        ],
+        "claims": [
+          {
+            "benchmark": "EdgeBench, 51 tasks, GPT-5.6 Sol and Opus 5",
+            "metric": "task performance vs Pi / token traffic",
+            "value": "Pi-comparable quality; token traffic −44.7% to −49.0%",
+            "baseline": "native Pi; also Codex and Claude Code harnesses for cost",
+            "date": "2026-09-17",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.20519",
+            "notes": "API cost about −1/3. Hourly savings $8.75–$13.50 vs Codex/Claude Code; $4.36–$5.71 vs Pi. Not an omp2 / mini-SWE-agent / NeoHorse-1 bake-off."
+          }
+        ],
+        "tags": [
+          "agents",
+          "agent-harness",
+          "rsi",
+          "token-efficiency",
+          "sol-pi",
+          "active"
+        ]
+      },
+      "body": "# SoL-Pi\n\n## Method Overview\nSoL-Pi is a Pi extension found by scaling auto-research at the harness layer. Four mechanisms survived: Action Fusion (validation in the same tool call as an edit/write), ObservationPack (large observations as handles with exact paged recall), Evidence-Preserving Reducer (compact log receipts whose quotes match the archive), and Online Context Compact (compact finished plan steps, then continue). They compose through Pi's public extension APIs. No Pi source patches. This is token-efficient harness RSI, not omp²'s journal kernel, not mini-SWE-agent's issue-to-patch loop, and not NeoHorse-1's routing-guided weight update.\n\n## When to Use\n- You already run Pi and want opt-in cuts to token traffic without changing the SWE start loop or the production kernel spec.\n\n## When NOT to Use\n- Harness kernel architecture → `method:omp2-harness`. Issue → patch → `method:mini-swe-agent`. Routing-harness post-train → `method:neohorse-1`. Policy RL → `method:sao`.\n\n## Relation to Existing SOTA\n- Active sibling on `task:agent-harness-runtime`. Mention on `task:agentic-rsi-routing-posttrain`. Does **not** enter `current_sota`. Does **not** supersede `method:omp2-harness`, `method:mini-swe-agent`, or `method:neohorse-1`.\n\n## Gotchas & Failure Modes\n- Missing `sol-pi.json` leaves every mechanism disabled.\n- Reducer and compact start extra model calls; enable them only after the security and cost notes.\n- EdgeBench is not SWE-bench locked mini. Do not retarget mini-SWE-agent from these numbers."
+    },
+    {
       "id": "method:surrogate-gradient-snn",
       "type": "method",
       "title": "Surrogate Gradient Direct SNN Training",
@@ -22011,6 +22540,100 @@
         ]
       },
       "body": "# W2S-OPD (Weak-to-Strong On-Policy Distillation)\n\n## Method Overview\nW2S-OPD matches a weaker teacher on stronger-student prefixes (on-policy verification and self-correction). `method:oprd` is the reverse-distill cousin: it rescales the student's verifier gradient along the teacher policy-shift and does **not** use the weak policy as a matching target. Keep both; neither replaces OPD or CISPO.\n\n## When to Use\n- Bootstrapping large capable base models with smaller, fast supervisor teachers via matching.\n\n## When NOT to Use\n- Reverse distillation / verifier-aligned teacher shift → `method:oprd`.\n- Strong-teacher matching default → `method:opd`. Pass@1 RLVR → `method:cispo`.\n\n## Relation to Existing SOTA\n- Active on `task:student-distillation`. Does **not** supersede `method:opd`. Is **not** superseded by `method:oprd`."
+    },
+    {
+      "id": "method:retireopd",
+      "type": "method",
+      "title": "RetireOPD (Self-Retiring On-Policy Distillation)",
+      "domain": null,
+      "status": "active",
+      "file_path": "graph/methods/retireopd.md",
+      "metadata": {
+        "id": "method:retireopd",
+        "type": "method",
+        "title": "RetireOPD (Self-Retiring On-Policy Distillation)",
+        "category": "rl-alignment",
+        "status": "active",
+        "sota_for": [],
+        "supersedes": [],
+        "do_not_use_for": [
+          {
+            "when": "programmatic checker exists and sparse outcome RL is the protocol (AppWorld TGC)",
+            "reason": "CANOPY remains the outcome-only first hop; RetireOPD is privileged self-OPD then retirement on ALFWorld/WebShop",
+            "use_instead": "method:canopy"
+          },
+          {
+            "when": "variable tool latency / async stragglers",
+            "reason": "SAO remains async RL; Adaptive Retirement is a teacher schedule, not straggler replay",
+            "use_instead": "method:sao"
+          },
+          {
+            "when": "single-teacher student distillation from a larger frozen teacher",
+            "reason": "OPD remains the distill default; RetireOPD is agent RL with a same-loop privileged teacher",
+            "use_instead": "method:opd"
+          },
+          {
+            "when": "privileged-teacher math OPSD with a gold solution and a deterministic verifier",
+            "reason": "VISTA remains that first hop; RetireOPD retires the teacher into pure agent RL",
+            "use_instead": "method:vista"
+          },
+          {
+            "when": "teacher-free / label-free on-policy self-adaptation",
+            "reason": "OPSA has no teacher; RetireOPD starts with a privileged teacher and then drops it",
+            "use_instead": "method:opsa"
+          },
+          {
+            "when": "single-turn math/code Pass@1 RLVR",
+            "reason": "CISPO remains Pass@1",
+            "use_instead": "method:cispo"
+          }
+        ],
+        "assumptions": [
+          "Multi-turn agent with a programmatic outcome (ALFWorld / WebShop in the paper). Privileged teacher sees skill-conditioned information the student does not.",
+          "Qwen2.5 1.5B–7B. Teacher is optimized first on environment rewards; student then trains with RL+OPD until Adaptive Retirement.",
+          "No official GitHub as of 2026-09-18. Does not claim AppWorld TGC SOTA."
+        ],
+        "last_reviewed": "2026-09-18",
+        "papers": [
+          "paper:retireopd"
+        ],
+        "recipes": [
+          "recipe:retireopd"
+        ],
+        "claims": [
+          {
+            "benchmark": "ALFWorld success rate, Qwen2.5 1.5B–7B",
+            "metric": "success rate vs RL",
+            "value": "+14.1% to +18.8%",
+            "baseline": "environment-reward RL without privileged OPD",
+            "date": "2026-09-17",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.20784",
+            "notes": "Abstract. Student also surpasses its skill-conditioned teacher in every reported setting. Not an AppWorld / CANOPY bake-off."
+          },
+          {
+            "benchmark": "WebShop accuracy, Qwen2.5 1.5B–7B",
+            "metric": "accuracy vs RL",
+            "value": "+11.8% to +19.0%",
+            "baseline": "environment-reward RL without privileged OPD",
+            "date": "2026-09-17",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.20784",
+            "notes": "Abstract. Adaptive Retirement then pure RL; not a VISTA / OPD replacement."
+          }
+        ],
+        "tags": [
+          "post-training",
+          "agentic",
+          "distillation",
+          "opsd",
+          "retireopd",
+          "active"
+        ]
+      },
+      "body": "# RetireOPD (Self-Retiring On-Policy Distillation)\n\n## Method Overview\nSparse trajectory rewards on multi-turn agents invite a privileged self-teacher. RetireOPD splits the loop: a skill-conditioned teacher is optimized on environment rewards, then a skill-free student trains with RL plus OPD. Adaptive Retirement watches two signals — student–teacher discrepancy and the student's success as a fraction of the teacher's — and drops OPD when discrepancy stops shrinking and the student has caught a target fraction of teacher success. After retirement, training is RL alone. Privilege is not treated as reliability, and teacher supervision is not a fixed schedule.\n\n## When to Use\n- Multi-turn agents with a checker where a privileged skill teacher can densify an otherwise sparse outcome, and you can afford to retire that teacher mid-run.\n\n## When NOT to Use\n- AppWorld coverage protocol → `method:canopy`. Async stragglers → `method:sao`. Larger-teacher distill → `method:opd`. Privileged math OPSD → `method:vista`. No teacher → `method:opsa`. Pass@1 → `method:cispo`.\n\n## Relation to Existing SOTA\n- Active plug-in on `task:outcome-only-long-horizon-agent-rl`. Mentions on `task:agentic-async-rl`, `task:student-distillation`, and `task:privileged-teacher-opsd`. Does **not** enter `current_sota`. Does **not** supersede `method:canopy`, `method:sao`, `method:opd`, `method:vista`, or `method:opsa`.\n\n## Gotchas & Failure Modes\n- A privileged teacher can still be a bad teacher. Do not freeze OPD for the whole run.\n- Retirement is two conditions, not one: discrepancy plateau **and** a success-fraction gate.\n- No public trainer as of 2026-09-18."
     },
     {
       "id": "method:esrl",
@@ -24967,6 +25590,90 @@
       "body": "# SAS (Simple Attention Sparsification)\n\n## Method Overview\nHard Top-K blocks LM-loss gradients into the selector, so prior trainable sparse attention distills dense attention. SAS keeps Top-K for compute but multiplies selected blocks by continuous log-space gates added to attention logits. The language-modeling loss then ranks context under the actual budget. Current block is always retained; historical blocks get a normalized softmax gate.\n\n## When to Use\n- Post-train a dense LLM to spend a fixed attention budget on the blocks that actually move the next-token loss.\n- Tight decode budgets where SeerAttention-R / Top-K distillation wastes the budget.\n\n## When NOT to Use\n- 10M-token dumped prompt → `method:rlm`. SSM from scratch → `method:mamba-2`. AR multi-token serving → `method:uno`. SWE loop → `method:mini-swe-agent`.\n\n## Relation to Existing SOTA\n- First hop for `task:posttrain-attention-sparsification` only. Does **not** replace RLM, Mamba-2, Uno, or mini-SWE-agent.\n\n## Gotchas & Failure Modes\n- Train gates only; do not unfreeze the backbone in the paper recipe.\n- Eval uses a SGLang block-sparse fork (`rayleizhu/sglang`), not stock SGLang.\n- Full attention remains the quality ceiling; SAS is budgeted recovery."
     },
     {
+      "id": "method:when2think",
+      "type": "method",
+      "title": "When2Think (IDAC Hybrid Think/NoThink)",
+      "domain": null,
+      "status": "active",
+      "file_path": "graph/methods/when2think.md",
+      "metadata": {
+        "id": "method:when2think",
+        "type": "method",
+        "title": "When2Think (IDAC Hybrid Think/NoThink)",
+        "category": "rl-alignment",
+        "status": "active",
+        "sota_for": [],
+        "supersedes": [],
+        "do_not_use_for": [
+          {
+            "when": "choosing the dense math/code Pass@1 RLVR loss",
+            "reason": "When2Think is a Think/NoThink length-control plug-in; CISPO remains Pass@1",
+            "use_instead": "method:cispo"
+          },
+          {
+            "when": "MoE/VL RLVR loss",
+            "reason": "SAPO remains the MoE/VL algorithm; IDAC does not change the surrogate",
+            "use_instead": "method:sapo"
+          },
+          {
+            "when": "Pass@K / coverage / no-backward as the primary goal",
+            "reason": "ES-reasoning remains that first hop; When2Think reports Pass@3 as an efficiency trade-off",
+            "use_instead": "method:es-reasoning"
+          },
+          {
+            "when": "outcome-only long-horizon agent RL",
+            "reason": "CANOPY remains coverage/anti-drift; this is single-turn hybrid reasoning length",
+            "use_instead": "method:canopy"
+          }
+        ],
+        "assumptions": [
+          "Hybrid Think/NoThink reasoner with a verifier. Paper uses pre-computed reference accuracy and token-usage statistics; no learned RM and no online reference-model queries.",
+          "Math-only evidence in the abstract (AIME24/AIME25). Host Pass@1 algorithm stays CISPO.",
+          "GitHub JJunShim/When2Think is a stub README as of 2026-09-18."
+        ],
+        "last_reviewed": "2026-09-18",
+        "papers": [
+          "paper:when2think"
+        ],
+        "recipes": [
+          "recipe:when2think"
+        ],
+        "claims": [
+          {
+            "benchmark": "AIME24 vs base hybrid reasoner",
+            "metric": "Pass@3 / token usage",
+            "value": "Pass@3 +10.0% with tokens −27.9%",
+            "baseline": "base model (uniform overthinking / no IDAC)",
+            "date": "2026-09-17",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.19671",
+            "notes": "Abstract. Efficiency plug-in, not a CISPO bake-off. Pass@3 is the paper's reported metric."
+          },
+          {
+            "benchmark": "AIME25 Pass@3",
+            "metric": "Pass@3",
+            "value": "40.0%",
+            "baseline": "compression and routing-only length-control baselines",
+            "date": "2026-09-17",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.19671",
+            "notes": "Abstract. Outperforms compression and routing-only. Not Pass@1 SOTA."
+          }
+        ],
+        "tags": [
+          "post-training",
+          "rlvr",
+          "hybrid-reasoning",
+          "length-control",
+          "when2think",
+          "active"
+        ]
+      },
+      "body": "# When2Think (IDAC Hybrid Think/NoThink)\n\n## Method Overview\nWhen2Think is a post-training length-control plug-in for hybrid reasoners. Easy items should skip CoT (NoThink); hard items should keep it (Think). IDAC shapes the verifier reward with offline reference statistics — accuracy and token usage — so the advantage tells the policy when System 1 is enough. Batch-wise standardized advantages keep the update critic-free. The host RLVR loss does not change.\n\n## When to Use\n- Hybrid Think/NoThink math reasoners that waste tokens on easy items and you can precompute reference accuracy/length stats.\n\n## When NOT to Use\n- Pass@1 kernel → `method:cispo`. MoE/VL loss → `method:sapo`. Pass@K / no-backward → `method:es-reasoning`. Agents → `method:canopy`.\n\n## Relation to Existing SOTA\n- Active efficiency plug-in on `task:math-code-rl-dense`. Does **not** enter `current_sota`. Does **not** supersede `method:cispo`.\n\n## Gotchas & Failure Modes\n- GitHub is a stub README as of 2026-09-18 (`code_status: partial`).\n- IDAC needs reference stats before training. No online teacher queries in the paper recipe.\n- Headline is Pass@3 + tokens, not Pass@1. Do not read this as a CISPO replacement."
+    },
+    {
       "id": "method:ida-opd",
       "type": "method",
       "title": "IDA-OPD (Influence-Directed Adaptive OPD)",
@@ -26289,11 +26996,12 @@
         "supersedes": [
           "method:on-policy-distillation"
         ],
-        "last_reviewed": "2026-09-08",
+        "last_reviewed": "2026-09-18",
         "papers": [
           "paper:opd",
           "paper:opd-one-example",
-          "paper:opd-hard-cot-selection"
+          "paper:opd-hard-cot-selection",
+          "paper:opd-eos"
         ],
         "recipes": [
           "recipe:opd"
@@ -26317,7 +27025,7 @@
           "sota"
         ]
       },
-      "body": "# OPD (On-Policy Distillation)\n\n## Method Overview\nOPD (On-Policy Distillation) is the state-of-the-art framework for distilling large frontier teachers into compact local student models:\n1. **Student Rollout Generation**: Samples token sequences from the *student* policy rather than teacher traces.\n2. **Generalized Divergence Scoring**: Evaluates student tokens using teacher forward log-probabilities with reverse or mixed KL divergence.\n\n## When to Use\n- Default SOTA method for distilling reasoning and conversational capabilities into small student models.\n\n## Relation to Existing SOTA\n- Remains the single-teacher student-distillation default. For a privileged same-model teacher that sees the gold solution, use `method:vista` instead of vanilla OPSD; that does not replace OPD.\n- Optional filter when a verifier is available: `method:ra-opd`. Sampled-token pass@k entropy plug-in: `method:ida-opd`. Teacher-free train-time self-adaptation is `method:opsa` and does not replace OPD when a strong teacher is the goal.\n- Data-efficiency companion (`paper:opd-one-example`, `method:opd-one-example`): OPD is data-overfed but algorithm-starved. One query recovers most full-data gain; ~16 semantically diverse queries match full-data / MOPD. Prefer semantic diversity over volume. Does not change this method's status.\n- Hard-CoT selection sibling (`paper:opd-hard-cot-selection`, `method:opd-hard-cot-selection`): hard/long-CoT examples drive gains, not high token entropy; 8 hard can match 17K. Does not replace this method or OPD-II.\n- Self-extrapolating teacher (`method:rise`): no external teacher; needs RLVR grounding. Does not replace OPD when a white-box teacher is the goal.\n- Tool-using OPKD (`method:pta`): student-induced but teacher-committed rollouts; tool calls execute only after the teacher verifies the turn. Does not replace OPD for plain text distillation.\n- Prompt-level teacher gate (`method:tgopd`): verifier-scored teacher probes then exclusive OPD vs GRPO. Does not replace this method.\n- Sparse token-budget plug-in (`method:sparse-opd-supervision`): 1–2 tokens per trajectory (~0.05%) can match/beat full-token OPD. Does not replace this method.\n- Sequential stack (`method:opd-then-rlvr`): OPD then RLVR beats joint one-step fusion when both are used. Does not replace this method or CISPO.\n\n## Gotchas & Failure Modes\n- Do not scale the prompt set when 16-shot already matches full-data OPD. The remaining gap is student absorption / step-efficiency (`method:opd-one-example`).\n- Prefer hard/long-CoT over easy short traces when ranking a small set (`method:opd-hard-cot-selection`). Do not treat that as OPD-II's diversity finding.\n- Sampled-token OPD can raise pass@1 while flattening pass@k. That is `method:ida-opd`, not more data.\n\n## Supersession\n- Supersedes `method:on-policy-distillation` (GKD baseline) as the primary distillation reference."
+      "body": "# OPD (On-Policy Distillation)\n\n## Method Overview\nOPD (On-Policy Distillation) is the state-of-the-art framework for distilling large frontier teachers into compact local student models:\n1. **Student Rollout Generation**: Samples token sequences from the *student* policy rather than teacher traces.\n2. **Generalized Divergence Scoring**: Evaluates student tokens using teacher forward log-probabilities with reverse or mixed KL divergence.\n\n## When to Use\n- Default SOTA method for distilling reasoning and conversational capabilities into small student models.\n\n## Relation to Existing SOTA\n- Remains the single-teacher student-distillation default. For a privileged same-model teacher that sees the gold solution, use `method:vista` instead of vanilla OPSD; that does not replace OPD.\n- Optional filter when a verifier is available: `method:ra-opd`. Sampled-token pass@k entropy plug-in: `method:ida-opd`. Teacher-free train-time self-adaptation is `method:opsa` and does not replace OPD when a strong teacher is the goal.\n- Data-efficiency companion (`paper:opd-one-example`, `method:opd-one-example`): OPD is data-overfed but algorithm-starved. One query recovers most full-data gain; ~16 semantically diverse queries match full-data / MOPD. Prefer semantic diversity over volume. Does not change this method's status.\n- Hard-CoT selection sibling (`paper:opd-hard-cot-selection`, `method:opd-hard-cot-selection`): hard/long-CoT examples drive gains, not high token entropy; 8 hard can match 17K. Does not replace this method or OPD-II.\n- Self-extrapolating teacher (`method:rise`): no external teacher; needs RLVR grounding. Does not replace OPD when a white-box teacher is the goal.\n- Tool-using OPKD (`method:pta`): student-induced but teacher-committed rollouts; tool calls execute only after the teacher verifies the turn. Does not replace OPD for plain text distillation.\n- Prompt-level teacher gate (`method:tgopd`): verifier-scored teacher probes then exclusive OPD vs GRPO. Does not replace this method.\n- Sparse token-budget plug-in (`method:sparse-opd-supervision`): 1–2 tokens per trajectory (~0.05%) can match/beat full-token OPD. Does not replace this method.\n- Sequential stack (`method:opd-then-rlvr`): OPD then RLVR beats joint one-step fusion when both are used. Does not replace this method or CISPO.\n\n## Gotchas & Failure Modes\n- Do not scale the prompt set when 16-shot already matches full-data OPD. The remaining gap is student absorption / step-efficiency (`method:opd-one-example`).\n- Prefer hard/long-CoT over easy short traces when ranking a small set (`method:opd-hard-cot-selection`). Do not treat that as OPD-II's diversity finding.\n- Sampled-token OPD can raise pass@1 while flattening pass@k. That is `method:ida-opd`, not more data.\n- Teacher/student EOS ids can disagree even when declared stop sets match (`paper:opd-eos`, `arXiv:2609.20511`). The teacher puts stop mass on a token the student never samples; length inflates into the budget. Aligning decode stops is not enough. Score equivalent EOS tokens as one semantic stop (`method:opd-eos`, `EOS_MODE=semantic_class`). A later K2-Horizon inflation mode can remain after alignment. Does not replace this method.\n\n## Supersession\n- Supersedes `method:on-policy-distillation` (GKD baseline) as the primary distillation reference."
     },
     {
       "id": "method:verigate",
@@ -27045,6 +27753,89 @@
         ]
       },
       "body": "# TD-MPC2 (Temporal Difference Model Predictive Control 2)\n\n## Method Overview\nTD-MPC2 trains a task-oriented latent world model without pixel-level decoding.\n\n## Supersession\n- Superseded by `method:efficienttdmpc` (2605.16692) as the continuous control default."
+    },
+    {
+      "id": "method:bias-only-ttrl",
+      "type": "method",
+      "title": "Bias-Only Label-Free TTRL",
+      "domain": null,
+      "status": "niche",
+      "file_path": "graph/methods/bias-only-ttrl.md",
+      "metadata": {
+        "id": "method:bias-only-ttrl",
+        "type": "method",
+        "title": "Bias-Only Label-Free TTRL",
+        "category": "rl-alignment",
+        "status": "niche",
+        "sota_for": [],
+        "supersedes": [],
+        "do_not_use_for": [
+          {
+            "when": "label-free test-time reasoning is the library default",
+            "reason": "TTPO remains the first hop (asymmetric OPSD + Grouped RL); this is a bias-subspace compression of majority-vote TTRL",
+            "use_instead": "method:ttpo"
+          },
+          {
+            "when": "train-time unlabeled math post-training on a prompt set",
+            "reason": "u-OPSD remains train-time unlabeled; this is test-time bias steering",
+            "use_instead": "method:u-opsd"
+          },
+          {
+            "when": "labeled Pass@1 RLVR",
+            "reason": "CISPO remains Pass@1",
+            "use_instead": "method:cispo"
+          },
+          {
+            "when": "teacher-free train-time self-adaptation without majority vote",
+            "reason": "OPSA does not use consensus rewards",
+            "use_instead": "method:opsa"
+          }
+        ],
+        "assumptions": [
+          "Test-time adaptation with majority-vote rewards. Frozen backbone; only bias parameters (~100K) move.",
+          "MATH-500 headline. Transfer to 4,500 held-out MATH problems in the paper. Also VL/audio benches.",
+          "No official GitHub as of 2026-09-18."
+        ],
+        "last_reviewed": "2026-09-18",
+        "papers": [
+          "paper:bias-only-ttrl"
+        ],
+        "recipes": [
+          "recipe:bias-only-ttrl"
+        ],
+        "claims": [
+          {
+            "benchmark": "MATH-500, label-free bias-only TTRL",
+            "metric": "accuracy",
+            "value": "76.67%",
+            "baseline": "authors' labeled bias-steering reproduction (slightly below); full-parameter TTRL uses ~76,000× more trainable params",
+            "date": "2026-09-16",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.18587",
+            "notes": "Abstract. Majority-vote rewards. Not a TTPO bake-off. Niche compression of TTRL."
+          },
+          {
+            "benchmark": "Trainable parameters vs full-parameter TTRL",
+            "metric": "parameter ratio",
+            "value": "~76,000× fewer (~100K bias-only)",
+            "baseline": "full-parameter TTRL",
+            "date": "2026-09-16",
+            "verified": true,
+            "evidence_level": "preprint",
+            "source_url": "https://arxiv.org/abs/2609.18587",
+            "notes": "Backbone frozen. Steering vectors transfer to 4,500 held-out MATH problems."
+          }
+        ],
+        "tags": [
+          "test-time-training",
+          "ttrl",
+          "label-free",
+          "bias-only",
+          "niche"
+        ]
+      },
+      "body": "# Bias-Only Label-Free TTRL\n\n## Method Overview\nKeep the pretrained backbone frozen. Train about 100K bias parameters with majority-vote pseudo-labels as the TTRL reward. The claim is that a tiny bias subspace with enough accessible gradient energy can absorb test-time gains that full-parameter TTRL buys with far more weights. Consensus reliability is used as the reason majority-vote rewards do not immediately collapse. This sits beside TTPO on `task:label-free-test-time-reasoner`; it does not replace TTPO's asymmetric OPSD / Grouped RL split.\n\n## When to Use\n- Label-free TTT where you can only afford a bias-sized optimizer state and you are willing to trust majority vote.\n\n## When NOT to Use\n- Default label-free TTT → `method:ttpo`. Train-time unlabeled → `method:u-opsd`. Labeled Pass@1 → `method:cispo`. No consensus labels → `method:opsa`.\n\n## Relation to Existing SOTA\n- Niche sibling on `task:label-free-test-time-reasoner`. Does **not** enter `current_sota`. Does **not** supersede `method:ttpo`.\n\n## Gotchas & Failure Modes\n- Majority vote is still a noisy teacher. TTPO exists because naive consensus distillation is brittle; this paper does not retire that argument.\n- No public trainer as of 2026-09-18.\n- MATH-500 76.67% is not a reason to drop TTPO on AIME-style TTT."
     },
     {
       "id": "method:memgpt",
@@ -28438,6 +29229,38 @@
         ]
       },
       "body": "# LoRDS Dynamic Sparsity Recipe\n\n```python\nimport torch\n\nprint(\"LoRDS recipe loaded\")\n```"
+    },
+    {
+      "id": "recipe:opd-eos",
+      "type": "recipe",
+      "title": "OPD Semantic-Class EOS",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/recipes/opd-eos.md",
+      "metadata": {
+        "id": "recipe:opd-eos",
+        "type": "recipe",
+        "title": "OPD Semantic-Class EOS",
+        "method": "method:opd-eos",
+        "task": "task:student-distillation",
+        "target_hardware": "4x GPU Slurm (repo smoke); paper pairs include Qwen3-1.7B/4B and Gemma-3-4B",
+        "framework": "PyTorch 2.8 / vLLM 0.11 / vendored verl",
+        "repo_url": "https://github.com/UNCSciML/opd-eos",
+        "pip_dependencies": [
+          "torch==2.8.0",
+          "vllm==0.11.0",
+          "transformers==4.55.4",
+          "ray==2.54.0",
+          "math-verify"
+        ],
+        "tags": [
+          "recipe",
+          "opd",
+          "eos",
+          "distillation"
+        ]
+      },
+      "body": "# OPD Semantic-Class EOS\n\n## Hardware & Environment Setup\n- Official code: `https://github.com/UNCSciML/opd-eos`. Heart of the study: `verl/utils/eos_semantics.py`. Shared launcher is sampled-token OPD on DAPO-Math-17k TTRL prompts.\n- Host distill algorithm stays OPD. This recipe only changes how terminal tokens are scored.\n- Slurm headers request a GPU count only. `DRY_RUN=true bash slurm/submit_ttrl_eos_sweep.sh` prints the plan.\n\n## Quickstart Implementation\n\n```python\nfrom __future__ import annotations\n\nimport torch\nimport torch.nn.functional as F\n\n\ndef semantic_stop_logp(logits: torch.Tensor, eos_ids: list[int]) -> torch.Tensor:\n    \"\"\"Sum teacher/student mass over equivalent EOS ids into one stop action.\"\"\"\n    if not eos_ids:\n        raise ValueError(\"eos_ids must be non-empty\")\n    log_probs = F.log_softmax(logits, dim=-1)\n    stacked = torch.stack([log_probs[..., i] for i in eos_ids], dim=-1)\n    return torch.logsumexp(stacked, dim=-1)\n```\n\nCondition D in the repo (`train_ttrl_eos_d_semantic_class_200step.sl`) is the fix. Conditions A/B are negative controls (native EOS; two-stop decode without loss change).\n\n## Critical Hyperparameters & Tuning Advice\n- Discover terminal ids at submit time. Do not hard-code Qwen vs Llama vs Gemma ids.\n- Paper defaults: batch 16, rollout n=4, prompt 1024 + response 7168, lr 1e-6, temperature 1.0, `log_prob_top_k=0`.\n- If length still inflates after semantic class, look at the K2-Horizon late-training mode; mismatch is not the only source."
     },
     {
       "id": "recipe:unisolver",
@@ -29922,6 +30745,35 @@
       "body": "# Unified LoRA Scaling Grid Recipe\n\n```python\nimport torch\n\nprint(\"LoRA scaling laws evaluation grid initialized\")\n```"
     },
     {
+      "id": "recipe:actobs",
+      "type": "recipe",
+      "title": "ActObs Observation-Token SFT",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/recipes/actobs.md",
+      "metadata": {
+        "id": "recipe:actobs",
+        "type": "recipe",
+        "title": "ActObs Observation-Token SFT",
+        "method": "method:actobs",
+        "task": "task:agentic-async-rl",
+        "target_hardware": "SFT then GRPO box for Qwen3-4B/8B agent traces",
+        "framework": "PyTorch SFT + GRPO-family host",
+        "repo_url": "none found",
+        "code_status": "none",
+        "pip_dependencies": [
+          "torch>=2.5.0"
+        ],
+        "tags": [
+          "recipe",
+          "actobs",
+          "sft",
+          "agentic"
+        ]
+      },
+      "body": "# ActObs Observation-Token SFT\n\n## Hardware & Environment Setup\n- No official GitHub as of 2026-09-18 (`arXiv:2609.20715`). `repo_url: none found`. `code_status: none`.\n- Async default stays SAO. SWE loop stays mini-SWE-agent. This recipe only changes which tokens in a trace get SFT loss.\n\n## Quickstart Implementation\n\n```python\nfrom __future__ import annotations\n\nimport torch\nimport torch.nn.functional as F\n\n\ndef actobs_sft_loss(\n    logits: torch.Tensor,\n    labels: torch.Tensor,\n    is_action: torch.Tensor,\n    is_observation: torch.Tensor,\n) -> torch.Tensor:\n    \"\"\"Loss on action and observation tokens; ignore prompt/padding.\"\"\"\n    n, t, v = logits.shape\n    logp = F.log_softmax(logits, dim=-1)\n    token_nll = F.nll_loss(logp.reshape(n * t, v), labels.reshape(n * t), reduction=\"none\").view(n, t)\n    mask = (is_action | is_observation).to(token_nll.dtype)\n    denom = mask.sum().clamp_min(1.0)\n    return (token_nll * mask).sum() / denom\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Observations are already in the sequence. Do not add a second forward pass or extra parameters.\n- Keep the GRPO stage. Comparing SFT-only checkpoints hides the paper's result.\n- Action-only masking is the ablation, not a recommended default once RL starts."
+    },
+    {
       "id": "recipe:lr-matters-lora",
       "type": "recipe",
       "title": "Vanilla LoRA + rsLoRA Quality Recipe",
@@ -30660,6 +31512,32 @@
         ]
       },
       "body": "# T1 Terminal Agent RL on slime\n\n## Hardware & Environment Setup\n- Project: `https://jyyang26.github.io/t1`. Weights: `https://huggingface.co/collections/TberiusJunyao/t1`.\n- Train host: slime v0.3.0 (`https://github.com/THUDM/slime`, paper commit bf14dc21). No dedicated T1 trainer repo as of 2026-09-11.\n- Production stack first hop stays Miles. Async algorithm stays SAO. AppWorld coverage stays CANOPY.\n\n## Quickstart Implementation\n\n```python\nfrom dataclasses import dataclass\n\n\n@dataclass(frozen=True)\nclass TitoR3:\n    replay_expert_ids: bool = True\n    repair_turn_boundary_drift: bool = True\n    process_reward: str = \"n_passing_verifiers\"\n\n\ndef r3_train_forward(rollout_expert_ids, router_logits, replay: bool) -> None:\n    \"\"\"Replay sampler expert choices so train MoE routing matches rollout.\"\"\"\n    if replay and rollout_expert_ids is None:\n        raise ValueError(\"R3 requires recorded expert ids from the sampler\")\n    _ = router_logits\n```\n\n## Critical Hyperparameters & Tuning Advice\n- TITO: token-in keeps prefixes; token-out stitches under loss masks; repair drift at turn boundaries.\n- R3 is load-bearing on MoE; dropping expert replay reopens the 0.021 logp gap.\n- Train data must stay disjoint from Terminal-Bench 2.1 if you want the paper's transfer claim."
+    },
+    {
+      "id": "recipe:sol-pi",
+      "type": "recipe",
+      "title": "SoL-Pi Pi Extension",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/recipes/sol-pi.md",
+      "metadata": {
+        "id": "recipe:sol-pi",
+        "type": "recipe",
+        "title": "SoL-Pi Pi Extension",
+        "method": "method:sol-pi",
+        "task": "task:agent-harness-runtime",
+        "target_hardware": "CPU host running Pi; model calls billed to the configured provider",
+        "framework": "Node.js 22.19+ / Pi coding agent 0.85.1",
+        "repo_url": "https://github.com/NVlabs/SoL-Pi",
+        "pip_dependencies": [],
+        "tags": [
+          "recipe",
+          "sol-pi",
+          "agent-harness",
+          "pi"
+        ]
+      },
+      "body": "# SoL-Pi Pi Extension\n\n## Hardware & Environment Setup\n- Official extension: `https://github.com/NVlabs/SoL-Pi`. Project page: `https://nvlabs.github.io/SoL-Pi/`.\n- Requires Node.js 22.19+ and `@earendil-works/pi-coding-agent@0.85.1`.\n- Production kernel spec stays omp². SWE loop stays mini-SWE-agent. Routing-harness post-train stays NeoHorse-1.\n\n```bash\nnpm install --global @earendil-works/pi-coding-agent@0.85.1\npi install git:github.com/NVlabs/SoL-Pi\n```\n\nConfig search order: `.pi/sol-pi.json` in a trusted project, else `~/.pi/agent/sol-pi.json`. Files are not merged.\n\n## Quickstart Implementation\n\n```python\nfrom __future__ import annotations\n\nfrom typing import Any\n\n\ndef conservative_sol_pi_config() -> dict[str, Any]:\n    \"\"\"Local mechanisms only: no extra model calls, does not stop an active run.\"\"\"\n    return {\n        \"version\": 1,\n        \"actionFusion\": True,\n        \"observationPack\": True,\n        \"evidencePreservingReducer\": False,\n        \"onlineContextCompact\": False,\n        \"cacheWriteReadRatio\": 12.5,\n    }\n\n\ndef enable_all_sol_pi() -> dict[str, Any]:\n    cfg = conservative_sol_pi_config()\n    cfg[\"evidencePreservingReducer\"] = True\n    cfg[\"onlineContextCompact\"] = True\n    return cfg\n```\n\nWrite the dict as `sol-pi.json`. Review `SECURITY.md` before enabling the reducer.\n\n## Critical Hyperparameters & Tuning Advice\n- Start with Action Fusion + ObservationPack. Turn on reducer/compact only after reading config + security docs.\n- `cacheWriteReadRatio` is a cost knob, not a quality knob.\n- Cancelling a run does not auto-continue after Online Context Compact; compact commits a new turn on success."
     },
     {
       "id": "recipe:diffusion-policy-servo",
@@ -31519,6 +32397,35 @@
         ]
       },
       "body": "# W2S-OPD Distillation Recipe\n\n```python\nimport torch\n\nprint(\"W2S-OPD weak-to-strong recipe loaded\")\n```"
+    },
+    {
+      "id": "recipe:retireopd",
+      "type": "recipe",
+      "title": "RetireOPD Adaptive Retirement",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/recipes/retireopd.md",
+      "metadata": {
+        "id": "recipe:retireopd",
+        "type": "recipe",
+        "title": "RetireOPD Adaptive Retirement",
+        "method": "method:retireopd",
+        "task": "task:outcome-only-long-horizon-agent-rl",
+        "target_hardware": "multi-GPU RL box for Qwen2.5 1.5B–7B agent rollouts",
+        "framework": "PyTorch agent RL host with privileged OPD",
+        "repo_url": "none found",
+        "code_status": "none",
+        "pip_dependencies": [
+          "torch>=2.5.0"
+        ],
+        "tags": [
+          "recipe",
+          "retireopd",
+          "opsd",
+          "agentic"
+        ]
+      },
+      "body": "# RetireOPD Adaptive Retirement\n\n## Hardware & Environment Setup\n- No official GitHub as of 2026-09-18 (`arXiv:2609.20784`). `repo_url: none found`. `code_status: none`.\n- Outcome-only first hop stays CANOPY. Async stays SAO. Distill default stays OPD. Privileged math OPSD stays VISTA.\n\n## Quickstart Implementation\n\n```python\nfrom __future__ import annotations\n\nfrom dataclasses import dataclass\n\n\n@dataclass\nclass RetirementState:\n    discrepancy: list[float]\n    student_success: float\n    teacher_success: float\n    fraction: float = 0.9\n    window: int = 3\n\n\ndef discrepancy_stopped_shrinking(history: list[float], window: int) -> bool:\n    if len(history) < window + 1:\n        return False\n    recent = history[-window:]\n    return min(recent) >= history[-(window + 1)]\n\n\ndef should_retire(state: RetirementState) -> bool:\n    \"\"\"Drop privileged OPD when discrepancy stalls and the student is close enough.\"\"\"\n    if state.teacher_success <= 0:\n        return False\n    caught_up = state.student_success >= state.fraction * state.teacher_success\n    return caught_up and discrepancy_stopped_shrinking(state.discrepancy, state.window)\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Train the skill-conditioned teacher on environment rewards first. Joint RL+OPD is the student phase only.\n- Sweep the success-fraction gate; retiring too early throws away dense tokens, retiring too late copies a stale teacher.\n- After retirement, keep the RL loss; do not keep a token-level OPD term \"just in case\"."
     },
     {
       "id": "recipe:esrl",
@@ -32615,6 +33522,35 @@
       "body": "# Large-Scale Reasoning RL with GRPO via Hugging Face TRL\n\n## Hardware & Environment Setup\n- Recommended GPU: 8x NVIDIA H100 80GB SXM (enables high-throughput vLLM rollout generation).\n- Minimum GPU: 4x A100 80GB.\n- Software Stack: PyTorch 2.5.0+, TRL 0.14.0+, vLLM 0.7.0+.\n\n## Quickstart Code\n\n```python\nimport re\nfrom trl import GRPOTrainer, GRPOConfig\nfrom datasets import load_dataset\n\n# 1. Deterministic Rule-Based Verifiers\ndef correctness_reward_func(prompts, completions, answer, **kwargs) -> list[float]:\n    \"\"\"Extracts boxed final answer and evaluates exact mathematical equivalence.\"\"\"\n    rewards = []\n    for completion, target in zip(completions, answer):\n        # Extract content inside \\boxed{...} or <answer>...</answer>\n        match = re.search(r\"\\\\boxed\\{(.*?)\\}\", completion)\n        if match:\n            pred = match.group(1).strip()\n            rewards.append(1.0 if pred == str(target).strip() else 0.0)\n        else:\n            rewards.append(0.0)\n    return rewards\n\ndef format_reward_func(completions, **kwargs) -> list[float]:\n    \"\"\"Rewards adherence to structured reasoning markup (<think>...</think><answer>...</answer>).\"\"\"\n    pattern = r\"^<think>.*?</think>\\s*<answer>.*?</answer>$\"\n    return [0.5 if re.match(pattern, c, re.DOTALL) else 0.0 for c in completions]\n\n# 2. Configure GRPO Training Parameters\ntraining_args = GRPOConfig(\n    output_dir=\"./grpo_reasoning_output\",\n    learning_rate=1e-6,\n    per_device_train_batch_size=2,\n    gradient_accumulation_steps=4,\n    num_generations=8,             # Group size G sampled per prompt\n    max_prompt_length=512,\n    max_completion_length=2048,\n    beta=0.04,                     # KL penalty coefficient\n    use_vllm=True,                 # Accelerated rollout engine\n    vllm_device=\"auto\",\n    vllm_gpu_memory_utilization=0.5,\n    logging_steps=10\n)\n\n# 3. Instantiate and Train\n# trainer = GRPOTrainer(\n#     model=\"Qwen/Qwen2.5-7B-Instruct\",\n#     reward_funcs=[correctness_reward_func, format_reward_func],\n#     args=training_args,\n#     train_dataset=dataset,\n# )\n# trainer.train()\n```\n\n## Critical Hyperparameters & Guidance\n- **Group Size (`num_generations`)**: Set to 8 or 16 for stable group variance estimation.\n- **KL Coefficient (`beta`)**: 0.01 to 0.05. If training collapses or outputs become repetitive, increase \\(\\beta\\).\n- **vLLM Rollout Acceleration**: Essential to maintain high GPU compute utilization during multi-step reasoning rollouts.\n- **Spurious advantage**: within-group $|\\hat{A}|$ can reward lucky guesses on bounded-answer and search-agent tasks (`paper:spurious-advantage-grpo`). Dense Pass@1 default is `method:cispo`, not this recipe."
     },
     {
+      "id": "recipe:when2think",
+      "type": "recipe",
+      "title": "When2Think IDAC Hybrid Reasoning",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/recipes/when2think.md",
+      "metadata": {
+        "id": "recipe:when2think",
+        "type": "recipe",
+        "title": "When2Think IDAC Hybrid Reasoning",
+        "method": "method:when2think",
+        "task": "task:math-code-rl-dense",
+        "target_hardware": "multi-GPU GRPO-family box for hybrid Think/NoThink math RLVR",
+        "framework": "PyTorch / critic-free GRPO-family host",
+        "repo_url": "https://github.com/JJunShim/When2Think",
+        "code_status": "partial",
+        "pip_dependencies": [
+          "torch>=2.5.0"
+        ],
+        "tags": [
+          "recipe",
+          "when2think",
+          "rlvr",
+          "hybrid-reasoning"
+        ]
+      },
+      "body": "# When2Think IDAC Hybrid Reasoning\n\n## Hardware & Environment Setup\n- Claimed repo: `https://github.com/JJunShim/When2Think`. README was a stub (`# When2Think`) as of 2026-09-18. `code_status: partial`.\n- Host Pass@1 algorithm stays CISPO. This recipe only shapes Think vs NoThink length.\n\n## Quickstart Implementation\n\n```python\nfrom __future__ import annotations\n\nfrom dataclasses import dataclass\n\n\n@dataclass(frozen=True)\nclass RefStats:\n    accuracy: float\n    tokens: float\n\n\ndef idac_reward(\n    correct: bool,\n    tokens: int,\n    mode: str,\n    ref: RefStats,\n    think_bonus: float = 0.1,\n    length_coef: float = 0.05,\n) -> float:\n    \"\"\"Shape verifier reward with offline accuracy/token references.\"\"\"\n    r = 1.0 if correct else 0.0\n    easy = ref.accuracy >= 0.8\n    if easy and mode == \"think\":\n        r -= length_coef * max(tokens - ref.tokens, 0) / max(ref.tokens, 1)\n    if (not easy) and mode == \"think\" and correct:\n        r += think_bonus\n    if (not easy) and mode == \"nothink\" and not correct:\n        r -= think_bonus\n    return r\n\n\ndef batch_zscore(advantages: list[float]) -> list[float]:\n    n = len(advantages)\n    if n == 0:\n        return []\n    mean = sum(advantages) / n\n    var = sum((a - mean) ** 2 for a in advantages) / n\n    std = var ** 0.5\n    if std < 1e-8:\n        return [0.0] * n\n    return [(a - mean) / std for a in advantages]\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Build `RefStats` offline. Do not query a live reference model inside the step.\n- Keep the CISPO/GRPO surrogate. IDAC is the reward, not a new clip.\n- If almost every prompt is hard, NoThink never wins and you have paid for a router that never routes."
+    },
+    {
       "id": "recipe:ida-opd",
       "type": "recipe",
       "title": "IDA-OPD Entropy-Shrinkage Recipe",
@@ -33142,7 +34078,7 @@
           "opd"
         ]
       },
-      "body": "# OPD Student Distillation Recipe\n\n```python\nimport torch\n\nprint(\"OPD student rollout generator and teacher logit scorer initialized\")\n```\n\n## Part-II query-set guidance (`paper:opd-one-example`)\n- Prefer ~16 semantically diverse queries per domain before dumping the full prompt set. Cluster with BGE-M3 (or equivalent) and take one representative per cluster.\n- One query already recovers most full-data OPD gain via state coverage; content-light / WildChat prompts can approach real-query baselines. The bottleneck is absorption rate, not more prompts.\n- Same loss as this recipe. Details: `recipe:opd-one-example`. Does not replace this host loop."
+      "body": "# OPD Student Distillation Recipe\n\n```python\nimport torch\n\nprint(\"OPD student rollout generator and teacher logit scorer initialized\")\n```\n\n## Part-II query-set guidance (`paper:opd-one-example`)\n- Prefer ~16 semantically diverse queries per domain before dumping the full prompt set. Cluster with BGE-M3 (or equivalent) and take one representative per cluster.\n- One query already recovers most full-data OPD gain via state coverage; content-light / WildChat prompts can approach real-query baselines. The bottleneck is absorption rate, not more prompts.\n- Same loss as this recipe. Details: `recipe:opd-one-example`. Does not replace this host loop.\n\n## Gotchas\n- Teacher/student EOS mismatch inflates length under OPD (`paper:opd-eos`, `arXiv:2609.20511`). If rollouts hit the generation budget after a correct answer, check stop ids before blaming the objective. Fix: semantic-class EOS in `recipe:opd-eos` (`https://github.com/UNCSciML/opd-eos`). Decoding-stop alignment alone is insufficient."
     },
     {
       "id": "recipe:verigate",
@@ -33494,6 +34430,35 @@
         ]
       },
       "body": "# MCP stateless tool server\n\nSpec: 2026-07-28 stateless core. This is agent↔tool, not a SWE harness and not A2A.\n\n## Hardware & Environment Setup\n- `pip install mcp`\n- Write AGENTS.md by hand. Do not LLM-init (ETH 2602.11988).\n\n## Quickstart Implementation\n\n```python\nfrom mcp.server.fastmcp import FastMCP\n\nmcp = FastMCP(\"demo\")\n\n\n@mcp.tool()\ndef echo(text: str) -> str:\n    return text\n\n\nif __name__ == \"__main__\":\n    mcp.run()\n```\n\n## Critical Hyperparameters & Tuning Advice\n- **Native FC** if the model was trained for it; **NLT** for weak/no-FC.\n- Do not stuff 40 MCP servers into mini-SWE-agent.\n- Agent↔agent across vendors → A2A, not MCP."
+    },
+    {
+      "id": "recipe:bias-only-ttrl",
+      "type": "recipe",
+      "title": "Bias-Only Label-Free TTRL",
+      "domain": null,
+      "status": null,
+      "file_path": "graph/recipes/bias-only-ttrl.md",
+      "metadata": {
+        "id": "recipe:bias-only-ttrl",
+        "type": "recipe",
+        "title": "Bias-Only Label-Free TTRL",
+        "method": "method:bias-only-ttrl",
+        "task": "task:label-free-test-time-reasoner",
+        "target_hardware": "1x GPU for frozen-backbone TTT; optimizer state is ~100K bias params",
+        "framework": "PyTorch TTRL host (majority-vote rewards)",
+        "repo_url": "none found",
+        "code_status": "none",
+        "pip_dependencies": [
+          "torch>=2.5.0"
+        ],
+        "tags": [
+          "recipe",
+          "ttrl",
+          "bias-only",
+          "label-free"
+        ]
+      },
+      "body": "# Bias-Only Label-Free TTRL\n\n## Hardware & Environment Setup\n- No official GitHub as of 2026-09-18 (`arXiv:2609.18587`). `repo_url: none found`. `code_status: none`.\n- Label-free TTT default stays TTPO. This recipe only trains bias parameters under majority-vote rewards.\n\n## Quickstart Implementation\n\n```python\nfrom __future__ import annotations\n\nfrom collections import Counter\n\nimport torch\n\n\ndef freeze_except_bias(model: torch.nn.Module) -> list[torch.nn.Parameter]:\n    trainable: list[torch.nn.Parameter] = []\n    for name, param in model.named_parameters():\n        is_bias = name.endswith(\"bias\") or \".bias\" in name\n        param.requires_grad = is_bias\n        if is_bias:\n            trainable.append(param)\n    if not trainable:\n        raise RuntimeError(\"no bias parameters marked trainable\")\n    return trainable\n\n\ndef majority_vote_reward(completions: list[str]) -> list[float]:\n    if not completions:\n        return []\n    winner, _ = Counter(completions).most_common(1)[0]\n    return [1.0 if c == winner else 0.0 for c in completions]\n```\n\n## Critical Hyperparameters & Tuning Advice\n- Do not unfreeze the backbone. The paper's compression claim is the bias-only constraint.\n- Majority-vote group size is the reliability knob; tiny groups make the reward noise TTPO was designed to split.\n- Host TTT algorithm stays TTPO when you want agreeing-rollout OPSD plus disagreeing-rollout Grouped RL."
     },
     {
       "id": "recipe:delora-finetuning",
@@ -34489,6 +35454,42 @@
       "source": "method:lords",
       "target": "paper:lords",
       "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:opd-eos",
+      "target": "method:opd-eos",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:opd-eos",
+      "target": "paper:opd-eos",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:opd-eos",
+      "target": "method:opd",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:opd",
+      "target": "paper:opd-eos",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:opd-eos",
+      "target": "paper:opd",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:opd",
+      "target": "paper:opd-eos",
+      "relation": "cited_by",
       "properties": {}
     },
     {
@@ -36376,6 +37377,54 @@
       "properties": {}
     },
     {
+      "source": "paper:actobs",
+      "target": "method:actobs",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:actobs",
+      "target": "paper:actobs",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:actobs",
+      "target": "paper:grpo",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:grpo",
+      "target": "paper:actobs",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:actobs",
+      "target": "paper:sao",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:sao",
+      "target": "paper:actobs",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:actobs",
+      "target": "paper:mini-swe-agent",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:mini-swe-agent",
+      "target": "paper:actobs",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
       "source": "paper:lr-matters-lora",
       "target": "method:lr-matters-lora",
       "relation": "introduces",
@@ -37396,6 +38445,54 @@
       "properties": {}
     },
     {
+      "source": "paper:sol-pi",
+      "target": "method:sol-pi",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:sol-pi",
+      "target": "paper:sol-pi",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:sol-pi",
+      "target": "paper:harness-playbook",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:harness-playbook",
+      "target": "paper:sol-pi",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:sol-pi",
+      "target": "paper:neohorse-1",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:neohorse-1",
+      "target": "paper:sol-pi",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:sol-pi",
+      "target": "paper:mini-swe-agent",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:mini-swe-agent",
+      "target": "paper:sol-pi",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
       "source": "paper:live-swe-agent",
       "target": "method:live-swe-agent",
       "relation": "introduces",
@@ -38328,6 +39425,66 @@
     {
       "source": "paper:opd",
       "target": "paper:w2s-opd",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:retireopd",
+      "target": "method:retireopd",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:retireopd",
+      "target": "paper:retireopd",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:retireopd",
+      "target": "paper:opd",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:opd",
+      "target": "paper:retireopd",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:retireopd",
+      "target": "paper:vista",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:vista",
+      "target": "paper:retireopd",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:retireopd",
+      "target": "paper:canopy",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:canopy",
+      "target": "paper:retireopd",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:retireopd",
+      "target": "paper:sao",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:sao",
+      "target": "paper:retireopd",
       "relation": "cited_by",
       "properties": {}
     },
@@ -39568,6 +40725,42 @@
       "properties": {}
     },
     {
+      "source": "paper:when2think",
+      "target": "method:when2think",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:when2think",
+      "target": "paper:when2think",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:when2think",
+      "target": "paper:minimax-m1",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:minimax-m1",
+      "target": "paper:when2think",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:when2think",
+      "target": "paper:grpo",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:grpo",
+      "target": "paper:when2think",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
       "source": "paper:ida-opd",
       "target": "method:ida-opd",
       "relation": "introduces",
@@ -40576,6 +41769,42 @@
       "properties": {}
     },
     {
+      "source": "paper:bias-only-ttrl",
+      "target": "method:bias-only-ttrl",
+      "relation": "introduces",
+      "properties": {}
+    },
+    {
+      "source": "method:bias-only-ttrl",
+      "target": "paper:bias-only-ttrl",
+      "relation": "described_in",
+      "properties": {}
+    },
+    {
+      "source": "paper:bias-only-ttrl",
+      "target": "paper:ttpo",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:ttpo",
+      "target": "paper:bias-only-ttrl",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
+      "source": "paper:bias-only-ttrl",
+      "target": "paper:u-opsd",
+      "relation": "cites",
+      "properties": {}
+    },
+    {
+      "source": "paper:u-opsd",
+      "target": "paper:bias-only-ttrl",
+      "relation": "cited_by",
+      "properties": {}
+    },
+    {
       "source": "paper:mac-meta-agent",
       "target": "method:single-agent-plus-tools",
       "relation": "introduces",
@@ -41178,6 +42407,18 @@
       "properties": {}
     },
     {
+      "source": "task:privileged-teacher-opsd",
+      "target": "method:retireopd",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:retireopd",
+      "target": "task:privileged-teacher-opsd",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
       "source": "task:distill-reasoner-verifier",
       "target": "method:opdvr",
       "relation": "has_sota_method",
@@ -41577,6 +42818,30 @@
     },
     {
       "source": "method:ngu",
+      "target": "task:agentic-async-rl",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:agentic-async-rl",
+      "target": "method:actobs",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:actobs",
+      "target": "task:agentic-async-rl",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:agentic-async-rl",
+      "target": "method:retireopd",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:retireopd",
       "target": "task:agentic-async-rl",
       "relation": "targets_task",
       "properties": {}
@@ -42176,6 +43441,18 @@
       "properties": {}
     },
     {
+      "source": "task:math-code-rl-dense",
+      "target": "method:when2think",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:when2think",
+      "target": "task:math-code-rl-dense",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
       "source": "task:directed-sssp-nonneg",
       "target": "method:bmssp",
       "relation": "has_sota_method",
@@ -42441,6 +43718,18 @@
     },
     {
       "source": "method:harness-onpolicy-correction",
+      "target": "task:agentic-rsi-routing-posttrain",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:agentic-rsi-routing-posttrain",
+      "target": "method:sol-pi",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:sol-pi",
       "target": "task:agentic-rsi-routing-posttrain",
       "relation": "targets_task",
       "properties": {}
@@ -44840,6 +46129,30 @@
       "properties": {}
     },
     {
+      "source": "task:software-engineering-agent-harness",
+      "target": "method:actobs",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:actobs",
+      "target": "task:software-engineering-agent-harness",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:software-engineering-agent-harness",
+      "target": "method:sol-pi",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:sol-pi",
+      "target": "task:software-engineering-agent-harness",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
       "source": "task:lora-quality-tuning",
       "target": "method:lr-matters-lora",
       "relation": "has_sota_method",
@@ -46636,6 +47949,18 @@
       "properties": {}
     },
     {
+      "source": "task:agent-harness-runtime",
+      "target": "method:sol-pi",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:sol-pi",
+      "target": "task:agent-harness-runtime",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
       "source": "task:all-zero-verifier-groups",
       "target": "method:verigate",
       "relation": "has_sota_method",
@@ -46863,6 +48188,30 @@
     },
     {
       "source": "method:ddo",
+      "target": "task:outcome-only-long-horizon-agent-rl",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:outcome-only-long-horizon-agent-rl",
+      "target": "method:retireopd",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:retireopd",
+      "target": "task:outcome-only-long-horizon-agent-rl",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:outcome-only-long-horizon-agent-rl",
+      "target": "method:actobs",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:actobs",
       "target": "task:outcome-only-long-horizon-agent-rl",
       "relation": "targets_task",
       "properties": {}
@@ -47828,6 +49177,18 @@
       "properties": {}
     },
     {
+      "source": "task:label-free-test-time-reasoner",
+      "target": "method:bias-only-ttrl",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:bias-only-ttrl",
+      "target": "task:label-free-test-time-reasoner",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
       "source": "task:reasoning-rl-alignment",
       "target": "method:cispo",
       "relation": "has_sota_method",
@@ -48469,6 +49830,30 @@
     },
     {
       "source": "method:oprd",
+      "target": "task:student-distillation",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:student-distillation",
+      "target": "method:opd-eos",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:opd-eos",
+      "target": "task:student-distillation",
+      "relation": "targets_task",
+      "properties": {}
+    },
+    {
+      "source": "task:student-distillation",
+      "target": "method:retireopd",
+      "relation": "addresses_task_method",
+      "properties": {}
+    },
+    {
+      "source": "method:retireopd",
       "target": "task:student-distillation",
       "relation": "targets_task",
       "properties": {}
@@ -49256,6 +50641,18 @@
     {
       "source": "recipe:lords",
       "target": "method:lords",
+      "relation": "implements",
+      "properties": {}
+    },
+    {
+      "source": "method:opd-eos",
+      "target": "recipe:opd-eos",
+      "relation": "implemented_by",
+      "properties": {}
+    },
+    {
+      "source": "recipe:opd-eos",
+      "target": "method:opd-eos",
       "relation": "implements",
       "properties": {}
     },
@@ -50238,6 +51635,18 @@
       "properties": {}
     },
     {
+      "source": "method:actobs",
+      "target": "recipe:actobs",
+      "relation": "implemented_by",
+      "properties": {}
+    },
+    {
+      "source": "recipe:actobs",
+      "target": "method:actobs",
+      "relation": "implements",
+      "properties": {}
+    },
+    {
       "source": "method:lr-matters-lora",
       "target": "method:dora",
       "relation": "supersedes",
@@ -50688,6 +52097,18 @@
       "properties": {}
     },
     {
+      "source": "method:sol-pi",
+      "target": "recipe:sol-pi",
+      "relation": "implemented_by",
+      "properties": {}
+    },
+    {
+      "source": "recipe:sol-pi",
+      "target": "method:sol-pi",
+      "relation": "implements",
+      "properties": {}
+    },
+    {
       "source": "method:surrogate-gradient-snn",
       "target": "method:silif",
       "relation": "superseded_by",
@@ -51110,6 +52531,18 @@
     {
       "source": "recipe:w2s-opd",
       "target": "method:w2s-opd",
+      "relation": "implements",
+      "properties": {}
+    },
+    {
+      "source": "method:retireopd",
+      "target": "recipe:retireopd",
+      "relation": "implemented_by",
+      "properties": {}
+    },
+    {
+      "source": "recipe:retireopd",
+      "target": "method:retireopd",
       "relation": "implements",
       "properties": {}
     },
@@ -51786,6 +53219,18 @@
       "properties": {}
     },
     {
+      "source": "method:when2think",
+      "target": "recipe:when2think",
+      "relation": "implemented_by",
+      "properties": {}
+    },
+    {
+      "source": "recipe:when2think",
+      "target": "method:when2think",
+      "relation": "implements",
+      "properties": {}
+    },
+    {
       "source": "method:ida-opd",
       "target": "recipe:ida-opd",
       "relation": "implemented_by",
@@ -52194,6 +53639,18 @@
       "properties": {}
     },
     {
+      "source": "method:bias-only-ttrl",
+      "target": "recipe:bias-only-ttrl",
+      "relation": "implemented_by",
+      "properties": {}
+    },
+    {
+      "source": "recipe:bias-only-ttrl",
+      "target": "method:bias-only-ttrl",
+      "relation": "implements",
+      "properties": {}
+    },
+    {
       "source": "method:harness-onpolicy-correction",
       "target": "recipe:harness-onpolicy-correction",
       "relation": "implemented_by",
@@ -52460,6 +53917,12 @@
     {
       "source": "recipe:lords",
       "target": "task:parameter-efficient-fine-tuning",
+      "relation": "recipe_for_task",
+      "properties": {}
+    },
+    {
+      "source": "recipe:opd-eos",
+      "target": "task:student-distillation",
       "relation": "recipe_for_task",
       "properties": {}
     },
@@ -52776,6 +54239,12 @@
       "properties": {}
     },
     {
+      "source": "recipe:actobs",
+      "target": "task:agentic-async-rl",
+      "relation": "recipe_for_task",
+      "properties": {}
+    },
+    {
       "source": "recipe:lr-matters-lora",
       "target": "task:parameter-efficient-fine-tuning",
       "relation": "recipe_for_task",
@@ -52928,6 +54397,12 @@
     {
       "source": "recipe:t1-terminal-rl",
       "target": "task:outcome-only-long-horizon-agent-rl",
+      "relation": "recipe_for_task",
+      "properties": {}
+    },
+    {
+      "source": "recipe:sol-pi",
+      "target": "task:agent-harness-runtime",
       "relation": "recipe_for_task",
       "properties": {}
     },
@@ -53108,6 +54583,12 @@
     {
       "source": "recipe:w2s-opd",
       "target": "task:student-distillation",
+      "relation": "recipe_for_task",
+      "properties": {}
+    },
+    {
+      "source": "recipe:retireopd",
+      "target": "task:outcome-only-long-horizon-agent-rl",
       "relation": "recipe_for_task",
       "properties": {}
     },
@@ -53340,6 +54821,12 @@
       "properties": {}
     },
     {
+      "source": "recipe:when2think",
+      "target": "task:math-code-rl-dense",
+      "relation": "recipe_for_task",
+      "properties": {}
+    },
+    {
       "source": "recipe:ida-opd",
       "target": "task:student-distillation",
       "relation": "recipe_for_task",
@@ -53516,6 +55003,12 @@
     {
       "source": "recipe:mcp",
       "target": "task:agent-communication",
+      "relation": "recipe_for_task",
+      "properties": {}
+    },
+    {
+      "source": "recipe:bias-only-ttrl",
+      "target": "task:label-free-test-time-reasoner",
       "relation": "recipe_for_task",
       "properties": {}
     },

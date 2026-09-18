@@ -14,6 +14,7 @@ out_of_scope:
   - "Production post-train engine rather than the async algorithm (Miles)"
   - "Routing-harness RSI post-train (NeoHorse-1)"
   - "Adaptive math/code sampling until ≥1 correct (NGU); that is a CISPO-host sampler, not SAO straggler replay"
+  - "Privileged self-OPD then Adaptive Retirement into pure agent RL (RetireOPD / ALFWorld/WebShop)"
 redirects:
   - when: "build an agent rather than train a policy"
     to: "task:software-engineering-agent-harness"
@@ -27,6 +28,8 @@ redirects:
     to: "task:agentic-rsi-routing-posttrain"
   - when: "adaptive sampling until ≥1 correct on math/code prompts, not tool stragglers"
     to: "task:math-code-rl-dense"
+  - when: "privileged self-OPD then retire to RL (ALFWorld/WebShop), not async stragglers"
+    to: "task:outcome-only-long-horizon-agent-rl"
 current_sota:
   - method: method:sao
     as_of: "2026-08-26"
@@ -45,7 +48,9 @@ methods:
   - method:neohorse-1
   - method:t1-terminal-rl
   - method:ngu
-last_reviewed: "2026-09-16"
+  - method:actobs
+  - method:retireopd
+last_reviewed: "2026-09-18"
 tags:
   - post-training
   - agentic
@@ -63,4 +68,5 @@ This is **policy training**. Building a software-engineering agent loop is `task
 ## SOTA Recommendation (as of 2026-09-08)
 - **Primary Method**: **SAO** (`method:sao`, 2607.07508). Unchanged.
 - **Related pre-RL tool OPKD (not this async-train default)**: `method:pta` (`arXiv:2609.04773`) teacher-commits tool turns before Search-R1 / DeepEyes RL. Lookahead fills idle distill capacity; it is not SAO's straggler replay.
-- **Not This Task**: sparse-outcome coverage / anti-drift on AppWorld-style agents is `task:outcome-only-long-horizon-agent-rl` (`method:canopy` / `method:draco`). Folding is `task:long-horizon-tool-agent`. Live-web search-agent climbing is `task:web-search-agent-rl` (`method:iris`). Production post-train engine is `task:frontier-rl-posttrain-stack` (`method:miles`). Routing-harness RSI post-train is `task:agentic-rsi-routing-posttrain` (`method:neohorse-1`). Terminal-MoE recipe `method:t1-terminal-rl` (`arXiv:2609.11042`) is not SAO. Adaptive math/code sampling until ≥1 correct is `method:ngu` on `task:math-code-rl-dense` (uses async refill; not SAO).
+- **Not This Task**: sparse-outcome coverage / anti-drift on AppWorld-style agents is `task:outcome-only-long-horizon-agent-rl` (`method:canopy` / `method:draco`). Folding is `task:long-horizon-tool-agent`. Live-web search-agent climbing is `task:web-search-agent-rl` (`method:iris`). Production post-train engine is `task:frontier-rl-posttrain-stack` (`method:miles`). Routing-harness RSI post-train is `task:agentic-rsi-routing-posttrain` (`method:neohorse-1`). Terminal-MoE recipe `method:t1-terminal-rl` (`arXiv:2609.11042`) is not SAO. Adaptive math/code sampling until ≥1 correct is `method:ngu` on `task:math-code-rl-dense` (uses async refill; not SAO). Privileged self-OPD then Adaptive Retirement is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl` (not SAO).
+- **Optional observation-token SFT init (not this async default)**: `method:actobs` (`arXiv:2609.20715`) supervises observation tokens before GRPO and changes later exploration (Terminal-Bench / aider-polyglot). Does not replace SAO.

@@ -127,6 +127,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when recurrent CED-style architecture, not a SWE harness → `task:recurrent-encoder-decoder-lm`
   - when input-heavy agentic / KV-compressed CED serving rather than a SWE loop → `task:input-heavy-agentic-moe-serving`
   - when post-train gated sparse attention under a fixed budget, not a SWE loop → `task:posttrain-attention-sparsification`
+  - when SFT on observation tokens before GRPO (consequence prediction), not the SWE loop → `task:agentic-async-rl`
+  - when token-efficient Pi extension from harness RSI, not issue-to-patch → `task:agent-harness-runtime`
 - **Out of scope**: Training an async agent policy (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Math/code RLVR (CISPO); GUI / OS desktop computer-use; Dumped 10M-token corpus prompt offload (RLM); Trajectory folding (FoldGRPO); Planner-coder-tester multi-agent theater for a single patch; Meta-agent search as the default design process; Training a live-web search policy (Iris); Frontier RL post-train engine (Miles); Routing-harness RSI post-train (NeoHorse-1); Recurrent CED-style architecture (RLT); Input-heavy agentic MoE serving / KV CED (DeepSeek-V4.1-Flash); Post-train gated sparse attention under a fixed budget (SAS)
 
 ## algorithms
@@ -264,7 +266,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when production post-train stack (SGLang / Megatron / LoRA RL / OPD), not the async algorithm → `task:frontier-rl-posttrain-stack`
   - when agentic RSI / routing-harness post-train, not async stragglers → `task:agentic-rsi-routing-posttrain`
   - when adaptive sampling until ≥1 correct on math/code prompts, not tool stragglers → `task:math-code-rl-dense`
-- **Out of scope**: Building or choosing a software-engineering agent loop (mini-SWE-agent / CCA / OpenHands); Dumped long-prompt offload (RLM); GUI computer-use without policy training; Outcome-only long-horizon agent RL where the failure is signal starvation / policy drift, not async latency; Live-web multi-hop search-agent training (Iris SFT-RL climbing); Production post-train engine rather than the async algorithm (Miles); Routing-harness RSI post-train (NeoHorse-1); Adaptive math/code sampling until ≥1 correct (NGU); that is a CISPO-host sampler, not SAO straggler replay
+  - when privileged self-OPD then retire to RL (ALFWorld/WebShop), not async stragglers → `task:outcome-only-long-horizon-agent-rl`
+- **Out of scope**: Building or choosing a software-engineering agent loop (mini-SWE-agent / CCA / OpenHands); Dumped long-prompt offload (RLM); GUI computer-use without policy training; Outcome-only long-horizon agent RL where the failure is signal starvation / policy drift, not async latency; Live-web multi-hop search-agent training (Iris SFT-RL climbing); Production post-train engine rather than the async algorithm (Miles); Routing-harness RSI post-train (NeoHorse-1); Adaptive math/code sampling until ≥1 correct (NGU); that is a CISPO-host sampler, not SAO straggler replay; Privileged self-OPD then Adaptive Retirement into pure agent RL (RetireOPD / ALFWorld/WebShop)
 
 ### task:agentic-rsi-routing-posttrain — Agentic RSI Routing-Harness Post-Training
 - **Scope**: Agentic post-training that converts routing-harness records (predicted demand, selected tier, interaction) into SFT curriculum and routing-guided OPD, then reallocates the next mix from capability feedback.
@@ -282,6 +285,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when train a live-web multi-hop search agent (SFT-RL climbing) → `task:web-search-agent-rl`
   - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
   - when single-teacher text distillation without a routing harness → `task:student-distillation`
+  - when token-efficient Pi harness mechanisms from auto-research, not routing-harness OPD → `task:agent-harness-runtime`
 - **Out of scope**: SWE issue-to-patch harness (mini-SWE-agent); Async tool-latency / straggler RL (SAO); AppWorld outcome-only coverage / anti-drift (CANOPY); Live-web multi-hop search-agent climbing (Iris); Single-turn dense math/code RLVR (CISPO); Text-only single-teacher distillation default (OPD)
 
 ### task:all-zero-verifier-groups — All-Zero Verifier Groups & Process Supervision
@@ -594,7 +598,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:input-heavy-agentic-moe-serving — Input-Heavy Agentic MoE Serving
 - **Scope**: KV-footprint / CED serving for input-heavy agentic MoE (encoder memory, decoder global KV from final encoder states, CSA2, SWA bounded replay). First hop is DeepSeek-V4.1-Flash.
-- **SOTA**: `method:deepseek-v41-flash` (as_of 2026-09-10) — DeepSeek-V4.1-Flash instruct, max reasoning effort; Terminal-Bench 2.1 / DeepSWE v1.1 / global KV bytes: TB2.1 90.6; DeepSWE 74.2; global KV 890 B/token (~1/4 of V4-Flash); persistent KV ~1/8 of V4-Flash
+- **SOTA**: `method:deepseek-v41-flash` `2609.19969` (as_of 2026-09-10) — DeepSeek-V4.1-Flash instruct, max reasoning effort; Terminal-Bench 2.1 / DeepSWE v1.1 / global KV bytes: TB2.1 90.6; DeepSWE 74.2; global KV 890 B/token (~1/4 of V4-Flash); persistent KV ~1/8 of V4-Flash
   - do not use when choosing the frontier MoE pretrain architecture template → `method:deepseek-v4`
   - do not use when GitHub issue to patch / SWE harness → `method:mini-swe-agent`
   - do not use when frontier RL post-train engine → `method:miles`

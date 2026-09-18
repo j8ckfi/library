@@ -41,7 +41,9 @@ methods:
   - method:routeopd
   - method:tv-opd
   - method:oprd
-last_reviewed: "2026-09-09"
+  - method:opd-eos
+  - method:retireopd
+last_reviewed: "2026-09-18"
 tags:
   - post-training
   - distillation
@@ -71,4 +73,6 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Optional sparse token-budget plug-in**: `method:sparse-opd-supervision` (`arXiv:2609.04565`) supervises 1–2 tokens per trajectory (~0.05%) and can match/beat full-token OPD. Does not replace OPD or CISPO.
 - **Optional stacking order when both OPD and RLVR will run**: `method:opd-then-rlvr` (`arXiv:2609.04108`) — OPD then RL, not joint one-step fusion. Does not replace OPD or CISPO.
 - **No teacher / no labels**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace OPD when a strong teacher is the goal.
+- **Gotcha (EOS mismatch)**: `method:opd-eos` / `paper:opd-eos` (`arXiv:2609.20511`). Teacher/student stop ids can disagree even when declared stop sets match; length inflates under OPD. Semantic-class EOS is the fix. Does not replace OPD.
+- **Not this task**: Adaptive Retirement of a privileged self-OPD teacher in agent RL is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl`.
 

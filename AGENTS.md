@@ -62,6 +62,8 @@ task:software-engineering-agent-harness -> method:mini-swe-agent (2405.15793, 20
   when recurrent CED-style architecture, not a SWE harness -> task:recurrent-encoder-decoder-lm
   when input-heavy agentic / KV-compressed CED serving rather than a SWE loop -> task:input-heavy-agentic-moe-serving
   when post-train gated sparse attention under a fixed budget, not a SWE loop -> task:posttrain-attention-sparsification
+  when SFT on observation tokens before GRPO (consequence prediction), not the SWE loop -> task:agentic-async-rl
+  when token-efficient Pi extension from harness RSI, not issue-to-patch -> task:agent-harness-runtime
 task:directed-sssp-nonneg -> method:bmssp (2504.17033, 2026-08)
 task:1bit-extreme-quantization -> method:sparse-bitnet (2603.05168, 2026-08-26)
 task:fp4-hardware-training -> method:quartet-ii (2601.22813, 2026-08-26) + method:mxfp4-mi355x (2605.09825, 2026-08-26)
@@ -106,6 +108,7 @@ task:agentic-async-rl -> method:sao (2607.07508, 2026-08-26)
   when production post-train stack (SGLang / Megatron / LoRA RL / OPD), not the async algorithm -> task:frontier-rl-posttrain-stack
   when agentic RSI / routing-harness post-train, not async stragglers -> task:agentic-rsi-routing-posttrain
   when adaptive sampling until ≥1 correct on math/code prompts, not tool stragglers -> task:math-code-rl-dense
+  when privileged self-OPD then retire to RL (ALFWorld/WebShop), not async stragglers -> task:outcome-only-long-horizon-agent-rl
 task:agentic-rsi-routing-posttrain -> method:neohorse-1 (2609.08183, 2026-09-09)
   when build a SWE / issue-to-patch harness rather than post-train from routing traces -> task:software-engineering-agent-harness
   when variable environment latency / async stragglers, not RSI routing post-train -> task:agentic-async-rl
@@ -113,6 +116,7 @@ task:agentic-rsi-routing-posttrain -> method:neohorse-1 (2609.08183, 2026-09-09)
   when train a live-web multi-hop search agent (SFT-RL climbing) -> task:web-search-agent-rl
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
   when single-teacher text distillation without a routing harness -> task:student-distillation
+  when token-efficient Pi harness mechanisms from auto-research, not routing-harness OPD -> task:agent-harness-runtime
 task:all-zero-verifier-groups -> method:verigate (2605.30451, 2026-08-26)
 task:data-free-self-evolution -> method:j-zero (2608.26582, 2026-08-31)
 task:direct-preference-alignment -> method:olmo-3 (2512.13961, 2026-08-26)
@@ -232,7 +236,7 @@ task:industrial-model-building -> method:poolside-model-factory (2605.27605, 202
   when full-stack frontier RL post-train engine (SGLang rollouts, Megatron/FSDP, LoRA RL / OPD / async agentic RL), not factory lineage -> task:frontier-rl-posttrain-stack
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
   when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
-task:input-heavy-agentic-moe-serving -> method:deepseek-v41-flash (2026-09-10)
+task:input-heavy-agentic-moe-serving -> method:deepseek-v41-flash (2609.19969, 2026-09-10)
   when choosing the frontier MoE pretrain architecture template -> task:pretrain-moe-frontier
   when GitHub issue to patch / SWE harness rather than serving architecture -> task:software-engineering-agent-harness
   when production post-train stack rather than KV-compressed serving -> task:frontier-rl-posttrain-stack
@@ -354,6 +358,12 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 100. **MLLM online RL prompt curriculum**: **EPS Prompt Scaffolding** (`method:eps-prompt-scaffolding`, `arXiv:2609.15051`) on `task:mllm-rl-prompt-curriculum`. First hop for that narrow task only. Does **not** replace OraRL, DataFlex-RL, CISPO, SAPO, GRPO, CANOPY, or DIEM.
 101. **Async RL adaptive sampling**: **Never Give Up (NGU)** (`method:ngu`, `arXiv:2609.13443`) on `task:math-code-rl-dense`. Keep sampling a prompt until ≥1 correct; reallocates async compute off easy prompts onto hard ones. Active plug-in. Does **not** replace CISPO, SAPO, GRPO, ThinkPrior, DIEM, GMTS, DataFlex-RL, or SAO.
 102. **Drift-budget instruct FT**: **DCO** (`method:dco`, `arXiv:2609.13680`) on `task:instruct-sft-alignment`. Optimize update direction (layer-selective probe) under an anchored-KL budget. Active plug-in. Does **not** replace OLMo-3, lr-matters-lora, NoRA, Iso-LoRA, Delta Learning, or Open-MOPD.
+103. **Privileged self-OPD Adaptive Retirement**: **RetireOPD** (`method:retireopd`, `arXiv:2609.20784`) on `task:outcome-only-long-horizon-agent-rl`. Drop the teacher when discrepancy stops shrinking and the student hits a fraction of teacher success, then pure RL. Active plug-in. Does **not** replace CANOPY, SAO, OPD, VISTA, or OPSA.
+104. **Hybrid Think/NoThink length control**: **When2Think** (`method:when2think`, `arXiv:2609.19671`) on `task:math-code-rl-dense`. IDAC from offline reference accuracy/token stats. Active efficiency plug-in. Does **not** replace CISPO.
+105. **Observation-token SFT before GRPO**: **ActObs** (`method:actobs`, `arXiv:2609.20715`) on `task:agentic-async-rl`. Supervises observation tokens already in traces; exploration changes after GRPO. Active plug-in. Does **not** replace SAO, mini-SWE-agent, or CANOPY.
+106. **OPD EOS termination gotcha**: **OPD-EOS** (`method:opd-eos`, `arXiv:2609.20511`) on `task:student-distillation`. Teacher/student stop-id mismatch inflates length; semantic-class EOS is the fix. Niche. Does **not** replace OPD.
+107. **Harness-layer token-efficient Pi mechanisms**: **SoL-Pi** (`method:sol-pi`, `arXiv:2609.20519`) on `task:agent-harness-runtime`. Auto-research RSI → Action Fusion / ObservationPack / reducer / compact. Active sibling of omp². Does **not** replace omp2-harness, mini-SWE-agent, or NeoHorse-1.
+108. **Bias-only label-free TTRL**: **Bias-only TTRL** (`method:bias-only-ttrl`, `arXiv:2609.18587`) on `task:label-free-test-time-reasoner`. Majority-vote rewards on ~100K bias params. Niche. Does **not** replace TTPO.
 
 ---
 
@@ -456,6 +466,12 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `eps-prompt-scaffolding` (2609.15051) is the first hop for `task:mllm-rl-prompt-curriculum` only. It does not supersede `orarl`, `dataflex-rl`, `cispo`, `sapo`, `grpo`, `canopy`, or `diem`.
 - `ngu` (2609.13443) is an active async adaptive sampler on dense math/code RLVR. It does not supersede `cispo`, `sapo`, `grpo`, `thinkprior`, `diem`, `gmts`, `dataflex-rl`, or `sao`.
 - `dco` (2609.13680) is an active drift-budget instruct fine-tune (layer-selective probe). It does not supersede `olmo-3`, `lr-matters-lora`, `nora`, `iso-lora`, `delta-learning`, or `open-mopd`.
+- `retireopd` (2609.20784) is an active Adaptive Retirement plug-in on outcome-only agent RL. It does not supersede `canopy`, `sao`, `opd`, `vista`, or `opsa`.
+- `when2think` (2609.19671) is an active Think/NoThink length-control plug-in on dense math RLVR. It does not supersede `cispo`.
+- `actobs` (2609.20715) is an active observation-token SFT init before GRPO. It does not supersede `sao`, `mini-swe-agent`, or `canopy`.
+- `opd-eos` (2609.20511) is a niche OPD length-inflation gotcha plus semantic-class stop. It does not supersede `opd`.
+- `sol-pi` (2609.20519) is an active Pi token-efficiency sibling on the harness-runtime task. It does not supersede `omp2-harness`, `mini-swe-agent`, or `neohorse-1`.
+- `bias-only-ttrl` (2609.18587) is a niche bias-subspace compression of majority-vote TTRL. It does not supersede `ttpo`.
 
 ---
 

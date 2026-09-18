@@ -45,6 +45,10 @@ redirects:
     to: "task:input-heavy-agentic-moe-serving"
   - when: "post-train gated sparse attention under a fixed budget, not a SWE loop"
     to: "task:posttrain-attention-sparsification"
+  - when: "SFT on observation tokens before GRPO (consequence prediction), not the SWE loop"
+    to: "task:agentic-async-rl"
+  - when: "token-efficient Pi extension from harness RSI, not issue-to-patch"
+    to: "task:agent-harness-runtime"
 current_sota:
   - method: method:mini-swe-agent
     as_of: "2026-09"
@@ -59,7 +63,9 @@ methods:
   - method:live-swe-agent
   - method:single-agent-plus-tools
   - method:harness-onpolicy-correction
-last_reviewed: "2026-09-14"
+  - method:actobs
+  - method:sol-pi
+last_reviewed: "2026-09-18"
 tags:
   - agents
   - agent
@@ -85,3 +91,5 @@ Choose the loop, ACI, and tools for repository-level software engineering (issue
 - **Niche**: Live-SWE-agent (official JSON 79.2% tie).
 - **Not this task**: SAO, CISPO, RLM, FoldGRPO, OSWorld, Iris search-agent training. Production harness kernels (rewind/fork/remote/sandbox/TUI) are `task:agent-harness-runtime`.
 - **Gotcha (harness × LoRA-SFT)**: `method:harness-onpolicy-correction` (`arXiv:2609.09134`). After evolving a model-specific harness, full expert-trajectory SFT regresses; rewrite the failing student turn only. Does not replace mini-SWE-agent.
+- **Not this task (observation-token SFT before GRPO)**: `method:actobs` on `task:agentic-async-rl`.
+- **Not this task (Pi token-efficiency extension)**: `method:sol-pi` on `task:agent-harness-runtime`.

@@ -29,3 +29,6 @@ print("OPD student rollout generator and teacher logit scorer initialized")
 - Prefer ~16 semantically diverse queries per domain before dumping the full prompt set. Cluster with BGE-M3 (or equivalent) and take one representative per cluster.
 - One query already recovers most full-data OPD gain via state coverage; content-light / WildChat prompts can approach real-query baselines. The bottleneck is absorption rate, not more prompts.
 - Same loss as this recipe. Details: `recipe:opd-one-example`. Does not replace this host loop.
+
+## Gotchas
+- Teacher/student EOS mismatch inflates length under OPD (`paper:opd-eos`, `arXiv:2609.20511`). If rollouts hit the generation budget after a correct answer, check stop ids before blaming the objective. Fix: semantic-class EOS in `recipe:opd-eos` (`https://github.com/UNCSciML/opd-eos`). Decoding-stop alignment alone is insufficient.

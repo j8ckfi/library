@@ -6,6 +6,46 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-18 — weekday SOTA sweep (RetireOPD, When2Think, ActObs, OPD-EOS, SoL-Pi, bias-only TTRL)
+- MUST 1–6. Active/niche only. No new tasks. No false supersessions of CISPO / CANOPY / SAO / VISTA / OPD / OPSA / TTPO / omp2-harness / mini-swe-agent / NeoHorse-1 / Muon2.
+- Housekeeping: `paper:deepseek-v41-flash` `arxiv_id` set to 2609.19969.
+
+### 2026-09-18 — ingest method:retireopd (active Adaptive Retirement; does not supersede method:canopy / method:sao / method:opd / method:vista / method:opsa)
+- Added paper:retireopd (2609.20784), method:retireopd, recipe:retireopd (`code_status: none`; `repo_url: none found`). Wired to task:outcome-only-long-horizon-agent-rl; mention on task:agentic-async-rl / task:student-distillation / task:privileged-teacher-opsd. Reverse redirect from agentic-async-rl for privileged self-OPD then retire to RL.
+- Status active. Not AppWorld TGC SOTA. Drop the privileged teacher when discrepancy stops shrinking and the student hits a fraction of teacher success, then pure RL.
+- Evidence: Qwen2.5 1.5B–7B ALFWorld SR +14.1–18.8% vs RL; WebShop +11.8–19.0%; student beats its skill-conditioned teacher in every reported setting (arXiv:2609.20784); verified: true; evidence_level: preprint.
+- Scope checks: CANOPY remains checker protocol; SAO remains async; OPD remains student distill; VISTA remains privileged math OPSD.
+
+### 2026-09-18 — ingest method:when2think (active IDAC Think/NoThink plug-in; does not supersede method:cispo)
+- Added paper:when2think (2609.19671), method:when2think, recipe:when2think (`code_status: partial`; GitHub JJunShim/When2Think stub README). Wired to task:math-code-rl-dense as an efficiency plug-in.
+- Status active. Not Pass@1 SOTA. Offline reference accuracy/token stats shape Think vs NoThink.
+- Evidence: AIME24 Pass@3 +10.0% with tokens −27.9% vs base; AIME25 Pass@3 40.0% over compression/routing-only (arXiv:2609.19671); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; SAPO remains MoE/VL; ES-reasoning remains Pass@K / no-backward.
+
+### 2026-09-18 — ingest method:actobs (active observation-token SFT; does not supersede method:sao / method:mini-swe-agent / method:canopy)
+- Added paper:actobs (2609.20715), method:actobs, recipe:actobs (`code_status: none`; `repo_url: none found`). Wired to task:agentic-async-rl; mention on task:software-engineering-agent-harness / task:outcome-only-long-horizon-agent-rl. Reverse redirect from the SWE harness for observation-token SFT before GRPO.
+- Status active. SFT looks similar; GRPO exploration changes.
+- Evidence: Qwen3-4B Terminal-Bench 2.0 higher pass@k at every budget vs action-only; Qwen3-8B +3.4 pp pass@16; aider-polyglot +4.2 pp pass@1 at 4B (arXiv:2609.20715); verified: true; evidence_level: preprint.
+- Scope checks: SAO remains async stragglers; mini-SWE-agent remains the loop; CANOPY remains coverage.
+
+### 2026-09-18 — ingest paper:opd-eos / method:opd-eos (niche gotcha + semantic-class stop; does not supersede method:opd)
+- Added paper:opd-eos (2609.20511), method:opd-eos (status niche), recipe:opd-eos. Code: UNCSciML/opd-eos. Wired to task:student-distillation. Gotchas added on method:opd and recipe:opd (same pattern as paper:spurious-advantage-grpo).
+- Teacher/student EOS mismatch inflates length under OPD; decoding-stop alignment is insufficient; semantic-class stop is the fix. Late K2-Horizon inflation can remain.
+- Evidence: Qwen stop-mass → ~0 by step 150 without the fix; Gemma 7168-clip ~100% → mean ~2000 tokens (arXiv:2609.20511); verified: true; evidence_level: preprint.
+- Scope checks: OPD remains student-distill default.
+
+### 2026-09-18 — ingest method:sol-pi (active Pi token-efficiency sibling; does not supersede method:omp2-harness / method:mini-swe-agent / method:neohorse-1)
+- Added paper:sol-pi (2609.20519), method:sol-pi, recipe:sol-pi. Code: NVlabs/SoL-Pi. Wired to task:agent-harness-runtime; mention on task:agentic-rsi-routing-posttrain. Reverse redirect from NeoHorse's task for Pi harness mechanisms vs routing-guided OPD.
+- Status active. Action Fusion / ObservationPack / Evidence-Preserving Reducer / Online Context Compact. Opt-in, default off.
+- Evidence: EdgeBench 51-task Pi parity at −44.7–49.0% token traffic / ~−1/3 API cost (arXiv:2609.20519); verified: true; evidence_level: preprint.
+- Scope checks: omp2 remains the kernel spec; mini-SWE-agent remains issue-to-patch; NeoHorse-1 remains routing-harness post-train.
+
+### 2026-09-18 — ingest method:bias-only-ttrl (niche bias-subspace TTRL; does not supersede method:ttpo)
+- Added paper:bias-only-ttrl (2609.18587), method:bias-only-ttrl, recipe:bias-only-ttrl (`code_status: none`; `repo_url: none found`). Wired to task:label-free-test-time-reasoner beside TTPO.
+- Status niche. Majority-vote rewards on ~100K bias params; backbone frozen.
+- Evidence: MATH-500 76.67%; ~76,000× fewer trainable params than full TTRL (arXiv:2609.18587); verified: true; evidence_level: preprint.
+- Scope checks: TTPO remains label-free TTT; u-OPSD remains train-time unlabeled; CISPO remains Pass@1.
+
 ### 2026-09-16 — weekday SOTA sweep (NGU, DCO)
 - MUST 1–2. Active plug-ins only. No new tasks. No false supersessions of CISPO / SAPO / GRPO / ThinkPrior / DIEM / GMTS / DataFlex-RL / NoRA / Iso-LoRA / lr-matters-lora / OLMo-3 / Delta Learning / Open-MOPD.
 

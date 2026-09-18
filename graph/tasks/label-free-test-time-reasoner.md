@@ -18,7 +18,8 @@ methods:
   - method:opdvr
   - method:cispo
   - method:opsa
-last_reviewed: "2026-09-01"
+  - method:bias-only-ttrl
+last_reviewed: "2026-09-18"
 tags:
   - test-time-training
   - reasoning
@@ -34,3 +35,4 @@ Adapting reasoning language models at inference / test time on unlabeled query d
 ## SOTA Recommendation (as of 2026-08-28)
 - **Primary Method**: **TTPO** (`method:ttpo`, `paper:ttpo` `arXiv:2608.27448`) for asymmetric test-time policy optimization (agreeing rollout OPSD + disagreeing rollout Grouped RL).
 - **Complementary Work**: `method:u-opsd` for train-time unlabeled post-training; `method:opdvr` when ground-truth verifiers and external teachers exist; `method:j-zero` for data-free train-time Challenger–Solver–Judge co-evolution (not test-time). Train-time teacher-free self-adaptation without consensus labels is `method:opsa`, not TTPO.
+- **Niche bias-only TTRL (not this first hop)**: `method:bias-only-ttrl` (`arXiv:2609.18587`) majority-vote rewards on ~100K bias parameters; MATH-500 76.67%; ~76,000× fewer params than full TTRL. Does not replace TTPO.

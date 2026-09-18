@@ -8,11 +8,12 @@ sota_for:
   - task:student-distillation
 supersedes:
   - method:on-policy-distillation
-last_reviewed: "2026-09-08"
+last_reviewed: "2026-09-18"
 papers:
   - paper:opd
   - paper:opd-one-example
   - paper:opd-hard-cot-selection
+  - paper:opd-eos
 recipes:
   - recipe:opd
 claims:
@@ -56,6 +57,7 @@ OPD (On-Policy Distillation) is the state-of-the-art framework for distilling la
 - Do not scale the prompt set when 16-shot already matches full-data OPD. The remaining gap is student absorption / step-efficiency (`method:opd-one-example`).
 - Prefer hard/long-CoT over easy short traces when ranking a small set (`method:opd-hard-cot-selection`). Do not treat that as OPD-II's diversity finding.
 - Sampled-token OPD can raise pass@1 while flattening pass@k. That is `method:ida-opd`, not more data.
+- Teacher/student EOS ids can disagree even when declared stop sets match (`paper:opd-eos`, `arXiv:2609.20511`). The teacher puts stop mass on a token the student never samples; length inflates into the budget. Aligning decode stops is not enough. Score equivalent EOS tokens as one semantic stop (`method:opd-eos`, `EOS_MODE=semantic_class`). A later K2-Horizon inflation mode can remain after alignment. Does not replace this method.
 
 ## Supersession
 - Supersedes `method:on-policy-distillation` (GKD baseline) as the primary distillation reference.

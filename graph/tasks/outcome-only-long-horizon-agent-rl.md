@@ -31,7 +31,7 @@ redirects:
     to: "task:agentic-rsi-routing-posttrain"
   - when: "noisy pairwise preference labels (PLC-DPO), not outcome-only agent RL"
     to: "task:direct-preference-alignment"
-last_reviewed: "2026-09-14"
+last_reviewed: "2026-09-18"
 current_sota:
   - method: method:canopy
     as_of: "2026-09-04"
@@ -50,6 +50,8 @@ methods:
   - method:t1-terminal-rl
   - method:evors
   - method:ddo
+  - method:retireopd
+  - method:actobs
 tags:
   - post-training
   - agentic
@@ -79,3 +81,5 @@ Two siblings share this task and are not substitutes:
 - **Optional 122B terminal-MoE recipe (not this first hop)**: `method:t1-terminal-rl` (`arXiv:2609.11042`) on slime. Terminal-Bench 2.1 43.8%→64.0%. Does not replace CANOPY, SAO, or Miles.
 - **Active open-ended reward-system evolution (not this first hop)**: `method:evors` (`arXiv:2609.12459`) co-evolves a reward model from on-policy traces. Does not replace CANOPY or DRACO.
 - **Active successful-strategy coverage regularizer (not this first hop)**: `method:ddo` (`arXiv:2609.10052`). Preference-pair primary; mention here for open-ended coverage. Does not replace CANOPY or DRACO.
+- **Active privileged self-OPD then retirement (not this first hop)**: `method:retireopd` (`arXiv:2609.20784`). Adaptive Retirement drops the privileged teacher when discrepancy stops shrinking and the student hits a fraction of teacher success, then pure RL. ALFWorld +14.1–18.8% SR vs RL; WebShop +11.8–19.0%. Does not replace CANOPY, SAO, OPD, or VISTA.
+- **Related SFT init (not this first hop)**: `method:actobs` (`arXiv:2609.20715`) on `task:agentic-async-rl` — observation-token SFT before GRPO. Does not replace CANOPY.

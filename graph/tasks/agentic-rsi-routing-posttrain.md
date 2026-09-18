@@ -25,6 +25,8 @@ redirects:
     to: "task:math-code-rl-dense"
   - when: "single-teacher text distillation without a routing harness"
     to: "task:student-distillation"
+  - when: "token-efficient Pi harness mechanisms from auto-research, not routing-harness OPD"
+    to: "task:agent-harness-runtime"
 current_sota:
   - method: method:neohorse-1
     as_of: "2026-09-09"
@@ -40,7 +42,8 @@ methods:
   - method:iris
   - method:opd
   - method:harness-onpolicy-correction
-last_reviewed: "2026-09-11"
+  - method:sol-pi
+last_reviewed: "2026-09-18"
 tags:
   - post-training
   - agentic
@@ -62,3 +65,4 @@ Recursive self-improvement needs a concrete loop: observe capability demand from
 - **Primary Method**: **NeoHorse-1** (`method:neohorse-1`, `paper:neohorse-1` `arXiv:2609.08183`). Code: TokenRhythm/NeoHorse. Weights: hf.co/collections/TokenRhythm/neohorse-1.
 - **Not This Task**: `method:mini-swe-agent` remains the SWE harness; `method:sao` remains async; `method:canopy` remains AppWorld; `method:iris` remains search-agent climbing; `method:cispo` remains Pass@1; `method:opd` remains text distill.
 - **Gotcha (evolved-harness full-traj SFT)**: `method:harness-onpolicy-correction` (`arXiv:2609.09134`). Does not replace NeoHorse-1.
+- **Not this task (Pi token-efficiency extension)**: `method:sol-pi` (`arXiv:2609.20519`) on `task:agent-harness-runtime`. Harness RSI that yields Pi mechanisms, not a routing-guided weight curriculum.

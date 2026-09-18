@@ -25,7 +25,7 @@ redirects:
     to: "task:agent-communication"
   - when: "recurrent CED-style architecture, not a harness kernel"
     to: "task:recurrent-encoder-decoder-lm"
-last_reviewed: "2026-09-12"
+last_reviewed: "2026-09-18"
 current_sota:
   - method: method:omp2-harness
     as_of: "2026-09-02"
@@ -36,6 +36,7 @@ current_sota:
 methods:
   - method:omp2-harness
   - method:harness-onpolicy-correction
+  - method:sol-pi
 tags:
   - agents
   - agent-harness
@@ -61,4 +62,5 @@ This is **not** the SWE-bench start/eval loop. Issue → patch / locked mini har
 - **Default (this task)**: **omp² harness** (`method:omp2-harness`, `paper:harness-playbook`). Spec for a production engine still being built; start with journal → session DOM.
 - **Not this task**: mini-SWE-agent (issue → patch / locked eval), CCA (equal-model Pro scaffold), OpenHands/CodeAct (production OSS SWE agent), SAO (train a policy), FoldGRPO (trajectory folding), RLM (dumped long prompt), MCP (agent↔tool protocol), ACE (agent memory), MAGIC / CISPO / Muon2 (training/eval kernels).
 - **Gotcha (evolved-harness SFT)**: `method:harness-onpolicy-correction` (`arXiv:2609.09134`). Does not replace omp2.
+- **Active token-efficient Pi sibling (not this first hop)**: `method:sol-pi` (`arXiv:2609.20519`). Harness-layer RSI → Action Fusion / ObservationPack / Evidence-Preserving Reducer / Online Context Compact. EdgeBench parity at −44.7–49% token traffic. Does not replace omp2, mini-SWE-agent, or NeoHorse-1.
 - Related workflow, not this architecture: [prewalk](https://stencil.so/blog/prewalk) is a workflow on omp, not current_sota here.

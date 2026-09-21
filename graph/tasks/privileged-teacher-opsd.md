@@ -4,6 +4,11 @@ type: task
 title: "Privileged-Teacher On-Policy Self-Distillation"
 domain: "post-training"
 summary: "On-policy self-distillation where a same-size teacher is privileged with a gold reference solution and a deterministic outcome verifier, rather than a larger frozen teacher model."
+redirects:
+  - when: "TSD calibration of teacher–student discrepancy during OPD (not teacher update)"
+    to: "method:cal-opd"
+  - when: "Adaptive Retirement of a privileged self-OPD teacher then pure agent RL"
+    to: "task:outcome-only-long-horizon-agent-rl"
 current_sota:
   - method: method:vista
     as_of: "2026-08-31"
@@ -22,7 +27,8 @@ methods:
   - method:nsd
   - method:scope-opsd
   - method:retireopd
-last_reviewed: "2026-09-18"
+  - method:cal-opd
+last_reviewed: "2026-09-21"
 tags:
   - post-training
   - distillation
@@ -50,3 +56,4 @@ Train a problem-only student on its own rollouts using dense token-level targets
 - **Actionable anti-collapse trainer (not this first hop)**: `method:nsd` (`arXiv:2609.11699`). Diverges from a self-generated negative condition instead of imitating privileged traces. Active sibling. VISTA stays this task's first hop.
 - **Optional Fisher-subspace OPSD auxiliary (not this first hop)**: `method:scope-opsd` (`arXiv:2609.12579`). Projects the privileged residual onto a frozen rank-64 Fisher-sensitive subspace; matched Random control. Does not replace VISTA, NSD, OPSA, OPD, or CISPO.
 - **Not this task (agent RL retirement)**: `method:retireopd` (`arXiv:2609.20784`) on `task:outcome-only-long-horizon-agent-rl` — Adaptive Retirement of a privileged self-OPD teacher then pure RL on ALFWorld/WebShop. Does not replace VISTA.
+- **Optional TSD calibration (not this first hop)**: `method:cal-opd` (`arXiv:2609.21619`) on `task:student-distillation` — residual discrepancy beyond a probed teacher-self-deviation region. Signal calibration during OPD, not a teacher update. Does not replace VISTA or RetireOPD.

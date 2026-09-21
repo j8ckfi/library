@@ -6,6 +6,40 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-21 — weekday SOTA sweep (Cal-OPD, CodeMidas, RecreationWorld, Code2Skill, Vision-RL2)
+- MUST 1–5. Three new tasks. No `current_sota` retargets of CISPO / CANOPY / SAO / OPD / Open-MOPD / VISTA / omp2-harness / TTPO / Miles / Claude computer-use / ACE / mini-SWE-agent / Muon2 / EPS.
+- Window: HF Daily 2026-09-19/20 empty weekend; 2026-09-21 + arXiv ~2609.20800–2609.22086. WATCH/SKIP: GraphSkillEvo 2609.21749, IntBMoE 2609.21346, λ-Controlled GRPO 2609.22041, Matrix AdaGrad 2609.21815, Abstention and Noise Filtering 2609.22005.
+
+### 2026-09-21 — ingest method:cal-opd (active TSD-calibration plug-in; does not supersede method:opd / method:vista / method:retireopd)
+- Added paper:cal-opd (2609.21619), method:cal-opd, recipe:cal-opd (`code_status: none`; `repo_url: none found`; verl reimplementation, λ=5, 8×H20). Wired to task:student-distillation; mention on task:privileged-teacher-opsd. Reverse redirect from privileged-teacher-opsd for TSD calibration vs teacher update.
+- Status active. Not distill SOTA. Probes teacher self-deviation with positive+negative privileged interventions; residual discrepancy (~52–65%) is the OPD advantage. Differentiates from RetireOPD (retirement timing).
+- Evidence: Qwen3-4B→1.7B Avg@16 53.1 vs OPD 50.8; Qwen3-30B-A3B→4B 69.0 vs OPD 65.9 (arXiv:2609.21619); verified: true; evidence_level: preprint.
+- Scope checks: OPD remains student distill; VISTA remains privileged-teacher adaptation; RetireOPD remains agent-RL retirement.
+
+### 2026-09-21 — ingest method:codemidas (new task:coding-agent-rl-environment-construction; does not supersede method:canopy / method:sao / method:miles / method:mini-swe-agent)
+- Added paper:codemidas (2609.22068), method:codemidas, recipe:codemidas (`code_status: none`; project `https://mimo.xiaomi.com/rl/`; no public GitHub as of 2026-09-21). New task first hop; method status active (`sota_for: []`). Mentions and reverse redirects from task:outcome-only-long-horizon-agent-rl / task:agentic-async-rl / task:software-engineering-agent-harness.
+- Status active. Source-code-only env factory (explore → specs → execution-grounded tests → filter) then GRPO. 5,545 tasks / 3,185 repos / 23 languages.
+- Evidence: MiMo-V2.5 GRPO DeepSWE 10.0→21.7, ProgramBench Almost Solved 4.5→21.5, Terminal-Bench v2.1 +8.5pp (arXiv:2609.22068); verified: true; evidence_level: preprint.
+- Scope checks: CANOPY remains AppWorld coverage; SAO remains async; Miles remains the engine; mini-SWE-agent remains the loop.
+
+### 2026-09-21 — ingest method:recreationworld (new task:hybrid-computer-use-agent-rl; does not demote method:claude-computer-use)
+- Added paper:recreationworld (2609.22000), method:recreationworld, recipe:recreationworld (`code_status: released`; QwenLM/RecreationWorld; RecreationBench 250; HF `Qwen/RecreationBench`). New task first hop; method status active. Reverse redirect from task:computer-use-agent for hybrid GUI+code training.
+- Status active. Hybrid CUA train/eval (GUI + code interleaved) across Ubuntu/macOS/Windows/Android/Web; reference-as-oracle rewards; OOD transfer.
+- Evidence: GPT-6 Astra RecreationBench 58.1% overall / 2.8% full programmatic; OOD up to +17.9 pp (arXiv:2609.22000); verified: true; evidence_level: preprint.
+- Scope checks: Claude computer-use remains OSWorld 2.0 ranking; mini-SWE-agent remains issue-to-patch; CANOPY remains AppWorld.
+
+### 2026-09-21 — ingest method:code2skill (active on task:agent-memory; does not supersede method:ace)
+- Added paper:code2skill (2609.05571), method:code2skill, recipe:code2skill (`code_status: partial`; ant-intl/Code2Skill pre-release; HF `ant-intl/DeveloperSkills-Code2Skill`). Wired to task:agent-memory alongside ACE. Redirect when repository-grounded skills before interaction.
+- Status active. Not memory SOTA. Pipeline lifts code units into verified atomic/composite/pattern skills; CodeSkillBank ~1.0M from 19,769 repos.
+- Evidence: +11.7% avg over matched baselines across 72 evals / 8 benches (42.90→47.90, 57/72); vs Trace2Skill 31.0 / ExpeL 27.9 / SkillRL-Bank 32.8, Code2Skill 49.5 (arXiv:2609.05571); verified: true; evidence_level: preprint.
+- Scope checks: ACE remains playbook/memory default; mini-SWE-agent remains the loop with no bank.
+
+### 2026-09-21 — ingest method:vision-rl2 (new task:mllm-finegrained-perception-rl; does not supersede method:eps-prompt-scaffolding)
+- Added paper:vision-rl2 (2609.19745), method:vision-rl2, recipe:vision-rl2 (`code_status: released`; YuHengsss/VisionRL2). New task first hop; method status active. Reverse redirects from task:mllm-rl-prompt-curriculum / task:rl-video-mllm.
+- Status active. Region-level RL on a lightweight RoI proposal network; frozen MLLM reader scores leave-one-out likelihood; sparse encoding cuts visual tokens ~4×.
+- Evidence: Qwen3.5-9B six-bench avg 80.1 vs base 74.6 / Vision-OPD-9B 78.7; 4B aligned 71.1 vs SD-RPN 66.6 with 4.2× fewer tokens (arXiv:2609.19745); verified: true; evidence_level: preprint.
+- Scope checks: EPS remains prompt-curriculum first hop; OraRL remains video annotation-as-rollout; CISPO remains Pass@1.
+
 ### 2026-09-18 — weekday SOTA sweep (RetireOPD, When2Think, ActObs, OPD-EOS, SoL-Pi, bias-only TTRL)
 - MUST 1–6. Active/niche only. No new tasks. No false supersessions of CISPO / CANOPY / SAO / VISTA / OPD / OPSA / TTPO / omp2-harness / mini-swe-agent / NeoHorse-1 / Muon2.
 - Housekeeping: `paper:deepseek-v41-flash` `arxiv_id` set to 2609.19969.

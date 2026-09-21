@@ -8,9 +8,12 @@ scope: "Video MLLM RL for temporal grounding, tracking, segmentation, and video 
 out_of_scope:
   - "General image / multimodal reasoning RL prompt curriculum (not video annotation-as-rollout)"
   - "Dense text Pass@1 RLVR"
+  - "Region-level image perception RL (Vision-RL2)"
 redirects:
   - when: "general image/multimodal reasoning RL prompt curriculum (not video OraRL)"
     to: "task:mllm-rl-prompt-curriculum"
+  - when: "image region-proposal RL (not video annotation-as-rollout)"
+    to: "task:mllm-finegrained-perception-rl"
 current_sota:
   - method: method:orarl
     as_of: "2026-08-27"
@@ -23,7 +26,8 @@ methods:
   - method:sapo
   - method:grpo
   - method:eps-prompt-scaffolding
-last_reviewed: "2026-09-15"
+  - method:vision-rl2
+last_reviewed: "2026-09-21"
 tags:
   - video-mllm
   - multimodal-rl
@@ -38,4 +42,4 @@ Post-training multimodal large language models for fine-grained video perception
 
 ## SOTA Recommendation (as of 2026-08-27)
 - **Primary Method**: **OraRL** (`method:orarl`, `paper:orarl` `arXiv:2608.20492`) for annotation-as-rollout with decoupled advantage estimation and sign-balanced pruning.
-- **Not This Task**: general image/multimodal reasoning RL prompt curriculum is `method:eps-prompt-scaffolding` on `task:mllm-rl-prompt-curriculum`. OraRL is unchanged.
+- **Not This Task**: general image/multimodal reasoning RL prompt curriculum is `method:eps-prompt-scaffolding` on `task:mllm-rl-prompt-curriculum`. Region-level image perception RL is `method:vision-rl2` on `task:mllm-finegrained-perception-rl`. OraRL is unchanged.

@@ -26,12 +26,15 @@ do_not_use_for:
   - when: "outcome-only long-horizon agent RL"
     reason: "CANOPY / DRACO own sparse-outcome coverage; EPS is single-turn multimodal prompt routing"
     use_instead: "method:canopy"
+  - when: "region-level RL for fine-grained MLLM perception (RoI proposal, frozen reader)"
+    reason: "EPS rewrites prompts; Vision-RL2 trains a region head on a frozen MLLM"
+    use_instead: "method:vision-rl2"
 assumptions:
   - "Host is GRPO (paper: 3000 steps, 8 rollouts/prompt, batch 16, 8-GPU FSDP, lr 1e-6, clip 0.2, KL 0.01, max response 3072). Default routing threshold τ=0."
   - "Student is a VLM (paper: Qwen3-VL-2B/4B) on Geometry3K and MMK12. Verifiable reward via MathRuler. Teacher is Qwen-VL-Max."
   - "Scaffolding is answer-aware in the paper: the teacher sees the reference answer and is instructed not to reveal it. Fully answer-free scaffolding is listed as future work."
   - "No official public training repo as of 2026-09-15. Project page only; Appendix A has the loop."
-last_reviewed: "2026-09-15"
+last_reviewed: "2026-09-21"
 papers:
   - paper:eps-prompt-scaffolding
 recipes:
@@ -89,10 +92,10 @@ Exploration Potential Score from \(N\) on-policy rewards \(r_i\):
 - When a teacher can rewrite the training condition without the student imitating teacher answers.
 
 ## When NOT to Use
-- Video annotation-as-rollout → `method:orarl`. Dense text Pass@1 → `method:cispo`. MoE/VL loss → `method:sapo`. Static data-policy eval → `method:dataflex-rl`. Example reweight → `method:diem`. Outcome-only agents → `method:canopy`.
+- Video annotation-as-rollout → `method:orarl`. Dense text Pass@1 → `method:cispo`. MoE/VL loss → `method:sapo`. Static data-policy eval → `method:dataflex-rl`. Example reweight → `method:diem`. Outcome-only agents → `method:canopy`. Region-level perception RL → `method:vision-rl2`.
 
 ## Relation to Existing SOTA
-- First hop for `task:mllm-rl-prompt-curriculum` only. Does **not** supersede `method:orarl`, `method:dataflex-rl`, `method:cispo`, `method:sapo`, `method:grpo`, `method:canopy`, or `method:diem`. DataFlex is the static-policy null; EPS is online adaptive scaffolding.
+- First hop for `task:mllm-rl-prompt-curriculum` only. Does **not** supersede `method:orarl`, `method:dataflex-rl`, `method:cispo`, `method:sapo`, `method:grpo`, `method:canopy`, or `method:diem`. DataFlex is the static-policy null; EPS is online adaptive scaffolding. Region-level perception RL is `method:vision-rl2`.
 
 ## Gotchas & Failure Modes
 - Teacher scaffolding in the paper is answer-aware. Do not treat results as answer-free distillation.

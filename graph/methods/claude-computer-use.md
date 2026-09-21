@@ -17,9 +17,12 @@ do_not_use_for:
   - when: "trained mobile GUI policy"
     reason: "MAI-UI / UI-TARS-2 are trained policies on old protocols"
     use_instead: "method:mai-ui"
+  - when: "training hybrid GUI+code recreation agents"
+    reason: "OSWorld 2.0 ranking stays Claude computer-use; RecreationWorld is hybrid train/eval"
+    use_instead: "method:recreationworld"
 assumptions:
   - "OSWorld 2.0 paper protocol (2606.29537). Not OSWorld-Verified (near-saturated)."
-last_reviewed: "2026-09-01"
+last_reviewed: "2026-09-21"
 papers:
   - paper:osworld-2
 recipes:
@@ -55,6 +58,7 @@ OSWorld-Verified is near-saturated and is not the ranking bench. Do **not** mix 
 - GitHub issue → patch → `method:mini-swe-agent`.
 - Mobile AndroidWorld → `method:mai-ui`.
 - Old OSWorld trained policy → `method:ui-tars-2` (not 2.0).
+- Hybrid GUI+code recreation train/eval → `method:recreationworld`.
 
 ## Gotchas & Failure Modes
 - Aggregator boards (Opus 5 70.6%, Steel 62.6% partial) are not this method's SOTA.

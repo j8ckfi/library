@@ -8,7 +8,7 @@ sota_for:
   - task:student-distillation
 supersedes:
   - method:on-policy-distillation
-last_reviewed: "2026-09-18"
+last_reviewed: "2026-09-21"
 papers:
   - paper:opd
   - paper:opd-one-example
@@ -52,6 +52,7 @@ OPD (On-Policy Distillation) is the state-of-the-art framework for distilling la
 - Prompt-level teacher gate (`method:tgopd`): verifier-scored teacher probes then exclusive OPD vs GRPO. Does not replace this method.
 - Sparse token-budget plug-in (`method:sparse-opd-supervision`): 1–2 tokens per trajectory (~0.05%) can match/beat full-token OPD. Does not replace this method.
 - Sequential stack (`method:opd-then-rlvr`): OPD then RLVR beats joint one-step fusion when both are used. Does not replace this method or CISPO.
+- Optional TSD calibration (`method:cal-opd`): residual discrepancy beyond a probed teacher-self-deviation region. Signal calibration during OPD. Does not replace this method, VISTA, or RetireOPD.
 
 ## Gotchas & Failure Modes
 - Do not scale the prompt set when 16-shot already matches full-data OPD. The remaining gap is student absorption / step-efficiency (`method:opd-one-example`).

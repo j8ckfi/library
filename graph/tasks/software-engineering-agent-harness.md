@@ -20,6 +20,8 @@ out_of_scope:
   - "Recurrent CED-style architecture (RLT)"
   - "Input-heavy agentic MoE serving / KV CED (DeepSeek-V4.1-Flash)"
   - "Post-train gated sparse attention under a fixed budget (SAS)"
+  - "SFT on observation tokens before GRPO (ActObs)"
+  - "Data/env construction for coding-agent RL from source code (CodeMidas)"
 redirects:
   - when: "train asynchronous RL for a tool-use policy"
     to: "task:agentic-async-rl"
@@ -49,6 +51,8 @@ redirects:
     to: "task:agentic-async-rl"
   - when: "token-efficient Pi extension from harness RSI, not issue-to-patch"
     to: "task:agent-harness-runtime"
+  - when: "data/env construction for coding-agent RL from source code"
+    to: "task:coding-agent-rl-environment-construction"
 current_sota:
   - method: method:mini-swe-agent
     as_of: "2026-09"
@@ -65,7 +69,8 @@ methods:
   - method:harness-onpolicy-correction
   - method:actobs
   - method:sol-pi
-last_reviewed: "2026-09-18"
+  - method:codemidas
+last_reviewed: "2026-09-21"
 tags:
   - agents
   - agent
@@ -93,3 +98,4 @@ Choose the loop, ACI, and tools for repository-level software engineering (issue
 - **Gotcha (harness × LoRA-SFT)**: `method:harness-onpolicy-correction` (`arXiv:2609.09134`). After evolving a model-specific harness, full expert-trajectory SFT regresses; rewrite the failing student turn only. Does not replace mini-SWE-agent.
 - **Not this task (observation-token SFT before GRPO)**: `method:actobs` on `task:agentic-async-rl`.
 - **Not this task (Pi token-efficiency extension)**: `method:sol-pi` on `task:agent-harness-runtime`.
+- **Not this task (coding-agent RL env construction)**: `method:codemidas` on `task:coding-agent-rl-environment-construction`.

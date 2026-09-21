@@ -42,9 +42,11 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when recursive summary as the only long-context strategy → `method:rlm`
   - do not use when SWE patch loop with no persistent playbook → `method:mini-swe-agent`
   - do not use when long-lived persona OS-style paging → `method:memgpt`
+  - do not use when repository-grounded procedural skills before interaction experience → `method:code2skill`
 - **Redirects**:
   - when dumped corpus ≫ window → `task:long-context-prompt-offload`
   - when SWE issue-to-patch without a playbook → `task:software-engineering-agent-harness`
+  - when repository-grounded procedural skills before interaction experience → `method:code2skill`
 - **Out of scope**: Recursive summary as the only long-context strategy; SWE patch loops with no playbook need; Dumped 10M-token prompt
 
 ### task:computer-use-agent — Computer-Use Agent
@@ -53,9 +55,25 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when GitHub issue → patch → `method:mini-swe-agent`
   - do not use when citing aggregator Opus 5 70.6% or Steel GPT-5.6 Sol 62.6% partial as this method's SOTA → `method:claude-computer-use`
   - do not use when trained mobile GUI policy → `method:mai-ui`
+  - do not use when training hybrid GUI+code recreation agents → `method:recreationworld`
 - **Redirects**:
   - when GitHub issue to patch → `task:software-engineering-agent-harness`
-- **Out of scope**: GitHub issue → patch (SWE harness); OSWorld-Verified as the ranking bench (near-saturated); Aggregator 70.6% / Steel 62.6% as method SOTA
+  - when training hybrid GUI+code agents → `task:hybrid-computer-use-agent-rl`
+- **Out of scope**: GitHub issue → patch (SWE harness); OSWorld-Verified as the ranking bench (near-saturated); Aggregator 70.6% / Steel 62.6% as method SOTA; Hybrid GUI+code recreation train/eval (RecreationWorld)
+
+### task:hybrid-computer-use-agent-rl — Hybrid Computer-Use Agent RL
+- **Scope**: Hybrid GUI+code train/eval (recreation tasks, reference-as-oracle rewards, multi-platform harness). First hop is RecreationWorld. Desktop OSWorld 2.0 paper-protocol ranking stays Claude computer-use.
+- **SOTA**: `method:recreationworld` `2609.22000` (as_of 2026-09-21) — RecreationBench 250 (50 per platform), GPT-6 Astra: 58.1% overall; full programmatic pass 2.8%
+  - do not use when desktop/OS GUI ranking on OSWorld 2.0 paper protocol → `method:claude-computer-use`
+  - do not use when GitHub issue to patch / SWE harness → `method:mini-swe-agent`
+  - do not use when programmatic checker AppWorld coverage / anti-drift → `method:canopy`
+  - do not use when trained mobile-only GUI policy on AndroidWorld → `method:mai-ui`
+- **Redirects**:
+  - when desktop/OS GUI ranking on OSWorld 2.0 paper protocol → `task:computer-use-agent`
+  - when GitHub issue to patch / SWE harness → `task:software-engineering-agent-harness`
+  - when programmatic checker AppWorld coverage / anti-drift → `task:outcome-only-long-horizon-agent-rl`
+  - when data/env construction for coding-agent RL from source code → `task:coding-agent-rl-environment-construction`
+- **Out of scope**: Desktop/OS GUI ranking on OSWorld 2.0 paper protocol (Claude computer-use); GitHub issue → patch (mini-SWE-agent); Programmatic-checker AppWorld coverage (CANOPY); Trained mobile-only GUI policy on AndroidWorld (MAI-UI / UI-TARS-2); Coding-agent RL env construction from source code (CodeMidas)
 
 ### task:long-context-prompt-offload — Long-Context Prompt Offload
 - **Scope**: Dumped corpus ≫ context window. RLM REPL offload. Not a SWE harness and not trajectory folding.
@@ -129,7 +147,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when post-train gated sparse attention under a fixed budget, not a SWE loop → `task:posttrain-attention-sparsification`
   - when SFT on observation tokens before GRPO (consequence prediction), not the SWE loop → `task:agentic-async-rl`
   - when token-efficient Pi extension from harness RSI, not issue-to-patch → `task:agent-harness-runtime`
-- **Out of scope**: Training an async agent policy (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Math/code RLVR (CISPO); GUI / OS desktop computer-use; Dumped 10M-token corpus prompt offload (RLM); Trajectory folding (FoldGRPO); Planner-coder-tester multi-agent theater for a single patch; Meta-agent search as the default design process; Training a live-web search policy (Iris); Frontier RL post-train engine (Miles); Routing-harness RSI post-train (NeoHorse-1); Recurrent CED-style architecture (RLT); Input-heavy agentic MoE serving / KV CED (DeepSeek-V4.1-Flash); Post-train gated sparse attention under a fixed budget (SAS)
+  - when data/env construction for coding-agent RL from source code → `task:coding-agent-rl-environment-construction`
+- **Out of scope**: Training an async agent policy (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Math/code RLVR (CISPO); GUI / OS desktop computer-use; Dumped 10M-token corpus prompt offload (RLM); Trajectory folding (FoldGRPO); Planner-coder-tester multi-agent theater for a single patch; Meta-agent search as the default design process; Training a live-web search policy (Iris); Frontier RL post-train engine (Miles); Routing-harness RSI post-train (NeoHorse-1); Recurrent CED-style architecture (RLT); Input-heavy agentic MoE serving / KV CED (DeepSeek-V4.1-Flash); Post-train gated sparse attention under a fixed budget (SAS); SFT on observation tokens before GRPO (ActObs); Data/env construction for coding-agent RL from source code (CodeMidas)
 
 ## algorithms
 
@@ -267,7 +286,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when agentic RSI / routing-harness post-train, not async stragglers → `task:agentic-rsi-routing-posttrain`
   - when adaptive sampling until ≥1 correct on math/code prompts, not tool stragglers → `task:math-code-rl-dense`
   - when privileged self-OPD then retire to RL (ALFWorld/WebShop), not async stragglers → `task:outcome-only-long-horizon-agent-rl`
-- **Out of scope**: Building or choosing a software-engineering agent loop (mini-SWE-agent / CCA / OpenHands); Dumped long-prompt offload (RLM); GUI computer-use without policy training; Outcome-only long-horizon agent RL where the failure is signal starvation / policy drift, not async latency; Live-web multi-hop search-agent training (Iris SFT-RL climbing); Production post-train engine rather than the async algorithm (Miles); Routing-harness RSI post-train (NeoHorse-1); Adaptive math/code sampling until ≥1 correct (NGU); that is a CISPO-host sampler, not SAO straggler replay; Privileged self-OPD then Adaptive Retirement into pure agent RL (RetireOPD / ALFWorld/WebShop)
+  - when data/env construction for coding-agent RL from source code → `task:coding-agent-rl-environment-construction`
+- **Out of scope**: Building or choosing a software-engineering agent loop (mini-SWE-agent / CCA / OpenHands); Dumped long-prompt offload (RLM); GUI computer-use without policy training; Outcome-only long-horizon agent RL where the failure is signal starvation / policy drift, not async latency; Live-web multi-hop search-agent training (Iris SFT-RL climbing); Production post-train engine rather than the async algorithm (Miles); Routing-harness RSI post-train (NeoHorse-1); Adaptive math/code sampling until ≥1 correct (NGU); that is a CISPO-host sampler, not SAO straggler replay; Privileged self-OPD then Adaptive Retirement into pure agent RL (RetireOPD / ALFWorld/WebShop); Data/env construction for coding-agent RL from source code (CodeMidas)
 
 ### task:agentic-rsi-routing-posttrain — Agentic RSI Routing-Harness Post-Training
 - **Scope**: Agentic post-training that converts routing-harness records (predicted demand, selected tier, interaction) into SFT curriculum and routing-guided OPD, then reallocates the next mix from capability feedback.
@@ -290,6 +310,22 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:all-zero-verifier-groups — All-Zero Verifier Groups & Process Supervision
 - **SOTA**: `method:verigate` `2605.30451` (as_of 2026-08-26) — All-Zero Verifier Group Benchmarks / Process Supervision: Default SOTA for verifier gating
+
+### task:coding-agent-rl-environment-construction — Coding-Agent RL Environment Construction
+- **Scope**: Data and environment factories for coding-agent RL (explore → behavioral specs → execution-grounded tests → filter). First hop is CodeMidas. Not the SWE loop, not AppWorld coverage, not async stragglers, not a production trainer.
+- **SOTA**: `method:codemidas` `2609.22068` (as_of 2026-09-21) — DeepSWE v1.1 / ProgramBench Almost Solved / Terminal-Bench v2.1, MiMo-V2.5 GRPO: DeepSWE 10.0→21.7; ProgramBench AS 4.5→21.5; TB v2.1 +8.5pp (63.7→72.2)
+  - do not use when programmatic checker exists and sparse outcome RL is the protocol (AppWorld TGC) → `method:canopy`
+  - do not use when variable tool latency / async stragglers → `method:sao`
+  - do not use when GitHub issue to patch / SWE harness → `method:mini-swe-agent`
+  - do not use when production post-train engine (SGLang / Megatron / LoRA RL / OPD) → `method:miles`
+  - do not use when single-turn math/code Pass@1 RLVR → `method:cispo`
+- **Redirects**:
+  - when programmatic checker exists and sparse outcome RL is the protocol (AppWorld TGC) → `task:outcome-only-long-horizon-agent-rl`
+  - when variable environment latency / async stragglers → `task:agentic-async-rl`
+  - when GitHub issue to patch / SWE harness → `task:software-engineering-agent-harness`
+  - when production post-train stack rather than env construction → `task:frontier-rl-posttrain-stack`
+  - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
+- **Out of scope**: Programmatic-checker outcome-only agent RL (CANOPY / AppWorld TGC); Variable tool latency / async stragglers (SAO); GitHub issue → patch harness (mini-SWE-agent); Production post-train engine (Miles); Single-turn math/code Pass@1 RLVR (CISPO); Live-web multi-hop search-agent training (Iris)
 
 ### task:data-free-self-evolution — Data-Free Self-Evolution across Verifiable and Unverifiable Domains
 - **SOTA**: `method:j-zero` `2608.26582` (as_of 2026-08-31) — Verifiable overall avg and unverifiable overall avg (Qwen3-4B-Base / Qwen3-8B-Base): Verifiable 54.38 / 58.55; unverifiable 20.81 / 23.41
@@ -329,6 +365,20 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 ### task:math-code-rl-moe — Mathematical and Code RL Reasoning (MoE Policies)
 - **SOTA**: `method:sapo` `2511.20347` (as_of 2026-08-26) — Qwen3 MoE / MATH-500 MoE RL: Default SOTA for MoE/VL RL
 
+### task:mllm-finegrained-perception-rl — MLLM Fine-grained Perception RL
+- **Scope**: Region-level RL on a small RoI head attached to a frozen MLLM. Actions are coherent image regions; the reader scores leave-one-out gold-answer likelihood. Not prompt curriculum, not video annotation-as-rollout.
+- **SOTA**: `method:vision-rl2` `2609.19745` (as_of 2026-09-21) — Six-bench average at 16,384 source tokens, Qwen3.5-9B: 80.1 vs 74.6 / 78.7; 4B aligned 71.1 vs SD-RPN 66.6 with 4.2× fewer tokens
+  - do not use when online adaptive prompt selection / teacher scaffolding for image/VL GRPO → `method:eps-prompt-scaffolding`
+  - do not use when video annotation-as-rollout / fine-grained video perception RL → `method:orarl`
+  - do not use when single-turn dense text math/code Pass@1 RLVR → `method:cispo`
+  - do not use when MoE/VL RLVR loss rather than region proposal → `method:sapo`
+- **Redirects**:
+  - when online adaptive prompt selection / teacher scaffolding for image/VL GRPO → `task:mllm-rl-prompt-curriculum`
+  - when video annotation-as-rollout / fine-grained video perception RL → `task:rl-video-mllm`
+  - when single-turn dense text math/code Pass@1 RLVR → `task:math-code-rl-dense`
+  - when MoE/VL RLVR loss rather than region proposal → `task:math-code-rl-moe`
+- **Out of scope**: Online adaptive prompt selection / teacher scaffolding for image/VL GRPO (EPS); Video annotation-as-rollout / fine-grained video perception RL (OraRL); Single-turn dense text math/code Pass@1 RLVR (CISPO); MoE/VL RLVR loss rather than region proposal (SAPO)
+
 ### task:mllm-rl-prompt-curriculum — MLLM Online RL Prompt Curriculum
 - **Scope**: Online adaptive prompt selection and task-preserving teacher scaffolding for multimodal (image/VL) RL post-training. EPS from on-policy rollout rewards; GRPO-family host.
 - **SOTA**: `method:eps-prompt-scaffolding` `2609.15051` (as_of 2026-09-15) — Geometry3K / MMK12, Qwen3-VL-4B, GRPO 3000 steps: Geo3K 65.39 vs 60.57; MMK12 71.15 vs 68.05
@@ -338,12 +388,14 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when static RLVR data-policy evaluation (uniform vs selection, not online scaffolding) → `method:dataflex-rl`
   - do not use when RFT example-reweight without rewriting the prompt → `method:diem`
   - do not use when outcome-only long-horizon agent RL → `method:canopy`
+  - do not use when region-level RL for fine-grained MLLM perception (RoI proposal, frozen reader) → `method:vision-rl2`
 - **Redirects**:
   - when video annotation-as-rollout / fine-grained video perception RL → `task:rl-video-mllm`
   - when single-turn dense text math/code Pass@1 RLVR → `task:math-code-rl-dense`
   - when MoE/VL RLVR loss rather than prompt curriculum → `task:math-code-rl-moe`
   - when outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) → `task:outcome-only-long-horizon-agent-rl`
-- **Out of scope**: Video annotation-as-rollout / fine-grained video perception RL (OraRL); Single-turn dense text math/code Pass@1 RLVR (CISPO); MoE/VL RLVR loss rather than prompt curriculum (SAPO); Static RLVR data-policy evaluation under uniform GRPO (DataFlex-RL); RFT example-reweight without prompt rewrite (DIEM); Outcome-only long-horizon agent RL (CANOPY / DRACO)
+  - when region-level RL / fine-grained MLLM perception (not prompt scaffolding) → `task:mllm-finegrained-perception-rl`
+- **Out of scope**: Video annotation-as-rollout / fine-grained video perception RL (OraRL); Single-turn dense text math/code Pass@1 RLVR (CISPO); MoE/VL RLVR loss rather than prompt curriculum (SAPO); Static RLVR data-policy evaluation under uniform GRPO (DataFlex-RL); RFT example-reweight without prompt rewrite (DIEM); Outcome-only long-horizon agent RL (CANOPY / DRACO); Region-level RL / fine-grained MLLM perception (Vision-RL2)
 
 ### task:multilingual-l2-reasoning-sft — Multilingual L2 Reasoning SFT
 - **Scope**: Data mixing and scheduling for in-language chain-of-thought SFT, including transfer to languages without reasoning supervision.
@@ -390,13 +442,17 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when production post-train stack rather than sparse-outcome coverage → `task:frontier-rl-posttrain-stack`
   - when agentic RSI / routing-harness post-train, not AppWorld coverage → `task:agentic-rsi-routing-posttrain`
   - when noisy pairwise preference labels (PLC-DPO), not outcome-only agent RL → `task:direct-preference-alignment`
-- **Out of scope**: Async straggler / tool-latency RL (SAO); Folding a long tool/web/SWE trajectory into a small active context (FoldGRPO); Single-turn dense math/code RLVR (CISPO); Building or choosing a SWE harness rather than training a policy (mini-SWE-agent); Production harness kernel (omp2); Live-web multi-hop search-agent training (Iris)
+  - when data/env construction for coding-agent RL from source code → `task:coding-agent-rl-environment-construction`
+- **Out of scope**: Async straggler / tool-latency RL (SAO); Folding a long tool/web/SWE trajectory into a small active context (FoldGRPO); Single-turn dense math/code RLVR (CISPO); Building or choosing a SWE harness rather than training a policy (mini-SWE-agent); Production harness kernel (omp2); Live-web multi-hop search-agent training (Iris); Data/env construction for coding-agent RL from source code (CodeMidas)
 
 ### task:passk-reasoning-coverage — Math/Code RLVR for Pass@K Coverage without Backward Pass
 - **SOTA**: `method:es-reasoning` `2608.27351` (as_of 2026-08-31) — GSM8K Easy Setting averages and DeepScaleR Hard Setting math average (AIME24/AIME25/AMC23/MATH500): ES beats GRPO on Pass@16/@32 while still lifting Pass@1 over base; ES then GRPO keeps most of GRPO Pass@1 and the best Hard Pass@32
 
 ### task:privileged-teacher-opsd — Privileged-Teacher On-Policy Self-Distillation
 - **SOTA**: `method:vista` `2608.28306` (as_of 2026-08-31) — AIME24 / AIME25 / HMMT25 Avg@12 (Qwen3-1.7B/4B/8B instruct): VISTA 44.0 / 64.3 / 66.9 vs OPSD 43.4 / 63.6 / 64.8 vs GRPO 37.7 / 62.7 / 64.0
+- **Redirects**:
+  - when TSD calibration of teacher–student discrepancy during OPD (not teacher update) → `method:cal-opd`
+  - when Adaptive Retirement of a privileged self-OPD teacher then pure agent RL → `task:outcome-only-long-horizon-agent-rl`
 
 ### task:reasoning-rl-alignment — Reinforcement Learning & Reasoning Post-Training
 - **SOTA**: `method:cispo` `2506.13585` (as_of 2026-08-26) — AIME 2024 / MATH-500: SOTA for Dense Long-CoT
@@ -405,6 +461,9 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 ### task:student-distillation — Small Local Student Distillation from Strong Teacher
 - **SOTA**: `method:opd` `2604.13016` (as_of 2026-08-26) — GSM8k / HumanEval / MT-Bench Student Evaluation: Default SOTA for single-teacher student distillation
 - **SOTA**: `method:open-mopd` `2608.19098` (as_of 2026-08-28) — Multi-Teacher Capability Integration (SmolLM3-3B Benchmark): 83.4% headroom recovery in a single deployable student
+- **Redirects**:
+  - when privileged OPD TSD calibration (residual discrepancy during OPD, not teacher retirement) → `method:cal-opd`
+  - when Adaptive Retirement of a privileged self-OPD teacher then pure agent RL → `task:outcome-only-long-horizon-agent-rl`
 
 ### task:teacher-free-on-policy-self-adaptation — Teacher-Free Label-Free On-Policy Self-Adaptation
 - **Scope**: Train-time supervision-free on-policy self-adaptation that suppresses low-logp tokens with entropy-adaptive negative advantages.
@@ -636,4 +695,5 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 - **SOTA**: `method:orarl` `2608.20492` (as_of 2026-08-27) — TimeLens / GOT-10k / RefCOCO / MeViS / VSI-Bench: Video-ORA-9B achieves 66.0 mIoU, 78.2 AO, 73.1 VSI-Bench at 2.2x SFT step time
 - **Redirects**:
   - when general image/multimodal reasoning RL prompt curriculum (not video OraRL) → `task:mllm-rl-prompt-curriculum`
-- **Out of scope**: General image / multimodal reasoning RL prompt curriculum (not video annotation-as-rollout); Dense text Pass@1 RLVR
+  - when image region-proposal RL (not video annotation-as-rollout) → `task:mllm-finegrained-perception-rl`
+- **Out of scope**: General image / multimodal reasoning RL prompt curriculum (not video annotation-as-rollout); Dense text Pass@1 RLVR; Region-level image perception RL (Vision-RL2)

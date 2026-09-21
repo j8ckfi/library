@@ -35,8 +35,15 @@ task:agent-harness-runtime -> method:omp2-harness (2026-09-02)
 task:agent-memory -> method:ace (2510.04618, 2025-10)
   when dumped corpus ≫ window -> task:long-context-prompt-offload
   when SWE issue-to-patch without a playbook -> task:software-engineering-agent-harness
+  when repository-grounded procedural skills before interaction experience -> method:code2skill
 task:computer-use-agent -> method:claude-computer-use (2606.29537, 2026-06)
   when GitHub issue to patch -> task:software-engineering-agent-harness
+  when training hybrid GUI+code agents -> task:hybrid-computer-use-agent-rl
+task:hybrid-computer-use-agent-rl -> method:recreationworld (2609.22000, 2026-09-21)
+  when desktop/OS GUI ranking on OSWorld 2.0 paper protocol -> task:computer-use-agent
+  when GitHub issue to patch / SWE harness -> task:software-engineering-agent-harness
+  when programmatic checker AppWorld coverage / anti-drift -> task:outcome-only-long-horizon-agent-rl
+  when data/env construction for coding-agent RL from source code -> task:coding-agent-rl-environment-construction
 task:long-context-prompt-offload -> method:rlm (2512.24601, 2025-12)
   when GitHub issue to patch without a dumped corpus -> task:software-engineering-agent-harness
   when long tool/web/SWE trajectory with folding -> task:long-horizon-tool-agent
@@ -64,6 +71,7 @@ task:software-engineering-agent-harness -> method:mini-swe-agent (2405.15793, 20
   when post-train gated sparse attention under a fixed budget, not a SWE loop -> task:posttrain-attention-sparsification
   when SFT on observation tokens before GRPO (consequence prediction), not the SWE loop -> task:agentic-async-rl
   when token-efficient Pi extension from harness RSI, not issue-to-patch -> task:agent-harness-runtime
+  when data/env construction for coding-agent RL from source code -> task:coding-agent-rl-environment-construction
 task:directed-sssp-nonneg -> method:bmssp (2504.17033, 2026-08)
 task:1bit-extreme-quantization -> method:sparse-bitnet (2603.05168, 2026-08-26)
 task:fp4-hardware-training -> method:quartet-ii (2601.22813, 2026-08-26) + method:mxfp4-mi355x (2605.09825, 2026-08-26)
@@ -109,6 +117,7 @@ task:agentic-async-rl -> method:sao (2607.07508, 2026-08-26)
   when agentic RSI / routing-harness post-train, not async stragglers -> task:agentic-rsi-routing-posttrain
   when adaptive sampling until ≥1 correct on math/code prompts, not tool stragglers -> task:math-code-rl-dense
   when privileged self-OPD then retire to RL (ALFWorld/WebShop), not async stragglers -> task:outcome-only-long-horizon-agent-rl
+  when data/env construction for coding-agent RL from source code -> task:coding-agent-rl-environment-construction
 task:agentic-rsi-routing-posttrain -> method:neohorse-1 (2609.08183, 2026-09-09)
   when build a SWE / issue-to-patch harness rather than post-train from routing traces -> task:software-engineering-agent-harness
   when variable environment latency / async stragglers, not RSI routing post-train -> task:agentic-async-rl
@@ -118,6 +127,12 @@ task:agentic-rsi-routing-posttrain -> method:neohorse-1 (2609.08183, 2026-09-09)
   when single-teacher text distillation without a routing harness -> task:student-distillation
   when token-efficient Pi harness mechanisms from auto-research, not routing-harness OPD -> task:agent-harness-runtime
 task:all-zero-verifier-groups -> method:verigate (2605.30451, 2026-08-26)
+task:coding-agent-rl-environment-construction -> method:codemidas (2609.22068, 2026-09-21)
+  when programmatic checker exists and sparse outcome RL is the protocol (AppWorld TGC) -> task:outcome-only-long-horizon-agent-rl
+  when variable environment latency / async stragglers -> task:agentic-async-rl
+  when GitHub issue to patch / SWE harness -> task:software-engineering-agent-harness
+  when production post-train stack rather than env construction -> task:frontier-rl-posttrain-stack
+  when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
 task:data-free-self-evolution -> method:j-zero (2608.26582, 2026-08-31)
 task:direct-preference-alignment -> method:olmo-3 (2512.13961, 2026-08-26)
 task:distill-reasoner-verifier -> method:opdvr (2608.24696, 2026-08-27)
@@ -135,11 +150,17 @@ task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
   when in-language (L2) reasoning SFT rather than Pass@1 -> task:multilingual-l2-reasoning-sft
   when multimodal VL prompt scaffolding (not dense text Pass@1) -> task:mllm-rl-prompt-curriculum
 task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
+task:mllm-finegrained-perception-rl -> method:vision-rl2 (2609.19745, 2026-09-21)
+  when online adaptive prompt selection / teacher scaffolding for image/VL GRPO -> task:mllm-rl-prompt-curriculum
+  when video annotation-as-rollout / fine-grained video perception RL -> task:rl-video-mllm
+  when single-turn dense text math/code Pass@1 RLVR -> task:math-code-rl-dense
+  when MoE/VL RLVR loss rather than region proposal -> task:math-code-rl-moe
 task:mllm-rl-prompt-curriculum -> method:eps-prompt-scaffolding (2609.15051, 2026-09-15)
   when video annotation-as-rollout / fine-grained video perception RL -> task:rl-video-mllm
   when single-turn dense text math/code Pass@1 RLVR -> task:math-code-rl-dense
   when MoE/VL RLVR loss rather than prompt curriculum -> task:math-code-rl-moe
   when outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) -> task:outcome-only-long-horizon-agent-rl
+  when region-level RL / fine-grained MLLM perception (not prompt scaffolding) -> task:mllm-finegrained-perception-rl
 task:multilingual-l2-reasoning-sft -> method:tiny-aya-l2-thinker (2609.10445, 2026-09-14)
   when open pretrain mix / Dolma-3 recipe -> task:open-data-recipe
   when general chat / instruct SFT without L2 language fidelity -> task:instruct-sft-alignment
@@ -159,10 +180,15 @@ task:outcome-only-long-horizon-agent-rl -> method:canopy (2609.01245, 2026-09-04
   when production post-train stack rather than sparse-outcome coverage -> task:frontier-rl-posttrain-stack
   when agentic RSI / routing-harness post-train, not AppWorld coverage -> task:agentic-rsi-routing-posttrain
   when noisy pairwise preference labels (PLC-DPO), not outcome-only agent RL -> task:direct-preference-alignment
+  when data/env construction for coding-agent RL from source code -> task:coding-agent-rl-environment-construction
 task:passk-reasoning-coverage -> method:es-reasoning (2608.27351, 2026-08-31)
 task:privileged-teacher-opsd -> method:vista (2608.28306, 2026-08-31)
+  when TSD calibration of teacher–student discrepancy during OPD (not teacher update) -> method:cal-opd
+  when Adaptive Retirement of a privileged self-OPD teacher then pure agent RL -> task:outcome-only-long-horizon-agent-rl
 task:reasoning-rl-alignment -> method:cispo (2506.13585, 2026-08-26) + method:sapo (2511.20347, 2026-08-26)
 task:student-distillation -> method:opd (2604.13016, 2026-08-26) + method:open-mopd (2608.19098, 2026-08-28)
+  when privileged OPD TSD calibration (residual discrepancy during OPD, not teacher retirement) -> method:cal-opd
+  when Adaptive Retirement of a privileged self-OPD teacher then pure agent RL -> task:outcome-only-long-horizon-agent-rl
 task:teacher-free-on-policy-self-adaptation -> method:opsa (2608.31046, 2026-09-01)
   when verifiable labels exist and the goal is Pass@1 RLVR -> task:math-code-rl-dense
   when a strong teacher is available and the goal is intentional distillation -> task:student-distillation
@@ -249,6 +275,7 @@ task:neural-video-deploy -> method:mlvc (2606.28027, 2026-08-26)
 task:neural-video-gpu -> method:dcvc-uf (2606.04410, 2026-08-26)
 task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
   when general image/multimodal reasoning RL prompt curriculum (not video OraRL) -> task:mllm-rl-prompt-curriculum
+  when image region-proposal RL (not video annotation-as-rollout) -> task:mllm-finegrained-perception-rl
 ```
 <!-- CHEAT-SHEET:END -->
 
@@ -364,6 +391,11 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 106. **OPD EOS termination gotcha**: **OPD-EOS** (`method:opd-eos`, `arXiv:2609.20511`) on `task:student-distillation`. Teacher/student stop-id mismatch inflates length; semantic-class EOS is the fix. Niche. Does **not** replace OPD.
 107. **Harness-layer token-efficient Pi mechanisms**: **SoL-Pi** (`method:sol-pi`, `arXiv:2609.20519`) on `task:agent-harness-runtime`. Auto-research RSI → Action Fusion / ObservationPack / reducer / compact. Active sibling of omp². Does **not** replace omp2-harness, mini-SWE-agent, or NeoHorse-1.
 108. **Bias-only label-free TTRL**: **Bias-only TTRL** (`method:bias-only-ttrl`, `arXiv:2609.18587`) on `task:label-free-test-time-reasoner`. Majority-vote rewards on ~100K bias params. Niche. Does **not** replace TTPO.
+109. **OPD TSD calibration**: **Cal-OPD** (`method:cal-opd`, `arXiv:2609.21619`) on `task:student-distillation` with a mention on `task:privileged-teacher-opsd`. Residual discrepancy beyond a probed teacher-self-deviation region (~52–65% retained). Active plug-in. Does **not** replace OPD, VISTA, or RetireOPD.
+110. **Coding-agent RL env construction**: **CodeMidas** (`method:codemidas`, `arXiv:2609.22068`) on `task:coding-agent-rl-environment-construction`. Source-code-only env factory then GRPO. Active first hop for that task only. Does **not** replace CANOPY, SAO, Miles, or mini-SWE-agent.
+111. **Hybrid GUI+code CUA train/eval**: **RecreationWorld** (`method:recreationworld`, `arXiv:2609.22000`) on `task:hybrid-computer-use-agent-rl`. Reference-as-oracle recreation across five platforms. Active first hop for that task only. Does **not** demote Claude computer-use on OSWorld 2.0.
+112. **Repository-grounded skill synthesis**: **Code2Skill** (`method:code2skill`, `arXiv:2609.05571`) on `task:agent-memory`. Lift code units into verified skills before interaction experience. Active. Does **not** replace ACE.
+113. **Region-level MLLM perception RL**: **Vision-RL2** (`method:vision-rl2`, `arXiv:2609.19745`) on `task:mllm-finegrained-perception-rl`. RoI proposal network + frozen reader; ~4× fewer visual tokens. Active first hop for that task only. Does **not** replace EPS prompt scaffolding or OraRL.
 
 ---
 
@@ -472,6 +504,11 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `opd-eos` (2609.20511) is a niche OPD length-inflation gotcha plus semantic-class stop. It does not supersede `opd`.
 - `sol-pi` (2609.20519) is an active Pi token-efficiency sibling on the harness-runtime task. It does not supersede `omp2-harness`, `mini-swe-agent`, or `neohorse-1`.
 - `bias-only-ttrl` (2609.18587) is a niche bias-subspace compression of majority-vote TTRL. It does not supersede `ttpo`.
+- `cal-opd` (2609.21619) is an active TSD-calibration plug-in on student distillation. It does not supersede `opd`, `vista`, or `retireopd`.
+- `codemidas` (2609.22068) is the active first hop for `task:coding-agent-rl-environment-construction` only. It does not supersede `canopy`, `sao`, `miles`, or `mini-swe-agent`.
+- `recreationworld` (2609.22000) is the active first hop for `task:hybrid-computer-use-agent-rl` only. It does not supersede `claude-computer-use`.
+- `code2skill` (2609.05571) is an active repository-grounded skill bank on `task:agent-memory`. It does not supersede `ace`.
+- `vision-rl2` (2609.19745) is the active first hop for `task:mllm-finegrained-perception-rl` only. It does not supersede `eps-prompt-scaffolding` or `orarl`.
 
 ---
 

@@ -9,10 +9,13 @@ out_of_scope:
   - "GitHub issue → patch (SWE harness)"
   - "OSWorld-Verified as the ranking bench (near-saturated)"
   - "Aggregator 70.6% / Steel 62.6% as method SOTA"
+  - "Hybrid GUI+code recreation train/eval (RecreationWorld)"
 redirects:
   - when: "GitHub issue to patch"
     to: "task:software-engineering-agent-harness"
-last_reviewed: "2026-09-01"
+  - when: "training hybrid GUI+code agents"
+    to: "task:hybrid-computer-use-agent-rl"
+last_reviewed: "2026-09-21"
 current_sota:
   - method: method:claude-computer-use
     as_of: "2026-06"
@@ -24,6 +27,7 @@ methods:
   - method:claude-computer-use
   - method:ui-tars-2
   - method:mai-ui
+  - method:recreationworld
 tags:
   - agents
   - computer-use
@@ -46,3 +50,4 @@ Operate a desktop OS or mobile GUI. Different from a software-engineering agent 
 - **current_sota (paper protocol)**: Claude computer-use on OSWorld 2.0.
 - **Active trained**: UI-TARS-2 (old protocol).
 - **Active mobile**: MAI-UI.
+- **Not this task (hybrid GUI+code train/eval)**: `method:recreationworld` on `task:hybrid-computer-use-agent-rl`. Does not demote Claude computer-use.

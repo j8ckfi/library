@@ -4,6 +4,11 @@ type: task
 title: "Small Local Student Distillation from Strong Teacher"
 domain: "post-training"
 summary: "Distilling reasoning and conversational capabilities from multi-hundred-billion parameter frontier teachers into small local student models."
+redirects:
+  - when: "privileged OPD TSD calibration (residual discrepancy during OPD, not teacher retirement)"
+    to: "method:cal-opd"
+  - when: "Adaptive Retirement of a privileged self-OPD teacher then pure agent RL"
+    to: "task:outcome-only-long-horizon-agent-rl"
 current_sota:
   - method: method:opd
     as_of: "2026-08-26"
@@ -43,7 +48,8 @@ methods:
   - method:oprd
   - method:opd-eos
   - method:retireopd
-last_reviewed: "2026-09-18"
+  - method:cal-opd
+last_reviewed: "2026-09-21"
 tags:
   - post-training
   - distillation
@@ -74,5 +80,6 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Optional stacking order when both OPD and RLVR will run**: `method:opd-then-rlvr` (`arXiv:2609.04108`) — OPD then RL, not joint one-step fusion. Does not replace OPD or CISPO.
 - **No teacher / no labels**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace OPD when a strong teacher is the goal.
 - **Gotcha (EOS mismatch)**: `method:opd-eos` / `paper:opd-eos` (`arXiv:2609.20511`). Teacher/student stop ids can disagree even when declared stop sets match; length inflates under OPD. Semantic-class EOS is the fix. Does not replace OPD.
+- **Optional TSD calibration plug-in**: `method:cal-opd` (`arXiv:2609.21619`) estimates the teacher self-deviation region with positive+negative privileged probes and keeps residual discrepancy (~52–65%) as the OPD advantage. Signal calibration during OPD, not teacher retirement. Does not replace OPD, VISTA, or RetireOPD.
 - **Not this task**: Adaptive Retirement of a privileged self-OPD teacher in agent RL is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl`.
 

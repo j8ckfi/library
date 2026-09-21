@@ -12,6 +12,7 @@ out_of_scope:
   - "Static RLVR data-policy evaluation under uniform GRPO (DataFlex-RL)"
   - "RFT example-reweight without prompt rewrite (DIEM)"
   - "Outcome-only long-horizon agent RL (CANOPY / DRACO)"
+  - "Region-level RL / fine-grained MLLM perception (Vision-RL2)"
 redirects:
   - when: "video annotation-as-rollout / fine-grained video perception RL"
     to: "task:rl-video-mllm"
@@ -21,6 +22,8 @@ redirects:
     to: "task:math-code-rl-moe"
   - when: "outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit)"
     to: "task:outcome-only-long-horizon-agent-rl"
+  - when: "region-level RL / fine-grained MLLM perception (not prompt scaffolding)"
+    to: "task:mllm-finegrained-perception-rl"
 current_sota:
   - method: method:eps-prompt-scaffolding
     as_of: "2026-09-15"
@@ -36,7 +39,8 @@ methods:
   - method:sapo
   - method:grpo
   - method:diem
-last_reviewed: "2026-09-15"
+  - method:vision-rl2
+last_reviewed: "2026-09-21"
 tags:
   - post-training
   - multimodal-rl
@@ -57,3 +61,4 @@ Online RL for MLLMs assigns equal rollout budget to every training prompt. Some 
 ## SOTA Recommendation (as of 2026-09-15)
 - **Primary Method (this task only)**: **EPS prompt scaffolding** (`method:eps-prompt-scaffolding`, `paper:eps-prompt-scaffolding` `arXiv:2609.15051`).
 - **Not This Task**: `method:orarl` remains video annotation-as-rollout; `method:cispo` remains dense Pass@1; `method:sapo` remains the MoE/VL loss; `method:dataflex-rl` remains the static-policy null; `method:diem` remains example-reweight; `method:canopy` remains outcome-only agents; GRPO stays the host, not the first hop.
+- **Not this task (region-level perception RL)**: `method:vision-rl2` on `task:mllm-finegrained-perception-rl`. EPS rewrites prompts; Vision-RL2 trains a RoI head.

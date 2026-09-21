@@ -14,7 +14,9 @@ redirects:
     to: "task:long-context-prompt-offload"
   - when: "SWE issue-to-patch without a playbook"
     to: "task:software-engineering-agent-harness"
-last_reviewed: "2026-09-01"
+  - when: "repository-grounded procedural skills before interaction experience"
+    to: "method:code2skill"
+last_reviewed: "2026-09-21"
 current_sota:
   - method: method:ace
     as_of: "2025-10"
@@ -25,6 +27,7 @@ current_sota:
 methods:
   - method:ace
   - method:memgpt
+  - method:code2skill
 tags:
   - agents
   - agent-memory
@@ -44,4 +47,5 @@ Agents need memory that accumulates strategies without collapsing under rewrite.
 ## SOTA Landscape
 - **current_sota**: ACE (`method:ace`).
 - **Active**: MemGPT for long-lived persona agents.
+- **Active (repository-grounded skills)**: `method:code2skill` (`arXiv:2609.05571`) — lift code units into verified skill records before interaction experience. ACE remains the playbook/memory default.
 - **do_not_use**: recursive summary as the only long-context strategy.

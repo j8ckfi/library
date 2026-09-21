@@ -17,9 +17,12 @@ do_not_use_for:
   - when: "long-lived persona OS-style paging"
     reason: "MemGPT is the persona/OS memory alternative"
     use_instead: "method:memgpt"
+  - when: "repository-grounded procedural skills before interaction experience"
+    reason: "ACE is an incremental playbook from execution feedback; Code2Skill synthesizes verified skill records from source code"
+    use_instead: "method:code2skill"
 assumptions:
   - "Generator / Reflector / Curator. Incremental bullets, not rewrite. Needs execution feedback."
-last_reviewed: "2026-09-01"
+last_reviewed: "2026-09-21"
 papers:
   - paper:ace
 recipes:
@@ -73,6 +76,7 @@ Failure: without feedback, ACE/DC can degrade. Recursive summary is not a long-c
 - Dumped prompt → `method:rlm`.
 - SWE bash loop with no playbook need → `method:mini-swe-agent`.
 - Persona OS paging → `method:memgpt`.
+- Repository-grounded skills from code before interaction → `method:code2skill`.
 
 ## Gotchas & Failure Modes
 - No feedback → ACE/DC can degrade.

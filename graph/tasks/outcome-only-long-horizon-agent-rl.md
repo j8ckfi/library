@@ -12,6 +12,7 @@ out_of_scope:
   - "Building or choosing a SWE harness rather than training a policy (mini-SWE-agent)"
   - "Production harness kernel (omp2)"
   - "Live-web multi-hop search-agent training (Iris)"
+  - "Data/env construction for coding-agent RL from source code (CodeMidas)"
 redirects:
   - when: "variable environment latency / async stragglers, not sparse-outcome coverage"
     to: "task:agentic-async-rl"
@@ -31,7 +32,9 @@ redirects:
     to: "task:agentic-rsi-routing-posttrain"
   - when: "noisy pairwise preference labels (PLC-DPO), not outcome-only agent RL"
     to: "task:direct-preference-alignment"
-last_reviewed: "2026-09-18"
+  - when: "data/env construction for coding-agent RL from source code"
+    to: "task:coding-agent-rl-environment-construction"
+last_reviewed: "2026-09-21"
 current_sota:
   - method: method:canopy
     as_of: "2026-09-04"
@@ -52,6 +55,7 @@ methods:
   - method:ddo
   - method:retireopd
   - method:actobs
+  - method:codemidas
 tags:
   - post-training
   - agentic
@@ -83,3 +87,4 @@ Two siblings share this task and are not substitutes:
 - **Active successful-strategy coverage regularizer (not this first hop)**: `method:ddo` (`arXiv:2609.10052`). Preference-pair primary; mention here for open-ended coverage. Does not replace CANOPY or DRACO.
 - **Active privileged self-OPD then retirement (not this first hop)**: `method:retireopd` (`arXiv:2609.20784`). Adaptive Retirement drops the privileged teacher when discrepancy stops shrinking and the student hits a fraction of teacher success, then pure RL. ALFWorld +14.1–18.8% SR vs RL; WebShop +11.8–19.0%. Does not replace CANOPY, SAO, OPD, or VISTA.
 - **Related SFT init (not this first hop)**: `method:actobs` (`arXiv:2609.20715`) on `task:agentic-async-rl` — observation-token SFT before GRPO. Does not replace CANOPY.
+- **Not this task (coding-agent RL env construction)**: `method:codemidas` (`arXiv:2609.22068`) on `task:coding-agent-rl-environment-construction` — source-code-only env factory then GRPO. Does not replace CANOPY.

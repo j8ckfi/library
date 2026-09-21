@@ -65,6 +65,7 @@ VISTA keeps the standard on-policy self-distillation (OPSD; Zhao et al., arXiv:2
 - `method:verpo` is an active evidence-regularized sibling (proposal, not teacher update). Does not replace VISTA.
 - Collapse diagnosis: `method:opsd-collapse-review` (`arXiv:2608.25936`) — playbook, not a trainer.
 - `method:nsd` (`arXiv:2609.11699`) is the actionable anti-collapse trainer (diverge from a negative condition). Does not replace VISTA.
+- TSD calibration of teacher–student discrepancy is `method:cal-opd` (residual advantage during OPD). Not a teacher update and not Adaptive Retirement. Does not replace VISTA.
 
 ## Gotchas & Failure Modes
 - Requires gold solutions plus a rule-based outcome verifier. Without both, this is the wrong shelf (`method:u-opsd` or `method:ttpo`).

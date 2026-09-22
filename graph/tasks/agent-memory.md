@@ -9,6 +9,7 @@ out_of_scope:
   - "Recursive summary as the only long-context strategy"
   - "SWE patch loops with no playbook need"
   - "Dumped 10M-token prompt"
+  - "System-One control plane for conversational memory ops (Jev-Mem)"
 redirects:
   - when: "dumped corpus ≫ window"
     to: "task:long-context-prompt-offload"
@@ -16,7 +17,9 @@ redirects:
     to: "task:software-engineering-agent-harness"
   - when: "repository-grounded procedural skills before interaction experience"
     to: "method:code2skill"
-last_reviewed: "2026-09-21"
+  - when: "System-One control plane for memory ops (typing, routing, budget, traversal)"
+    to: "method:jev-mem"
+last_reviewed: "2026-09-22"
 current_sota:
   - method: method:ace
     as_of: "2025-10"
@@ -28,6 +31,7 @@ methods:
   - method:ace
   - method:memgpt
   - method:code2skill
+  - method:jev-mem
 tags:
   - agents
   - agent-memory
@@ -48,4 +52,5 @@ Agents need memory that accumulates strategies without collapsing under rewrite.
 - **current_sota**: ACE (`method:ace`).
 - **Active**: MemGPT for long-lived persona agents.
 - **Active (repository-grounded skills)**: `method:code2skill` (`arXiv:2609.05571`) — lift code units into verified skill records before interaction experience. ACE remains the playbook/memory default.
+- **Active (System-One-controlled store)**: `method:jev-mem` (`arXiv:2609.23986`) — typed control plane for typing, routing, budget, traversal, scoring, stop; System Two only for hard reasoning. LoCoMo judge 0.777. Does not replace ACE or Code2Skill.
 - **do_not_use**: recursive summary as the only long-context strategy.

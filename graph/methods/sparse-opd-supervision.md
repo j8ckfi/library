@@ -22,6 +22,9 @@ do_not_use_for:
   - when: "shrinking the query set, not the token mask"
     reason: "OPD-II is one/16 diverse queries"
     use_instead: "method:opd-one-example"
+  - when: "sparse OPD token selection by gradient-estimation reliability (IER), not a usefulness keep-mask"
+    reason: "IER-OPD ranks signal-to-noise of the one-sample reverse-KL gradient and fuses with usefulness"
+    use_instead: "method:ier-opd"
 assumptions:
   - "Host is reverse-KL / sampled-token OPD with per-token A_t = log π_T(y_t|h_t) − log π_θ(y_t|h_t). Paper: veRL 0.8.0, DAPO-Math-17K, n=1 OPD rollout, max response 8192, lr 1e-6, clip 0.2, Qwen3 no-think."
   - "Table 2 names: mintok = highest-reward token; maxtok = lowest-reward token. Figure 1 caption swaps those adjectives — follow Table 2."
@@ -90,9 +93,10 @@ where $\ell_t$ is the usual PPO-clipped reverse-KL token loss and $A_t=\log\pi_T
 - Pass@1 labeled RLVR → `method:cispo`.
 - Entropy collapse on sampled-token OPD → `method:ida-opd`.
 - Prompt-set size → `method:opd-one-example` / `method:opd-hard-cot-selection`.
+- Gradient-estimation SNR ranking (IER) → `method:ier-opd`.
 
 ## Relation to Existing SOTA
-- Active token-budget plug-in on `task:student-distillation`, beside `method:opd-hard-cot-selection`, `method:opd-one-example`, `method:ida-opd`, `method:tgopd`. Does **not** supersede `method:opd` or `method:cispo`.
+- Active token-budget plug-in on `task:student-distillation`, beside `method:opd-hard-cot-selection`, `method:opd-one-example`, `method:ida-opd`, `method:tgopd`, `method:ier-opd`. Does **not** supersede `method:opd` or `method:cispo`. Gradient-estimation SNR ranking is `method:ier-opd`.
 
 ## Gotchas & Failure Modes
 - `maxtok` (lowest-reward token) can underperform plain OPD on large-teacher / small-base students (Family 1 mean 1.7 vs 4.6). Prefer `mintok` / `minmaxtok` / `pctltail` there.

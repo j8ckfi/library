@@ -29,6 +29,9 @@ do_not_use_for:
   - when: "multi-agent as the long-horizon strategy"
     reason: "single folded agent, not MAS"
     use_instead: "method:single-agent-plus-tools"
+  - when: "diagnose which multi-turn tool calls are trainable (nested sampling / contextual bandit)"
+    reason: "FoldGRPO folds context; Critical-State RL selects which call receives gradient"
+    use_instead: "method:critical-state-rl"
 assumptions:
   - "Seed-OSS-36B, 32K×10. Long tool/web/SWE trajectory, small active context."
   - "Open reimplementation: sunnweiwei/FoldAgent (may differ from paper train code)."

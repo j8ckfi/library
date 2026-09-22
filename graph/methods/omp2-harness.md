@@ -23,6 +23,12 @@ do_not_use_for:
   - when: "stuffing MCP into the permanent tool grammar"
     reason: "playbook: MCP is long-tail behind dyn/Bash; MCP remains the agent↔tool protocol, not a harness primitive"
     use_instead: "method:mcp"
+  - when: "regularized harness RSI (annealed edit budget / anti-memorization critic)"
+    reason: "omp² is the kernel spec; RRSI regularizes harness search around a frozen backbone"
+    use_instead: "method:rrsi"
+  - when: "distill optimized-harness behaviors into weights under a fixed target harness"
+    reason: "omp² is the production kernel; Harness-Zero distills harness behaviors into weights"
+    use_instead: "method:harness-zero"
 assumptions:
   - "You are implementing a harness kernel, not wrapping a 100-line ReAct loop."
   - "The four envelope tests must hold: multiplexed workspace, remote driver, spectator, untrusted factory."
@@ -110,6 +116,7 @@ Does **not** supersede `method:mini-swe-agent`, `method:cca`, `method:openhands-
 - Dumped 10M-token prompt → `method:rlm`.
 - How to talk to tools as a protocol → `method:mcp` (keep MCP off the permanent roster; discover via `dyn`/Bash).
 - Agent memory playbooks → `method:ace`. Trajectory folding → `method:foldgrpo`.
+- Regularized harness RSI → `method:rrsi`. Harness distillation into weights → `method:harness-zero`.
 
 ## Gotchas & Failure Modes
 - Dual authorities (message tree plus closures / Maps) make rewind/fork/resume lie even if the JSONL looks complete.

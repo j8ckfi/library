@@ -29,6 +29,12 @@ do_not_use_for:
   - when: "train a live-web multi-hop search agent (SFT-RL climbing)"
     reason: "CANOPY is AppWorld coverage/anti-drift, not a live-web search data+climbing recipe"
     use_instead: "method:iris"
+  - when: "diagnose which multi-turn tool calls are trainable (nested sampling / contextual bandit)"
+    reason: "CANOPY is AppWorld TGC coverage; Critical-State RL is a BFCL multi-turn diagnostic"
+    use_instead: "method:critical-state-rl"
+  - when: "distill optimized-harness behaviors into weights under a fixed target harness"
+    reason: "CANOPY is outcome-only agent RL; AppWorld in Harness-Zero is a distillation eval, not TGC"
+    use_instead: "method:harness-zero"
 assumptions:
   - "A held-out unit-test / patch verifier exists. Sparse fully-correct reward, not pass-fraction."
   - "Paper: Qwen3-14B on AppWorld train split (90 tasks), veRL, n=32, 50 turns / 32k train, 100 turns / 61k test, KL β=1e-4, lr 3e-6, 90 steps, hardest tier kept."
@@ -85,6 +91,8 @@ Test-time budget transfer raises turns and context without search. Differentiate
 - Single-turn math/code -> `method:cispo`.
 - Choosing a harness -> `method:mini-swe-agent`.
 - No checker -> `method:draco`.
+- Multi-turn trainability diagnostic -> `method:critical-state-rl`.
+- Harness distillation into weights -> `method:harness-zero`.
 
 ## Relation to Existing SOTA
 - SOTA only for `task:outcome-only-long-horizon-agent-rl`. Does **not** supersede `method:sao`, `method:foldgrpo`, `method:cispo`, `method:mini-swe-agent`, `method:omp2-harness`, or `method:draco`.

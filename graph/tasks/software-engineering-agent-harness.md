@@ -22,6 +22,7 @@ out_of_scope:
   - "Post-train gated sparse attention under a fixed budget (SAS)"
   - "SFT on observation tokens before GRPO (ActObs)"
   - "Data/env construction for coding-agent RL from source code (CodeMidas)"
+  - "Harness distillation into weights under a fixed target harness (Harness-Zero)"
 redirects:
   - when: "train asynchronous RL for a tool-use policy"
     to: "task:agentic-async-rl"
@@ -53,6 +54,8 @@ redirects:
     to: "task:agent-harness-runtime"
   - when: "data/env construction for coding-agent RL from source code"
     to: "task:coding-agent-rl-environment-construction"
+  - when: "distill optimized-harness behaviors into weights under a fixed target harness"
+    to: "task:harness-distillation"
 current_sota:
   - method: method:mini-swe-agent
     as_of: "2026-09"
@@ -70,7 +73,8 @@ methods:
   - method:actobs
   - method:sol-pi
   - method:codemidas
-last_reviewed: "2026-09-21"
+  - method:harness-zero
+last_reviewed: "2026-09-22"
 tags:
   - agents
   - agent
@@ -99,3 +103,4 @@ Choose the loop, ACI, and tools for repository-level software engineering (issue
 - **Not this task (observation-token SFT before GRPO)**: `method:actobs` on `task:agentic-async-rl`.
 - **Not this task (Pi token-efficiency extension)**: `method:sol-pi` on `task:agent-harness-runtime`.
 - **Not this task (coding-agent RL env construction)**: `method:codemidas` on `task:coding-agent-rl-environment-construction`.
+- **Not this task (harness distillation into weights)**: `method:harness-zero` on `task:harness-distillation`. The paper uses mini-SWE-agent as the *target* harness \(h\), not a ranking retarget.

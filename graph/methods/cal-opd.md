@@ -22,11 +22,14 @@ do_not_use_for:
   - when: "single-turn math/code Pass@1 RLVR"
     reason: "CISPO remains Pass@1; Cal-OPD is an OPD plug-in"
     use_instead: "method:cispo"
+  - when: "sparse OPD token selection by gradient-estimation reliability (IER), not TSD calibration"
+    reason: "IER-OPD ranks tokens by gradient SNR; Cal-OPD calibrates residual discrepancy"
+    use_instead: "method:ier-opd"
 assumptions:
   - "White-box teacher that can be forwarded under extra context while the student trajectory is held fixed. Paper: DAPO-17K filtered by Qwen3-235B-A22B-Instruct-2507; Avg@16 on AMC23/AIME24/25/26/HMMT26/MATH500."
   - "Default interventions are positive and negative evaluative feedback, not solution-level privilege. Relaxation λ=5. Implemented in verl on 8×H20 (4 student + 4 teacher), 100 steps, 256 trajectories/step, lr 1e-6, train response 16384."
   - "No public GitHub as of 2026-09-21. Reimplement the residual advantage on verl."
-last_reviewed: "2026-09-21"
+last_reviewed: "2026-09-22"
 papers:
   - paper:cal-opd
 recipes:
@@ -82,10 +85,10 @@ If the student log-likelihood sits inside \(\hat{\mathcal{R}}^T_t\), \(A^{\mathr
 - Running OPD (including privileged OPD) where teacher self-deviation is mixed into the discrepancy, and you can afford two extra teacher forwards per token for calibration.
 
 ## When NOT to Use
-- Default single-teacher distill → `method:opd`. Privileged-teacher adaptation → `method:vista`. Teacher retirement in agent RL → `method:retireopd`. No teacher → `method:opsa`. Pass@1 → `method:cispo`.
+- Default single-teacher distill → `method:opd`. Privileged-teacher adaptation → `method:vista`. Teacher retirement in agent RL → `method:retireopd`. No teacher → `method:opsa`. Pass@1 → `method:cispo`. Sparse token reliability (IER) → `method:ier-opd`.
 
 ## Relation to Existing SOTA
-- Active plug-in on `task:student-distillation`. Mention on `task:privileged-teacher-opsd`. Does **not** enter `current_sota`. Does **not** replace `method:opd`, `method:vista`, or `method:retireopd`.
+- Active plug-in on `task:student-distillation`. Mention on `task:privileged-teacher-opsd`. Does **not** enter `current_sota`. Does **not** replace `method:opd`, `method:vista`, or `method:retireopd`. Sparse-OPD reliability ranking is `method:ier-opd`.
 - RetireOPD is a retirement *schedule*. Cal-OPD is signal *calibration* during OPD.
 
 ## Gotchas & Failure Modes

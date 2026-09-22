@@ -35,6 +35,12 @@ do_not_use_for:
   - when: "building a durable coding-agent engine (rewind/fork/remote/sandbox/TUI)"
     reason: "mini-SWE-agent is the SWE-bench start/eval loop, not a production harness kernel"
     use_instead: "method:omp2-harness"
+  - when: "distill optimized-harness behaviors into weights under a fixed target harness"
+    reason: "mini-SWE-agent is the locked ranking scaffold; Harness-Zero uses it as the *target* harness, not a ranking retarget"
+    use_instead: "method:harness-zero"
+  - when: "regularized harness RSI with a frozen backbone"
+    reason: "mini-SWE-agent is the start loop; RRSI regularizes harness search"
+    use_instead: "method:rrsi"
 assumptions:
   - "Locked SWE-bench mini harness; bash-only ReAct; linear history; independent subprocess.run actions."
   - "Model quality, not scaffold complexity, is the ranking variable on official boards."
@@ -100,6 +106,7 @@ MAC (2606.04455): code agents given 12–24h to write an agent; only 5/39 config
 - GUI desktop → `method:claude-computer-use`.
 - Need notes/context mgmt beyond bash → `method:cca`.
 - Durable production engine (rewind/fork/remote/sandbox/TUI) → `method:omp2-harness` / `task:agent-harness-runtime`.
+- Harness distillation into weights → `method:harness-zero`. Frozen-backbone harness RSI → `method:rrsi`.
 
 ## Gotchas & Failure Modes
 - Do not mix vals.ai 97% with official JSON 79.2% or 76.8% (different snapshots/models).

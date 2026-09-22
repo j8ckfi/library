@@ -51,6 +51,7 @@ OPD (On-Policy Distillation) is the state-of-the-art framework for distilling la
 - Tool-using OPKD (`method:pta`): student-induced but teacher-committed rollouts; tool calls execute only after the teacher verifies the turn. Does not replace OPD for plain text distillation.
 - Prompt-level teacher gate (`method:tgopd`): verifier-scored teacher probes then exclusive OPD vs GRPO. Does not replace this method.
 - Sparse token-budget plug-in (`method:sparse-opd-supervision`): 1–2 tokens per trajectory (~0.05%) can match/beat full-token OPD. Does not replace this method.
+- Sparse-OPD reliability plug-in (`method:ier-opd`): information-efficiency ratio (gradient SNR under an optimal scalar baseline) fused with usefulness. 0.1%–1% budgets match/exceed full OPD. Does not replace this method.
 - Sequential stack (`method:opd-then-rlvr`): OPD then RLVR beats joint one-step fusion when both are used. Does not replace this method or CISPO.
 - Optional TSD calibration (`method:cal-opd`): residual discrepancy beyond a probed teacher-self-deviation region. Signal calibration during OPD. Does not replace this method, VISTA, or RetireOPD.
 

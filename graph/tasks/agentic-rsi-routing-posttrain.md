@@ -12,6 +12,8 @@ out_of_scope:
   - "Live-web multi-hop search-agent climbing (Iris)"
   - "Single-turn dense math/code RLVR (CISPO)"
   - "Text-only single-teacher distillation default (OPD)"
+  - "Regularized harness RSI with a frozen backbone (RRSI)"
+  - "Harness distillation into weights under a fixed target harness (Harness-Zero)"
 redirects:
   - when: "build a SWE / issue-to-patch harness rather than post-train from routing traces"
     to: "task:software-engineering-agent-harness"
@@ -27,6 +29,10 @@ redirects:
     to: "task:student-distillation"
   - when: "token-efficient Pi harness mechanisms from auto-research, not routing-harness OPD"
     to: "task:agent-harness-runtime"
+  - when: "regularized harness RSI with a frozen backbone, not routing-guided OPD"
+    to: "method:rrsi"
+  - when: "distill optimized-harness behaviors into weights under a fixed target harness"
+    to: "task:harness-distillation"
 current_sota:
   - method: method:neohorse-1
     as_of: "2026-09-09"
@@ -43,7 +49,9 @@ methods:
   - method:opd
   - method:harness-onpolicy-correction
   - method:sol-pi
-last_reviewed: "2026-09-18"
+  - method:rrsi
+  - method:harness-zero
+last_reviewed: "2026-09-22"
 tags:
   - post-training
   - agentic
@@ -66,3 +74,5 @@ Recursive self-improvement needs a concrete loop: observe capability demand from
 - **Not This Task**: `method:mini-swe-agent` remains the SWE harness; `method:sao` remains async; `method:canopy` remains AppWorld; `method:iris` remains search-agent climbing; `method:cispo` remains Pass@1; `method:opd` remains text distill.
 - **Gotcha (evolved-harness full-traj SFT)**: `method:harness-onpolicy-correction` (`arXiv:2609.09134`). Does not replace NeoHorse-1.
 - **Not this task (Pi token-efficiency extension)**: `method:sol-pi` (`arXiv:2609.20519`) on `task:agent-harness-runtime`. Harness RSI that yields Pi mechanisms, not a routing-guided weight curriculum.
+- **Active regularized harness RSI (frozen backbone, not this first hop)**: `method:rrsi` (`arXiv:2609.24972`) on `task:agent-harness-runtime`. Does not replace NeoHorse-1.
+- **Not this task (harness distillation into weights)**: `method:harness-zero` on `task:harness-distillation`. Agent-as-harness SFT, not routing-guided OPD.

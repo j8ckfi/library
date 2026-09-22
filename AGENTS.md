@@ -32,13 +32,22 @@ task:agent-harness-runtime -> method:omp2-harness (2026-09-02)
   when dumped long prompt -> task:long-context-prompt-offload
   when how to talk to tools/agents as a protocol -> task:agent-communication
   when recurrent CED-style architecture, not a harness kernel -> task:recurrent-encoder-decoder-lm
+  when regularized harness RSI (annealed edit budget / anti-memorization critic) -> method:rrsi
+  when distill optimized-harness behaviors into weights under a fixed target harness -> task:harness-distillation
 task:agent-memory -> method:ace (2510.04618, 2025-10)
   when dumped corpus ≫ window -> task:long-context-prompt-offload
   when SWE issue-to-patch without a playbook -> task:software-engineering-agent-harness
   when repository-grounded procedural skills before interaction experience -> method:code2skill
+  when System-One control plane for memory ops (typing, routing, budget, traversal) -> method:jev-mem
 task:computer-use-agent -> method:claude-computer-use (2606.29537, 2026-06)
   when GitHub issue to patch -> task:software-engineering-agent-harness
   when training hybrid GUI+code agents -> task:hybrid-computer-use-agent-rl
+task:harness-distillation -> method:harness-zero (2609.24974, 2026-09-22)
+  when production kernel (rewind, sandbox, remote, TUI) -> task:agent-harness-runtime
+  when routing RSI post-train -> task:agentic-rsi-routing-posttrain
+  when plain OPD -> task:student-distillation
+  when issue-to-patch -> task:software-engineering-agent-harness
+  when async RL -> task:agentic-async-rl
 task:hybrid-computer-use-agent-rl -> method:recreationworld (2609.22000, 2026-09-21)
   when desktop/OS GUI ranking on OSWorld 2.0 paper protocol -> task:computer-use-agent
   when GitHub issue to patch / SWE harness -> task:software-engineering-agent-harness
@@ -72,6 +81,7 @@ task:software-engineering-agent-harness -> method:mini-swe-agent (2405.15793, 20
   when SFT on observation tokens before GRPO (consequence prediction), not the SWE loop -> task:agentic-async-rl
   when token-efficient Pi extension from harness RSI, not issue-to-patch -> task:agent-harness-runtime
   when data/env construction for coding-agent RL from source code -> task:coding-agent-rl-environment-construction
+  when distill optimized-harness behaviors into weights under a fixed target harness -> task:harness-distillation
 task:directed-sssp-nonneg -> method:bmssp (2504.17033, 2026-08)
 task:1bit-extreme-quantization -> method:sparse-bitnet (2603.05168, 2026-08-26)
 task:fp4-hardware-training -> method:quartet-ii (2601.22813, 2026-08-26) + method:mxfp4-mi355x (2605.09825, 2026-08-26)
@@ -118,6 +128,8 @@ task:agentic-async-rl -> method:sao (2607.07508, 2026-08-26)
   when adaptive sampling until ≥1 correct on math/code prompts, not tool stragglers -> task:math-code-rl-dense
   when privileged self-OPD then retire to RL (ALFWorld/WebShop), not async stragglers -> task:outcome-only-long-horizon-agent-rl
   when data/env construction for coding-agent RL from source code -> task:coding-agent-rl-environment-construction
+  when diagnose which multi-turn tool calls are trainable (nested sampling / contextual bandit) -> method:critical-state-rl
+  when distill optimized-harness behaviors into weights under a fixed target harness -> task:harness-distillation
 task:agentic-rsi-routing-posttrain -> method:neohorse-1 (2609.08183, 2026-09-09)
   when build a SWE / issue-to-patch harness rather than post-train from routing traces -> task:software-engineering-agent-harness
   when variable environment latency / async stragglers, not RSI routing post-train -> task:agentic-async-rl
@@ -126,6 +138,8 @@ task:agentic-rsi-routing-posttrain -> method:neohorse-1 (2609.08183, 2026-09-09)
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
   when single-teacher text distillation without a routing harness -> task:student-distillation
   when token-efficient Pi harness mechanisms from auto-research, not routing-harness OPD -> task:agent-harness-runtime
+  when regularized harness RSI with a frozen backbone, not routing-guided OPD -> method:rrsi
+  when distill optimized-harness behaviors into weights under a fixed target harness -> task:harness-distillation
 task:all-zero-verifier-groups -> method:verigate (2605.30451, 2026-08-26)
 task:coding-agent-rl-environment-construction -> method:codemidas (2609.22068, 2026-09-21)
   when programmatic checker exists and sparse outcome RL is the protocol (AppWorld TGC) -> task:outcome-only-long-horizon-agent-rl
@@ -189,6 +203,8 @@ task:reasoning-rl-alignment -> method:cispo (2506.13585, 2026-08-26) + method:sa
 task:student-distillation -> method:opd (2604.13016, 2026-08-26) + method:open-mopd (2608.19098, 2026-08-28)
   when privileged OPD TSD calibration (residual discrepancy during OPD, not teacher retirement) -> method:cal-opd
   when Adaptive Retirement of a privileged self-OPD teacher then pure agent RL -> task:outcome-only-long-horizon-agent-rl
+  when sparse OPD token selection by gradient-estimation reliability (IER), not usefulness keep-mask only -> method:ier-opd
+  when distill optimized-harness behaviors into weights under a fixed target harness (action-space mismatch) -> task:harness-distillation
 task:teacher-free-on-policy-self-adaptation -> method:opsa (2608.31046, 2026-09-01)
   when verifiable labels exist and the goal is Pass@1 RLVR -> task:math-code-rl-dense
   when a strong teacher is available and the goal is intentional distillation -> task:student-distillation
@@ -396,6 +412,11 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 111. **Hybrid GUI+code CUA train/eval**: **RecreationWorld** (`method:recreationworld`, `arXiv:2609.22000`) on `task:hybrid-computer-use-agent-rl`. Reference-as-oracle recreation across five platforms. Active first hop for that task only. Does **not** demote Claude computer-use on OSWorld 2.0.
 112. **Repository-grounded skill synthesis**: **Code2Skill** (`method:code2skill`, `arXiv:2609.05571`) on `task:agent-memory`. Lift code units into verified skills before interaction experience. Active. Does **not** replace ACE.
 113. **Region-level MLLM perception RL**: **Vision-RL2** (`method:vision-rl2`, `arXiv:2609.19745`) on `task:mllm-finegrained-perception-rl`. RoI proposal network + frozen reader; ~4× fewer visual tokens. Active first hop for that task only. Does **not** replace EPS prompt scaffolding or OraRL.
+114. **Sparse OPD gradient-reliability plug-in**: **IER-OPD** (`method:ier-opd`, `arXiv:2609.24432`) on `task:student-distillation`. Information-efficiency ratio (teacher-gradient SNR under an optimal scalar baseline) fused with usefulness; 0.1%–1% token budgets match/exceed full OPD. Active. Does **not** replace OPD, CISPO, sparse-opd-supervision, IDA-OPD, or Cal-OPD.
+115. **Regularized harness RSI**: **RRSI** (`method:rrsi`, `arXiv:2609.24972`) on `task:agent-harness-runtime` with a mention on `task:agentic-rsi-routing-posttrain`. Annealed edit budget + unexplored trajectories; critic+pruner against evolve-set memorization. Active. Does **not** replace omp2-harness, NeoHorse-1, SoL-Pi, mini-SWE-agent, or harness-onpolicy-correction.
+116. **Harness distillation into weights**: **Harness-Zero** (`method:harness-zero`, `arXiv:2609.24974`) on `task:harness-distillation`. Agent-as-harness maps optimized-harness behaviors into a fixed target action space, then SFT; drop the specialized harness at deploy. Active first hop for that task only. Does **not** retarget omp2, NeoHorse-1, OPD, Open-MOPD, SAO, or CANOPY.
+117. **System-One-controlled agentic memory**: **Jev-Mem** (`method:jev-mem`, `arXiv:2609.23986`) on `task:agent-memory`. Typed control plane for typing, routing, budget, traversal, scoring, stop; System Two only for hard reasoning. Active. Does **not** replace ACE or Code2Skill.
+118. **Multi-turn tool-use trainability diagnostic**: **Critical-State RL** (`method:critical-state-rl`, `arXiv:2609.24985`) on `task:agentic-async-rl`. Nested sampling vs continuation noise; contextual-bandit at selected states. Active. No public code. Does **not** replace SAO, CANOPY, CISPO, or FoldGRPO.
 
 ---
 
@@ -509,6 +530,11 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `recreationworld` (2609.22000) is the active first hop for `task:hybrid-computer-use-agent-rl` only. It does not supersede `claude-computer-use`.
 - `code2skill` (2609.05571) is an active repository-grounded skill bank on `task:agent-memory`. It does not supersede `ace`.
 - `vision-rl2` (2609.19745) is the active first hop for `task:mllm-finegrained-perception-rl` only. It does not supersede `eps-prompt-scaffolding` or `orarl`.
+- `ier-opd` (2609.24432) is an active sparse-OPD reliability plug-in on student distillation. It does not supersede `opd`, `cispo`, `sparse-opd-supervision`, `ida-opd`, or `cal-opd`.
+- `rrsi` (2609.24972) is an active regularized harness-RSI searcher. It does not supersede `omp2-harness`, `neohorse-1`, `sol-pi`, `mini-swe-agent`, or `harness-onpolicy-correction`.
+- `harness-zero` (2609.24974) is the active first hop for `task:harness-distillation` only. It does not supersede `omp2-harness`, `neohorse-1`, `opd`, `open-mopd`, `sao`, or `canopy`.
+- `jev-mem` (2609.23986) is an active System-One memory control plane on `task:agent-memory`. It does not supersede `ace` or `code2skill`.
+- `critical-state-rl` (2609.24985) is an active multi-turn trainability diagnostic on `task:agentic-async-rl`. It does not supersede `sao`, `canopy`, `cispo`, or `foldgrpo`.
 
 ---
 

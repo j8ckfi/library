@@ -12,6 +12,7 @@ out_of_scope:
   - "Dumped 10M-token prompts (RLM)"
   - "MCP as the product protocol (MCP stays agent-communication)"
   - "Recurrent CED-style architecture (RLT)"
+  - "Harness distillation into weights under a fixed target harness (Harness-Zero)"
 redirects:
   - when: "issue-to-patch / locked eval"
     to: "task:software-engineering-agent-harness"
@@ -25,7 +26,11 @@ redirects:
     to: "task:agent-communication"
   - when: "recurrent CED-style architecture, not a harness kernel"
     to: "task:recurrent-encoder-decoder-lm"
-last_reviewed: "2026-09-18"
+  - when: "regularized harness RSI (annealed edit budget / anti-memorization critic)"
+    to: "method:rrsi"
+  - when: "distill optimized-harness behaviors into weights under a fixed target harness"
+    to: "task:harness-distillation"
+last_reviewed: "2026-09-22"
 current_sota:
   - method: method:omp2-harness
     as_of: "2026-09-02"
@@ -37,6 +42,8 @@ methods:
   - method:omp2-harness
   - method:harness-onpolicy-correction
   - method:sol-pi
+  - method:rrsi
+  - method:harness-zero
 tags:
   - agents
   - agent-harness
@@ -63,4 +70,6 @@ This is **not** the SWE-bench start/eval loop. Issue → patch / locked mini har
 - **Not this task**: mini-SWE-agent (issue → patch / locked eval), CCA (equal-model Pro scaffold), OpenHands/CodeAct (production OSS SWE agent), SAO (train a policy), FoldGRPO (trajectory folding), RLM (dumped long prompt), MCP (agent↔tool protocol), ACE (agent memory), MAGIC / CISPO / Muon2 (training/eval kernels).
 - **Gotcha (evolved-harness SFT)**: `method:harness-onpolicy-correction` (`arXiv:2609.09134`). Does not replace omp2.
 - **Active token-efficient Pi sibling (not this first hop)**: `method:sol-pi` (`arXiv:2609.20519`). Harness-layer RSI → Action Fusion / ObservationPack / Evidence-Preserving Reducer / Online Context Compact. EdgeBench parity at −44.7–49% token traffic. Does not replace omp2, mini-SWE-agent, or NeoHorse-1.
+- **Active regularized harness RSI (not this first hop)**: `method:rrsi` (`arXiv:2609.24972`). Annealed edit budget, unexplored-trajectory proposer, critic+pruner against evolve-set memorization. Up to +14.1 evolve / +4.7 OOD, ~30% fewer policy tokens. Frozen backbone. Does not replace omp2, NeoHorse-1, SoL-Pi, mini-SWE-agent, or harness-onpolicy-correction.
+- **Not this task (harness distillation into weights)**: `method:harness-zero` on `task:harness-distillation`. Agent-as-harness SFT so specialized-harness gains survive under a fixed target harness.
 - Related workflow, not this architecture: [prewalk](https://stencil.so/blog/prewalk) is a workflow on omp, not current_sota here.

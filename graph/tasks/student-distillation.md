@@ -9,6 +9,10 @@ redirects:
     to: "method:cal-opd"
   - when: "Adaptive Retirement of a privileged self-OPD teacher then pure agent RL"
     to: "task:outcome-only-long-horizon-agent-rl"
+  - when: "sparse OPD token selection by gradient-estimation reliability (IER), not usefulness keep-mask only"
+    to: "method:ier-opd"
+  - when: "distill optimized-harness behaviors into weights under a fixed target harness (action-space mismatch)"
+    to: "task:harness-distillation"
 current_sota:
   - method: method:opd
     as_of: "2026-08-26"
@@ -49,7 +53,8 @@ methods:
   - method:opd-eos
   - method:retireopd
   - method:cal-opd
-last_reviewed: "2026-09-21"
+  - method:ier-opd
+last_reviewed: "2026-09-22"
 tags:
   - post-training
   - distillation
@@ -81,5 +86,6 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **No teacher / no labels**: `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. Does not replace OPD when a strong teacher is the goal.
 - **Gotcha (EOS mismatch)**: `method:opd-eos` / `paper:opd-eos` (`arXiv:2609.20511`). Teacher/student stop ids can disagree even when declared stop sets match; length inflates under OPD. Semantic-class EOS is the fix. Does not replace OPD.
 - **Optional TSD calibration plug-in**: `method:cal-opd` (`arXiv:2609.21619`) estimates the teacher self-deviation region with positive+negative privileged probes and keeps residual discrepancy (~52–65%) as the OPD advantage. Signal calibration during OPD, not teacher retirement. Does not replace OPD, VISTA, or RetireOPD.
-- **Not this task**: Adaptive Retirement of a privileged self-OPD teacher in agent RL is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl`.
+- **Optional sparse-OPD reliability plug-in**: `method:ier-opd` (`arXiv:2609.24432`) ranks tokens by information-efficiency ratio (gradient signal-to-noise under an optimal scalar baseline) and fuses with usefulness scores. 0.1%–1% budgets match/exceed full OPD. Does not replace OPD, CISPO, sparse-opd-supervision, IDA-OPD, or Cal-OPD.
+- **Not this task**: Adaptive Retirement of a privileged self-OPD teacher in agent RL is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl`. Distilling optimized-harness behaviors into weights under a fixed target harness is `method:harness-zero` on `task:harness-distillation`.
 

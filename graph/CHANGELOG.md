@@ -6,6 +6,40 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-22 — weekday SOTA sweep (IER-OPD, RRSI, Harness-Zero, Jev-Mem, Critical-State RL)
+- MUST 1–5. One new task (`task:harness-distillation`). No `current_sota` retargets of CISPO / CANOPY / SAO / OPD / Open-MOPD / VISTA / omp2-harness / TTPO / Miles / Claude computer-use / ACE / mini-SWE-agent / Muon2 / NeoHorse-1 / Code2Skill / Cal-OPD / RecreationWorld / CodeMidas / Vision-RL2 / EPS / sol-pi.
+- Window: America/Denver 2026-09-22 Librarian weekday sweep. SKIP: OSWorld-Pro, onPanda, Complex KDA, VideoGen-Agent, EDGEGEN, IncLoRA+Muon, iSDFT, InfoPPO, Category-Aware SWE 2609.23377 (no public code).
+
+### 2026-09-22 — ingest method:ier-opd (active sparse-OPD reliability plug-in; does not supersede method:opd / method:cispo / method:sparse-opd-supervision / method:ida-opd / method:cal-opd)
+- Added paper:ier-opd (2609.24432), method:ier-opd, recipe:ier-opd (`code_status: released`; BruceSheng1202/IER-OPD). Wired to task:student-distillation beside sparse-opd-supervision and ida-opd. Reverse redirects from student-distillation and sibling methods.
+- Status active (`sota_for: []`). Not distill SOTA. IER = teacher-gradient SNR under an optimal scalar baseline; candidate-set ranking fused with usefulness (IER-OR / IER-AND); keep sampled reverse-KL OPD.
+- Evidence: 0.1%–1% token budgets match/exceed full OPD on math + HealthBench (JustRL-Qwen3-4B→1.7B Bayes@32 AIME25 15.8 vs full OPD 14.4; HealthBench TIP+IER-OR 46.08 vs 45.77) (arXiv:2609.24432); verified: true; evidence_level: preprint.
+- Scope checks: OPD remains distill default; CISPO remains Pass@1; sparse-opd-supervision remains usefulness keep-mask; IDA-OPD remains entropy A_y reweight; Cal-OPD remains TSD calibration.
+
+### 2026-09-22 — ingest method:rrsi (active regularized harness RSI; does not supersede method:omp2-harness / method:neohorse-1 / method:sol-pi / method:mini-swe-agent / method:harness-onpolicy-correction)
+- Added paper:rrsi (2609.24972), method:rrsi, recipe:rrsi (`code_status: released`; google-research/rrsi). Mention on task:agent-harness-runtime and task:agentic-rsi-routing-posttrain. Reverse redirects from both tasks and sibling methods.
+- Status active (`sota_for: []`). Frozen-backbone harness search with annealed edit budget, unexplored-component proposer, critic+pruner against evolve-set memorization.
+- Evidence: Terminal-Bench 2.1 evolve 64.6→78.7 (+14.1) Gemini 3.5 Flash; up to +4.7 on five OOD benches; ~30% fewer policy tokens vs unregularized; 8 benches (arXiv:2609.24972); verified: true; evidence_level: preprint.
+- Scope checks: omp2 remains kernel spec; NeoHorse-1 remains routing-harness weight post-train; SoL-Pi remains Pi token-efficiency; mini-SWE-agent remains issue-to-patch; harness-onpolicy-correction remains the evolved-harness SFT gotcha.
+
+### 2026-09-22 — ingest method:harness-zero (new task:harness-distillation; does not supersede method:omp2-harness / method:neohorse-1 / method:opd / method:open-mopd / method:sao / method:canopy)
+- Added paper:harness-zero (2609.24974), method:harness-zero, recipe:harness-zero (`code_status: released`; metaevo-ai/harness-zero). New task first hop; method status active (`sota_for: []`). Reverse redirects from task:agent-harness-runtime / task:agentic-rsi-routing-posttrain / task:student-distillation / task:software-engineering-agent-harness / task:agentic-async-rl.
+- Status active. Agent-as-harness corrects student replies into the target action space before execution, then SFT; drop the specialized harness at deploy.
+- Evidence: Qwen3.5-9B macro success 23.3%→44.3% without specialized harness (vs 41.7% with harness); agent-as-harness 81.1% vs code-as-harness 78.1%; 82.3% recovery of 28 patterns (arXiv:2609.24974); verified: true; evidence_level: preprint.
+- Scope checks: omp2 remains kernel; NeoHorse-1 remains routing RSI post-train; OPD / Open-MOPD remain text distill; mini-SWE-agent remains the loop (used here as target harness h); SAO remains async; CANOPY remains AppWorld TGC.
+
+### 2026-09-22 — ingest method:jev-mem (active on task:agent-memory; does not supersede method:ace / method:code2skill)
+- Added paper:jev-mem (2609.23986), method:jev-mem, recipe:jev-mem (`code_status: released`; libingzheren/Jev-Mem). Wired to task:agent-memory alongside ACE and Code2Skill. Redirect when System-One control of memory ops.
+- Status active. Not memory SOTA. Typed System-One control plane (typing, routing, budget, traversal, scoring, stop) plus multi-relational store; System Two only for hard reasoning.
+- Evidence: LoCoMo judge 0.777 vs MAGMA 0.700 (+11% rel); construction 158 s (6.6× vs Nemori 1,044 s); query 0.93 s (−36.7% vs MAGMA 1.47 s) (arXiv:2609.23986); verified: true; evidence_level: preprint.
+- Scope checks: ACE remains playbook/memory default; Code2Skill remains repository-grounded skills.
+
+### 2026-09-22 — ingest method:critical-state-rl (active multi-turn trainability diagnostic; does not supersede method:sao / method:canopy / method:cispo / method:foldgrpo)
+- Added paper:critical-state-rl (2609.24985), method:critical-state-rl, recipe:critical-state-rl (`code_status: none`; `repo_url: none found`). Wired to task:agentic-async-rl. Reverse redirect for nested-sampling diagnostic vs straggler replay.
+- Status active (`sota_for: []`). Diagnose which multi-turn calls are trainable (action-sufficiency, headroom, nested sampling vs continuation noise), then contextual-bandit at selected states.
+- Evidence: BFCL v4 miss_func Gemma-4-26B-A4B 0.14→0.283±0.015 (~+14 pp); alternatives flat/worse (arXiv:2609.24985); verified: true; evidence_level: preprint.
+- Scope checks: SAO remains async first hop; CANOPY remains AppWorld coverage; CISPO remains Pass@1; FoldGRPO remains folding.
+
 ### 2026-09-21 — weekday SOTA sweep (Cal-OPD, CodeMidas, RecreationWorld, Code2Skill, Vision-RL2)
 - MUST 1–5. Three new tasks. No `current_sota` retargets of CISPO / CANOPY / SAO / OPD / Open-MOPD / VISTA / omp2-harness / TTPO / Miles / Claude computer-use / ACE / mini-SWE-agent / Muon2 / EPS.
 - Window: HF Daily 2026-09-19/20 empty weekend; 2026-09-21 + arXiv ~2609.20800–2609.22086. WATCH/SKIP: GraphSkillEvo 2609.21749, IntBMoE 2609.21346, λ-Controlled GRPO 2609.22041, Matrix AdaGrad 2609.21815, Abstention and Noise Filtering 2609.22005.

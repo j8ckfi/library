@@ -22,6 +22,12 @@ do_not_use_for:
   - when: "expert full-trajectory SFT after model-specific harness evolution"
     reason: "That imitation is the failure mode (−4 to −30 pts on all seven tasks)"
     use_instead: "method:harness-onpolicy-correction"
+  - when: "regularized harness RSI with a frozen backbone"
+    reason: "This card is the evolved-harness full-traj SFT gotcha; RRSI is regularized harness search"
+    use_instead: "method:rrsi"
+  - when: "distill optimized-harness behaviors into weights under a fixed target harness"
+    reason: "This card is a co-evolution gotcha; Harness-Zero is agent-as-harness SFT"
+    use_instead: "method:harness-zero"
 assumptions:
   - "Enterprise agent tasks with an evolvable harness (system prompt, tools, hooks, context scaffolding) and a stronger expert model. Paper: Qwen3-Coder-30B-A3B and Gemma-4-26B-A4B, LoRA-SFT."
   - "No official code as of 2026-09-11. Pipeline is automated by a meta-level MLE agent in the paper."
@@ -61,7 +67,7 @@ Niche gotcha + recipe. Does not replace mini-SWE-agent, Miles, or NeoHorse-1.
 - You evolved a model-specific harness and now want a light weight update. Do not dump expert traces.
 
 ## When NOT to Use
-- SWE harness pick → `method:mini-swe-agent`. Production kernel → `method:omp2-harness`. RSI routing post-train → `method:neohorse-1`. Stack → `method:miles`.
+- SWE harness pick → `method:mini-swe-agent`. Production kernel → `method:omp2-harness`. RSI routing post-train → `method:neohorse-1`. Stack → `method:miles`. Frozen-backbone harness RSI → `method:rrsi`. Harness distillation → `method:harness-zero`.
 
 ## Relation to Existing SOTA
 - Niche on `task:software-engineering-agent-harness`, `task:agent-harness-runtime`, and `task:agentic-rsi-routing-posttrain`. Does **not** enter `current_sota`.

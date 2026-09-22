@@ -22,6 +22,9 @@ do_not_use_for:
   - when: "Pass@K RLVR without a teacher"
     reason: "Coverage/no-backward RLVR is ES-reasoning, not an OPD entropy shrink"
     use_instead: "method:es-reasoning"
+  - when: "sparse OPD token selection by gradient-estimation reliability (IER), not entropy A_y reweight"
+    reason: "IER-OPD ranks tokens; IDA-OPD reweights sampled-token advantages"
+    use_instead: "method:ier-opd"
 assumptions:
   - "Running sampled-token (K1) OPD: A_y = log q(y|h) - log p(y|h). Student next-token distribution is available so D_y can be computed."
   - "Paper: Qwen3-8B/4B Non-Thinking students distilled from GRPO-trained same-size math/code teachers; DeepMath103K level-6; n=128 eval for unbiased pass@k."
@@ -81,9 +84,10 @@ Sits beside `method:ra-opd` (trajectory filter on outcome alignment) and `method
 - Labeled Pass@1 RLVR -> `method:cispo`.
 - No teacher -> `method:opsa`.
 - Outcome-alignment trajectory drop -> `method:ra-opd`.
+- Sparse token selection by gradient-estimation reliability -> `method:ier-opd`.
 
 ## Relation to Existing SOTA
-- Niche plug-in on `task:student-distillation`. Does **not** supersede `method:opd`, `method:cispo`, `method:opsa`, or `method:ra-opd`.
+- Niche plug-in on `task:student-distillation`. Does **not** supersede `method:opd`, `method:cispo`, `method:opsa`, or `method:ra-opd`. Token keep-mask by IER is `method:ier-opd`.
 
 ## Gotchas & Failure Modes
 - Uniform shrinkage of every $A_y$ (no $\mathcal{I}_H$ gate) is an ablation that loses the method. Gate on the sign.

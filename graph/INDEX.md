@@ -27,6 +27,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when training an async agent policy → `method:sao`
   - do not use when train outcome-only long-horizon agent RL → `task:outcome-only-long-horizon-agent-rl`
   - do not use when stuffing MCP into the permanent tool grammar → `method:mcp`
+  - do not use when regularized harness RSI (annealed edit budget / anti-memorization critic) → `method:rrsi`
+  - do not use when distill optimized-harness behaviors into weights under a fixed target harness → `method:harness-zero`
 - **Redirects**:
   - when issue-to-patch / locked eval → `task:software-engineering-agent-harness`
   - when train agent RL → `task:agentic-async-rl`
@@ -34,7 +36,9 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when dumped long prompt → `task:long-context-prompt-offload`
   - when how to talk to tools/agents as a protocol → `task:agent-communication`
   - when recurrent CED-style architecture, not a harness kernel → `task:recurrent-encoder-decoder-lm`
-- **Out of scope**: SWE-bench eval loops and issue-to-patch start loops; Training an agent policy (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Dumped 10M-token prompts (RLM); MCP as the product protocol (MCP stays agent-communication); Recurrent CED-style architecture (RLT)
+  - when regularized harness RSI (annealed edit budget / anti-memorization critic) → `method:rrsi`
+  - when distill optimized-harness behaviors into weights under a fixed target harness → `task:harness-distillation`
+- **Out of scope**: SWE-bench eval loops and issue-to-patch start loops; Training an agent policy (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Dumped 10M-token prompts (RLM); MCP as the product protocol (MCP stays agent-communication); Recurrent CED-style architecture (RLT); Harness distillation into weights under a fixed target harness (Harness-Zero)
 
 ### task:agent-memory — Agent Memory
 - **Scope**: How an agent stores and updates strategies across tasks. Not dumped-prompt RLM and not a SWE loop.
@@ -43,11 +47,13 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when SWE patch loop with no persistent playbook → `method:mini-swe-agent`
   - do not use when long-lived persona OS-style paging → `method:memgpt`
   - do not use when repository-grounded procedural skills before interaction experience → `method:code2skill`
+  - do not use when System-One control plane for memory ops (typing, routing, budget, traversal) → `method:jev-mem`
 - **Redirects**:
   - when dumped corpus ≫ window → `task:long-context-prompt-offload`
   - when SWE issue-to-patch without a playbook → `task:software-engineering-agent-harness`
   - when repository-grounded procedural skills before interaction experience → `method:code2skill`
-- **Out of scope**: Recursive summary as the only long-context strategy; SWE patch loops with no playbook need; Dumped 10M-token prompt
+  - when System-One control plane for memory ops (typing, routing, budget, traversal) → `method:jev-mem`
+- **Out of scope**: Recursive summary as the only long-context strategy; SWE patch loops with no playbook need; Dumped 10M-token prompt; System-One control plane for conversational memory ops (Jev-Mem)
 
 ### task:computer-use-agent — Computer-Use Agent
 - **Scope**: GUI computer-use. Paper protocol OSWorld 2.0 for desktop. Not GitHub-issue-to-patch.
@@ -60,6 +66,24 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when GitHub issue to patch → `task:software-engineering-agent-harness`
   - when training hybrid GUI+code agents → `task:hybrid-computer-use-agent-rl`
 - **Out of scope**: GitHub issue → patch (SWE harness); OSWorld-Verified as the ranking bench (near-saturated); Aggregator 70.6% / Steel 62.6% as method SOTA; Hybrid GUI+code recreation train/eval (RecreationWorld)
+
+### task:harness-distillation — Harness Distillation
+- **Scope**: Training-time guidance from a domain- or instance-optimized harness, mapped into the target harness action space (agent-as-harness), then SFT so the specialized harness can be removed at deploy. First hop is Harness-Zero. Not a production kernel, not routing-harness RSI post-train, not plain OPD, not the SWE loop, not async RL.
+- **SOTA**: `method:harness-zero` `2609.24974` (as_of 2026-09-22) — Qwen3.5-9B macro success (SpreadsheetBench / AppWorld / USPTO), specialized harness removed: 23.3% → 44.3% (vs 41.7% with evolved harness still attached)
+  - do not use when production harness kernel (rewind, sandbox, remote, TUI) → `method:omp2-harness`
+  - do not use when routing-harness RSI post-train of model weights from harness traces → `method:neohorse-1`
+  - do not use when single-teacher text distillation without a harness action-space mismatch → `method:opd`
+  - do not use when multi-teacher student distillation → `method:open-mopd`
+  - do not use when GitHub issue to patch / SWE harness → `method:mini-swe-agent`
+  - do not use when variable environment latency / async stragglers → `method:sao`
+  - do not use when programmatic checker AppWorld coverage / anti-drift → `method:canopy`
+- **Redirects**:
+  - when production kernel (rewind, sandbox, remote, TUI) → `task:agent-harness-runtime`
+  - when routing RSI post-train → `task:agentic-rsi-routing-posttrain`
+  - when plain OPD → `task:student-distillation`
+  - when issue-to-patch → `task:software-engineering-agent-harness`
+  - when async RL → `task:agentic-async-rl`
+- **Out of scope**: Production harness kernel (rewind, sandbox, remote, TUI / omp²); Routing-harness RSI post-train of model weights (NeoHorse-1); Single-teacher text distillation / sampled reverse-KL OPD; GitHub issue → patch SWE harness (mini-SWE-agent); Async tool-latency / straggler RL (SAO); AppWorld outcome-only coverage / anti-drift (CANOPY)
 
 ### task:hybrid-computer-use-agent-rl — Hybrid Computer-Use Agent RL
 - **Scope**: Hybrid GUI+code train/eval (recreation tasks, reference-as-oracle rewards, multi-platform harness). First hop is RecreationWorld. Desktop OSWorld 2.0 paper-protocol ranking stays Claude computer-use.
@@ -100,6 +124,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when train a live-web multi-hop search agent (SFT-RL climbing), not folding → `method:iris`
   - do not use when frontier-model SOTA vs GPT-5 ReAct → `method:foldgrpo`
   - do not use when multi-agent as the long-horizon strategy → `method:single-agent-plus-tools`
+  - do not use when diagnose which multi-turn tool calls are trainable (nested sampling / contextual bandit) → `method:critical-state-rl`
 - **Redirects**:
   - when dumped corpus much larger than the window → `task:long-context-prompt-offload`
   - when SWE harness without folding → `task:software-engineering-agent-harness`
@@ -132,6 +157,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when GUI / OS desktop computer-use → `method:claude-computer-use`
   - do not use when notes/context management beyond bash on a hard repo → `method:cca`
   - do not use when building a durable coding-agent engine (rewind/fork/remote/sandbox/TUI) → `method:omp2-harness`
+  - do not use when distill optimized-harness behaviors into weights under a fixed target harness → `method:harness-zero`
+  - do not use when regularized harness RSI with a frozen backbone → `method:rrsi`
 - **Redirects**:
   - when train asynchronous RL for a tool-use policy → `task:agentic-async-rl`
   - when math-code RLVR with verifiable rewards → `task:math-code-rl-dense`
@@ -148,7 +175,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when SFT on observation tokens before GRPO (consequence prediction), not the SWE loop → `task:agentic-async-rl`
   - when token-efficient Pi extension from harness RSI, not issue-to-patch → `task:agent-harness-runtime`
   - when data/env construction for coding-agent RL from source code → `task:coding-agent-rl-environment-construction`
-- **Out of scope**: Training an async agent policy (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Math/code RLVR (CISPO); GUI / OS desktop computer-use; Dumped 10M-token corpus prompt offload (RLM); Trajectory folding (FoldGRPO); Planner-coder-tester multi-agent theater for a single patch; Meta-agent search as the default design process; Training a live-web search policy (Iris); Frontier RL post-train engine (Miles); Routing-harness RSI post-train (NeoHorse-1); Recurrent CED-style architecture (RLT); Input-heavy agentic MoE serving / KV CED (DeepSeek-V4.1-Flash); Post-train gated sparse attention under a fixed budget (SAS); SFT on observation tokens before GRPO (ActObs); Data/env construction for coding-agent RL from source code (CodeMidas)
+  - when distill optimized-harness behaviors into weights under a fixed target harness → `task:harness-distillation`
+- **Out of scope**: Training an async agent policy (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Math/code RLVR (CISPO); GUI / OS desktop computer-use; Dumped 10M-token corpus prompt offload (RLM); Trajectory folding (FoldGRPO); Planner-coder-tester multi-agent theater for a single patch; Meta-agent search as the default design process; Training a live-web search policy (Iris); Frontier RL post-train engine (Miles); Routing-harness RSI post-train (NeoHorse-1); Recurrent CED-style architecture (RLT); Input-heavy agentic MoE serving / KV CED (DeepSeek-V4.1-Flash); Post-train gated sparse attention under a fixed budget (SAS); SFT on observation tokens before GRPO (ActObs); Data/env construction for coding-agent RL from source code (CodeMidas); Harness distillation into weights under a fixed target harness (Harness-Zero)
 
 ## algorithms
 
@@ -278,6 +306,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when sparse-outcome coverage / anti-drift on a small revisited task pool, not async latency → `task:outcome-only-long-horizon-agent-rl`
   - do not use when train a live-web multi-hop search agent (SFT-RL climbing), not async stragglers → `method:iris`
   - do not use when build an agent rather than train a policy → `method:mini-swe-agent`
+  - do not use when diagnose which multi-turn tool calls are trainable (nested sampling / contextual bandit) → `method:critical-state-rl`
+  - do not use when distill optimized-harness behaviors into weights under a fixed target harness → `method:harness-zero`
 - **Redirects**:
   - when build an agent rather than train a policy → `task:software-engineering-agent-harness`
   - when outcome-only long-horizon agent RL (coverage / anti-drift), not async stragglers → `task:outcome-only-long-horizon-agent-rl`
@@ -287,7 +317,9 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when adaptive sampling until ≥1 correct on math/code prompts, not tool stragglers → `task:math-code-rl-dense`
   - when privileged self-OPD then retire to RL (ALFWorld/WebShop), not async stragglers → `task:outcome-only-long-horizon-agent-rl`
   - when data/env construction for coding-agent RL from source code → `task:coding-agent-rl-environment-construction`
-- **Out of scope**: Building or choosing a software-engineering agent loop (mini-SWE-agent / CCA / OpenHands); Dumped long-prompt offload (RLM); GUI computer-use without policy training; Outcome-only long-horizon agent RL where the failure is signal starvation / policy drift, not async latency; Live-web multi-hop search-agent training (Iris SFT-RL climbing); Production post-train engine rather than the async algorithm (Miles); Routing-harness RSI post-train (NeoHorse-1); Adaptive math/code sampling until ≥1 correct (NGU); that is a CISPO-host sampler, not SAO straggler replay; Privileged self-OPD then Adaptive Retirement into pure agent RL (RetireOPD / ALFWorld/WebShop); Data/env construction for coding-agent RL from source code (CodeMidas)
+  - when diagnose which multi-turn tool calls are trainable (nested sampling / contextual bandit) → `method:critical-state-rl`
+  - when distill optimized-harness behaviors into weights under a fixed target harness → `task:harness-distillation`
+- **Out of scope**: Building or choosing a software-engineering agent loop (mini-SWE-agent / CCA / OpenHands); Dumped long-prompt offload (RLM); GUI computer-use without policy training; Outcome-only long-horizon agent RL where the failure is signal starvation / policy drift, not async latency; Live-web multi-hop search-agent training (Iris SFT-RL climbing); Production post-train engine rather than the async algorithm (Miles); Routing-harness RSI post-train (NeoHorse-1); Adaptive math/code sampling until ≥1 correct (NGU); that is a CISPO-host sampler, not SAO straggler replay; Privileged self-OPD then Adaptive Retirement into pure agent RL (RetireOPD / ALFWorld/WebShop); Data/env construction for coding-agent RL from source code (CodeMidas); Diagnosing which multi-turn tool calls are trainable (Critical-State RL); Harness distillation into weights under a fixed target harness (Harness-Zero)
 
 ### task:agentic-rsi-routing-posttrain — Agentic RSI Routing-Harness Post-Training
 - **Scope**: Agentic post-training that converts routing-harness records (predicted demand, selected tier, interaction) into SFT curriculum and routing-guided OPD, then reallocates the next mix from capability feedback.
@@ -298,6 +330,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when train a live-web multi-hop search agent (SFT-RL climbing) → `method:iris`
   - do not use when single-turn math/code Pass@1 RLVR → `method:cispo`
   - do not use when single-teacher text distillation without a routing harness → `method:opd`
+  - do not use when regularized harness RSI with a frozen backbone → `method:rrsi`
+  - do not use when distill optimized-harness behaviors into weights under a fixed target harness → `method:harness-zero`
 - **Redirects**:
   - when build a SWE / issue-to-patch harness rather than post-train from routing traces → `task:software-engineering-agent-harness`
   - when variable environment latency / async stragglers, not RSI routing post-train → `task:agentic-async-rl`
@@ -306,7 +340,9 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
   - when single-teacher text distillation without a routing harness → `task:student-distillation`
   - when token-efficient Pi harness mechanisms from auto-research, not routing-harness OPD → `task:agent-harness-runtime`
-- **Out of scope**: SWE issue-to-patch harness (mini-SWE-agent); Async tool-latency / straggler RL (SAO); AppWorld outcome-only coverage / anti-drift (CANOPY); Live-web multi-hop search-agent climbing (Iris); Single-turn dense math/code RLVR (CISPO); Text-only single-teacher distillation default (OPD)
+  - when regularized harness RSI with a frozen backbone, not routing-guided OPD → `method:rrsi`
+  - when distill optimized-harness behaviors into weights under a fixed target harness → `task:harness-distillation`
+- **Out of scope**: SWE issue-to-patch harness (mini-SWE-agent); Async tool-latency / straggler RL (SAO); AppWorld outcome-only coverage / anti-drift (CANOPY); Live-web multi-hop search-agent climbing (Iris); Single-turn dense math/code RLVR (CISPO); Text-only single-teacher distillation default (OPD); Regularized harness RSI with a frozen backbone (RRSI); Harness distillation into weights under a fixed target harness (Harness-Zero)
 
 ### task:all-zero-verifier-groups — All-Zero Verifier Groups & Process Supervision
 - **SOTA**: `method:verigate` `2605.30451` (as_of 2026-08-26) — All-Zero Verifier Group Benchmarks / Process Supervision: Default SOTA for verifier gating
@@ -432,6 +468,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when production harness kernel (rewind, sandbox, remote, TUI) → `method:omp2-harness`
   - do not use when no programmatic checker exists and the reward must come from process criteria → `method:draco`
   - do not use when train a live-web multi-hop search agent (SFT-RL climbing) → `method:iris`
+  - do not use when diagnose which multi-turn tool calls are trainable (nested sampling / contextual bandit) → `method:critical-state-rl`
+  - do not use when distill optimized-harness behaviors into weights under a fixed target harness → `method:harness-zero`
 - **Redirects**:
   - when variable environment latency / async stragglers, not sparse-outcome coverage → `task:agentic-async-rl`
   - when the problem is context folding of a long tool trajectory, not the RL signal → `task:long-horizon-tool-agent`
@@ -464,6 +502,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 - **Redirects**:
   - when privileged OPD TSD calibration (residual discrepancy during OPD, not teacher retirement) → `method:cal-opd`
   - when Adaptive Retirement of a privileged self-OPD teacher then pure agent RL → `task:outcome-only-long-horizon-agent-rl`
+  - when sparse OPD token selection by gradient-estimation reliability (IER), not usefulness keep-mask only → `method:ier-opd`
+  - when distill optimized-harness behaviors into weights under a fixed target harness (action-space mismatch) → `task:harness-distillation`
 
 ### task:teacher-free-on-policy-self-adaptation — Teacher-Free Label-Free On-Policy Self-Adaptation
 - **Scope**: Train-time supervision-free on-policy self-adaptation that suppresses low-logp tokens with entropy-adaptive negative advantages.

@@ -16,6 +16,8 @@ out_of_scope:
   - "Adaptive math/code sampling until ≥1 correct (NGU); that is a CISPO-host sampler, not SAO straggler replay"
   - "Privileged self-OPD then Adaptive Retirement into pure agent RL (RetireOPD / ALFWorld/WebShop)"
   - "Data/env construction for coding-agent RL from source code (CodeMidas)"
+  - "Diagnosing which multi-turn tool calls are trainable (Critical-State RL)"
+  - "Harness distillation into weights under a fixed target harness (Harness-Zero)"
 redirects:
   - when: "build an agent rather than train a policy"
     to: "task:software-engineering-agent-harness"
@@ -33,6 +35,10 @@ redirects:
     to: "task:outcome-only-long-horizon-agent-rl"
   - when: "data/env construction for coding-agent RL from source code"
     to: "task:coding-agent-rl-environment-construction"
+  - when: "diagnose which multi-turn tool calls are trainable (nested sampling / contextual bandit)"
+    to: "method:critical-state-rl"
+  - when: "distill optimized-harness behaviors into weights under a fixed target harness"
+    to: "task:harness-distillation"
 current_sota:
   - method: method:sao
     as_of: "2026-08-26"
@@ -54,7 +60,9 @@ methods:
   - method:actobs
   - method:retireopd
   - method:codemidas
-last_reviewed: "2026-09-21"
+  - method:critical-state-rl
+  - method:harness-zero
+last_reviewed: "2026-09-22"
 tags:
   - post-training
   - agentic
@@ -75,3 +83,5 @@ This is **policy training**. Building a software-engineering agent loop is `task
 - **Not This Task**: sparse-outcome coverage / anti-drift on AppWorld-style agents is `task:outcome-only-long-horizon-agent-rl` (`method:canopy` / `method:draco`). Folding is `task:long-horizon-tool-agent`. Live-web search-agent climbing is `task:web-search-agent-rl` (`method:iris`). Production post-train engine is `task:frontier-rl-posttrain-stack` (`method:miles`). Routing-harness RSI post-train is `task:agentic-rsi-routing-posttrain` (`method:neohorse-1`). Terminal-MoE recipe `method:t1-terminal-rl` (`arXiv:2609.11042`) is not SAO. Adaptive math/code sampling until ≥1 correct is `method:ngu` on `task:math-code-rl-dense` (uses async refill; not SAO). Privileged self-OPD then Adaptive Retirement is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl` (not SAO).
 - **Optional observation-token SFT init (not this async default)**: `method:actobs` (`arXiv:2609.20715`) supervises observation tokens before GRPO and changes later exploration (Terminal-Bench / aider-polyglot). Does not replace SAO.
 - **Not this task (coding-agent RL env construction)**: `method:codemidas` on `task:coding-agent-rl-environment-construction`. Source-code-only env factory, not straggler replay.
+- **Optional multi-turn trainability diagnostic (not this async default)**: `method:critical-state-rl` (`arXiv:2609.24985`) nested-samples which calls are trainable, then contextual-bandit at those states. BFCL v4 miss_func ~+14 pp. No public code. Does not replace SAO, CANOPY, CISPO, or FoldGRPO.
+- **Not this task (harness distillation into weights)**: `method:harness-zero` on `task:harness-distillation`.

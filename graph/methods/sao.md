@@ -19,7 +19,13 @@ do_not_use_for:
   - when: "build an agent rather than train a policy"
     reason: "SAO trains a policy; the harness default is mini-SWE-agent"
     use_instead: "method:mini-swe-agent"
-last_reviewed: "2026-09-04"
+  - when: "diagnose which multi-turn tool calls are trainable (nested sampling / contextual bandit)"
+    reason: "SAO is async straggler replay; Critical-State RL selects which turns receive gradient"
+    use_instead: "method:critical-state-rl"
+  - when: "distill optimized-harness behaviors into weights under a fixed target harness"
+    reason: "SAO is async RL; Harness-Zero is agent-as-harness SFT"
+    use_instead: "method:harness-zero"
+last_reviewed: "2026-09-22"
 papers:
   - paper:sao
 recipes:
@@ -55,6 +61,7 @@ SAO (Single-Rollout Asynchronous Optimization) solves the straggler bottleneck i
 ## Relation to Existing SOTA
 - Remains SOTA for `task:agentic-async-rl`. Does **not** own outcome-only long-horizon coverage (`method:canopy`) or outcome-blind rubric credit (`method:draco`).
 - Pre-RL tool OPKD with persistent lookahead (`method:pta`) is not this shelf: lookahead fills idle distill capacity under a fixed teacher; SAO owns async policy-train stragglers.
+- Multi-turn trainability diagnostic (`method:critical-state-rl`) selects which calls receive gradient; it does not replace SAO. Harness distillation into weights is `method:harness-zero`.
 
 ## Supersession
 - Supersedes synchronous `method:grpo` / `method:dr-grpo` for agentic asynchronous tasks.

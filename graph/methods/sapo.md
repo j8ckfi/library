@@ -41,6 +41,7 @@ SAPO (Soft Adaptive Policy Optimization) introduces soft token-adaptive gating f
 
 ## Relation to Existing SOTA
 - Remains the MoE/VL RLVR loss default. `method:esrl` (`arXiv:2609.13058`) is an active rollout-routing exploration plug-in and does **not** replace SAPO. `method:rpb` remains the router soft-anchor candidate.
+- Critic-free PMD (`method:bpo`) used a Qwen3-30B-A3B-Base host under a CISPO/GSPO/DPPO bake-off. That is a dense-task plug-in on `task:math-code-rl-dense`. SAPO remains the MoE/VL default.
 
 ## Supersession
 - Supersedes `method:gspo` as the primary Qwen MoE/VL algorithm.

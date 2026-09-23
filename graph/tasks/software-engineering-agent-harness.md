@@ -23,6 +23,8 @@ out_of_scope:
   - "SFT on observation tokens before GRPO (ActObs)"
   - "Data/env construction for coding-agent RL from source code (CodeMidas)"
   - "Harness distillation into weights under a fixed target harness (Harness-Zero)"
+  - "Multi-stage agent continual learning (ACLArena)"
+  - "Category-aware SWE expert RL (Category-Aware SWE Experts)"
 redirects:
   - when: "train asynchronous RL for a tool-use policy"
     to: "task:agentic-async-rl"
@@ -56,6 +58,10 @@ redirects:
     to: "task:coding-agent-rl-environment-construction"
   - when: "distill optimized-harness behaviors into weights under a fixed target harness"
     to: "task:harness-distillation"
+  - when: "multi-stage agent capability stacking / continual learning"
+    to: "task:agent-continual-learning"
+  - when: "category see-saw on heterogeneous SWE RL"
+    to: "task:swe-agent-category-expert-rl"
 current_sota:
   - method: method:mini-swe-agent
     as_of: "2026-09"
@@ -74,7 +80,9 @@ methods:
   - method:sol-pi
   - method:codemidas
   - method:harness-zero
-last_reviewed: "2026-09-22"
+  - method:aclarena
+  - method:category-aware-swe-experts
+last_reviewed: "2026-09-23"
 tags:
   - agents
   - agent
@@ -104,3 +112,5 @@ Choose the loop, ACI, and tools for repository-level software engineering (issue
 - **Not this task (Pi token-efficiency extension)**: `method:sol-pi` on `task:agent-harness-runtime`.
 - **Not this task (coding-agent RL env construction)**: `method:codemidas` on `task:coding-agent-rl-environment-construction`.
 - **Not this task (harness distillation into weights)**: `method:harness-zero` on `task:harness-distillation`. The paper uses mini-SWE-agent as the *target* harness \(h\), not a ranking retarget.
+- **Not this task (multi-stage agent continual learning)**: `method:aclarena` on `task:agent-continual-learning`.
+- **Not this task (category-aware SWE expert RL)**: `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`. SWE Labeler + RRE experts + label-routed MOPD. Does not replace mini-SWE-agent.

@@ -29,6 +29,9 @@ do_not_use_for:
   - when: "distill optimized-harness behaviors into weights under a fixed target harness"
     reason: "omp² is the production kernel; Harness-Zero distills harness behaviors into weights"
     use_instead: "method:harness-zero"
+  - when: "recursive self-rewrite of a research-agent harness (accepted rewrite is the next incumbent)"
+    reason: "omp² is the kernel spec; AIDE2 recursively rewrites a research-agent harness"
+    use_instead: "method:aide2"
 assumptions:
   - "You are implementing a harness kernel, not wrapping a 100-line ReAct loop."
   - "The four envelope tests must hold: multiplexed workspace, remote driver, spectator, untrusted factory."
@@ -116,7 +119,7 @@ Does **not** supersede `method:mini-swe-agent`, `method:cca`, `method:openhands-
 - Dumped 10M-token prompt → `method:rlm`.
 - How to talk to tools as a protocol → `method:mcp` (keep MCP off the permanent roster; discover via `dyn`/Bash).
 - Agent memory playbooks → `method:ace`. Trajectory folding → `method:foldgrpo`.
-- Regularized harness RSI → `method:rrsi`. Harness distillation into weights → `method:harness-zero`.
+- Regularized harness RSI → `method:rrsi`. Harness distillation into weights → `method:harness-zero`. Recursive harness self-rewrite → `method:aide2`.
 
 ## Gotchas & Failure Modes
 - Dual authorities (message tree plus closures / Maps) make rewind/fork/resume lie even if the JSONL looks complete.

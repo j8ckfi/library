@@ -13,6 +13,7 @@ out_of_scope:
   - "Production harness kernel (omp2)"
   - "Live-web multi-hop search-agent training (Iris)"
   - "Data/env construction for coding-agent RL from source code (CodeMidas)"
+  - "Multi-stage agent continual learning (ACLArena)"
 redirects:
   - when: "variable environment latency / async stragglers, not sparse-outcome coverage"
     to: "task:agentic-async-rl"
@@ -34,7 +35,9 @@ redirects:
     to: "task:direct-preference-alignment"
   - when: "data/env construction for coding-agent RL from source code"
     to: "task:coding-agent-rl-environment-construction"
-last_reviewed: "2026-09-21"
+  - when: "multi-stage agent capability stacking / continual learning"
+    to: "task:agent-continual-learning"
+last_reviewed: "2026-09-23"
 current_sota:
   - method: method:canopy
     as_of: "2026-09-04"
@@ -56,6 +59,7 @@ methods:
   - method:retireopd
   - method:actobs
   - method:codemidas
+  - method:aclarena
 tags:
   - post-training
   - agentic
@@ -88,3 +92,4 @@ Two siblings share this task and are not substitutes:
 - **Active privileged self-OPD then retirement (not this first hop)**: `method:retireopd` (`arXiv:2609.20784`). Adaptive Retirement drops the privileged teacher when discrepancy stops shrinking and the student hits a fraction of teacher success, then pure RL. ALFWorld +14.1–18.8% SR vs RL; WebShop +11.8–19.0%. Does not replace CANOPY, SAO, OPD, or VISTA.
 - **Related SFT init (not this first hop)**: `method:actobs` (`arXiv:2609.20715`) on `task:agentic-async-rl` — observation-token SFT before GRPO. Does not replace CANOPY.
 - **Not this task (coding-agent RL env construction)**: `method:codemidas` (`arXiv:2609.22068`) on `task:coding-agent-rl-environment-construction` — source-code-only env factory then GRPO. Does not replace CANOPY.
+- **Not this task (multi-stage agent continual learning)**: `method:aclarena` (`arXiv:2609.23989`) on `task:agent-continual-learning`. Sequential capability stacking, not AppWorld TGC.

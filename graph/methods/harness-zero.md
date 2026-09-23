@@ -28,11 +28,14 @@ do_not_use_for:
   - when: "programmatic checker AppWorld coverage / anti-drift"
     reason: "CANOPY remains outcome-only agent RL; AppWorld here is a distillation eval, not TGC protocol"
     use_instead: "method:canopy"
+  - when: "recursive self-rewrite of a research-agent harness (accepted rewrite is the next incumbent)"
+    reason: "Harness-Zero distills harness behaviors into weights under a fixed target; AIDE2 rewrites the harness"
+    use_instead: "method:aide2"
 assumptions:
   - "Target harness h is a fixed mini-SWE-agent-style bash loop. Evolved student harness h* is adapted into a private reference K for the harnessing agent. Review discussion is not visible to the student."
   - "Paper: Qwen3.5-9B SFT student; SpreadsheetBench Verified / AppWorld / USPTO Retrosynthesis. Harbor Docker sandboxes. Tinker SFT recipe."
   - "Code: metaevo-ai/harness-zero. Weights: Hugging Face metaevo-ai."
-last_reviewed: "2026-09-22"
+last_reviewed: "2026-09-23"
 papers:
   - paper:harness-zero
 recipes:
@@ -88,10 +91,10 @@ Agent-as-harness is the mapping across mismatched action spaces. Code-as-harness
 - An optimized harness helps at train time but you must ship one fixed target harness, and source/target action spaces do not match.
 
 ## When NOT to Use
-- Kernel spec → `method:omp2-harness`. Routing RSI post-train → `method:neohorse-1`. Plain text OPD → `method:opd`. Multi-teacher → `method:open-mopd`. Issue → patch → `method:mini-swe-agent`. Async stragglers → `method:sao`. AppWorld TGC → `method:canopy`.
+- Kernel spec → `method:omp2-harness`. Routing RSI post-train → `method:neohorse-1`. Plain text OPD → `method:opd`. Multi-teacher → `method:open-mopd`. Issue → patch → `method:mini-swe-agent`. Async stragglers → `method:sao`. AppWorld TGC → `method:canopy`. Recursive harness self-rewrite → `method:aide2`.
 
 ## Relation to Existing SOTA
-- Active first hop on `task:harness-distillation` only (method status active; listed in that task's `current_sota`; `sota_for` stays empty). Does **not** retarget `method:omp2-harness`, `method:neohorse-1`, `method:opd`, `method:open-mopd`, `method:sao`, or `method:canopy`.
+- Active first hop on `task:harness-distillation` only (method status active; listed in that task's `current_sota`; `sota_for` stays empty). Does **not** retarget `method:omp2-harness`, `method:neohorse-1`, `method:opd`, `method:open-mopd`, `method:sao`, or `method:canopy`. Recursive self-rewrite of the harness codebase is `method:aide2`.
 
 ## Gotchas & Failure Modes
 - Trajectories collected under \(h^\star\) are not valid SFT targets under \(h\). That action-space mismatch is the reason for agent-as-harness.

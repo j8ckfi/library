@@ -25,7 +25,13 @@ do_not_use_for:
   - when: "distill optimized-harness behaviors into weights under a fixed target harness"
     reason: "SAO is async RL; Harness-Zero is agent-as-harness SFT"
     use_instead: "method:harness-zero"
-last_reviewed: "2026-09-22"
+  - when: "multi-stage agent capability stacking / continual learning"
+    reason: "SAO is async straggler replay; ACLArena stacks sequential post-train stages"
+    use_instead: "task:agent-continual-learning"
+  - when: "category see-saw on heterogeneous SWE RL"
+    reason: "SAO is the async algorithm; Category-Aware SWE Experts split and reintegrate categories"
+    use_instead: "task:swe-agent-category-expert-rl"
+last_reviewed: "2026-09-23"
 papers:
   - paper:sao
 recipes:
@@ -62,6 +68,7 @@ SAO (Single-Rollout Asynchronous Optimization) solves the straggler bottleneck i
 - Remains SOTA for `task:agentic-async-rl`. Does **not** own outcome-only long-horizon coverage (`method:canopy`) or outcome-blind rubric credit (`method:draco`).
 - Pre-RL tool OPKD with persistent lookahead (`method:pta`) is not this shelf: lookahead fills idle distill capacity under a fixed teacher; SAO owns async policy-train stragglers.
 - Multi-turn trainability diagnostic (`method:critical-state-rl`) selects which calls receive gradient; it does not replace SAO. Harness distillation into weights is `method:harness-zero`.
+- Multi-stage agent continual learning is `method:aclarena`. Category-aware SWE expert RL is `method:category-aware-swe-experts`. Neither replaces SAO.
 
 ## Supersession
 - Supersedes synchronous `method:grpo` / `method:dr-grpo` for agentic asynchronous tasks.

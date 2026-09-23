@@ -26,11 +26,20 @@ do_not_use_for:
   - when: "outcome-only long-horizon agent RL (AppWorld coverage / anti-drift)"
     reason: "Coverage / anti-drift is CANOPY, not a production engine"
     use_instead: "method:canopy"
+  - when: "full-pipeline FP8 RL entropy surge / calibrated clip bounds"
+    reason: "Miles is the engine; Calibrated Clipping is an FP8 clip-bound plug-in inside a GRPO/DAPO host"
+    use_instead: "method:fp8-calibrated-clipping"
+  - when: "multi-stage agent capability stacking / continual learning"
+    reason: "Miles is the stack; ACLArena is a continual-learning recipe on slime"
+    use_instead: "task:agent-continual-learning"
+  - when: "category see-saw on heterogeneous SWE RL"
+    reason: "Miles is the engine; Category-Aware SWE Experts is a training recipe"
+    use_instead: "task:swe-agent-category-expert-rl"
 assumptions:
   - "Frontier MoE post-train with a split rollout/train fleet. Paper case study: GLM-5.2 744B-A40B on 64 GB300 (32/32), Megatron trainer, optimizer-state streaming to disk."
   - "SGLang rollouts; Megatron or FSDP trainer. LoRA RL is Megatron-only in v0.1."
   - "Does not replace the train-kernel defaults run inside the stack (CISPO, OPD, Muon2)."
-last_reviewed: "2026-09-09"
+last_reviewed: "2026-09-23"
 papers:
   - paper:miles
 recipes:
@@ -88,11 +97,13 @@ This does not replace CISPO, Muon2, Poolside factory, SAO, CANOPY, or mini-SWE-a
 - Async-straggler algorithm → `method:sao`.
 - Pass@1 loss → `method:cispo`. 7B optimizer → `method:muon2`.
 - SWE harness → `method:mini-swe-agent`. AppWorld coverage → `method:canopy`.
+- Full-pipeline FP8 clip calibration → `method:fp8-calibrated-clipping`. Multi-stage ACL → `method:aclarena`. Category-aware SWE experts → `method:category-aware-swe-experts`.
 
 ## Relation to Existing SOTA
 - First hop for `task:frontier-rl-posttrain-stack` only. Does **not** supersede `method:poolside-model-factory`, `method:sao`, `method:cispo`, `method:muon2`, `method:canopy`, or `method:mini-swe-agent`.
 - Async scheduling here is an engine feature, not SAO's importance-corrected replay.
 - `method:t1-terminal-rl` is a 122B terminal-MoE recipe on slime v0.3.0. It does not replace Miles.
+- Full-pipeline FP8 clip plug-in (`method:fp8-calibrated-clipping`) restores BF16-level quality under compounded FP8 noise. Does not replace Miles.
 
 ## Gotchas & Failure Modes
 - GLM-5.2 reference run leaves R3 off; routing replay is a per-recipe choice and is expensive on long agentic sequences (~60MB routing tensor example in the paper).

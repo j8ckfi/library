@@ -41,3 +41,4 @@ Open-MOPD is the state-of-the-art framework for consolidating multiple domain-sp
 
 ## Relation to Existing SOTA
 - Co-exists with `method:opd` under `task:student-distillation`: `method:opd` is the single-teacher default; `method:open-mopd` is the multi-teacher distillation default as of 2026-08-28. Privileged same-model gold-solution OPSD is `method:vista` and does not replace Open-MOPD.
+- Multi-stage agent continual learning (`method:aclarena`) uses MMOPD as a paper baseline, not a retarget of this method. Label-routed MOPD of SWE category experts is `method:category-aware-swe-experts`.

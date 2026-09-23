@@ -34,6 +34,7 @@ task:agent-harness-runtime -> method:omp2-harness (2026-09-02)
   when recurrent CED-style architecture, not a harness kernel -> task:recurrent-encoder-decoder-lm
   when regularized harness RSI (annealed edit budget / anti-memorization critic) -> method:rrsi
   when distill optimized-harness behaviors into weights under a fixed target harness -> task:harness-distillation
+  when recursive self-rewrite of a research-agent harness (accepted rewrite is the next incumbent) -> method:aide2
 task:agent-memory -> method:ace (2510.04618, 2025-10)
   when dumped corpus ≫ window -> task:long-context-prompt-offload
   when SWE issue-to-patch without a playbook -> task:software-engineering-agent-harness
@@ -48,6 +49,7 @@ task:harness-distillation -> method:harness-zero (2609.24974, 2026-09-22)
   when plain OPD -> task:student-distillation
   when issue-to-patch -> task:software-engineering-agent-harness
   when async RL -> task:agentic-async-rl
+  when recursive self-rewrite of a research-agent harness (accepted rewrite is the next incumbent) -> method:aide2
 task:hybrid-computer-use-agent-rl -> method:recreationworld (2609.22000, 2026-09-21)
   when desktop/OS GUI ranking on OSWorld 2.0 paper protocol -> task:computer-use-agent
   when GitHub issue to patch / SWE harness -> task:software-engineering-agent-harness
@@ -82,6 +84,8 @@ task:software-engineering-agent-harness -> method:mini-swe-agent (2405.15793, 20
   when token-efficient Pi extension from harness RSI, not issue-to-patch -> task:agent-harness-runtime
   when data/env construction for coding-agent RL from source code -> task:coding-agent-rl-environment-construction
   when distill optimized-harness behaviors into weights under a fixed target harness -> task:harness-distillation
+  when multi-stage agent capability stacking / continual learning -> task:agent-continual-learning
+  when category see-saw on heterogeneous SWE RL -> task:swe-agent-category-expert-rl
 task:directed-sssp-nonneg -> method:bmssp (2504.17033, 2026-08)
 task:1bit-extreme-quantization -> method:sparse-bitnet (2603.05168, 2026-08-26)
 task:fp4-hardware-training -> method:quartet-ii (2601.22813, 2026-08-26) + method:mxfp4-mi355x (2605.09825, 2026-08-26)
@@ -119,6 +123,12 @@ task:training-data-attribution -> method:magic (2504.16430, 2026-09-01)
   when mix-ratio search or replacing an open pretrain mix -> task:open-data-recipe
   when SAE dictionaries, circuits, or effect geometry -> task:mechanistic-interpretability-dictionaries
   when factory process / experiments-as-code / lineage -> task:industrial-model-building
+task:agent-continual-learning -> method:aclarena (2609.23989, 2026-09-23)
+  when single-turn math Pass@1 -> task:math-code-rl-dense
+  when async stragglers -> task:agentic-async-rl
+  when outcome-only AppWorld -> task:outcome-only-long-horizon-agent-rl
+  when production engine -> task:frontier-rl-posttrain-stack
+  when SWE issue-to-patch loop -> task:software-engineering-agent-harness
 task:agentic-async-rl -> method:sao (2607.07508, 2026-08-26)
   when build an agent rather than train a policy -> task:software-engineering-agent-harness
   when outcome-only long-horizon agent RL (coverage / anti-drift), not async stragglers -> task:outcome-only-long-horizon-agent-rl
@@ -130,6 +140,8 @@ task:agentic-async-rl -> method:sao (2607.07508, 2026-08-26)
   when data/env construction for coding-agent RL from source code -> task:coding-agent-rl-environment-construction
   when diagnose which multi-turn tool calls are trainable (nested sampling / contextual bandit) -> method:critical-state-rl
   when distill optimized-harness behaviors into weights under a fixed target harness -> task:harness-distillation
+  when multi-stage agent capability stacking / continual learning -> task:agent-continual-learning
+  when category see-saw on heterogeneous SWE RL -> task:swe-agent-category-expert-rl
 task:agentic-rsi-routing-posttrain -> method:neohorse-1 (2609.08183, 2026-09-09)
   when build a SWE / issue-to-patch harness rather than post-train from routing traces -> task:software-engineering-agent-harness
   when variable environment latency / async stragglers, not RSI routing post-train -> task:agentic-async-rl
@@ -140,6 +152,7 @@ task:agentic-rsi-routing-posttrain -> method:neohorse-1 (2609.08183, 2026-09-09)
   when token-efficient Pi harness mechanisms from auto-research, not routing-harness OPD -> task:agent-harness-runtime
   when regularized harness RSI with a frozen backbone, not routing-guided OPD -> method:rrsi
   when distill optimized-harness behaviors into weights under a fixed target harness -> task:harness-distillation
+  when recursive self-rewrite of a research-agent harness, not routing-guided OPD -> method:aide2
 task:all-zero-verifier-groups -> method:verigate (2605.30451, 2026-08-26)
 task:coding-agent-rl-environment-construction -> method:codemidas (2609.22068, 2026-09-21)
   when programmatic checker exists and sparse outcome RL is the protocol (AppWorld TGC) -> task:outcome-only-long-horizon-agent-rl
@@ -147,6 +160,7 @@ task:coding-agent-rl-environment-construction -> method:codemidas (2609.22068, 2
   when GitHub issue to patch / SWE harness -> task:software-engineering-agent-harness
   when production post-train stack rather than env construction -> task:frontier-rl-posttrain-stack
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
+  when category see-saw on heterogeneous SWE RL (already-executable tasks) -> task:swe-agent-category-expert-rl
 task:data-free-self-evolution -> method:j-zero (2608.26582, 2026-08-31)
 task:direct-preference-alignment -> method:olmo-3 (2512.13961, 2026-08-26)
 task:distill-reasoner-verifier -> method:opdvr (2608.24696, 2026-08-27)
@@ -163,6 +177,8 @@ task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
   when olympiad-style natural-language proofs / IMO TTC rather than Pass@1 -> task:olympiad-math-posttrain
   when in-language (L2) reasoning SFT rather than Pass@1 -> task:multilingual-l2-reasoning-sft
   when multimodal VL prompt scaffolding (not dense text Pass@1) -> task:mllm-rl-prompt-curriculum
+  when critic-free PMD / Bellman telescoping RLVR (not CISPO default) -> method:bpo
+  when multi-stage agent capability stacking / continual learning -> task:agent-continual-learning
 task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
 task:mllm-finegrained-perception-rl -> method:vision-rl2 (2609.19745, 2026-09-21)
   when online adaptive prompt selection / teacher scaffolding for image/VL GRPO -> task:mllm-rl-prompt-curriculum
@@ -195,6 +211,7 @@ task:outcome-only-long-horizon-agent-rl -> method:canopy (2609.01245, 2026-09-04
   when agentic RSI / routing-harness post-train, not AppWorld coverage -> task:agentic-rsi-routing-posttrain
   when noisy pairwise preference labels (PLC-DPO), not outcome-only agent RL -> task:direct-preference-alignment
   when data/env construction for coding-agent RL from source code -> task:coding-agent-rl-environment-construction
+  when multi-stage agent capability stacking / continual learning -> task:agent-continual-learning
 task:passk-reasoning-coverage -> method:es-reasoning (2608.27351, 2026-08-31)
 task:privileged-teacher-opsd -> method:vista (2608.28306, 2026-08-31)
   when TSD calibration of teacher–student discrepancy during OPD (not teacher update) -> method:cal-opd
@@ -205,6 +222,13 @@ task:student-distillation -> method:opd (2604.13016, 2026-08-26) + method:open-m
   when Adaptive Retirement of a privileged self-OPD teacher then pure agent RL -> task:outcome-only-long-horizon-agent-rl
   when sparse OPD token selection by gradient-estimation reliability (IER), not usefulness keep-mask only -> method:ier-opd
   when distill optimized-harness behaviors into weights under a fixed target harness (action-space mismatch) -> task:harness-distillation
+  when multi-stage agent capability stacking (MMOPD / SDFT / LoRA experts, not Open-MOPD default) -> task:agent-continual-learning
+  when label-routed multi-teacher OPD of SWE category experts -> task:swe-agent-category-expert-rl
+task:swe-agent-category-expert-rl -> method:category-aware-swe-experts (2609.23377, 2026-09-23)
+  when env construction from source only -> task:coding-agent-rl-environment-construction
+  when async algorithm -> task:agentic-async-rl
+  when issue-to-patch harness loop -> task:software-engineering-agent-harness
+  when production stack -> task:frontier-rl-posttrain-stack
 task:teacher-free-on-policy-self-adaptation -> method:opsa (2608.31046, 2026-09-01)
   when verifiable labels exist and the goal is Pass@1 RLVR -> task:math-code-rl-dense
   when a strong teacher is available and the goal is intentional distillation -> task:student-distillation
@@ -274,6 +298,9 @@ task:frontier-rl-posttrain-stack -> method:miles (2609.08368, 2026-09-09)
   when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
   when build a SWE / issue-to-patch harness rather than run a post-train stack -> task:software-engineering-agent-harness
   when outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) -> task:outcome-only-long-horizon-agent-rl
+  when full-pipeline FP8 RL entropy surge / calibrated clip bounds -> method:fp8-calibrated-clipping
+  when multi-stage agent capability stacking / continual learning -> task:agent-continual-learning
+  when category see-saw on heterogeneous SWE RL -> task:swe-agent-category-expert-rl
 task:industrial-model-building -> method:poolside-model-factory (2605.27605, 2026-08)
   when full-stack frontier RL post-train engine (SGLang rollouts, Megatron/FSDP, LoRA RL / OPD / async agentic RL), not factory lineage -> task:frontier-rl-posttrain-stack
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
@@ -417,6 +444,11 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 116. **Harness distillation into weights**: **Harness-Zero** (`method:harness-zero`, `arXiv:2609.24974`) on `task:harness-distillation`. Agent-as-harness maps optimized-harness behaviors into a fixed target action space, then SFT; drop the specialized harness at deploy. Active first hop for that task only. Does **not** retarget omp2, NeoHorse-1, OPD, Open-MOPD, SAO, or CANOPY.
 117. **System-One-controlled agentic memory**: **Jev-Mem** (`method:jev-mem`, `arXiv:2609.23986`) on `task:agent-memory`. Typed control plane for typing, routing, budget, traversal, scoring, stop; System Two only for hard reasoning. Active. Does **not** replace ACE or Code2Skill.
 118. **Multi-turn tool-use trainability diagnostic**: **Critical-State RL** (`method:critical-state-rl`, `arXiv:2609.24985`) on `task:agentic-async-rl`. Nested sampling vs continuation noise; contextual-bandit at selected states. Active. No public code. Does **not** replace SAO, CANOPY, CISPO, or FoldGRPO.
+119. **Critic-free PMD RLVR candidate**: **BPO** (`method:bpo`, `arXiv:2609.15987`) on `task:math-code-rl-dense`. Bellman telescoping of Policy Mirror Descent; complementary-token mismatch weight instead of an IS ratio. Active plug-in. No public code. Does **not** replace CISPO, SAPO, or SAO.
+120. **Full-pipeline FP8 clip calibration**: **Calibrated Clipping** (`method:fp8-calibrated-clipping`, `arXiv:2609.22870`) on `task:frontier-rl-posttrain-stack`. Match FP8 lower-bound clip quantile to BF16 and rebalance the upper bound. Active. No public standalone repo. Does **not** replace Miles or CISPO.
+121. **Agent continual learning**: **ACLArena** (`method:aclarena`, `arXiv:2609.23989`) on `task:agent-continual-learning`. Offline replay of high-quality trajectories plus routed LoRA experts specialized via RL. Active first hop for that task only. Does **not** replace CISPO, SAO, CANOPY, Miles, or mini-SWE-agent.
+122. **Category-aware SWE expert RL**: **Category-Aware SWE Experts** (`method:category-aware-swe-experts`, `arXiv:2609.23377`) on `task:swe-agent-category-expert-rl`. SWE Labeler + RRE experts + label-routed MOPD. Active first hop for that task only. Does **not** replace CodeMidas, SAO, mini-SWE-agent, or Miles.
+123. **Recursive harness RSI**: **AIDE2** (`method:aide2`, `arXiv:2609.26457`) on `task:agent-harness-runtime` with a mention on `task:agentic-rsi-routing-posttrain`. Outer-loop research agent rewrites its own harness; accepted rewrite is the next incumbent. Active. No public GitHub. Does **not** replace omp2-harness, RRSI, NeoHorse-1, SoL-Pi, or Harness-Zero.
 
 ---
 
@@ -535,6 +567,11 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `harness-zero` (2609.24974) is the active first hop for `task:harness-distillation` only. It does not supersede `omp2-harness`, `neohorse-1`, `opd`, `open-mopd`, `sao`, or `canopy`.
 - `jev-mem` (2609.23986) is an active System-One memory control plane on `task:agent-memory`. It does not supersede `ace` or `code2skill`.
 - `critical-state-rl` (2609.24985) is an active multi-turn trainability diagnostic on `task:agentic-async-rl`. It does not supersede `sao`, `canopy`, `cispo`, or `foldgrpo`.
+- `bpo` (2609.15987) is an active critic-free PMD candidate on `task:math-code-rl-dense`. It does not supersede `cispo`, `sapo`, or `sao`.
+- `fp8-calibrated-clipping` (2609.22870) is an active full-pipeline FP8 clip plug-in on `task:frontier-rl-posttrain-stack`. It does not supersede `miles` or `cispo`.
+- `aclarena` (2609.23989) is the active first hop for `task:agent-continual-learning` only. It does not supersede `cispo`, `sao`, `canopy`, `miles`, or `mini-swe-agent`.
+- `category-aware-swe-experts` (2609.23377) is the active first hop for `task:swe-agent-category-expert-rl` only. It does not supersede `codemidas`, `sao`, `mini-swe-agent`, or `miles`.
+- `aide2` (2609.26457) is an active recursive harness-RSI mention on `task:agent-harness-runtime` and `task:agentic-rsi-routing-posttrain`. It does not supersede `omp2-harness`, `rrsi`, `neohorse-1`, `sol-pi`, or `harness-zero`.
 
 ---
 

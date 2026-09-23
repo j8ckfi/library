@@ -54,6 +54,7 @@ OPD (On-Policy Distillation) is the state-of-the-art framework for distilling la
 - Sparse-OPD reliability plug-in (`method:ier-opd`): information-efficiency ratio (gradient SNR under an optimal scalar baseline) fused with usefulness. 0.1%–1% budgets match/exceed full OPD. Does not replace this method.
 - Sequential stack (`method:opd-then-rlvr`): OPD then RLVR beats joint one-step fusion when both are used. Does not replace this method or CISPO.
 - Optional TSD calibration (`method:cal-opd`): residual discrepancy beyond a probed teacher-self-deviation region. Signal calibration during OPD. Does not replace this method, VISTA, or RetireOPD.
+- Multi-stage agent continual learning (`method:aclarena`) compares MMOPD / SDFT / merge then proposes MLE. Does not replace this method or Open-MOPD. Label-routed MOPD of SWE category experts is `method:category-aware-swe-experts`.
 
 ## Gotchas & Failure Modes
 - Do not scale the prompt set when 16-shot already matches full-data OPD. The remaining gap is student absorption / step-efficiency (`method:opd-one-example`).

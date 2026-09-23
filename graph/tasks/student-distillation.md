@@ -13,6 +13,10 @@ redirects:
     to: "method:ier-opd"
   - when: "distill optimized-harness behaviors into weights under a fixed target harness (action-space mismatch)"
     to: "task:harness-distillation"
+  - when: "multi-stage agent capability stacking (MMOPD / SDFT / LoRA experts, not Open-MOPD default)"
+    to: "task:agent-continual-learning"
+  - when: "label-routed multi-teacher OPD of SWE category experts"
+    to: "task:swe-agent-category-expert-rl"
 current_sota:
   - method: method:opd
     as_of: "2026-08-26"
@@ -54,7 +58,9 @@ methods:
   - method:retireopd
   - method:cal-opd
   - method:ier-opd
-last_reviewed: "2026-09-22"
+  - method:aclarena
+  - method:category-aware-swe-experts
+last_reviewed: "2026-09-23"
 tags:
   - post-training
   - distillation
@@ -87,5 +93,5 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Gotcha (EOS mismatch)**: `method:opd-eos` / `paper:opd-eos` (`arXiv:2609.20511`). Teacher/student stop ids can disagree even when declared stop sets match; length inflates under OPD. Semantic-class EOS is the fix. Does not replace OPD.
 - **Optional TSD calibration plug-in**: `method:cal-opd` (`arXiv:2609.21619`) estimates the teacher self-deviation region with positive+negative privileged probes and keeps residual discrepancy (~52–65%) as the OPD advantage. Signal calibration during OPD, not teacher retirement. Does not replace OPD, VISTA, or RetireOPD.
 - **Optional sparse-OPD reliability plug-in**: `method:ier-opd` (`arXiv:2609.24432`) ranks tokens by information-efficiency ratio (gradient signal-to-noise under an optimal scalar baseline) and fuses with usefulness scores. 0.1%–1% budgets match/exceed full OPD. Does not replace OPD, CISPO, sparse-opd-supervision, IDA-OPD, or Cal-OPD.
-- **Not this task**: Adaptive Retirement of a privileged self-OPD teacher in agent RL is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl`. Distilling optimized-harness behaviors into weights under a fixed target harness is `method:harness-zero` on `task:harness-distillation`.
+- **Not this task**: Adaptive Retirement of a privileged self-OPD teacher in agent RL is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl`. Distilling optimized-harness behaviors into weights under a fixed target harness is `method:harness-zero` on `task:harness-distillation`. Multi-stage agent continual learning (MMOPD / SDFT / MLE) is `method:aclarena` on `task:agent-continual-learning` and does not retarget Open-MOPD. Label-routed MOPD of SWE category experts is `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`.
 

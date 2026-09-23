@@ -14,6 +14,7 @@ out_of_scope:
   - "Text-only single-teacher distillation default (OPD)"
   - "Regularized harness RSI with a frozen backbone (RRSI)"
   - "Harness distillation into weights under a fixed target harness (Harness-Zero)"
+  - "Recursive self-rewrite of a research-agent harness (AIDE2)"
 redirects:
   - when: "build a SWE / issue-to-patch harness rather than post-train from routing traces"
     to: "task:software-engineering-agent-harness"
@@ -33,6 +34,8 @@ redirects:
     to: "method:rrsi"
   - when: "distill optimized-harness behaviors into weights under a fixed target harness"
     to: "task:harness-distillation"
+  - when: "recursive self-rewrite of a research-agent harness, not routing-guided OPD"
+    to: "method:aide2"
 current_sota:
   - method: method:neohorse-1
     as_of: "2026-09-09"
@@ -51,7 +54,8 @@ methods:
   - method:sol-pi
   - method:rrsi
   - method:harness-zero
-last_reviewed: "2026-09-22"
+  - method:aide2
+last_reviewed: "2026-09-23"
 tags:
   - post-training
   - agentic
@@ -76,3 +80,4 @@ Recursive self-improvement needs a concrete loop: observe capability demand from
 - **Not this task (Pi token-efficiency extension)**: `method:sol-pi` (`arXiv:2609.20519`) on `task:agent-harness-runtime`. Harness RSI that yields Pi mechanisms, not a routing-guided weight curriculum.
 - **Active regularized harness RSI (frozen backbone, not this first hop)**: `method:rrsi` (`arXiv:2609.24972`) on `task:agent-harness-runtime`. Does not replace NeoHorse-1.
 - **Not this task (harness distillation into weights)**: `method:harness-zero` on `task:harness-distillation`. Agent-as-harness SFT, not routing-guided OPD.
+- **Active recursive harness RSI (not this first hop)**: `method:aide2` (`arXiv:2609.26457`) on `task:agent-harness-runtime`. Accepted rewrite is the next incumbent codebase. Does not replace NeoHorse-1, RRSI, omp2, or Harness-Zero.

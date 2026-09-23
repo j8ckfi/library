@@ -41,6 +41,12 @@ do_not_use_for:
   - when: "regularized harness RSI with a frozen backbone"
     reason: "mini-SWE-agent is the start loop; RRSI regularizes harness search"
     use_instead: "method:rrsi"
+  - when: "multi-stage agent capability stacking / continual learning"
+    reason: "mini-SWE-agent is the issue-to-patch loop; ACLArena stacks sequential post-train stages"
+    use_instead: "task:agent-continual-learning"
+  - when: "category see-saw on heterogeneous SWE RL"
+    reason: "mini-SWE-agent is the start/eval loop; Category-Aware SWE Experts train category specialists then integrate"
+    use_instead: "task:swe-agent-category-expert-rl"
 assumptions:
   - "Locked SWE-bench mini harness; bash-only ReAct; linear history; independent subprocess.run actions."
   - "Model quality, not scaffold complexity, is the ranking variable on official boards."
@@ -107,6 +113,7 @@ MAC (2606.04455): code agents given 12–24h to write an agent; only 5/39 config
 - Need notes/context mgmt beyond bash → `method:cca`.
 - Durable production engine (rewind/fork/remote/sandbox/TUI) → `method:omp2-harness` / `task:agent-harness-runtime`.
 - Harness distillation into weights → `method:harness-zero`. Frozen-backbone harness RSI → `method:rrsi`.
+- Multi-stage agent continual learning → `method:aclarena`. Category-aware SWE expert RL → `method:category-aware-swe-experts`.
 
 ## Gotchas & Failure Modes
 - Do not mix vals.ai 97% with official JSON 79.2% or 76.8% (different snapshots/models).

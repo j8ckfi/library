@@ -32,11 +32,14 @@ do_not_use_for:
   - when: "distill optimized-harness behaviors into weights under a fixed target harness"
     reason: "Harness-Zero is agent-as-harness SFT, not routing-guided OPD"
     use_instead: "method:harness-zero"
+  - when: "recursive self-rewrite of a research-agent harness (accepted rewrite is the next incumbent)"
+    reason: "NeoHorse updates weights from routing traces; AIDE2 rewrites harness code"
+    use_instead: "method:aide2"
 assumptions:
   - "A deployed routing harness over a heterogeneous model pool that logs predicted demand, selected tier, and the interaction."
   - "Paper: 4B and 9B agent-native models; SGLang v0.5.17; thinking mode; eval on ten harness/tool/code/IF benches."
   - "RSI here is one evaluation–selection–update prototype, not an automated research loop."
-last_reviewed: "2026-09-22"
+last_reviewed: "2026-09-23"
 papers:
   - paper:neohorse-1
 recipes:
@@ -85,10 +88,10 @@ This is not mini-SWE-agent, SAO, CANOPY, Iris, CISPO, or OPD.
 - Async stragglers → `method:sao`. AppWorld coverage → `method:canopy`.
 - Live-web search climbing → `method:iris`. Pass@1 RLVR → `method:cispo`.
 - Text distill without routing → `method:opd`.
-- Frozen-backbone harness RSI → `method:rrsi`. Harness distillation into weights → `method:harness-zero`.
+- Frozen-backbone harness RSI → `method:rrsi`. Harness distillation into weights → `method:harness-zero`. Recursive harness self-rewrite → `method:aide2`.
 
 ## Relation to Existing SOTA
-- First hop for `task:agentic-rsi-routing-posttrain` only. Does **not** supersede `method:mini-swe-agent`, `method:sao`, `method:canopy`, `method:iris`, `method:cispo`, or `method:opd`. Regularized harness search is `method:rrsi`. Harness-behavior SFT is `method:harness-zero`.
+- First hop for `task:agentic-rsi-routing-posttrain` only. Does **not** supersede `method:mini-swe-agent`, `method:sao`, `method:canopy`, `method:iris`, `method:cispo`, or `method:opd`. Regularized harness search is `method:rrsi`. Harness-behavior SFT is `method:harness-zero`. Recursive self-rewrite of the harness codebase is `method:aide2`.
 - Routing-guided OPD is a data/curriculum construction on OPD, not a new distill kernel.
 
 ## Gotchas & Failure Modes

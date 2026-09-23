@@ -18,6 +18,8 @@ out_of_scope:
   - "Data/env construction for coding-agent RL from source code (CodeMidas)"
   - "Diagnosing which multi-turn tool calls are trainable (Critical-State RL)"
   - "Harness distillation into weights under a fixed target harness (Harness-Zero)"
+  - "Multi-stage agent continual learning (ACLArena)"
+  - "Category-aware SWE expert RL (Category-Aware SWE Experts)"
 redirects:
   - when: "build an agent rather than train a policy"
     to: "task:software-engineering-agent-harness"
@@ -39,6 +41,10 @@ redirects:
     to: "method:critical-state-rl"
   - when: "distill optimized-harness behaviors into weights under a fixed target harness"
     to: "task:harness-distillation"
+  - when: "multi-stage agent capability stacking / continual learning"
+    to: "task:agent-continual-learning"
+  - when: "category see-saw on heterogeneous SWE RL"
+    to: "task:swe-agent-category-expert-rl"
 current_sota:
   - method: method:sao
     as_of: "2026-08-26"
@@ -62,7 +68,9 @@ methods:
   - method:codemidas
   - method:critical-state-rl
   - method:harness-zero
-last_reviewed: "2026-09-22"
+  - method:aclarena
+  - method:category-aware-swe-experts
+last_reviewed: "2026-09-23"
 tags:
   - post-training
   - agentic
@@ -85,3 +93,5 @@ This is **policy training**. Building a software-engineering agent loop is `task
 - **Not this task (coding-agent RL env construction)**: `method:codemidas` on `task:coding-agent-rl-environment-construction`. Source-code-only env factory, not straggler replay.
 - **Optional multi-turn trainability diagnostic (not this async default)**: `method:critical-state-rl` (`arXiv:2609.24985`) nested-samples which calls are trainable, then contextual-bandit at those states. BFCL v4 miss_func ~+14 pp. No public code. Does not replace SAO, CANOPY, CISPO, or FoldGRPO.
 - **Not this task (harness distillation into weights)**: `method:harness-zero` on `task:harness-distillation`.
+- **Not this task (multi-stage agent continual learning)**: `method:aclarena` on `task:agent-continual-learning`. Sequential capability stacking on slime, not straggler replay.
+- **Not this task (category-aware SWE expert RL)**: `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`. Does not replace SAO.

@@ -19,7 +19,8 @@ methods:
   - method:grpo
   - method:rpb
   - method:esrl
-last_reviewed: "2026-09-14"
+  - method:bpo
+last_reviewed: "2026-09-23"
 tags:
   - post-training
   - reasoning
@@ -37,3 +38,4 @@ Training sparse Mixture-of-Experts policies with reinforcement learning where dy
 - **Omni / Talker**: **GSPO** (`method:gspo`) only if training Qwen3.5-Omni Talker (`paper:qwen35-omni`).
 - **Optional router soft-anchor**: `method:rpb` (`arXiv:2609.08115`). Active MoE post-train routing candidate. Does not replace SAPO.
 - **Optional expert-space rollout exploration**: `method:esrl` (`arXiv:2609.13058`). Perturb routing like temperature; replay expert IDs. Active beside SAPO. Does not replace SAPO.
+- **Not this task (critic-free PMD on dense math)**: `method:bpo` (`arXiv:2609.15987`) on `task:math-code-rl-dense`. Bake-off used Qwen3-30B-A3B-Base under a CISPO/GSPO/DPPO host; SAPO remains the MoE/VL default.

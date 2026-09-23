@@ -13,6 +13,7 @@ out_of_scope:
   - "MCP as the product protocol (MCP stays agent-communication)"
   - "Recurrent CED-style architecture (RLT)"
   - "Harness distillation into weights under a fixed target harness (Harness-Zero)"
+  - "Recursive self-rewrite of a research-agent harness (AIDE2)"
 redirects:
   - when: "issue-to-patch / locked eval"
     to: "task:software-engineering-agent-harness"
@@ -30,7 +31,9 @@ redirects:
     to: "method:rrsi"
   - when: "distill optimized-harness behaviors into weights under a fixed target harness"
     to: "task:harness-distillation"
-last_reviewed: "2026-09-22"
+  - when: "recursive self-rewrite of a research-agent harness (accepted rewrite is the next incumbent)"
+    to: "method:aide2"
+last_reviewed: "2026-09-23"
 current_sota:
   - method: method:omp2-harness
     as_of: "2026-09-02"
@@ -44,6 +47,7 @@ methods:
   - method:sol-pi
   - method:rrsi
   - method:harness-zero
+  - method:aide2
 tags:
   - agents
   - agent-harness
@@ -72,4 +76,5 @@ This is **not** the SWE-bench start/eval loop. Issue → patch / locked mini har
 - **Active token-efficient Pi sibling (not this first hop)**: `method:sol-pi` (`arXiv:2609.20519`). Harness-layer RSI → Action Fusion / ObservationPack / Evidence-Preserving Reducer / Online Context Compact. EdgeBench parity at −44.7–49% token traffic. Does not replace omp2, mini-SWE-agent, or NeoHorse-1.
 - **Active regularized harness RSI (not this first hop)**: `method:rrsi` (`arXiv:2609.24972`). Annealed edit budget, unexplored-trajectory proposer, critic+pruner against evolve-set memorization. Up to +14.1 evolve / +4.7 OOD, ~30% fewer policy tokens. Frozen backbone. Does not replace omp2, NeoHorse-1, SoL-Pi, mini-SWE-agent, or harness-onpolicy-correction.
 - **Not this task (harness distillation into weights)**: `method:harness-zero` on `task:harness-distillation`. Agent-as-harness SFT so specialized-harness gains survive under a fixed target harness.
+- **Active recursive harness RSI (not this first hop)**: `method:aide2` (`arXiv:2609.26457`). Outer-loop research agent rewrites its own harness; accepted rewrite becomes the next incumbent. 8-day run, 7 accepted improvements; eventually beats AIDE_human on the selection benchmark. No public GitHub. Distinct from RRSI (frozen-backbone search) and NeoHorse-1 (routing-guided weight post-train). Does not replace omp2, RRSI, NeoHorse-1, SoL-Pi, or Harness-Zero.
 - Related workflow, not this architecture: [prewalk](https://stencil.so/blog/prewalk) is a workflow on omp, not current_sota here.

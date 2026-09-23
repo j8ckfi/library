@@ -25,6 +25,9 @@ do_not_use_for:
   - when: "distill optimized-harness behaviors into weights under a fixed target harness"
     reason: "SoL-Pi keeps the Pi harness; Harness-Zero internalizes harness behavior in weights"
     use_instead: "method:harness-zero"
+  - when: "recursive self-rewrite of a research-agent harness (accepted rewrite is the next incumbent)"
+    reason: "SoL-Pi is a Pi token-efficiency extension; AIDE2 rewrites the agent itself"
+    use_instead: "method:aide2"
 assumptions:
   - "You run Pi (`@earendil-works/pi-coding-agent` 0.85.1). SoL-Pi is a standalone extension; every mechanism is opt-in and off by default."
   - "EdgeBench 51 tasks with GPT-5.6 Sol and Opus 5 in the paper. Not a SWE-bench locked-mini number."
@@ -62,10 +65,10 @@ SoL-Pi is a Pi extension found by scaling auto-research at the harness layer. Fo
 - You already run Pi and want opt-in cuts to token traffic without changing the SWE start loop or the production kernel spec.
 
 ## When NOT to Use
-- Harness kernel architecture → `method:omp2-harness`. Issue → patch → `method:mini-swe-agent`. Routing-harness post-train → `method:neohorse-1`. Policy RL → `method:sao`. Regularized harness RSI → `method:rrsi`. Harness distillation → `method:harness-zero`.
+- Harness kernel architecture → `method:omp2-harness`. Issue → patch → `method:mini-swe-agent`. Routing-harness post-train → `method:neohorse-1`. Policy RL → `method:sao`. Regularized harness RSI → `method:rrsi`. Harness distillation → `method:harness-zero`. Recursive harness self-rewrite → `method:aide2`.
 
 ## Relation to Existing SOTA
-- Active sibling on `task:agent-harness-runtime`. Mention on `task:agentic-rsi-routing-posttrain`. Does **not** enter `current_sota`. Does **not** supersede `method:omp2-harness`, `method:mini-swe-agent`, or `method:neohorse-1`. Regularized harness search is `method:rrsi`. Harness-behavior SFT is `method:harness-zero`.
+- Active sibling on `task:agent-harness-runtime`. Mention on `task:agentic-rsi-routing-posttrain`. Does **not** enter `current_sota`. Does **not** supersede `method:omp2-harness`, `method:mini-swe-agent`, or `method:neohorse-1`. Regularized harness search is `method:rrsi`. Harness-behavior SFT is `method:harness-zero`. Recursive self-rewrite of the harness codebase is `method:aide2`.
 
 ## Gotchas & Failure Modes
 - Missing `sol-pi.json` leaves every mechanism disabled.

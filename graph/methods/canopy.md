@@ -35,11 +35,14 @@ do_not_use_for:
   - when: "distill optimized-harness behaviors into weights under a fixed target harness"
     reason: "CANOPY is outcome-only agent RL; AppWorld in Harness-Zero is a distillation eval, not TGC"
     use_instead: "method:harness-zero"
+  - when: "multi-stage agent capability stacking / continual learning"
+    reason: "CANOPY is AppWorld TGC coverage; ACLArena stacks sequential post-train stages"
+    use_instead: "task:agent-continual-learning"
 assumptions:
   - "A held-out unit-test / patch verifier exists. Sparse fully-correct reward, not pass-fraction."
   - "Paper: Qwen3-14B on AppWorld train split (90 tasks), veRL, n=32, 50 turns / 32k train, 100 turns / 61k test, KL β=1e-4, lr 3e-6, 90 steps, hardest tier kept."
   - "SWE transfer retunes n=16, KL 1e-2, 80 turns / 36k, and -0.2 for no-patch terminals. Not a literal hyperparameter copy."
-last_reviewed: "2026-09-04"
+last_reviewed: "2026-09-23"
 papers:
   - paper:canopy
 recipes:
@@ -93,11 +96,14 @@ Test-time budget transfer raises turns and context without search. Differentiate
 - No checker -> `method:draco`.
 - Multi-turn trainability diagnostic -> `method:critical-state-rl`.
 - Harness distillation into weights -> `method:harness-zero`.
+- Multi-stage agent continual learning -> `method:aclarena`.
+- Multi-stage agent continual learning -> `method:aclarena`.
 
 ## Relation to Existing SOTA
 - SOTA only for `task:outcome-only-long-horizon-agent-rl`. Does **not** supersede `method:sao`, `method:foldgrpo`, `method:cispo`, `method:mini-swe-agent`, `method:omp2-harness`, or `method:draco`.
 - Tool-using pre-RL OPKD (`method:pta`) does not scale sparse episode-end groups and does not replace CANOPY.
 - Active notes on this task: `method:evors` (open-ended Reward-DAG evolution) and `method:ddo` (successful-strategy coverage). Neither replaces CANOPY or DRACO.
+- Multi-stage agent continual learning (`method:aclarena`) does not replace CANOPY.
 
 ## Gotchas & Failure Modes
 - Dense pass-fraction rewards manufacture within-group variance but can reward wrong approaches. CANOPY's claim is that scaled exploration removes the need to densify.

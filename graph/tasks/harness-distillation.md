@@ -12,6 +12,7 @@ out_of_scope:
   - "GitHub issue → patch SWE harness (mini-SWE-agent)"
   - "Async tool-latency / straggler RL (SAO)"
   - "AppWorld outcome-only coverage / anti-drift (CANOPY)"
+  - "Recursive self-rewrite of a research-agent harness (AIDE2)"
 redirects:
   - when: "production kernel (rewind, sandbox, remote, TUI)"
     to: "task:agent-harness-runtime"
@@ -23,6 +24,8 @@ redirects:
     to: "task:software-engineering-agent-harness"
   - when: "async RL"
     to: "task:agentic-async-rl"
+  - when: "recursive self-rewrite of a research-agent harness (accepted rewrite is the next incumbent)"
+    to: "method:aide2"
 current_sota:
   - method: method:harness-zero
     as_of: "2026-09-22"
@@ -41,7 +44,8 @@ methods:
   - method:canopy
   - method:rrsi
   - method:harness-onpolicy-correction
-last_reviewed: "2026-09-22"
+  - method:aide2
+last_reviewed: "2026-09-23"
 tags:
   - agents
   - agent-harness
@@ -62,4 +66,4 @@ This is **not** the production kernel, not routing-guided OPD, not plain text OP
 
 ## SOTA Recommendation (as of 2026-09-22)
 - **Primary Method (this task only)**: **Harness-Zero** (`method:harness-zero`, `paper:harness-zero` `arXiv:2609.24974`). Status `active`. Listed here as first hop; method `sota_for` stays empty. Agent-as-harness corrects student replies into the target action space, then SFT; drop the specialized harness at deploy.
-- **Not This Task**: `method:omp2-harness` remains the production kernel; `method:neohorse-1` remains routing-harness RSI post-train; `method:opd` / `method:open-mopd` remain text distill; `method:mini-swe-agent` remains issue-to-patch; `method:sao` remains async; `method:canopy` remains AppWorld coverage. Regularized harness search with a frozen backbone is `method:rrsi` on `task:agent-harness-runtime`.
+- **Not This Task**: `method:omp2-harness` remains the production kernel; `method:neohorse-1` remains routing-harness RSI post-train; `method:opd` / `method:open-mopd` remain text distill; `method:mini-swe-agent` remains issue-to-patch; `method:sao` remains async; `method:canopy` remains AppWorld coverage. Regularized harness search with a frozen backbone is `method:rrsi` on `task:agent-harness-runtime`. Recursive self-rewrite of the harness codebase is `method:aide2`.

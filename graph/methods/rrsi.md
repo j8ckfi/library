@@ -22,11 +22,14 @@ do_not_use_for:
   - when: "full expert-trajectory SFT after model-specific harness evolution"
     reason: "That imitation is the harness-onpolicy-correction failure mode"
     use_instead: "method:harness-onpolicy-correction"
+  - when: "recursive self-rewrite of a research-agent harness (accepted rewrite is the next incumbent)"
+    reason: "RRSI searches edits around a frozen backbone; AIDE2 accepts a rewrite as the next agent"
+    use_instead: "method:aide2"
 assumptions:
   - "Frozen backbone. Search edits prompts, control flow, tools, skills, memory, context, sub-agents. Paper: Claude Opus 4.8 / Gemini 3.5 Flash as search policy; Vertex AI."
   - "One evolve suite per domain; transfer is measured on held-out and OOD benches with the harness frozen."
   - "Code: google-research/rrsi. Candidates live in git worktrees off evolve/<domain>."
-last_reviewed: "2026-09-22"
+last_reviewed: "2026-09-23"
 papers:
   - paper:rrsi
 recipes:
@@ -71,10 +74,10 @@ This is harness search, not omp²'s kernel spec, not NeoHorse-1's routing-guided
 - You are evolving a harness against a finite evolve set and OOD transfer / anti-memorization is the complaint.
 
 ## When NOT to Use
-- Production kernel → `method:omp2-harness`. Routing-harness weight post-train → `method:neohorse-1`. Pi token-efficiency extension → `method:sol-pi`. Issue → patch → `method:mini-swe-agent`. Evolved-harness full-traj SFT → `method:harness-onpolicy-correction`.
+- Production kernel → `method:omp2-harness`. Routing-harness weight post-train → `method:neohorse-1`. Pi token-efficiency extension → `method:sol-pi`. Issue → patch → `method:mini-swe-agent`. Evolved-harness full-traj SFT → `method:harness-onpolicy-correction`. Recursive harness self-rewrite → `method:aide2`.
 
 ## Relation to Existing SOTA
-- Active mention on `task:agent-harness-runtime` and `task:agentic-rsi-routing-posttrain`. Does **not** enter `current_sota`. Does **not** replace `method:omp2-harness`, `method:neohorse-1`, `method:sol-pi`, `method:mini-swe-agent`, or `method:harness-onpolicy-correction`.
+- Active mention on `task:agent-harness-runtime` and `task:agentic-rsi-routing-posttrain`. Does **not** enter `current_sota`. Does **not** replace `method:omp2-harness`, `method:neohorse-1`, `method:sol-pi`, `method:mini-swe-agent`, or `method:harness-onpolicy-correction`. Recursive self-rewrite of the harness codebase is `method:aide2`.
 
 ## Gotchas & Failure Modes
 - Backbone stays frozen. If you need weight updates from routing traces, that is NeoHorse-1.

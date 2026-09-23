@@ -6,6 +6,40 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-23 — weekday SOTA sweep (BPO, FP8 Calibrated Clipping, ACLArena, Category-Aware SWE Experts, AIDE2)
+- MUST 1–5. Two new tasks (`task:agent-continual-learning`, `task:swe-agent-category-expert-rl`). No `current_sota` retargets of CISPO / CANOPY / SAO / OPD / Open-MOPD / VISTA / omp2-harness / TTPO / Miles / Claude computer-use / ACE / mini-SWE-agent / Muon2 / NeoHorse-1 / Code2Skill / Cal-OPD / RecreationWorld / CodeMidas / Vision-RL2 / EPS / Harness-Zero / Jev-Mem / RRSI / IER-OPD / sol-pi / Critical-State RL.
+- Window: America/Denver 2026-09-23 Librarian weekday sweep. SKIP: Tasteful Agent / Taste-Bench, RULER SVG, Flash-dLLM, Agensh, JEV-as-a-Judge, onPanda, EDGEGEN, SkillSpec, LatentPort, ALPINE, collusion study, StableVQ, VideoGen-Agent, already-ingested PR29 set (IER-OPD / RRSI / Harness-Zero / Jev-Mem / Critical-State RL).
+
+### 2026-09-23 — ingest method:bpo (active critic-free PMD candidate; does not supersede method:cispo / method:sapo / method:sao)
+- Added paper:bpo (2609.15987), method:bpo, recipe:bpo (`code_status: none`; `repo_url: none found`). Wired to task:math-code-rl-dense. Reverse redirect from CISPO for Bellman telescoping vs Pass@1 default.
+- Status active (`sota_for: []`). Not dense Pass@1 SOTA. Practical loss replaces the IS ratio with a smoothed complementary-token mismatch weight (ε, C). Authors Apodex / Princeton.
+- Evidence: Qwen3-30B-A3B-Base + DAPO-Math-17k peak AIME24–26 Avg@32 50.5% vs CISPO 47.4% (+3.1), GRPO-ClipHigher 39.5% (+11.0); also beats GSPO/DPPO under matched settings (arXiv:2609.15987); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; SAPO remains MoE/VL; SAO remains async.
+
+### 2026-09-23 — ingest method:fp8-calibrated-clipping (active FP8 clip plug-in; does not supersede method:miles / method:cispo)
+- Added paper:fp8-calibrated-clipping (2609.22870), method:fp8-calibrated-clipping, recipe:fp8-calibrated-clipping (`code_status: none`; `repo_url: none found`; VeRL experiments). Wired to task:frontier-rl-posttrain-stack beside Miles. Reverse redirect from Miles for full-pipeline FP8 clip calibration.
+- Status active (`sota_for: []`). Match FP8 lower-bound clipping quantile to BF16 and rebalance the upper bound. ByteDance Seed / UW–Madison.
+- Evidence: restores BF16-level quality; tensorwise up to ~1.5× BF16 throughput; blockwise ~10–20%; GRPO/DAPO, 8B–32B, VeRL + vLLM + TorchAO (arXiv:2609.22870); verified: true; evidence_level: preprint.
+- Scope checks: Miles remains the engine; CISPO remains Pass@1; skip on BF16-only stacks.
+
+### 2026-09-23 — ingest method:aclarena (new task:agent-continual-learning; does not supersede method:cispo / method:sao / method:canopy / method:miles / method:mini-swe-agent)
+- Added paper:aclarena (2609.23989), method:aclarena, recipe:aclarena (`code_status: released`; WillDreamer/ACLArena; HF willhx/aclarena). New task first hop; method status active (`sota_for: []`). Reverse redirects from task:math-code-rl-dense / task:agentic-async-rl / task:outcome-only-long-horizon-agent-rl / task:frontier-rl-posttrain-stack / task:software-engineering-agent-harness / task:student-distillation.
+- Status active. Offline replay of high-quality trajectories plus routed LoRA experts specialized via RL. Built on slime.
+- Evidence: MLE AIME26 21.04 / NQ 49.7 / τ³-Retail 32.9 / IF-Eval 85.0 vs Seq-Final 10.21 / 33.5 / 29.6 / 84.8 (arXiv:2609.23989); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; SAO remains async; CANOPY remains AppWorld TGC; Miles remains the engine; mini-SWE-agent remains the loop; OPD / Open-MOPD remain text distill defaults.
+
+### 2026-09-23 — ingest method:category-aware-swe-experts (new task:swe-agent-category-expert-rl; does not supersede method:codemidas / method:sao / method:mini-swe-agent / method:miles)
+- Added paper:category-aware-swe-experts (2609.23377), method:category-aware-swe-experts, recipe:category-aware-swe-experts (`code_status: released`; alibaba/AgenticBigBang). New task first hop; method status active (`sota_for: []`). Reverse redirects from task:coding-agent-rl-environment-construction / task:agentic-async-rl / task:software-engineering-agent-harness / task:frontier-rl-posttrain-stack / task:student-distillation. SKIP'd 2026-09-22 for no public code; repo is live.
+- Status active. SWE Labeler + RRE experts + label-routed MOPD (ReLU-gated reward extrapolation). No external teacher trajectories. Alibaba Logics-SWE-Qwen3.6-27B line.
+- Evidence: Pro-618 58.04% (+5.39 vs base); SWE-bench Multilingual 59.00% (+2.78) (arXiv:2609.23377); verified: true; evidence_level: preprint.
+- Scope checks: CodeMidas remains source-only env construction; SAO remains async; mini-SWE-agent remains issue-to-patch; Miles remains the engine.
+
+### 2026-09-23 — ingest method:aide2 (active recursive harness RSI; does not supersede method:omp2-harness / method:rrsi / method:neohorse-1 / method:harness-zero)
+- Added paper:aide2 (2609.26457), method:aide2, recipe:aide2 (`code_status: none`; `repo_url: none found`). Mention on task:agent-harness-runtime and task:agentic-rsi-routing-posttrain. Reverse redirects from both tasks, task:harness-distillation, and sibling methods. Authors Weco AI.
+- Status active (`sota_for: []`). Outer-loop research agent rewrites its own harness; accepted rewrite becomes the next incumbent.
+- Evidence: 8-day autonomous run, 7 accepted improvements, incumbent grade 0.703→0.778 vs AIDE_human 0.749; reward hacking 55%→32% vs human 39% (arXiv:2609.26457); verified: true; evidence_level: preprint.
+- Scope checks: omp2 remains kernel spec; RRSI remains regularized frozen-backbone search; NeoHorse-1 remains routing-harness weight post-train; Harness-Zero remains harness-behavior SFT.
+
 ### 2026-09-22 — weekday SOTA sweep (IER-OPD, RRSI, Harness-Zero, Jev-Mem, Critical-State RL)
 - MUST 1–5. One new task (`task:harness-distillation`). No `current_sota` retargets of CISPO / CANOPY / SAO / OPD / Open-MOPD / VISTA / omp2-harness / TTPO / Miles / Claude computer-use / ACE / mini-SWE-agent / Muon2 / NeoHorse-1 / Code2Skill / Cal-OPD / RecreationWorld / CodeMidas / Vision-RL2 / EPS / sol-pi.
 - Window: America/Denver 2026-09-22 Librarian weekday sweep. SKIP: OSWorld-Pro, onPanda, Complex KDA, VideoGen-Agent, EDGEGEN, IncLoRA+Muon, iSDFT, InfoPPO, Category-Aware SWE 2609.23377 (no public code).

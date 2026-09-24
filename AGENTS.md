@@ -18,7 +18,7 @@ When you are asked to **"train model X to do Y"**, **do not rely on outdated pre
 
 ## 2. Agent Routing Cheat-Sheet (First-Hop SOTA Index)
 
-Use this quick-routing table as of **2026-09-02**:
+Use this quick-routing table as of **2026-09-24**:
 
 <!-- CHEAT-SHEET:START -->
 ```
@@ -40,6 +40,7 @@ task:agent-memory -> method:ace (2510.04618, 2025-10)
   when SWE issue-to-patch without a playbook -> task:software-engineering-agent-harness
   when repository-grounded procedural skills before interaction experience -> method:code2skill
   when System-One control plane for memory ops (typing, routing, budget, traversal) -> method:jev-mem
+  when read-time curation of raw trajectories (not write-time playbook) -> method:jitmem
 task:computer-use-agent -> method:claude-computer-use (2606.29537, 2026-06)
   when GitHub issue to patch -> task:software-engineering-agent-harness
   when training hybrid GUI+code agents -> task:hybrid-computer-use-agent-rl
@@ -86,6 +87,7 @@ task:software-engineering-agent-harness -> method:mini-swe-agent (2405.15793, 20
   when distill optimized-harness behaviors into weights under a fixed target harness -> task:harness-distillation
   when multi-stage agent capability stacking / continual learning -> task:agent-continual-learning
   when category see-saw on heterogeneous SWE RL -> task:swe-agent-category-expert-rl
+  when token-level critic / Actor-then-Critic rather than a SWE loop -> method:pact
 task:directed-sssp-nonneg -> method:bmssp (2504.17033, 2026-08)
 task:1bit-extreme-quantization -> method:sparse-bitnet (2603.05168, 2026-08-26)
 task:fp4-hardware-training -> method:quartet-ii (2601.22813, 2026-08-26) + method:mxfp4-mi355x (2605.09825, 2026-08-26)
@@ -94,6 +96,7 @@ task:continuous-control-world-model -> method:efficienttdmpc (2605.16692, 2026-0
 task:visuomotor-servo-control -> method:td-mpc2 (2310.16828, 2026-08-26)
 task:posttrain-diffusion -> method:diffusion-opsd (2608.24646, 2026-08-27) + method:self-opd (2608.26872, 2026-08-28)
   when lossless multi-token / diffusion-augmented AR serving, not image-policy alignment -> task:diffusion-augmented-ar
+  when training a stable video reward model / rubric-guided RM PO -> method:rewardverse
 task:4bit-peft-quantization -> method:aqlora-q (2608.23816, 2026-08-26) + method:autoqra (2602.22268, 2026-08-26)
 task:diffusion-augmented-ar -> method:uno (2609.04010, 2026-09-08)
   when aligning text-to-image diffusion or flow models with rewards -> task:posttrain-diffusion
@@ -142,6 +145,7 @@ task:agentic-async-rl -> method:sao (2607.07508, 2026-08-26)
   when distill optimized-harness behaviors into weights under a fixed target harness -> task:harness-distillation
   when multi-stage agent capability stacking / continual learning -> task:agent-continual-learning
   when category see-saw on heterogeneous SWE RL -> task:swe-agent-category-expert-rl
+  when Actor-then-Critic IS-aligned critic rather than async stragglers -> method:pact
 task:agentic-rsi-routing-posttrain -> method:neohorse-1 (2609.08183, 2026-09-09)
   when build a SWE / issue-to-patch harness rather than post-train from routing traces -> task:software-engineering-agent-harness
   when variable environment latency / async stragglers, not RSI routing post-train -> task:agentic-async-rl
@@ -161,6 +165,7 @@ task:coding-agent-rl-environment-construction -> method:codemidas (2609.22068, 2
   when production post-train stack rather than env construction -> task:frontier-rl-posttrain-stack
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
   when category see-saw on heterogeneous SWE RL (already-executable tasks) -> task:swe-agent-category-expert-rl
+  when mechanism-first stateful tool envs (not OSS source) -> task:mechanism-grounded-agentic-rl-env
 task:data-free-self-evolution -> method:j-zero (2608.26582, 2026-08-31)
 task:direct-preference-alignment -> method:olmo-3 (2512.13961, 2026-08-26)
 task:distill-reasoner-verifier -> method:opdvr (2608.24696, 2026-08-27)
@@ -178,8 +183,13 @@ task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
   when in-language (L2) reasoning SFT rather than Pass@1 -> task:multilingual-l2-reasoning-sft
   when multimodal VL prompt scaffolding (not dense text Pass@1) -> task:mllm-rl-prompt-curriculum
   when critic-free PMD / Bellman telescoping RLVR (not CISPO default) -> method:bpo
+  when Actor-then-Critic IS-aligned critic after axiomatic token credit (not CISPO default) -> method:pact
   when multi-stage agent capability stacking / continual learning -> task:agent-continual-learning
 task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
+task:mechanism-grounded-agentic-rl-env -> method:vhd-play (2609.27321, 2026-09-24)
+  when source-code coding RL envs -> task:coding-agent-rl-environment-construction
+  when AppWorld coverage -> task:outcome-only-long-horizon-agent-rl
+  when async stragglers -> task:agentic-async-rl
 task:mllm-finegrained-perception-rl -> method:vision-rl2 (2609.19745, 2026-09-21)
   when online adaptive prompt selection / teacher scaffolding for image/VL GRPO -> task:mllm-rl-prompt-curriculum
   when video annotation-as-rollout / fine-grained video perception RL -> task:rl-video-mllm
@@ -238,6 +248,7 @@ task:teacher-free-on-policy-self-adaptation -> method:opsa (2608.31046, 2026-09-
   when flow matching or continuous diffusion post-training -> task:posttrain-diffusion
   when verifier-grounded same-model self-improvement with privileged hindsight -> task:math-code-rl-dense
 task:token-level-critic-rl -> method:bpco (2608.23566, 2026-08-27)
+  when Actor-then-Critic IS-aligned critic after axiomatic token credit -> method:pact
 task:web-search-agent-rl -> method:iris (2609.04304, 2026-09-08)
   when outcome-only long-horizon agent RL (AppWorld coverage / anti-drift or rubric credit) -> task:outcome-only-long-horizon-agent-rl
   when variable environment latency / async stragglers, not search-agent climbing -> task:agentic-async-rl
@@ -449,6 +460,10 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 121. **Agent continual learning**: **ACLArena** (`method:aclarena`, `arXiv:2609.23989`) on `task:agent-continual-learning`. Offline replay of high-quality trajectories plus routed LoRA experts specialized via RL. Active first hop for that task only. Does **not** replace CISPO, SAO, CANOPY, Miles, or mini-SWE-agent.
 122. **Category-aware SWE expert RL**: **Category-Aware SWE Experts** (`method:category-aware-swe-experts`, `arXiv:2609.23377`) on `task:swe-agent-category-expert-rl`. SWE Labeler + RRE experts + label-routed MOPD. Active first hop for that task only. Does **not** replace CodeMidas, SAO, mini-SWE-agent, or Miles.
 123. **Recursive harness RSI**: **AIDE2** (`method:aide2`, `arXiv:2609.26457`) on `task:agent-harness-runtime` with a mention on `task:agentic-rsi-routing-posttrain`. Outer-loop research agent rewrites its own harness; accepted rewrite is the next incumbent. Active. No public GitHub. Does **not** replace omp2-harness, RRSI, NeoHorse-1, SoL-Pi, or Harness-Zero.
+124. **Actor-then-Critic IS**: **PACT** (`method:pact`, `arXiv:2609.26355`) on `task:token-level-critic-rl`. Axiomatic token credit (Completeness / Prefix Consistency / Neutrality) then Actor-then-Critic with IS on the critic. Active plug-in. Empty GitHub stub. Does **not** replace BPCO, CISPO, or SAO.
+125. **Read-time trajectory curator**: **JitMem** (`method:jitmem`, `arXiv:2609.27334`) on `task:agent-memory`. Keep raw traces; curate at read time from immediate task success. Active. No public GitHub. Does **not** replace ACE, Code2Skill, or Jev-Mem.
+126. **Mechanism-grounded agentic RL envs**: **VHD-Play** (`method:vhd-play`, `arXiv:2609.27321`) on `task:mechanism-grounded-agentic-rl-env`. Solve a math mechanism first, then render stateful tools. Active first hop for that task only (`sota_for: []`). No public GitHub. Does **not** replace CodeMidas, CANOPY, SAO, Miles, or mini-SWE-agent.
+127. **Video RM / RGPO**: **RewardVerse** (`method:rewardverse`, `arXiv:2609.22947`) on `task:posttrain-diffusion`. Dynamic rubric + two-stage RGPO for video reward models. Active plug-in. Code: 2kxx/RewardVerse. Does **not** replace DiffusionOPSD, Self-OPD, or OraRL.
 
 ---
 
@@ -572,6 +587,10 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `aclarena` (2609.23989) is the active first hop for `task:agent-continual-learning` only. It does not supersede `cispo`, `sao`, `canopy`, `miles`, or `mini-swe-agent`.
 - `category-aware-swe-experts` (2609.23377) is the active first hop for `task:swe-agent-category-expert-rl` only. It does not supersede `codemidas`, `sao`, `mini-swe-agent`, or `miles`.
 - `aide2` (2609.26457) is an active recursive harness-RSI mention on `task:agent-harness-runtime` and `task:agentic-rsi-routing-posttrain`. It does not supersede `omp2-harness`, `rrsi`, `neohorse-1`, `sol-pi`, or `harness-zero`.
+- `pact` (2609.26355) is an active Actor-then-Critic IS plug-in on `task:token-level-critic-rl`. It does not supersede `bpco`, `cispo`, or `sao`.
+- `jitmem` (2609.27334) is an active read-time curator on `task:agent-memory`. It does not supersede `ace`, `code2skill`, or `jev-mem`.
+- `vhd-play` (2609.27321) is the active first hop for `task:mechanism-grounded-agentic-rl-env` only. It does not supersede `codemidas`, `canopy`, `sao`, `miles`, or `mini-swe-agent`.
+- `rewardverse` (2609.22947) is an active video-RM / RGPO plug-in on `task:posttrain-diffusion`. It does not supersede `diffusion-opsd`, `self-opd`, or `orarl`.
 
 ---
 

@@ -23,9 +23,12 @@ do_not_use_for:
   - when: "System-One control plane for memory ops (typing, routing, budget, traversal)"
     reason: "ACE is an incremental playbook; Jev-Mem is typed System-One control of a multi-relational store"
     use_instead: "method:jev-mem"
+  - when: "read-time curation of raw trajectories (not write-time playbook)"
+    reason: "ACE is write-time incremental bullets; JitMem curates raw traces at read time from immediate task success"
+    use_instead: "method:jitmem"
 assumptions:
   - "Generator / Reflector / Curator. Incremental bullets, not rewrite. Needs execution feedback."
-last_reviewed: "2026-09-22"
+last_reviewed: "2026-09-24"
 papers:
   - paper:ace
 recipes:
@@ -81,6 +84,10 @@ Failure: without feedback, ACE/DC can degrade. Recursive summary is not a long-c
 - Persona OS paging → `method:memgpt`.
 - Repository-grounded skills from code before interaction → `method:code2skill`.
 - System-One-controlled conversational memory store → `method:jev-mem`.
+- Read-time curation of raw trajectories → `method:jitmem`.
+
+## Relation to Existing SOTA
+- Remains SOTA for `task:agent-memory`. JitMem is a read-time curator beside ACE, not a playbook replacement.
 
 ## Gotchas & Failure Modes
 - No feedback → ACE/DC can degrade.

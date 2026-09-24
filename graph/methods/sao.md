@@ -31,7 +31,10 @@ do_not_use_for:
   - when: "category see-saw on heterogeneous SWE RL"
     reason: "SAO is the async algorithm; Category-Aware SWE Experts split and reintegrate categories"
     use_instead: "task:swe-agent-category-expert-rl"
-last_reviewed: "2026-09-23"
+  - when: "Actor-then-Critic IS-aligned critic rather than async stragglers"
+    reason: "SAO remains async first hop; PACT's SWE lift does not retarget SAO"
+    use_instead: "method:pact"
+last_reviewed: "2026-09-24"
 papers:
   - paper:sao
 recipes:
@@ -69,6 +72,7 @@ SAO (Single-Rollout Asynchronous Optimization) solves the straggler bottleneck i
 - Pre-RL tool OPKD with persistent lookahead (`method:pta`) is not this shelf: lookahead fills idle distill capacity under a fixed teacher; SAO owns async policy-train stragglers.
 - Multi-turn trainability diagnostic (`method:critical-state-rl`) selects which calls receive gradient; it does not replace SAO. Harness distillation into weights is `method:harness-zero`.
 - Multi-stage agent continual learning is `method:aclarena`. Category-aware SWE expert RL is `method:category-aware-swe-experts`. Neither replaces SAO.
+- Actor-then-Critic IS (`method:pact`) is a token-level critic recipe. SWE-Verified +3.8 vs SAO is mention-only and does not retarget this async first hop.
 
 ## Supersession
 - Supersedes synchronous `method:grpo` / `method:dr-grpo` for agentic asynchronous tasks.

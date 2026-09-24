@@ -13,6 +13,7 @@ out_of_scope:
   - "Single-turn math/code Pass@1 RLVR (CISPO)"
   - "Live-web multi-hop search-agent training (Iris)"
   - "Category-aware SWE expert RL on already-executable tasks (Category-Aware SWE Experts)"
+  - "Mechanism-first stateful tool envs from solved math dynamics (VHD-Play)"
 redirects:
   - when: "programmatic checker exists and sparse outcome RL is the protocol (AppWorld TGC)"
     to: "task:outcome-only-long-horizon-agent-rl"
@@ -26,6 +27,8 @@ redirects:
     to: "task:math-code-rl-dense"
   - when: "category see-saw on heterogeneous SWE RL (already-executable tasks)"
     to: "task:swe-agent-category-expert-rl"
+  - when: "mechanism-first stateful tool envs (not OSS source)"
+    to: "task:mechanism-grounded-agentic-rl-env"
 current_sota:
   - method: method:codemidas
     as_of: "2026-09-21"
@@ -40,7 +43,8 @@ methods:
   - method:mini-swe-agent
   - method:miles
   - method:category-aware-swe-experts
-last_reviewed: "2026-09-23"
+  - method:vhd-play
+last_reviewed: "2026-09-24"
 tags:
   - post-training
   - agentic
@@ -64,3 +68,4 @@ This is **not** the SWE loop, not AppWorld coverage, and not an async trainer.
 - **Primary Method (this task only)**: **CodeMidas** (`method:codemidas`, `paper:codemidas` `arXiv:2609.22068`). Status `active`. Listed here as first hop; method `sota_for` stays empty.
 - **Not This Task**: `method:canopy` remains checker-protocol outcome-only RL; `method:sao` remains async stragglers; `method:mini-swe-agent` remains the issue-to-patch loop; `method:miles` remains the frontier post-train engine; `method:cispo` remains Pass@1.
 - **Not this task (category-aware SWE expert RL)**: `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`. Trains experts on already-executable SWE tasks; not a source-only env factory.
+- **Not this task (mechanism-first tool envs)**: `method:vhd-play` on `task:mechanism-grounded-agentic-rl-env`. Solved math mechanism → stateful tools. Does not replace CodeMidas.

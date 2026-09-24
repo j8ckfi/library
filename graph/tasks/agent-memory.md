@@ -19,7 +19,9 @@ redirects:
     to: "method:code2skill"
   - when: "System-One control plane for memory ops (typing, routing, budget, traversal)"
     to: "method:jev-mem"
-last_reviewed: "2026-09-22"
+  - when: "read-time curation of raw trajectories (not write-time playbook)"
+    to: "method:jitmem"
+last_reviewed: "2026-09-24"
 current_sota:
   - method: method:ace
     as_of: "2025-10"
@@ -32,6 +34,7 @@ methods:
   - method:memgpt
   - method:code2skill
   - method:jev-mem
+  - method:jitmem
 tags:
   - agents
   - agent-memory
@@ -53,4 +56,5 @@ Agents need memory that accumulates strategies without collapsing under rewrite.
 - **Active**: MemGPT for long-lived persona agents.
 - **Active (repository-grounded skills)**: `method:code2skill` (`arXiv:2609.05571`) — lift code units into verified skill records before interaction experience. ACE remains the playbook/memory default.
 - **Active (System-One-controlled store)**: `method:jev-mem` (`arXiv:2609.23986`) — typed control plane for typing, routing, budget, traversal, scoring, stop; System Two only for hard reasoning. LoCoMo judge 0.777. Does not replace ACE or Code2Skill.
+- **Active (read-time curator)**: `method:jitmem` (`arXiv:2609.27334`) — keep raw trajectories; curate at read time from immediate task success. ALFWorld/WebShop/τ² +16.2/+16.3/+3.9 vs write-time baselines. Does not retarget ACE.
 - **do_not_use**: recursive summary as the only long-context strategy.

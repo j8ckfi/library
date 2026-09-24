@@ -22,11 +22,14 @@ do_not_use_for:
   - when: "System-One control plane for conversational memory ops"
     reason: "Jev-Mem is typed memory control; Code2Skill is repository-grounded skill synthesis"
     use_instead: "method:jev-mem"
+  - when: "read-time curation of raw trajectories (not write-time playbook)"
+    reason: "Code2Skill is write-time skill synthesis from source; JitMem curates raw traces at read time"
+    use_instead: "method:jitmem"
 assumptions:
   - "Source units from maintained GitHub repos (>500 stars in the paper pool). Records are atomic, composite, or pattern. Acceptance is LLM reconstruction-plus-judge, not a proof of program equivalence."
   - "Default eval retrieves from a 10% sample of CodeSkillBank into a draft–review–revise loop. Compact summaries retain most utility at much lower context."
   - "GitHub https://github.com/ant-intl/Code2Skill is a pre-release publication implementation as of 2026-09-21. Dataset: ant-intl/DeveloperSkills-Code2Skill."
-last_reviewed: "2026-09-22"
+last_reviewed: "2026-09-24"
 papers:
   - paper:code2skill
 recipes:
@@ -77,7 +80,7 @@ Retrieved records enter an agent loop at planning, generation, or post-generatio
 - Incremental execution-feedback playbook → `method:ace`. SWE bash loop with no bank → `method:mini-swe-agent`. Persona paging → `method:memgpt`. Dumped prompt → `method:rlm`. System-One conversational memory control → `method:jev-mem`.
 
 ## Relation to Existing SOTA
-- Active on `task:agent-memory` alongside ACE. Does **not** enter `current_sota`. Does **not** replace `method:ace`. System-One memory control is `method:jev-mem`.
+- Active on `task:agent-memory` alongside ACE. Does **not** enter `current_sota`. Does **not** replace `method:ace`. System-One memory control is `method:jev-mem`. Read-time raw-trajectory curator is `method:jitmem`.
 
 ## Gotchas & Failure Modes
 - The judge is an LLM consistency check, not program equivalence. Treat rejected records as unsupported, not as a verified negative.

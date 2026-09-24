@@ -13,10 +13,13 @@ do_not_use_for:
   - when: "critic-free PMD / Bellman telescoping RLVR (not CISPO default)"
     reason: "CISPO remains Pass@1; BPO is a matched-settings candidate that replaces the IS ratio with a complementary-token weight"
     use_instead: "method:bpo"
+  - when: "Actor-then-Critic IS-aligned critic after axiomatic token credit (not CISPO default)"
+    reason: "CISPO remains Pass@1; PACT is an actor-critic / credit-alignment recipe"
+    use_instead: "method:pact"
   - when: "multi-stage agent capability stacking / continual learning"
     reason: "CISPO is a Pass@1 loss; ACLArena stacks heterogeneous post-train stages"
     use_instead: "task:agent-continual-learning"
-last_reviewed: "2026-09-23"
+last_reviewed: "2026-09-24"
 papers:
   - paper:minimax-m1
   - paper:scalerl
@@ -57,6 +60,7 @@ CISPO (Clipped IS-weight Policy Optimization) establishes the state-of-the-art r
 ## Relation to Existing SOTA
 - Remains the dense math/code RLVR default for Pass@1 when labels exist. GRPO inside `method:j-zero` is that method's inner self-play optimizer, not a change to this default.
 - Optional critic-free PMD candidate (`method:bpo`): Bellman telescoping; complementary-token mismatch weight. Matched AIME24–26 Avg@32 50.5% vs this method 47.4% on Qwen3-30B-A3B-Base. Does not replace CISPO. No public code.
+- Optional Actor-then-Critic IS (`method:pact`): axiomatic token credit then critic IS. Does not replace CISPO. Empty GitHub stub.
 - For Pass@K / reasoning coverage or a no-backward memory budget, use `method:es-reasoning` on `task:passk-reasoning-coverage`. That is not a GRPO revival and does not replace CISPO.
 - Optional token-filter plug-in: `method:gmts`. Example-reweight plug-in: `method:diem`. First-mistake process credit: `method:cliff` (not a PRM; does not replace VeriGate). Sample-level GRPO/OPSD router: `method:self-routing`. Adaptive IS clip: `method:gapo` (does not replace CISPO). RLVR+self-OPD loop: `method:rise` (does not replace CISPO, OPD, or OPSA). Tool-using pre-RL OPKD: `method:pta` (does not replace CISPO). Teacher-free unlabeled train-time self-adaptation: `method:opsa`. Olympiad NL proof TTC: `method:nemotron-imo-gold` (does not replace CISPO). None of these replace CISPO when labels exist.
 

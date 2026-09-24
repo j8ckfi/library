@@ -25,11 +25,14 @@ do_not_use_for:
   - when: "category see-saw on heterogeneous SWE RL (already-executable tasks)"
     reason: "CodeMidas constructs environments from source; Category-Aware SWE Experts train on already-executable SWE tasks"
     use_instead: "task:swe-agent-category-expert-rl"
+  - when: "mechanism-first stateful tool envs (not OSS source)"
+    reason: "CodeMidas is source-code coding RL env construction; VHD-Play starts from solved math mechanisms"
+    use_instead: "task:mechanism-grounded-agentic-rl-env"
 assumptions:
   - "Source code is the only task-specific input. Agents explore implemented functionality, write behavioral specs, build execution-grounded tests, then filter."
   - "Paper trains MiMo-V2.5 with GRPO, binary execution rewards, batch 32, 32 rollouts per task, on 5,545 tasks / 3,185 repos / 23 languages."
   - "Project page https://mimo.xiaomi.com/rl/ is a live MiMo RL dashboard as of 2026-09-21. No public GitHub found."
-last_reviewed: "2026-09-23"
+last_reviewed: "2026-09-24"
 papers:
   - paper:codemidas
 recipes:
@@ -87,10 +90,10 @@ The paper then trains MiMo-V2.5 with GRPO and binary execution rewards. The host
 - You need a large, execution-verified coding-agent RL task pool and you have OSS codebases rather than issues/PRs/tests as the seed.
 
 ## When NOT to Use
-- AppWorld coverage → `method:canopy`. Async stragglers → `method:sao`. SWE loop → `method:mini-swe-agent`. Production engine → `method:miles`. Pass@1 → `method:cispo`. Category-aware SWE expert RL → `method:category-aware-swe-experts`.
+- AppWorld coverage → `method:canopy`. Async stragglers → `method:sao`. SWE loop → `method:mini-swe-agent`. Production engine → `method:miles`. Pass@1 → `method:cispo`. Category-aware SWE expert RL → `method:category-aware-swe-experts`. Mechanism-first tool envs → `method:vhd-play`.
 
 ## Relation to Existing SOTA
-- Active first hop on `task:coding-agent-rl-environment-construction` only (method status active; listed in that task's `current_sota`). Mentions on `task:outcome-only-long-horizon-agent-rl`, `task:agentic-async-rl`, and `task:software-engineering-agent-harness`. Does **not** replace `method:canopy`, `method:sao`, `method:miles`, or `method:mini-swe-agent`.
+- Active first hop on `task:coding-agent-rl-environment-construction` only (method status active; listed in that task's `current_sota`). Mentions on `task:outcome-only-long-horizon-agent-rl`, `task:agentic-async-rl`, and `task:software-engineering-agent-harness`. Does **not** replace `method:canopy`, `method:sao`, `method:miles`, or `method:mini-swe-agent`. Mechanism-grounded tool envs are `method:vhd-play` on `task:mechanism-grounded-agentic-rl-env`.
 
 ## Gotchas & Failure Modes
 - Unfiltered scale loses to a smaller cleaned pool: high-quality 3k beats vanilla 8k on SWE-bench Pro, DeepSWE, and CodeMidas Val.

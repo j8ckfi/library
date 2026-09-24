@@ -22,11 +22,14 @@ do_not_use_for:
   - when: "SWE patch loop with no persistent memory"
     reason: "bash ReAct does not need a System-One memory plane"
     use_instead: "method:mini-swe-agent"
+  - when: "read-time curation of raw trajectories (not write-time playbook)"
+    reason: "Jev-Mem is a typed control plane; JitMem is a read-time curator over raw trajectories"
+    use_instead: "method:jitmem"
 assumptions:
   - "System-One controller (Jev / typed Noul and Choice decisions) plus an OpenAI-compatible System-Two answer model. Default paper eval: GPT-4o-mini judge and answer on LoCoMo."
   - "Canonical observations are retained; selectivity is in relation construction and retrieval, not irreversible discard at ingest."
   - "Code: libingzheren/Jev-Mem. Demo runs offline with mock decisions."
-last_reviewed: "2026-09-22"
+last_reviewed: "2026-09-24"
 papers:
   - paper:jev-mem
 recipes:
@@ -68,10 +71,10 @@ Decisions are bounded (propositions or a small choice set), not generated text. 
 - Long-horizon conversational / interaction memory where LLM-on-the-critical-path for typing, routing, and stop is the cost, and you can run a typed System-One controller.
 
 ## When NOT to Use
-- Incremental execution-feedback playbook → `method:ace`. Skills from source code → `method:code2skill`. Persona paging → `method:memgpt`. Dumped prompt → `method:rlm`. SWE bash with no store → `method:mini-swe-agent`.
+- Incremental execution-feedback playbook → `method:ace`. Skills from source code → `method:code2skill`. Read-time raw-trajectory curator → `method:jitmem`. Persona paging → `method:memgpt`. Dumped prompt → `method:rlm`. SWE bash with no store → `method:mini-swe-agent`.
 
 ## Relation to Existing SOTA
-- Active on `task:agent-memory` alongside ACE and Code2Skill. Does **not** enter `current_sota`. Does **not** supersede `method:ace` or `method:code2skill`.
+- Active on `task:agent-memory` alongside ACE and Code2Skill. Does **not** enter `current_sota`. Does **not** supersede `method:ace` or `method:code2skill`. Read-time curation of raw trajectories is `method:jitmem`.
 
 ## Gotchas & Failure Modes
 - LoCoMo + GPT-4o-mini is not AppWorld. Do not retarget ACE from these numbers.

@@ -6,6 +6,26 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-24 — weekday SOTA sweep (PACT, JitMem, VHD-Play, RewardVerse)
+- MUST 1–4. One new task. No current_sota retarget of CISPO / CANOPY / SAO / OPD / omp2 / TTPO / Miles / ACE / BPCO / CodeMidas / DiffusionOPSD / Self-OPD.
+- Window: HF Daily 2026-09-23/24 + arXiv ≳2609.26800. FLAG: UECR-GRPO, RL-Starts-before-RL, AEWM, MemoryAthena, Agensh, JEV-as-a-Judge, EmbodiedSWE, LatentPort, WhatWorkedBench, GeoPair, FLEET.
+
+### 2026-09-24 — ingest method:pact (active on task:token-level-critic-rl; does not supersede method:bpco / method:cispo / method:sao)
+- Added paper:pact (2609.26355), method:pact, recipe:pact (`code_status: announced`; AllSpark-Research/PACT empty stub).
+- Evidence: agentic-math avg 72.87% (+8.80 GRPO / +13.16 PPO); SWE-Verified 67.4% (+3.8 SAO); verified: true; preprint.
+
+### 2026-09-24 — ingest method:jitmem (active on task:agent-memory; does not supersede method:ace)
+- Added paper:jitmem (2609.27334), method:jitmem, recipe:jitmem (`code_status: none`).
+- Evidence: ALFWorld/WebShop/τ² +16.2/+16.3/+3.9 abs vs strongest write-time baseline; verified: true; preprint.
+
+### 2026-09-24 — ingest method:vhd-play (new task:mechanism-grounded-agentic-rl-env; does not supersede method:codemidas)
+- Added paper:vhd-play (2609.27321), method:vhd-play, recipe:vhd-play (`code_status: none`), task:mechanism-grounded-agentic-rl-env.
+- Evidence: 0.204→0.815 five-family diagnostic; E-Commerce Bench > Qwen3.7-Max; verified: true; preprint.
+
+### 2026-09-24 — ingest method:rewardverse (active video-RM plug-in on task:posttrain-diffusion; does not supersede method:diffusion-opsd / method:self-opd)
+- Added paper:rewardverse (2609.22947), method:rewardverse, recipe:rewardverse (`code_status: released`; 2kxx/RewardVerse).
+- Evidence: EvalVerse SOTA pointwise/pairwise; rubric mitigates scalar drift; verified: true; preprint.
+
 ### 2026-09-23 — weekday SOTA sweep (BPO, FP8 Calibrated Clipping, ACLArena, Category-Aware SWE Experts, AIDE2)
 - MUST 1–5. Two new tasks (`task:agent-continual-learning`, `task:swe-agent-category-expert-rl`). No `current_sota` retargets of CISPO / CANOPY / SAO / OPD / Open-MOPD / VISTA / omp2-harness / TTPO / Miles / Claude computer-use / ACE / mini-SWE-agent / Muon2 / NeoHorse-1 / Code2Skill / Cal-OPD / RecreationWorld / CodeMidas / Vision-RL2 / EPS / Harness-Zero / Jev-Mem / RRSI / IER-OPD / sol-pi / Critical-State RL.
 - Window: America/Denver 2026-09-23 Librarian weekday sweep. SKIP: Tasteful Agent / Taste-Bench, RULER SVG, Flash-dLLM, Agensh, JEV-as-a-Judge, onPanda, EDGEGEN, SkillSpec, LatentPort, ALPINE, collusion study, StableVQ, VideoGen-Agent, already-ingested PR29 set (IER-OPD / RRSI / Harness-Zero / Jev-Mem / Critical-State RL).

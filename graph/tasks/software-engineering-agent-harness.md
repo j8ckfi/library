@@ -62,6 +62,8 @@ redirects:
     to: "task:agent-continual-learning"
   - when: "category see-saw on heterogeneous SWE RL"
     to: "task:swe-agent-category-expert-rl"
+  - when: "token-level critic / Actor-then-Critic rather than a SWE loop"
+    to: "method:pact"
 current_sota:
   - method: method:mini-swe-agent
     as_of: "2026-09"
@@ -82,7 +84,8 @@ methods:
   - method:harness-zero
   - method:aclarena
   - method:category-aware-swe-experts
-last_reviewed: "2026-09-23"
+  - method:pact
+last_reviewed: "2026-09-24"
 tags:
   - agents
   - agent
@@ -114,3 +117,4 @@ Choose the loop, ACI, and tools for repository-level software engineering (issue
 - **Not this task (harness distillation into weights)**: `method:harness-zero` on `task:harness-distillation`. The paper uses mini-SWE-agent as the *target* harness \(h\), not a ranking retarget.
 - **Not this task (multi-stage agent continual learning)**: `method:aclarena` on `task:agent-continual-learning`.
 - **Not this task (category-aware SWE expert RL)**: `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`. SWE Labeler + RRE experts + label-routed MOPD. Does not replace mini-SWE-agent.
+- **Not this task (token-level critic / Actor-then-Critic)**: `method:pact` on `task:token-level-critic-rl`. SWE-Verified numbers are critic-path evidence, not a harness ranking retarget.

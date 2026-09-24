@@ -7,6 +7,11 @@ status: sota
 sota_for:
   - task:token-level-critic-rl
 supersedes: []
+do_not_use_for:
+  - when: "Actor-then-Critic IS-aligned critic after axiomatic token credit"
+    reason: "BPCO remains the single-sample critic first hop; PACT is the Actor-then-Critic IS plug-in"
+    use_instead: "method:pact"
+last_reviewed: "2026-09-24"
 papers:
   - paper:bpco
 recipes:
@@ -44,3 +49,4 @@ BPCO stabilizes single-rollout actor-critic reinforcement learning for language 
 
 ## Relation to Existing SOTA
 - Does not replace `method:cispo` or `method:sapo` as the multi-sample group RL defaults, but provides the primary single-sample token-level critic baseline.
+- Actor-then-Critic IS plug-in (`method:pact`) is not a BPCO replacement. PACT's SWE-Verified lift vs SAO is mention-only.

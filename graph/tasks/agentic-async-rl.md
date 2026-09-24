@@ -45,6 +45,8 @@ redirects:
     to: "task:agent-continual-learning"
   - when: "category see-saw on heterogeneous SWE RL"
     to: "task:swe-agent-category-expert-rl"
+  - when: "Actor-then-Critic IS-aligned critic rather than async stragglers"
+    to: "method:pact"
 current_sota:
   - method: method:sao
     as_of: "2026-08-26"
@@ -70,7 +72,8 @@ methods:
   - method:harness-zero
   - method:aclarena
   - method:category-aware-swe-experts
-last_reviewed: "2026-09-23"
+  - method:pact
+last_reviewed: "2026-09-24"
 tags:
   - post-training
   - agentic
@@ -95,3 +98,4 @@ This is **policy training**. Building a software-engineering agent loop is `task
 - **Not this task (harness distillation into weights)**: `method:harness-zero` on `task:harness-distillation`.
 - **Not this task (multi-stage agent continual learning)**: `method:aclarena` on `task:agent-continual-learning`. Sequential capability stacking on slime, not straggler replay.
 - **Not this task (category-aware SWE expert RL)**: `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`. Does not replace SAO.
+- **Optional Actor-then-Critic IS (not this async default)**: `method:pact` (`arXiv:2609.26355`) on `task:token-level-critic-rl`. SWE-Verified +3.8 vs SAO is mention-only. SAO remains the straggler first hop.

@@ -13,10 +13,15 @@ current_sota:
     notes: "BPCO (2608.23566) actor-critic recipe with DPPO, bounded value head, MC targets, and length-adaptive GAE."
 methods:
   - method:bpco
+  - method:pact
   - method:sao
   - method:grpo
   - method:dapo
   - method:dr-grpo
+redirects:
+  - when: "Actor-then-Critic IS-aligned critic after axiomatic token credit"
+    to: "method:pact"
+last_reviewed: "2026-09-24"
 tags:
   - post-training
   - rl-alignment
@@ -30,3 +35,4 @@ Reinforcement learning alignment often relies on group-relative comparisons (suc
 
 ## SOTA Recommendation (as of 2026-08-27)
 - **Primary Method**: **BPCO** (`method:bpco`, `paper:bpco` `arXiv:2608.23566`) for robust single-sample actor-critic training with DPPO and bounded value heads.
+- **Active Actor-then-Critic IS plug-in (not this first hop)**: `method:pact` (`arXiv:2609.26355`) axiomatic token credit then Actor-then-Critic with IS on the critic. Agentic-math avg 72.87%; SWE-Verified 67.4% (+3.8 SAO) is mention-only. Empty GitHub stub. Does not replace BPCO, CISPO, or SAO.

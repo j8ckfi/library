@@ -50,11 +50,13 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when long-lived persona OS-style paging → `method:memgpt`
   - do not use when repository-grounded procedural skills before interaction experience → `method:code2skill`
   - do not use when System-One control plane for memory ops (typing, routing, budget, traversal) → `method:jev-mem`
+  - do not use when read-time curation of raw trajectories (not write-time playbook) → `method:jitmem`
 - **Redirects**:
   - when dumped corpus ≫ window → `task:long-context-prompt-offload`
   - when SWE issue-to-patch without a playbook → `task:software-engineering-agent-harness`
   - when repository-grounded procedural skills before interaction experience → `method:code2skill`
   - when System-One control plane for memory ops (typing, routing, budget, traversal) → `method:jev-mem`
+  - when read-time curation of raw trajectories (not write-time playbook) → `method:jitmem`
 - **Out of scope**: Recursive summary as the only long-context strategy; SWE patch loops with no playbook need; Dumped 10M-token prompt; System-One control plane for conversational memory ops (Jev-Mem)
 
 ### task:computer-use-agent — Computer-Use Agent
@@ -184,6 +186,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when distill optimized-harness behaviors into weights under a fixed target harness → `task:harness-distillation`
   - when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
   - when category see-saw on heterogeneous SWE RL → `task:swe-agent-category-expert-rl`
+  - when token-level critic / Actor-then-Critic rather than a SWE loop → `method:pact`
 - **Out of scope**: Training an async agent policy (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Math/code RLVR (CISPO); GUI / OS desktop computer-use; Dumped 10M-token corpus prompt offload (RLM); Trajectory folding (FoldGRPO); Planner-coder-tester multi-agent theater for a single patch; Meta-agent search as the default design process; Training a live-web search policy (Iris); Frontier RL post-train engine (Miles); Routing-harness RSI post-train (NeoHorse-1); Recurrent CED-style architecture (RLT); Input-heavy agentic MoE serving / KV CED (DeepSeek-V4.1-Flash); Post-train gated sparse attention under a fixed budget (SAS); SFT on observation tokens before GRPO (ActObs); Data/env construction for coding-agent RL from source code (CodeMidas); Harness distillation into weights under a fixed target harness (Harness-Zero); Multi-stage agent continual learning (ACLArena); Category-aware SWE expert RL (Category-Aware SWE Experts)
 
 ## algorithms
@@ -219,6 +222,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 - **SOTA**: `method:self-opd` `2608.26872` (as_of 2026-08-28) — Flow Matching Visual Alignment (Single & Mixed Reward Benchmarks): Outperforms Flow-GRPO, Flow-OPD, and DiffusionNFT without external task-specific teachers
 - **Redirects**:
   - when lossless multi-token / diffusion-augmented AR serving, not image-policy alignment → `task:diffusion-augmented-ar`
+  - when training a stable video reward model / rubric-guided RM PO → `method:rewardverse`
 
 ## efficiency
 
@@ -334,6 +338,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when distill optimized-harness behaviors into weights under a fixed target harness → `method:harness-zero`
   - do not use when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
   - do not use when category see-saw on heterogeneous SWE RL → `task:swe-agent-category-expert-rl`
+  - do not use when Actor-then-Critic IS-aligned critic rather than async stragglers → `method:pact`
 - **Redirects**:
   - when build an agent rather than train a policy → `task:software-engineering-agent-harness`
   - when outcome-only long-horizon agent RL (coverage / anti-drift), not async stragglers → `task:outcome-only-long-horizon-agent-rl`
@@ -347,6 +352,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when distill optimized-harness behaviors into weights under a fixed target harness → `task:harness-distillation`
   - when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
   - when category see-saw on heterogeneous SWE RL → `task:swe-agent-category-expert-rl`
+  - when Actor-then-Critic IS-aligned critic rather than async stragglers → `method:pact`
 - **Out of scope**: Building or choosing a software-engineering agent loop (mini-SWE-agent / CCA / OpenHands); Dumped long-prompt offload (RLM); GUI computer-use without policy training; Outcome-only long-horizon agent RL where the failure is signal starvation / policy drift, not async latency; Live-web multi-hop search-agent training (Iris SFT-RL climbing); Production post-train engine rather than the async algorithm (Miles); Routing-harness RSI post-train (NeoHorse-1); Adaptive math/code sampling until ≥1 correct (NGU); that is a CISPO-host sampler, not SAO straggler replay; Privileged self-OPD then Adaptive Retirement into pure agent RL (RetireOPD / ALFWorld/WebShop); Data/env construction for coding-agent RL from source code (CodeMidas); Diagnosing which multi-turn tool calls are trainable (Critical-State RL); Harness distillation into weights under a fixed target harness (Harness-Zero); Multi-stage agent continual learning (ACLArena); Category-aware SWE expert RL (Category-Aware SWE Experts)
 
 ### task:agentic-rsi-routing-posttrain — Agentic RSI Routing-Harness Post-Training
@@ -386,6 +392,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when production post-train engine (SGLang / Megatron / LoRA RL / OPD) → `method:miles`
   - do not use when single-turn math/code Pass@1 RLVR → `method:cispo`
   - do not use when category see-saw on heterogeneous SWE RL (already-executable tasks) → `task:swe-agent-category-expert-rl`
+  - do not use when mechanism-first stateful tool envs (not OSS source) → `task:mechanism-grounded-agentic-rl-env`
 - **Redirects**:
   - when programmatic checker exists and sparse outcome RL is the protocol (AppWorld TGC) → `task:outcome-only-long-horizon-agent-rl`
   - when variable environment latency / async stragglers → `task:agentic-async-rl`
@@ -393,7 +400,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when production post-train stack rather than env construction → `task:frontier-rl-posttrain-stack`
   - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
   - when category see-saw on heterogeneous SWE RL (already-executable tasks) → `task:swe-agent-category-expert-rl`
-- **Out of scope**: Programmatic-checker outcome-only agent RL (CANOPY / AppWorld TGC); Variable tool latency / async stragglers (SAO); GitHub issue → patch harness (mini-SWE-agent); Production post-train engine (Miles); Single-turn math/code Pass@1 RLVR (CISPO); Live-web multi-hop search-agent training (Iris); Category-aware SWE expert RL on already-executable tasks (Category-Aware SWE Experts)
+  - when mechanism-first stateful tool envs (not OSS source) → `task:mechanism-grounded-agentic-rl-env`
+- **Out of scope**: Programmatic-checker outcome-only agent RL (CANOPY / AppWorld TGC); Variable tool latency / async stragglers (SAO); GitHub issue → patch harness (mini-SWE-agent); Production post-train engine (Miles); Single-turn math/code Pass@1 RLVR (CISPO); Live-web multi-hop search-agent training (Iris); Category-aware SWE expert RL on already-executable tasks (Category-Aware SWE Experts); Mechanism-first stateful tool envs from solved math dynamics (VHD-Play)
 
 ### task:data-free-self-evolution — Data-Free Self-Evolution across Verifiable and Unverifiable Domains
 - **SOTA**: `method:j-zero` `2608.26582` (as_of 2026-08-31) — Verifiable overall avg and unverifiable overall avg (Qwen3-4B-Base / Qwen3-8B-Base): Verifiable 54.38 / 58.55; unverifiable 20.81 / 23.41
@@ -421,6 +429,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 - **Scope**: Single-turn (or short-CoT) dense math/code RLVR with a programmatic verifier. Pass@1 default is CISPO.
 - **SOTA**: `method:cispo` `2506.13585` (as_of 2026-08-26) — MATH-500 / AIME 2024 / LiveCodeBench: Default SOTA for Dense RL
   - do not use when critic-free PMD / Bellman telescoping RLVR (not CISPO default) → `method:bpo`
+  - do not use when Actor-then-Critic IS-aligned critic after axiomatic token credit (not CISPO default) → `method:pact`
   - do not use when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
 - **Redirects**:
   - when outcome-only long-horizon interactive agent RL → `task:outcome-only-long-horizon-agent-rl`
@@ -431,11 +440,25 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when in-language (L2) reasoning SFT rather than Pass@1 → `task:multilingual-l2-reasoning-sft`
   - when multimodal VL prompt scaffolding (not dense text Pass@1) → `task:mllm-rl-prompt-curriculum`
   - when critic-free PMD / Bellman telescoping RLVR (not CISPO default) → `method:bpo`
+  - when Actor-then-Critic IS-aligned critic after axiomatic token credit (not CISPO default) → `method:pact`
   - when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
 - **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO); Live-web multi-hop search-agent training (Iris); Pass@K / coverage / no-backward (ES-reasoning / DATPO); Olympiad NL proofs / IMO TTC (Nemotron IMO Gold); Multimodal VL prompt scaffolding / online EPS curriculum (not dense text Pass@1); Multi-stage agent capability stacking / continual learning (ACLArena)
 
 ### task:math-code-rl-moe — Mathematical and Code RL Reasoning (MoE Policies)
 - **SOTA**: `method:sapo` `2511.20347` (as_of 2026-08-26) — Qwen3 MoE / MATH-500 MoE RL: Default SOTA for MoE/VL RL
+
+### task:mechanism-grounded-agentic-rl-env — Mechanism-Grounded Agentic RL Environment Synthesis
+- **Scope**: Env factories that start from solved mechanisms / hidden dynamics (VHD-Play). Not source-code coding env factories (CodeMidas), not AppWorld coverage, not async trainers.
+- **SOTA**: `method:vhd-play` `2609.27321` (as_of 2026-09-24) — five-family agentic diagnostic / E-Commerce Bench: 0.204→0.815 on diagnostic; exceeds Qwen3.7-Max on E-Commerce Bench
+  - do not use when source code is the only task-specific input for coding RL envs → `method:codemidas`
+  - do not use when programmatic checker exists and sparse outcome RL is the protocol (AppWorld TGC) → `method:canopy`
+  - do not use when variable tool latency / async stragglers → `method:sao`
+  - do not use when GitHub issue to patch / SWE harness → `method:mini-swe-agent`
+- **Redirects**:
+  - when source-code coding RL envs → `task:coding-agent-rl-environment-construction`
+  - when AppWorld coverage → `task:outcome-only-long-horizon-agent-rl`
+  - when async stragglers → `task:agentic-async-rl`
+- **Out of scope**: Source-code-only coding-agent RL env construction (CodeMidas); AppWorld TGC / programmatic checker coverage (CANOPY); Async straggler replay (SAO); SWE issue→patch harness (mini-SWE-agent)
 
 ### task:mllm-finegrained-perception-rl — MLLM Fine-grained Perception RL
 - **Scope**: Region-level RL on a small RoI head attached to a frozen MLLM. Actions are coherent image regions; the reader scores leave-one-out gold-answer likelihood. Not prompt curriculum, not video annotation-as-rollout.
@@ -533,6 +556,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 ### task:reasoning-rl-alignment — Reinforcement Learning & Reasoning Post-Training
 - **SOTA**: `method:cispo` `2506.13585` (as_of 2026-08-26) — AIME 2024 / MATH-500: SOTA for Dense Long-CoT
   - do not use when critic-free PMD / Bellman telescoping RLVR (not CISPO default) → `method:bpo`
+  - do not use when Actor-then-Critic IS-aligned critic after axiomatic token credit (not CISPO default) → `method:pact`
   - do not use when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
 - **SOTA**: `method:sapo` `2511.20347` (as_of 2026-08-26) — Qwen MoE / VL Reasoning: SOTA for MoE/VL RL
 
@@ -584,6 +608,9 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:token-level-critic-rl — Token-Level Advantage Estimation with Single-Sample Critics
 - **SOTA**: `method:bpco` `2608.23566` (as_of 2026-08-27) — Mathematical Reasoning & Rubric Evaluation (1.5B to 30B-A3B): Matches or exceeds group-relative GRPO baseline with 1 response per prompt
+  - do not use when Actor-then-Critic IS-aligned critic after axiomatic token credit → `method:pact`
+- **Redirects**:
+  - when Actor-then-Critic IS-aligned critic after axiomatic token credit → `method:pact`
 
 ### task:web-search-agent-rl — Web Search Agent Training
 - **Scope**: Policy training for ReAct search agents (search/scrape against the live web) with synthetic multi-hop tasks, trajectory/turn filtering, in-cluster judge/summarizer, and iterative SFT-RL climbing.

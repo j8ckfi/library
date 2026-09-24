@@ -30,6 +30,8 @@ redirects:
     to: "task:mllm-rl-prompt-curriculum"
   - when: "critic-free PMD / Bellman telescoping RLVR (not CISPO default)"
     to: "method:bpo"
+  - when: "Actor-then-Critic IS-aligned critic after axiomatic token credit (not CISPO default)"
+    to: "method:pact"
   - when: "multi-stage agent capability stacking / continual learning"
     to: "task:agent-continual-learning"
 current_sota:
@@ -74,7 +76,8 @@ methods:
   - method:when2think
   - method:bpo
   - method:aclarena
-last_reviewed: "2026-09-23"
+  - method:pact
+last_reviewed: "2026-09-24"
 tags:
   - post-training
   - reasoning
@@ -115,6 +118,7 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Optional async adaptive sampler**: `method:ngu` (`arXiv:2609.13443`) keeps sampling a prompt until ≥1 correct (Matthew Effect / signal-efficiency fix). Does not replace CISPO / SAPO / GRPO loss. Distinct from ThinkPrior (cold-start prompt rank), DIEM/GMTS (example/token reweight), and DataFlex-RL (data-policy accuracy null).
 - **Optional hybrid Think/NoThink length control**: `method:when2think` (`arXiv:2609.19671`) IDAC from offline reference accuracy/token stats. AIME24 Pass@3 +10.0% with tokens −27.9%. Does not replace CISPO.
 - **Optional critic-free PMD candidate (not this Pass@1 default)**: `method:bpo` (`arXiv:2609.15987`) Bellman telescoping of Policy Mirror Descent; complementary-token mismatch weight instead of an IS ratio. Peak AIME24–26 Avg@32 50.5% vs CISPO 47.4% on Qwen3-30B-A3B-Base + DAPO-Math-17k. No public code. Does not replace CISPO.
+- **Optional Actor-then-Critic IS (not this Pass@1 default)**: `method:pact` (`arXiv:2609.26355`) on `task:token-level-critic-rl`. Unique token credit then Actor-then-Critic with critic IS. Does not replace CISPO.
 - **Not this task (multi-stage agent continual learning)**: `method:aclarena` on `task:agent-continual-learning`. Sequential stage stacking, not a Pass@1 loss.
 - **L2 in-language reasoning SFT (not this Pass@1 task)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.
 - **Multimodal VL prompt scaffolding (not this Pass@1 task)**: `method:eps-prompt-scaffolding` on `task:mllm-rl-prompt-curriculum`. Online EPS from on-policy rewards plus teacher rewrites. DataFlex-RL remains the static-policy null under text GRPO; EPS is the online adaptive scaffolding path. Does not replace CISPO.

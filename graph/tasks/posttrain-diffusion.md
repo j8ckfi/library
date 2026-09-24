@@ -21,10 +21,13 @@ methods:
   - method:diffusion-opsd
   - method:self-opd
   - method:canvasanneal
+  - method:rewardverse
 redirects:
   - when: "lossless multi-token / diffusion-augmented AR serving, not image-policy alignment"
     to: "task:diffusion-augmented-ar"
-last_reviewed: "2026-09-14"
+  - when: "training a stable video reward model / rubric-guided RM PO"
+    to: "method:rewardverse"
+last_reviewed: "2026-09-24"
 tags:
   - diffusion
   - post-training
@@ -41,4 +44,5 @@ Aligning generative diffusion and flow models with downstream reward functions (
 - **Primary Method (Reward/Self-Distill with Behavior Policy)**: **DiffusionOPSD** (`method:diffusion-opsd`, `paper:diffusion-opsd` `arXiv:2608.24646`) for on-policy self-distillation with bounded intermediate clean-output targets.
 - **Teacher-Free Flow Matching / Multi-Objective Alignment**: **Self-OPD** (`method:self-opd`, `paper:self-opd` `arXiv:2608.26872`) for stochastic SDE branching vs deterministic self-reference and reward-level multi-objective fusion without task-specific teachers.
 - **Niche discrete-diffusion-LM curriculum RL (not this first hop)**: `method:canvasanneal` (`arXiv:2609.13060`) anneals a teacher-trace canvas on LLaDA-8B. MATH500 +6.0 / +2.0 / +0.4 vs diffu-GRPO. Does not replace DiffusionOPSD, Self-OPD, or Uno.
+- **Active video-RM / RGPO plug-in (not generator alignment)**: `method:rewardverse` (`arXiv:2609.22947`) dynamic rubric + two-stage RGPO for video reward models. EvalVerse Joint mean PLCC 0.554 / SRCC 0.446. Does not replace DiffusionOPSD or Self-OPD. Does not retarget OraRL.
 - **Not This Task**: lossless AR multi-token serving is `method:uno` on `task:diffusion-augmented-ar`. Does not replace this image/flow post-train default.

@@ -20,6 +20,7 @@ out_of_scope:
   - "Harness distillation into weights under a fixed target harness (Harness-Zero)"
   - "Multi-stage agent continual learning (ACLArena)"
   - "Category-aware SWE expert RL (Category-Aware SWE Experts)"
+  - "Structural tool vs summary credit under GRPO (SLCA-GRPO)"
 redirects:
   - when: "build an agent rather than train a policy"
     to: "task:software-engineering-agent-harness"
@@ -47,6 +48,8 @@ redirects:
     to: "task:swe-agent-category-expert-rl"
   - when: "Actor-then-Critic IS-aligned critic rather than async stragglers"
     to: "method:pact"
+  - when: "structural credit split for tool-call vs natural-language-summary tokens, not async stragglers"
+    to: "task:tool-agent-segment-credit"
 current_sota:
   - method: method:sao
     as_of: "2026-08-26"
@@ -73,7 +76,8 @@ methods:
   - method:aclarena
   - method:category-aware-swe-experts
   - method:pact
-last_reviewed: "2026-09-24"
+  - method:slca-grpo
+last_reviewed: "2026-09-25"
 tags:
   - post-training
   - agentic
@@ -99,3 +103,4 @@ This is **policy training**. Building a software-engineering agent loop is `task
 - **Not this task (multi-stage agent continual learning)**: `method:aclarena` on `task:agent-continual-learning`. Sequential capability stacking on slime, not straggler replay.
 - **Not this task (category-aware SWE expert RL)**: `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`. Does not replace SAO.
 - **Optional Actor-then-Critic IS (not this async default)**: `method:pact` (`arXiv:2609.26355`) on `task:token-level-critic-rl`. SWE-Verified +3.8 vs SAO is mention-only. SAO remains the straggler first hop.
+- **Not this task (structural tool/summary credit)**: `method:slca-grpo` on `task:tool-agent-segment-credit`. Does not replace SAO.

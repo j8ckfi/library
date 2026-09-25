@@ -131,12 +131,14 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when frontier-model SOTA vs GPT-5 ReAct → `method:foldgrpo`
   - do not use when multi-agent as the long-horizon strategy → `method:single-agent-plus-tools`
   - do not use when diagnose which multi-turn tool calls are trainable (nested sampling / contextual bandit) → `method:critical-state-rl`
+  - do not use when structural credit split for tool-call vs natural-language-summary tokens (not folding) → `task:tool-agent-segment-credit`
 - **Redirects**:
   - when dumped corpus much larger than the window → `task:long-context-prompt-offload`
   - when SWE harness without folding → `task:software-engineering-agent-harness`
   - when outcome-only long-horizon agent RL (signal starvation / drift or outcome-blind rubrics) → `task:outcome-only-long-horizon-agent-rl`
   - when train a live-web multi-hop search agent (SFT-RL climbing), not folding → `task:web-search-agent-rl`
-- **Out of scope**: Dumped corpus prompt offload (RLM); SWE harness without folding; Async RL training without a folding objective (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Live-web multi-hop search-agent training without a folding objective (Iris)
+  - when structural credit split for tool-call vs natural-language-summary tokens (not folding) → `task:tool-agent-segment-credit`
+- **Out of scope**: Dumped corpus prompt offload (RLM); SWE harness without folding; Async RL training without a folding objective (SAO); Outcome-only long-horizon agent RL (CANOPY / DRACO); Live-web multi-hop search-agent training without a folding objective (Iris); Structural tool vs summary credit under GRPO (SLCA-GRPO)
 
 ### task:multi-agent-orchestration — Multi-Agent Orchestration
 - **Scope**: Whether to use more than one agent. Default is single agent + tools (mini-SWE-agent / CCA). Not training SAO.
@@ -339,6 +341,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
   - do not use when category see-saw on heterogeneous SWE RL → `task:swe-agent-category-expert-rl`
   - do not use when Actor-then-Critic IS-aligned critic rather than async stragglers → `method:pact`
+  - do not use when structural credit split for tool-call vs natural-language-summary tokens, not async stragglers → `task:tool-agent-segment-credit`
 - **Redirects**:
   - when build an agent rather than train a policy → `task:software-engineering-agent-harness`
   - when outcome-only long-horizon agent RL (coverage / anti-drift), not async stragglers → `task:outcome-only-long-horizon-agent-rl`
@@ -353,7 +356,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
   - when category see-saw on heterogeneous SWE RL → `task:swe-agent-category-expert-rl`
   - when Actor-then-Critic IS-aligned critic rather than async stragglers → `method:pact`
-- **Out of scope**: Building or choosing a software-engineering agent loop (mini-SWE-agent / CCA / OpenHands); Dumped long-prompt offload (RLM); GUI computer-use without policy training; Outcome-only long-horizon agent RL where the failure is signal starvation / policy drift, not async latency; Live-web multi-hop search-agent training (Iris SFT-RL climbing); Production post-train engine rather than the async algorithm (Miles); Routing-harness RSI post-train (NeoHorse-1); Adaptive math/code sampling until ≥1 correct (NGU); that is a CISPO-host sampler, not SAO straggler replay; Privileged self-OPD then Adaptive Retirement into pure agent RL (RetireOPD / ALFWorld/WebShop); Data/env construction for coding-agent RL from source code (CodeMidas); Diagnosing which multi-turn tool calls are trainable (Critical-State RL); Harness distillation into weights under a fixed target harness (Harness-Zero); Multi-stage agent continual learning (ACLArena); Category-aware SWE expert RL (Category-Aware SWE Experts)
+  - when structural credit split for tool-call vs natural-language-summary tokens, not async stragglers → `task:tool-agent-segment-credit`
+- **Out of scope**: Building or choosing a software-engineering agent loop (mini-SWE-agent / CCA / OpenHands); Dumped long-prompt offload (RLM); GUI computer-use without policy training; Outcome-only long-horizon agent RL where the failure is signal starvation / policy drift, not async latency; Live-web multi-hop search-agent training (Iris SFT-RL climbing); Production post-train engine rather than the async algorithm (Miles); Routing-harness RSI post-train (NeoHorse-1); Adaptive math/code sampling until ≥1 correct (NGU); that is a CISPO-host sampler, not SAO straggler replay; Privileged self-OPD then Adaptive Retirement into pure agent RL (RetireOPD / ALFWorld/WebShop); Data/env construction for coding-agent RL from source code (CodeMidas); Diagnosing which multi-turn tool calls are trainable (Critical-State RL); Harness distillation into weights under a fixed target harness (Harness-Zero); Multi-stage agent continual learning (ACLArena); Category-aware SWE expert RL (Category-Aware SWE Experts); Structural tool vs summary credit under GRPO (SLCA-GRPO)
 
 ### task:agentic-rsi-routing-posttrain — Agentic RSI Routing-Harness Post-Training
 - **Scope**: Agentic post-training that converts routing-harness records (predicted demand, selected tier, interaction) into SFT curriculum and routing-guided OPD, then reallocates the next mix from capability feedback.
@@ -431,6 +435,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when critic-free PMD / Bellman telescoping RLVR (not CISPO default) → `method:bpo`
   - do not use when Actor-then-Critic IS-aligned critic after axiomatic token credit (not CISPO default) → `method:pact`
   - do not use when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
+  - do not use when structural credit split for tool-call vs natural-language-summary tokens (not Pass@1) → `task:tool-agent-segment-credit`
 - **Redirects**:
   - when outcome-only long-horizon interactive agent RL → `task:outcome-only-long-horizon-agent-rl`
   - when train asynchronous RL for a tool-use policy → `task:agentic-async-rl`
@@ -442,7 +447,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when critic-free PMD / Bellman telescoping RLVR (not CISPO default) → `method:bpo`
   - when Actor-then-Critic IS-aligned critic after axiomatic token credit (not CISPO default) → `method:pact`
   - when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
-- **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO); Live-web multi-hop search-agent training (Iris); Pass@K / coverage / no-backward (ES-reasoning / DATPO); Olympiad NL proofs / IMO TTC (Nemotron IMO Gold); Multimodal VL prompt scaffolding / online EPS curriculum (not dense text Pass@1); Multi-stage agent capability stacking / continual learning (ACLArena)
+  - when structural credit split for tool-call vs natural-language-summary tokens (not Pass@1) → `task:tool-agent-segment-credit`
+- **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO); Live-web multi-hop search-agent training (Iris); Pass@K / coverage / no-backward (ES-reasoning / DATPO); Olympiad NL proofs / IMO TTC (Nemotron IMO Gold); Multimodal VL prompt scaffolding / online EPS curriculum (not dense text Pass@1); Multi-stage agent capability stacking / continual learning (ACLArena); Structural tool vs summary credit under GRPO (SLCA-GRPO)
 
 ### task:math-code-rl-moe — Mathematical and Code RL Reasoning (MoE Policies)
 - **SOTA**: `method:sapo` `2511.20347` (as_of 2026-08-26) — Qwen3 MoE / MATH-500 MoE RL: Default SOTA for MoE/VL RL
@@ -558,10 +564,13 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when critic-free PMD / Bellman telescoping RLVR (not CISPO default) → `method:bpo`
   - do not use when Actor-then-Critic IS-aligned critic after axiomatic token credit (not CISPO default) → `method:pact`
   - do not use when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
+  - do not use when structural credit split for tool-call vs natural-language-summary tokens (not Pass@1) → `task:tool-agent-segment-credit`
 - **SOTA**: `method:sapo` `2511.20347` (as_of 2026-08-26) — Qwen MoE / VL Reasoning: SOTA for MoE/VL RL
 
 ### task:student-distillation — Small Local Student Distillation from Strong Teacher
 - **SOTA**: `method:opd` `2604.13016` (as_of 2026-08-26) — GSM8k / HumanEval / MT-Bench Student Evaluation: Default SOTA for single-teacher student distillation
+  - do not use when latent OPD collapse / last-layer crossfade into token OPD → `method:lastopd`
+  - do not use when Direct-OPD / weak-to-strong policy-shift token selection by teacher–ref JSD → `method:s2d-opd`
 - **SOTA**: `method:open-mopd` `2608.19098` (as_of 2026-08-28) — Multi-Teacher Capability Integration (SmolLM3-3B Benchmark): 83.4% headroom recovery in a single deployable student
 - **Redirects**:
   - when privileged OPD TSD calibration (residual discrepancy during OPD, not teacher retirement) → `method:cal-opd`
@@ -570,6 +579,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when distill optimized-harness behaviors into weights under a fixed target harness (action-space mismatch) → `task:harness-distillation`
   - when multi-stage agent capability stacking (MMOPD / SDFT / LoRA experts, not Open-MOPD default) → `task:agent-continual-learning`
   - when label-routed multi-teacher OPD of SWE category experts → `task:swe-agent-category-expert-rl`
+  - when latent OPD collapse / last-layer crossfade into token OPD → `method:lastopd`
+  - when Direct-OPD / weak-to-strong policy-shift token selection by teacher–ref JSD → `method:s2d-opd`
 
 ### task:swe-agent-category-expert-rl — SWE Agent Category-Expert RL
 - **Scope**: Category-aware expert RL plus label-routed integration inside repository-level SWE. First hop is Category-Aware SWE Experts. Not source-only env construction, not async stragglers, not the issue-to-patch harness loop, not the production engine.
@@ -611,6 +622,23 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when Actor-then-Critic IS-aligned critic after axiomatic token credit → `method:pact`
 - **Redirects**:
   - when Actor-then-Critic IS-aligned critic after axiomatic token credit → `method:pact`
+  - when structural credit split for tool-call vs natural-language-summary tokens (not Actor-then-Critic) → `task:tool-agent-segment-credit`
+
+### task:tool-agent-segment-credit — Tool-Agent Segment Credit Assignment
+- **Scope**: On-policy RL credit routing along the structural axis (execution vs articulation) inside one tool-calling trajectory. Not context folding, not async stragglers, not Actor-then-Critic token credit, not which-turn trainability diagnostics, not single-turn math Pass@1.
+- **SOTA**: `method:slca-grpo` `2609.29050` (as_of 2026-09-25) — Toucan-Test Success@0.9 / BFCL V3 / tau2-Bench, Qwen2.5-7B-Instruct: +2.53 pp / +1.36 pp / +9.15 pp
+  - do not use when folding a long tool trajectory into a small active context → `method:foldgrpo`
+  - do not use when variable environment latency / async stragglers → `method:sao`
+  - do not use when Actor-then-Critic IS-aligned critic after axiomatic token credit → `method:pact`
+  - do not use when diagnose which multi-turn tool calls are trainable → `method:critical-state-rl`
+  - do not use when single-turn math/code Pass@1 RLVR → `method:cispo`
+- **Redirects**:
+  - when context folding of a long tool trajectory → `task:long-horizon-tool-agent`
+  - when variable environment latency / async stragglers → `task:agentic-async-rl`
+  - when Actor-then-Critic IS-aligned critic after axiomatic token credit → `method:pact`
+  - when diagnose which multi-turn tool calls are trainable (nested sampling / contextual bandit) → `method:critical-state-rl`
+  - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
+- **Out of scope**: Context folding of a long tool trajectory (FoldGRPO); Async straggler replay (SAO); Actor-then-Critic IS token credit (PACT); Which multi-turn call is trainable (Critical-State RL); Single-turn math/code Pass@1 RLVR (CISPO)
 
 ### task:web-search-agent-rl — Web Search Agent Training
 - **Scope**: Policy training for ReAct search agents (search/scrape against the live web) with synthetic multi-hop tasks, trajectory/turn filtering, in-cluster judge/summarizer, and iterative SFT-RL climbing.
@@ -763,6 +791,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when full-pipeline FP8 RL entropy surge / calibrated clip bounds → `method:fp8-calibrated-clipping`
   - do not use when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
   - do not use when category see-saw on heterogeneous SWE RL → `task:swe-agent-category-expert-rl`
+  - do not use when full open post-train recipe / stage order / agentic RL infrastructure playbook → `method:rufus-air`
 - **Redirects**:
   - when factory process / experiments-as-code / lineage rather than the RL engine → `task:industrial-model-building`
   - when variable environment latency / async stragglers, not the production stack → `task:agentic-async-rl`
@@ -773,7 +802,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when full-pipeline FP8 RL entropy surge / calibrated clip bounds → `method:fp8-calibrated-clipping`
   - when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
   - when category see-saw on heterogeneous SWE RL → `task:swe-agent-category-expert-rl`
-- **Out of scope**: Industrial factory process / experiments-as-code / lineage (Poolside); Async straggler algorithm (SAO); Dense math/code Pass@1 loss (CISPO); ~7B dense pretrain optimizer (Muon2); SWE issue-to-patch harness (mini-SWE-agent); AppWorld outcome-only coverage (CANOPY); Full-pipeline FP8 clip calibration (Calibrated Clipping); Multi-stage agent continual learning (ACLArena); Category-aware SWE expert RL (Category-Aware SWE Experts)
+  - when full open post-train recipe / stage order / agentic RL infrastructure playbook → `method:rufus-air`
+- **Out of scope**: Industrial factory process / experiments-as-code / lineage (Poolside); Async straggler algorithm (SAO); Dense math/code Pass@1 loss (CISPO); ~7B dense pretrain optimizer (Muon2); SWE issue-to-patch harness (mini-SWE-agent); AppWorld outcome-only coverage (CANOPY); Full-pipeline FP8 clip calibration (Calibrated Clipping); Multi-stage agent continual learning (ACLArena); Category-aware SWE expert RL (Category-Aware SWE Experts); Open 8-stage serial post-train recipe / stage order on slime (Rufus-Air)
 
 ### task:industrial-model-building — Industrial Model Building (Model Factory Process)
 - **Scope**: Factory process: experiments-as-code, lineage, streamed mixes, shared train+infer codebase. Not the RL post-train engine and not a train kernel.

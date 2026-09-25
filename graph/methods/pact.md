@@ -16,6 +16,9 @@ do_not_use_for:
   - when: "async tool stragglers / importance-corrected replay"
     reason: "SAO remains async first hop; PACT's SWE lift does not retarget SAO"
     use_instead: "method:sao"
+  - when: "structural credit split for tool-call vs natural-language-summary tokens"
+    reason: "PACT is Actor-then-Critic token credit; SLCA-GRPO routes GRPO segment advantages"
+    use_instead: "task:tool-agent-segment-credit"
 assumptions:
   - "Actor-then-Critic update order with importance-sampling correction on critic training. BCE critic loss instead of MSE."
   - "Paper: agentic math Avg@16 on Qwen3.5-4B; SWE-bench Verified on Qwen3.6-35B-A3B."

@@ -19,7 +19,10 @@ do_not_use_for:
   - when: "multi-stage agent capability stacking / continual learning"
     reason: "CISPO is a Pass@1 loss; ACLArena stacks heterogeneous post-train stages"
     use_instead: "task:agent-continual-learning"
-last_reviewed: "2026-09-24"
+  - when: "structural credit split for tool-call vs natural-language-summary tokens (not Pass@1)"
+    reason: "CISPO remains Pass@1; SLCA-GRPO routes GRPO advantages on tool-calling agents"
+    use_instead: "task:tool-agent-segment-credit"
+last_reviewed: "2026-09-25"
 papers:
   - paper:minimax-m1
   - paper:scalerl

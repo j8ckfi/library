@@ -35,11 +35,14 @@ do_not_use_for:
   - when: "category see-saw on heterogeneous SWE RL"
     reason: "Miles is the engine; Category-Aware SWE Experts is a training recipe"
     use_instead: "task:swe-agent-category-expert-rl"
+  - when: "full open post-train recipe / stage order / agentic RL infrastructure playbook"
+    reason: "Miles is the production engine; Rufus-Air is the documented 8-stage slime recipe"
+    use_instead: "method:rufus-air"
 assumptions:
   - "Frontier MoE post-train with a split rollout/train fleet. Paper case study: GLM-5.2 744B-A40B on 64 GB300 (32/32), Megatron trainer, optimizer-state streaming to disk."
   - "SGLang rollouts; Megatron or FSDP trainer. LoRA RL is Megatron-only in v0.1."
   - "Does not replace the train-kernel defaults run inside the stack (CISPO, OPD, Muon2)."
-last_reviewed: "2026-09-23"
+last_reviewed: "2026-09-25"
 papers:
   - paper:miles
 recipes:
@@ -98,12 +101,14 @@ This does not replace CISPO, Muon2, Poolside factory, SAO, CANOPY, or mini-SWE-a
 - Pass@1 loss → `method:cispo`. 7B optimizer → `method:muon2`.
 - SWE harness → `method:mini-swe-agent`. AppWorld coverage → `method:canopy`.
 - Full-pipeline FP8 clip calibration → `method:fp8-calibrated-clipping`. Multi-stage ACL → `method:aclarena`. Category-aware SWE experts → `method:category-aware-swe-experts`.
+- Open 8-stage serial post-train recipe / stage order → `method:rufus-air`.
 
 ## Relation to Existing SOTA
 - First hop for `task:frontier-rl-posttrain-stack` only. Does **not** supersede `method:poolside-model-factory`, `method:sao`, `method:cispo`, `method:muon2`, `method:canopy`, or `method:mini-swe-agent`.
 - Async scheduling here is an engine feature, not SAO's importance-corrected replay.
 - `method:t1-terminal-rl` is a 122B terminal-MoE recipe on slime v0.3.0. It does not replace Miles.
 - Full-pipeline FP8 clip plug-in (`method:fp8-calibrated-clipping`) restores BF16-level quality under compounded FP8 noise. Does not replace Miles.
+- Open 8-stage slime recipe (`method:rufus-air`, `arXiv:2609.29421`) documents stage order and agentic RL infra on GLM-4.5-Air-Base. Does not replace Miles.
 
 ## Gotchas & Failure Modes
 - GLM-5.2 reference run leaves R3 off; routing replay is a per-recipe choice and is expensive on long agentic sequences (~60MB routing tensor example in the paper).

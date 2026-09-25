@@ -19,6 +19,9 @@ do_not_use_for:
   - when: "folding a long tool trajectory into a small active context"
     reason: "FoldGRPO folds context; Critical-State RL selects which call receives gradient"
     use_instead: "method:foldgrpo"
+  - when: "structural credit split for tool-call vs natural-language-summary tokens"
+    reason: "Critical-State RL selects which turn is trainable; SLCA-GRPO routes tool vs summary advantages"
+    use_instead: "task:tool-agent-segment-credit"
 assumptions:
   - "Task-defined candidate calls and a local label. Nested sampling at a frozen prefix: sample actions, then resample reward-only continuations."
   - "Paper: Gemma-4-26B-A4B no-think four-cell on BFCL v4 multi_turn; also Nemotron missing-function, logged repeat-call, xLAM/Gemma memory."

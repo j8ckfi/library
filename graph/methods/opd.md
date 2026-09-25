@@ -8,7 +8,14 @@ sota_for:
   - task:student-distillation
 supersedes:
   - method:on-policy-distillation
-last_reviewed: "2026-09-21"
+do_not_use_for:
+  - when: "latent OPD collapse / last-layer crossfade into token OPD"
+    reason: "OPD remains the matching default; LastOPD is a latent-collapse schedule on reverse top-k OPD"
+    use_instead: "method:lastopd"
+  - when: "Direct-OPD / weak-to-strong policy-shift token selection by teacher–ref JSD"
+    reason: "OPD is strong-teacher matching; S2D-OPD is a Direct-OPD keep-mask"
+    use_instead: "method:s2d-opd"
+last_reviewed: "2026-09-25"
 papers:
   - paper:opd
   - paper:opd-one-example
@@ -54,6 +61,8 @@ OPD (On-Policy Distillation) is the state-of-the-art framework for distilling la
 - Sparse-OPD reliability plug-in (`method:ier-opd`): information-efficiency ratio (gradient SNR under an optimal scalar baseline) fused with usefulness. 0.1%–1% budgets match/exceed full OPD. Does not replace this method.
 - Sequential stack (`method:opd-then-rlvr`): OPD then RLVR beats joint one-step fusion when both are used. Does not replace this method or CISPO.
 - Optional TSD calibration (`method:cal-opd`): residual discrepancy beyond a probed teacher-self-deviation region. Signal calibration during OPD. Does not replace this method, VISTA, or RetireOPD.
+- Latent-collapse schedule (`method:lastopd`): last-layer pre-head latent term, then a ~10-step crossfade into token OPD. Does not replace this method. Same-lineage latent-only can stay on OPRD-Vanilla.
+- Direct-OPD JSD keep-mask (`method:s2d-opd`): keep top ~10% student states by teacher–reference JSD. Does not replace this method.
 - Multi-stage agent continual learning (`method:aclarena`) compares MMOPD / SDFT / merge then proposes MLE. Does not replace this method or Open-MOPD. Label-routed MOPD of SWE category experts is `method:category-aware-swe-experts`.
 
 ## Gotchas & Failure Modes

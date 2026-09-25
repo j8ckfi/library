@@ -34,7 +34,10 @@ do_not_use_for:
   - when: "Actor-then-Critic IS-aligned critic rather than async stragglers"
     reason: "SAO remains async first hop; PACT's SWE lift does not retarget SAO"
     use_instead: "method:pact"
-last_reviewed: "2026-09-24"
+  - when: "structural credit split for tool-call vs natural-language-summary tokens, not async stragglers"
+    reason: "SAO remains async first hop; SLCA-GRPO routes segment advantages"
+    use_instead: "task:tool-agent-segment-credit"
+last_reviewed: "2026-09-25"
 papers:
   - paper:sao
 recipes:

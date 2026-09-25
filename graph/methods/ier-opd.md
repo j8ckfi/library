@@ -22,6 +22,9 @@ do_not_use_for:
   - when: "TSD calibration of teacher–student discrepancy during OPD"
     reason: "Cal-OPD is residual-advantage calibration, not sparse token selection"
     use_instead: "method:cal-opd"
+  - when: "Direct-OPD / weak-to-strong policy-shift token selection by teacher–ref JSD"
+    reason: "IER-OPD ranks reverse-KL gradient SNR; S2D-OPD ranks teacher–ref JSD on Direct-OPD"
+    use_instead: "method:s2d-opd"
 assumptions:
   - "Host is sampled reverse-KL OPD. Paper: slime + TA-OPD, DAPO-Math-17k or RaR-Medicine, 4 prompts × 16 responses, lr 1e-6, prompt/response/context 2048/8192/16384."
   - "IER is approximated on a top-K candidate set from student and teacher logits plus the sampled token. High IER is reliability, not usefulness."

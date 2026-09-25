@@ -18,7 +18,7 @@ When you are asked to **"train model X to do Y"**, **do not rely on outdated pre
 
 ## 2. Agent Routing Cheat-Sheet (First-Hop SOTA Index)
 
-Use this quick-routing table as of **2026-09-24**:
+Use this quick-routing table as of **2026-09-25**:
 
 <!-- CHEAT-SHEET:START -->
 ```
@@ -65,6 +65,7 @@ task:long-horizon-tool-agent -> method:foldgrpo (2510.11967, 2025-10)
   when SWE harness without folding -> task:software-engineering-agent-harness
   when outcome-only long-horizon agent RL (signal starvation / drift or outcome-blind rubrics) -> task:outcome-only-long-horizon-agent-rl
   when train a live-web multi-hop search agent (SFT-RL climbing), not folding -> task:web-search-agent-rl
+  when structural credit split for tool-call vs natural-language-summary tokens (not folding) -> task:tool-agent-segment-credit
 task:multi-agent-orchestration -> method:single-agent-plus-tools (2606.04455, 2026-06)
   when GitHub issue to patch -> task:software-engineering-agent-harness
   when train asynchronous RL for a tool-use policy -> task:agentic-async-rl
@@ -146,6 +147,7 @@ task:agentic-async-rl -> method:sao (2607.07508, 2026-08-26)
   when multi-stage agent capability stacking / continual learning -> task:agent-continual-learning
   when category see-saw on heterogeneous SWE RL -> task:swe-agent-category-expert-rl
   when Actor-then-Critic IS-aligned critic rather than async stragglers -> method:pact
+  when structural credit split for tool-call vs natural-language-summary tokens, not async stragglers -> task:tool-agent-segment-credit
 task:agentic-rsi-routing-posttrain -> method:neohorse-1 (2609.08183, 2026-09-09)
   when build a SWE / issue-to-patch harness rather than post-train from routing traces -> task:software-engineering-agent-harness
   when variable environment latency / async stragglers, not RSI routing post-train -> task:agentic-async-rl
@@ -185,6 +187,7 @@ task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
   when critic-free PMD / Bellman telescoping RLVR (not CISPO default) -> method:bpo
   when Actor-then-Critic IS-aligned critic after axiomatic token credit (not CISPO default) -> method:pact
   when multi-stage agent capability stacking / continual learning -> task:agent-continual-learning
+  when structural credit split for tool-call vs natural-language-summary tokens (not Pass@1) -> task:tool-agent-segment-credit
 task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
 task:mechanism-grounded-agentic-rl-env -> method:vhd-play (2609.27321, 2026-09-24)
   when source-code coding RL envs -> task:coding-agent-rl-environment-construction
@@ -234,6 +237,8 @@ task:student-distillation -> method:opd (2604.13016, 2026-08-26) + method:open-m
   when distill optimized-harness behaviors into weights under a fixed target harness (action-space mismatch) -> task:harness-distillation
   when multi-stage agent capability stacking (MMOPD / SDFT / LoRA experts, not Open-MOPD default) -> task:agent-continual-learning
   when label-routed multi-teacher OPD of SWE category experts -> task:swe-agent-category-expert-rl
+  when latent OPD collapse / last-layer crossfade into token OPD -> method:lastopd
+  when Direct-OPD / weak-to-strong policy-shift token selection by teacher–ref JSD -> method:s2d-opd
 task:swe-agent-category-expert-rl -> method:category-aware-swe-experts (2609.23377, 2026-09-23)
   when env construction from source only -> task:coding-agent-rl-environment-construction
   when async algorithm -> task:agentic-async-rl
@@ -249,6 +254,13 @@ task:teacher-free-on-policy-self-adaptation -> method:opsa (2608.31046, 2026-09-
   when verifier-grounded same-model self-improvement with privileged hindsight -> task:math-code-rl-dense
 task:token-level-critic-rl -> method:bpco (2608.23566, 2026-08-27)
   when Actor-then-Critic IS-aligned critic after axiomatic token credit -> method:pact
+  when structural credit split for tool-call vs natural-language-summary tokens (not Actor-then-Critic) -> task:tool-agent-segment-credit
+task:tool-agent-segment-credit -> method:slca-grpo (2609.29050, 2026-09-25)
+  when context folding of a long tool trajectory -> task:long-horizon-tool-agent
+  when variable environment latency / async stragglers -> task:agentic-async-rl
+  when Actor-then-Critic IS-aligned critic after axiomatic token credit -> method:pact
+  when diagnose which multi-turn tool calls are trainable (nested sampling / contextual bandit) -> method:critical-state-rl
+  when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
 task:web-search-agent-rl -> method:iris (2609.04304, 2026-09-08)
   when outcome-only long-horizon agent RL (AppWorld coverage / anti-drift or rubric credit) -> task:outcome-only-long-horizon-agent-rl
   when variable environment latency / async stragglers, not search-agent climbing -> task:agentic-async-rl
@@ -312,6 +324,7 @@ task:frontier-rl-posttrain-stack -> method:miles (2609.08368, 2026-09-09)
   when full-pipeline FP8 RL entropy surge / calibrated clip bounds -> method:fp8-calibrated-clipping
   when multi-stage agent capability stacking / continual learning -> task:agent-continual-learning
   when category see-saw on heterogeneous SWE RL -> task:swe-agent-category-expert-rl
+  when full open post-train recipe / stage order / agentic RL infrastructure playbook -> method:rufus-air
 task:industrial-model-building -> method:poolside-model-factory (2605.27605, 2026-08)
   when full-stack frontier RL post-train engine (SGLang rollouts, Megatron/FSDP, LoRA RL / OPD / async agentic RL), not factory lineage -> task:frontier-rl-posttrain-stack
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
@@ -464,6 +477,10 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 125. **Read-time trajectory curator**: **JitMem** (`method:jitmem`, `arXiv:2609.27334`) on `task:agent-memory`. Keep raw traces; curate at read time from immediate task success. Active. No public GitHub. Does **not** replace ACE, Code2Skill, or Jev-Mem.
 126. **Mechanism-grounded agentic RL envs**: **VHD-Play** (`method:vhd-play`, `arXiv:2609.27321`) on `task:mechanism-grounded-agentic-rl-env`. Solve a math mechanism first, then render stateful tools. Active first hop for that task only (`sota_for: []`). No public GitHub. Does **not** replace CodeMidas, CANOPY, SAO, Miles, or mini-SWE-agent.
 127. **Video RM / RGPO**: **RewardVerse** (`method:rewardverse`, `arXiv:2609.22947`) on `task:posttrain-diffusion`. Dynamic rubric + two-stage RGPO for video reward models. Active plug-in. Code: 2kxx/RewardVerse. Does **not** replace DiffusionOPSD, Self-OPD, or OraRL.
+128. **Open 8-stage post-train recipe**: **Rufus-Air** (`method:rufus-air`, `arXiv:2609.29421`) on `task:frontier-rl-posttrain-stack`. Serial SFT→Reasoning RL→Coding RL→IF RL→General/Coding/Search Agent→RLHF on GLM-4.5-Air-Base (Slime+SGLang+Megatron). Active. No dedicated repo; host is THUDM/slime. Does **not** replace Miles, SAO, or CISPO.
+129. **Latent OPD collapse schedule**: **LastOPD** (`method:lastopd`, `arXiv:2609.28845`) on `task:student-distillation`. Last-layer pre-LM-head latent loss, then ~10-step crossfade into reverse top-k OPD. Active. GitHub announced, 404 as of 2026-09-25. Does **not** replace OPD, Open-MOPD, Cal-OPD, or OPRD.
+130. **Tool-agent segment credit**: **SLCA-GRPO** (`method:slca-grpo`, `arXiv:2609.29050`) on `task:tool-agent-segment-credit`. Routes tool advantages to tool tokens and summary advantages to summary tokens. Active first hop for that task only (`sota_for: []`). GitHub announced, 404 as of 2026-09-25; HF dataset live. Does **not** replace FoldGRPO, SAO, PACT, Critical-State RL, or CISPO.
+131. **Direct-OPD JSD keep-mask**: **S²D-OPD** (`method:s2d-opd`, `arXiv:2609.29142`) on `task:student-distillation`. Keep top ~10% student states by teacher–reference JSD. Active. Review-anonymous code. Does **not** replace OPD, Cal-OPD, IER-OPD, LastOPD, or OPRD.
 
 ---
 
@@ -591,6 +608,10 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `jitmem` (2609.27334) is an active read-time curator on `task:agent-memory`. It does not supersede `ace`, `code2skill`, or `jev-mem`.
 - `vhd-play` (2609.27321) is the active first hop for `task:mechanism-grounded-agentic-rl-env` only. It does not supersede `codemidas`, `canopy`, `sao`, `miles`, or `mini-swe-agent`.
 - `rewardverse` (2609.22947) is an active video-RM / RGPO plug-in on `task:posttrain-diffusion`. It does not supersede `diffusion-opsd`, `self-opd`, or `orarl`.
+- `rufus-air` (2609.29421) is an active open 8-stage post-train recipe on `task:frontier-rl-posttrain-stack`. It does not supersede `miles`, `sao`, or `cispo`.
+- `lastopd` (2609.28845) is an active latent-collapse schedule on `task:student-distillation`. It does not supersede `opd`, `open-mopd`, `cal-opd`, or `oprd`.
+- `slca-grpo` (2609.29050) is the active first hop for `task:tool-agent-segment-credit` only. It does not supersede `foldgrpo`, `sao`, `pact`, `critical-state-rl`, or `cispo`.
+- `s2d-opd` (2609.29142) is an active Direct-OPD JSD keep-mask on `task:student-distillation`. It does not supersede `opd`, `cal-opd`, `ier-opd`, `lastopd`, or `oprd`.
 
 ---
 

@@ -19,6 +19,9 @@ do_not_use_for:
   - when: "multi-teacher token-share balancing is the goal"
     reason: "Open-MOPD remains the multi-teacher distill default; OPRD's multi-teacher result is reverse-distill consolidation"
     use_instead: "method:open-mopd"
+  - when: "latent OPD collapse under continued depth-paired alignment"
+    reason: "OPRD-Bridge latent-only is the collapse regime; LastOPD is the last-layer crossfade. Same-lineage OPRD-Vanilla can stay here."
+    use_instead: "method:lastopd"
 assumptions:
   - "Frozen teacher with a reference policy, student rollouts, and a deterministic outcome verifier. Paper: Qwen3 4B/8B (and 1.7B/0.6B strong-to-weak), DAPO-Math-17K, Reasoning Gym."
   - "Trained-policy tables average five checkpoints (speed + level), not a single best ckpt."

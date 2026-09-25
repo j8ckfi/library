@@ -32,6 +32,9 @@ do_not_use_for:
   - when: "diagnose which multi-turn tool calls are trainable (nested sampling / contextual bandit)"
     reason: "FoldGRPO folds context; Critical-State RL selects which call receives gradient"
     use_instead: "method:critical-state-rl"
+  - when: "structural credit split for tool-call vs natural-language-summary tokens (not folding)"
+    reason: "FoldGRPO folds context; SLCA-GRPO routes tool vs summary advantages"
+    use_instead: "task:tool-agent-segment-credit"
 assumptions:
   - "Seed-OSS-36B, 32K×10. Long tool/web/SWE trajectory, small active context."
   - "Open reimplementation: sunnweiwei/FoldAgent (may differ from paper train code)."

@@ -17,6 +17,10 @@ redirects:
     to: "task:agent-continual-learning"
   - when: "label-routed multi-teacher OPD of SWE category experts"
     to: "task:swe-agent-category-expert-rl"
+  - when: "latent OPD collapse / last-layer crossfade into token OPD"
+    to: "method:lastopd"
+  - when: "Direct-OPD / weak-to-strong policy-shift token selection by teacher–ref JSD"
+    to: "method:s2d-opd"
 current_sota:
   - method: method:opd
     as_of: "2026-08-26"
@@ -60,7 +64,9 @@ methods:
   - method:ier-opd
   - method:aclarena
   - method:category-aware-swe-experts
-last_reviewed: "2026-09-23"
+  - method:lastopd
+  - method:s2d-opd
+last_reviewed: "2026-09-25"
 tags:
   - post-training
   - distillation
@@ -93,5 +99,7 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Gotcha (EOS mismatch)**: `method:opd-eos` / `paper:opd-eos` (`arXiv:2609.20511`). Teacher/student stop ids can disagree even when declared stop sets match; length inflates under OPD. Semantic-class EOS is the fix. Does not replace OPD.
 - **Optional TSD calibration plug-in**: `method:cal-opd` (`arXiv:2609.21619`) estimates the teacher self-deviation region with positive+negative privileged probes and keeps residual discrepancy (~52–65%) as the OPD advantage. Signal calibration during OPD, not teacher retirement. Does not replace OPD, VISTA, or RetireOPD.
 - **Optional sparse-OPD reliability plug-in**: `method:ier-opd` (`arXiv:2609.24432`) ranks tokens by information-efficiency ratio (gradient signal-to-noise under an optimal scalar baseline) and fuses with usefulness scores. 0.1%–1% budgets match/exceed full OPD. Does not replace OPD, CISPO, sparse-opd-supervision, IDA-OPD, or Cal-OPD.
+- **Optional latent-collapse plug-in**: `method:lastopd` (`arXiv:2609.28845`) applies latent loss only at the last-layer pre-LM-head state and crossfades into reverse top-k OPD over ~10 steps. MATH-500 +5.55 / +4.02 vs token-only OPD on Qwen3-4B/8B → 1.7B. Same-lineage latent-only OPRD-Vanilla can already work; do not retarget OPD or Open-MOPD. Cal-OPD remains TSD calibration.
+- **Optional Direct-OPD JSD keep-mask**: `method:s2d-opd` (`arXiv:2609.29142`) ranks student states by teacher–reference JSD and keeps the top ~10% per response. +0.95 mean held-out Acc over dense Direct-OPD (7/8 settings). Not standard strong-teacher OPD.
 - **Not this task**: Adaptive Retirement of a privileged self-OPD teacher in agent RL is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl`. Distilling optimized-harness behaviors into weights under a fixed target harness is `method:harness-zero` on `task:harness-distillation`. Multi-stage agent continual learning (MMOPD / SDFT / MLE) is `method:aclarena` on `task:agent-continual-learning` and does not retarget Open-MOPD. Label-routed MOPD of SWE category experts is `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`.
 

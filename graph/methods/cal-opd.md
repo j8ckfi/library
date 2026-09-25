@@ -25,6 +25,9 @@ do_not_use_for:
   - when: "sparse OPD token selection by gradient-estimation reliability (IER), not TSD calibration"
     reason: "IER-OPD ranks tokens by gradient SNR; Cal-OPD calibrates residual discrepancy"
     use_instead: "method:ier-opd"
+  - when: "latent OPD collapse / last-layer crossfade into token OPD"
+    reason: "Cal-OPD is TSD residual calibration; LastOPD is a latent-depth collapse schedule"
+    use_instead: "method:lastopd"
 assumptions:
   - "White-box teacher that can be forwarded under extra context while the student trajectory is held fixed. Paper: DAPO-17K filtered by Qwen3-235B-A22B-Instruct-2507; Avg@16 on AMC23/AIME24/25/26/HMMT26/MATH500."
   - "Default interventions are positive and negative evaluative feedback, not solution-level privilege. Relaxation λ=5. Implemented in verl on 8×H20 (4 student + 4 teacher), 100 steps, 256 trajectories/step, lr 1e-6, train response 16384."

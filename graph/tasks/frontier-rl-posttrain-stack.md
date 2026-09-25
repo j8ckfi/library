@@ -15,6 +15,7 @@ out_of_scope:
   - "Full-pipeline FP8 clip calibration (Calibrated Clipping)"
   - "Multi-stage agent continual learning (ACLArena)"
   - "Category-aware SWE expert RL (Category-Aware SWE Experts)"
+  - "Open 8-stage serial post-train recipe / stage order on slime (Rufus-Air)"
 redirects:
   - when: "factory process / experiments-as-code / lineage rather than the RL engine"
     to: "task:industrial-model-building"
@@ -34,6 +35,8 @@ redirects:
     to: "task:agent-continual-learning"
   - when: "category see-saw on heterogeneous SWE RL"
     to: "task:swe-agent-category-expert-rl"
+  - when: "full open post-train recipe / stage order / agentic RL infrastructure playbook"
+    to: "method:rufus-air"
 current_sota:
   - method: method:miles
     as_of: "2026-09-09"
@@ -52,7 +55,8 @@ methods:
   - method:fp8-calibrated-clipping
   - method:aclarena
   - method:category-aware-swe-experts
-last_reviewed: "2026-09-23"
+  - method:rufus-air
+last_reviewed: "2026-09-25"
 tags:
   - systems
   - training-systems
@@ -78,3 +82,4 @@ Frontier post-training is a systems problem: multi-turn tool rollouts on trillio
 - **Optional full-pipeline FP8 clip plug-in (not this stack default)**: `method:fp8-calibrated-clipping` (`arXiv:2609.22870`). Match FP8 lower-bound clip quantile to BF16 and rebalance the upper bound. Restores BF16-level quality; tensorwise up to ~1.5× BF16 throughput. No public standalone repo. Does not replace Miles or CISPO.
 - **Not this task (multi-stage agent continual learning)**: `method:aclarena` on `task:agent-continual-learning`. Built on slime; not the production engine.
 - **Not this task (category-aware SWE expert RL)**: `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`.
+- **Optional open 8-stage serial recipe (not this engine default)**: `method:rufus-air` (`arXiv:2609.29421`). GLM-4.5-Air-Base SFT→Reasoning RL→Coding RL→IF RL→General/Coding/Search Agent→RLHF on Slime+SGLang+Megatron. Miles remains the production engine.

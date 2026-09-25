@@ -11,6 +11,7 @@ out_of_scope:
   - "Async RL training without a folding objective (SAO)"
   - "Outcome-only long-horizon agent RL (CANOPY / DRACO)"
   - "Live-web multi-hop search-agent training without a folding objective (Iris)"
+  - "Structural tool vs summary credit under GRPO (SLCA-GRPO)"
 redirects:
   - when: "dumped corpus much larger than the window"
     to: "task:long-context-prompt-offload"
@@ -20,7 +21,9 @@ redirects:
     to: "task:outcome-only-long-horizon-agent-rl"
   - when: "train a live-web multi-hop search agent (SFT-RL climbing), not folding"
     to: "task:web-search-agent-rl"
-last_reviewed: "2026-09-08"
+  - when: "structural credit split for tool-call vs natural-language-summary tokens (not folding)"
+    to: "task:tool-agent-segment-credit"
+last_reviewed: "2026-09-25"
 current_sota:
   - method: method:foldgrpo
     as_of: "2025-10"
@@ -34,6 +37,7 @@ methods:
   - method:rao
   - method:pta
   - method:iris
+  - method:slca-grpo
 tags:
   - agents
   - agent-recursion
@@ -55,3 +59,4 @@ The agent takes many tool/web/SWE steps. The problem is the **trajectory**, not 
 - **Active**: AgentFold (web history, 36.2% BrowseComp); RAO (trained recursion, TextCraft 24% vs 95%).
 - **Related pre-RL tool OPKD (not this folding default)**: `method:pta` (`arXiv:2609.04773`) teacher-commits tool turns before Search-R1 / DeepEyes RL. Does not replace FoldGRPO.
 - **Not this folding default**: live-web search-agent climbing is `task:web-search-agent-rl` (`method:iris`).
+- **Not this folding default (structural tool/summary credit)**: `method:slca-grpo` on `task:tool-agent-segment-credit`. Does not replace FoldGRPO.

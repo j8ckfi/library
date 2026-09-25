@@ -6,6 +6,34 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-25 — weekday SOTA sweep (Rufus-Air, LastOPD, SLCA-GRPO, S2D-OPD)
+- MUST 1–4. One new task (`task:tool-agent-segment-credit`). No current_sota retarget of Miles / OPD / Open-MOPD / CISPO / CANOPY / SAO / ACE / omp2 / TTPO / FoldGRPO / PACT / Cal-OPD / IER-OPD.
+- Window: America/Denver 2026-09-25 Librarian weekday sweep after 2609.27334 / HF Daily through 09-24. New arXiv 2609.28845, 2609.29050, 2609.29142, 2609.29421.
+
+### 2026-09-25 — ingest method:rufus-air (active on task:frontier-rl-posttrain-stack; does not supersede method:miles)
+- Added paper:rufus-air (2609.29421), method:rufus-air, recipe:rufus-air (`code_status: none`; `repo_url: https://github.com/THUDM/slime`; no dedicated Rufus-Air GitHub). Reverse redirect from Miles for full open post-train recipe / stage order / agentic RL infra playbook.
+- Status active (`sota_for: []`). 8-stage serial pipeline on GLM-4.5-Air-Base (106B-A12B): SFT → Reasoning RL → Coding RL → IF RL → General Agent → Coding Agent → Search Agent → RLHF. Amazon.
+- Evidence: vs GLM-4.5-Air IFBench 76.9 vs 33.6, LCB v6 76.4 vs 59.6, TB2.1 42.7 vs 24.7, SWE-Verified 65.6 vs 50.6 (arXiv:2609.29421); verified: true; evidence_level: preprint.
+- Scope checks: Miles remains the engine; SAO remains async; CISPO remains Pass@1.
+
+### 2026-09-25 — ingest method:lastopd (active on task:student-distillation; does not supersede method:opd / method:open-mopd / method:cal-opd / method:oprd)
+- Added paper:lastopd (2609.28845), method:lastopd, recipe:lastopd (`code_status: announced`; Muyiiiii/LastOPD 404 as of 2026-09-25). Reverse redirect for latent OPD collapse / last-layer crossfade.
+- Status active (`sota_for: []`). Last-layer pre-LM-head latent loss, then ~10-step crossfade into reverse top-k token OPD. Visa Research.
+- Evidence: Qwen3-4B/8B → 1.7B-Base MATH-500 +5.55 / +4.02 vs token-only OPD; ~half the steps to token-OPD final score (arXiv:2609.28845); verified: true; evidence_level: preprint.
+- Scope checks: OPD remains distill default; Open-MOPD remains multi-teacher; Cal-OPD remains TSD calibration; same-lineage latent-only stays OPRD-Vanilla.
+
+### 2026-09-25 — ingest method:slca-grpo (new task:tool-agent-segment-credit; does not supersede method:foldgrpo / method:sao / method:pact / method:critical-state-rl / method:cispo)
+- Added paper:slca-grpo (2609.29050), method:slca-grpo, recipe:slca-grpo (`code_status: announced`; SLCA-GRPO/SLCA-GRPO 404 as of 2026-09-25; HF YanZhanPKU/SLCA-GRPO-Datasets). New task first hop; method status active (`sota_for: []`). Reverse redirects from long-horizon-tool-agent / agentic-async-rl / math-code-rl-dense / token-level-critic-rl.
+- Status active. Segment-locked GRPO: tool advantages to tool tokens, summary advantages to summary tokens. SGLS + HierR. Tencent PCG / PKU.
+- Evidence: Qwen2.5-7B matched GRPO +2.53 pp Toucan Success@0.9 / +1.36 pp BFCL / +9.15 pp τ²-Bench (arXiv:2609.29050); verified: true; evidence_level: preprint.
+- Scope checks: FoldGRPO remains folding; SAO remains async; PACT remains Actor-then-Critic; Critical-State RL remains which-turn trainability; CISPO remains Pass@1.
+
+### 2026-09-25 — ingest method:s2d-opd (active Direct-OPD plug-in on task:student-distillation; does not supersede method:opd)
+- Added paper:s2d-opd (2609.29142), method:s2d-opd, recipe:s2d-opd (`code_status: announced`; review-anonymous `anonymous.4open.science/r/S2D-OPD-8868`). Reverse redirect for Direct-OPD JSD keep-mask.
+- Status active (`sota_for: []`). Direct-OPD log-ratio is mass-invariant; keep top ~10% student states by teacher–reference JSD. ECNU.
+- Evidence: +0.95 mean held-out Acc over dense Direct-OPD (7/8 settings; 95% CI 0.40–1.54); no extra forwards (arXiv:2609.29142); verified: true; evidence_level: preprint.
+- Scope checks: OPD remains strong-teacher matching; Cal-OPD / IER-OPD / LastOPD are different axes; OPRD remains reverse distill.
+
 ### 2026-09-24 — weekday SOTA sweep (PACT, JitMem, VHD-Play, RewardVerse)
 - MUST 1–4. One new task. No current_sota retarget of CISPO / CANOPY / SAO / OPD / omp2 / TTPO / Miles / ACE / BPCO / CodeMidas / DiffusionOPSD / Self-OPD.
 - Window: HF Daily 2026-09-23/24 + arXiv ≳2609.26800. FLAG: UECR-GRPO, RL-Starts-before-RL, AEWM, MemoryAthena, Agensh, JEV-as-a-Judge, EmbodiedSWE, LatentPort, WhatWorkedBench, GeoPair, FLEET.

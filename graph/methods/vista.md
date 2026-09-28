@@ -66,6 +66,7 @@ VISTA keeps the standard on-policy self-distillation (OPSD; Zhao et al., arXiv:2
 - Collapse diagnosis: `method:opsd-collapse-review` (`arXiv:2608.25936`) — playbook, not a trainer.
 - `method:nsd` (`arXiv:2609.11699`) is the actionable anti-collapse trainer (diverge from a negative condition). Does not replace VISTA.
 - TSD calibration of teacher–student discrepancy is `method:cal-opd` (residual advantage during OPD). Not a teacher update and not Adaptive Retirement. Does not replace VISTA.
+- Active sibling `method:dce-srcl` (`arXiv:2609.30652`) co-evolves the privileged teacher (DCE) and adds shorter verified rewrites (SRCL). That paper's OPSD baseline (~30% Average@12, Qwen3-8B non-thinking) is **not** comparable to this library's VISTA bake-off (64.8→66.9). Does **not** enter `current_sota`. Bake before any future retarget.
 
 ## Gotchas & Failure Modes
 - Requires gold solutions plus a rule-based outcome verifier. Without both, this is the wrong shelf (`method:u-opsd` or `method:ttpo`).

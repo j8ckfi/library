@@ -18,7 +18,7 @@ When you are asked to **"train model X to do Y"**, **do not rely on outdated pre
 
 ## 2. Agent Routing Cheat-Sheet (First-Hop SOTA Index)
 
-Use this quick-routing table as of **2026-09-25**:
+Use this quick-routing table as of **2026-09-28**:
 
 <!-- CHEAT-SHEET:START -->
 ```
@@ -112,8 +112,15 @@ task:full-lowbit-finetune -> method:gradcodes (2608.30908, 2026-09-01)
   when quality LoRA on 24GB without a fully quantized checkpoint constraint -> task:lora-quality-tuning
 task:full-param-memory-efficient-pretrain -> method:scale (2506.16659, 2026-08-26)
 task:lora-quality-tuning -> method:lr-matters-lora (2602.04998, 2026-08-26)
+  when stacking independently trained LoRA adapters / sequential skill add without an inference router -> task:lora-skill-composition
+task:lora-skill-composition -> method:read-lora (2609.31600, 2026-09-28)
+  when single-adapter quality LoRA / rsLoRA + LR sweep rather than stacking adapters -> task:lora-quality-tuning
+  when memory must fit a 4-bit PEFT stack -> task:4bit-peft-quantization
+  when instruct FT under a behavioral-drift budget / layer-selective freeze of instruct models rather than LoRA composition -> task:instruct-sft-alignment
+  when deployed checkpoint must stay NF4/INT4/MXFP4 with no high-precision adapter -> task:full-lowbit-finetune
 task:parameter-efficient-fine-tuning -> method:lr-matters-lora (2602.04998, 2026-08-26) + method:aqlora-q (2608.23816, 2026-08-26)
   when instruct FT under a behavioral-drift budget / layer-selective freeze of instruct models rather than LoRA quality -> task:instruct-sft-alignment
+  when stacking independently trained LoRA adapters / sequential skill add without an inference router -> task:lora-skill-composition
 task:posttrain-attention-sparsification -> method:sas (2609.13141, 2026-09-14)
   when dumped corpus ≫ window -> task:long-context-prompt-offload
   when linear-time architecture from scratch (SSM / Mamba) -> task:linear-time-sequence-modeling
@@ -229,6 +236,7 @@ task:passk-reasoning-coverage -> method:es-reasoning (2608.27351, 2026-08-31)
 task:privileged-teacher-opsd -> method:vista (2608.28306, 2026-08-31)
   when TSD calibration of teacher–student discrepancy during OPD (not teacher update) -> method:cal-opd
   when Adaptive Retirement of a privileged self-OPD teacher then pure agent RL -> task:outcome-only-long-horizon-agent-rl
+  when privileged teacher co-evolves with the student (DCE) plus shorter verified rewrites (SRCL) -> method:dce-srcl
 task:reasoning-rl-alignment -> method:cispo (2506.13585, 2026-08-26) + method:sapo (2511.20347, 2026-08-26)
 task:student-distillation -> method:opd (2604.13016, 2026-08-26) + method:open-mopd (2608.19098, 2026-08-28)
   when privileged OPD TSD calibration (residual discrepancy during OPD, not teacher retirement) -> method:cal-opd
@@ -239,6 +247,7 @@ task:student-distillation -> method:opd (2604.13016, 2026-08-26) + method:open-m
   when label-routed multi-teacher OPD of SWE category experts -> task:swe-agent-category-expert-rl
   when latent OPD collapse / last-layer crossfade into token OPD -> method:lastopd
   when Direct-OPD / weak-to-strong policy-shift token selection by teacher–ref JSD -> method:s2d-opd
+  when token-level ExpertAlign routing over unlabeled multi-teacher pools (no domain labels, no separate router train) -> method:mopd-router
 task:swe-agent-category-expert-rl -> method:category-aware-swe-experts (2609.23377, 2026-09-23)
   when env construction from source only -> task:coding-agent-rl-environment-construction
   when async algorithm -> task:agentic-async-rl
@@ -481,6 +490,9 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 129. **Latent OPD collapse schedule**: **LastOPD** (`method:lastopd`, `arXiv:2609.28845`) on `task:student-distillation`. Last-layer pre-LM-head latent loss, then ~10-step crossfade into reverse top-k OPD. Active. GitHub announced, 404 as of 2026-09-25. Does **not** replace OPD, Open-MOPD, Cal-OPD, or OPRD.
 130. **Tool-agent segment credit**: **SLCA-GRPO** (`method:slca-grpo`, `arXiv:2609.29050`) on `task:tool-agent-segment-credit`. Routes tool advantages to tool tokens and summary advantages to summary tokens. Active first hop for that task only (`sota_for: []`). GitHub announced, 404 as of 2026-09-25; HF dataset live. Does **not** replace FoldGRPO, SAO, PACT, Critical-State RL, or CISPO.
 131. **Direct-OPD JSD keep-mask**: **S²D-OPD** (`method:s2d-opd`, `arXiv:2609.29142`) on `task:student-distillation`. Keep top ~10% student states by teacher–reference JSD. Active. Review-anonymous code. Does **not** replace OPD, Cal-OPD, IER-OPD, LastOPD, or OPRD.
+132. **Token-level multi-teacher router**: **MOPD-Router** (`method:mopd-router`, `arXiv:2609.30837`) on `task:student-distillation`. ExpertAlign over the full teacher pool with no domain labels. Active plug-in. Code: TURLEing/MOPD-Router. Does **not** replace Open-MOPD, OPD, S2D-OPD, Cal-OPD, IER-OPD, or LastOPD.
+133. **Privileged-teacher co-evolution**: **DCE+SRCL** (`method:dce-srcl`, `arXiv:2609.30652`) on `task:privileged-teacher-opsd`. DCE refreshes the gold teacher each round; SRCL adds shorter verified rewrites. Active. No public GitHub. Does **not** replace VISTA (paper OPSD ~30% is not the library 64.8→66.9 bake-off).
+134. **LoRA skill composition**: **READ** (`method:read-lora`, `arXiv:2609.31600`) on `task:lora-skill-composition`. Canonical factors + read-only coupling, then fold. Active first hop for that task only. No public code. Does **not** replace lr-matters-lora or AQLoRA-Q.
 
 ---
 
@@ -612,6 +624,9 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `lastopd` (2609.28845) is an active latent-collapse schedule on `task:student-distillation`. It does not supersede `opd`, `open-mopd`, `cal-opd`, or `oprd`.
 - `slca-grpo` (2609.29050) is the active first hop for `task:tool-agent-segment-credit` only. It does not supersede `foldgrpo`, `sao`, `pact`, `critical-state-rl`, or `cispo`.
 - `s2d-opd` (2609.29142) is an active Direct-OPD JSD keep-mask on `task:student-distillation`. It does not supersede `opd`, `cal-opd`, `ier-opd`, `lastopd`, or `oprd`.
+- `mopd-router` (2609.30837) is an active token-level ExpertAlign plug-in on `task:student-distillation`. It does not supersede `open-mopd`, `opd`, `s2d-opd`, `cal-opd`, `ier-opd`, or `lastopd`.
+- `dce-srcl` (2609.30652) is an active privileged-teacher co-evolution plug-in on `task:privileged-teacher-opsd`. It does not supersede `vista`, `opd`, `self-opd`, `u-opsd`, `lastopd`, `s2d-opd`, or `open-mopd`.
+- `read-lora` (2609.31600) is the active first hop for `task:lora-skill-composition` only. It does not supersede `lr-matters-lora` or `aqlora-q`.
 
 ---
 

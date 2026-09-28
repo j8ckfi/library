@@ -7,6 +7,11 @@ status: sota
 sota_for:
   - task:student-distillation
 supersedes: []
+do_not_use_for:
+  - when: "token-level ExpertAlign routing over unlabeled multi-teacher pools (no domain labels, no separate router train)"
+    reason: "Open-MOPD is gap-aware token-share balancing on labeled domain teachers; MOPD-Router routes the full pool per token"
+    use_instead: "method:mopd-router"
+last_reviewed: "2026-09-28"
 papers:
   - paper:open-mopd
 recipes:
@@ -42,3 +47,4 @@ Open-MOPD is the state-of-the-art framework for consolidating multiple domain-sp
 ## Relation to Existing SOTA
 - Co-exists with `method:opd` under `task:student-distillation`: `method:opd` is the single-teacher default; `method:open-mopd` is the multi-teacher distillation default as of 2026-08-28. Privileged same-model gold-solution OPSD is `method:vista` and does not replace Open-MOPD.
 - Multi-stage agent continual learning (`method:aclarena`) uses MMOPD as a paper baseline, not a retarget of this method. Label-routed MOPD of SWE category experts is `method:category-aware-swe-experts`.
+- Token-level ExpertAlign routing over unlabeled multi-teacher pools is `method:mopd-router` (`arXiv:2609.30837`). Active plug-in. Does **not** replace Open-MOPD as the gap-aware budget / token-share balancing default.

@@ -265,12 +265,31 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:lora-quality-tuning — LoRA Quality Tuning on Single GPU
 - **SOTA**: `method:lr-matters-lora` `2602.04998` (as_of 2026-08-26) — Single GPU PEFT / MMLU / GSM8k: Matches/exceeds DoRA
+  - do not use when stacking independently trained LoRA adapters / sequential skill add without an inference router → `method:read-lora`
+- **Redirects**:
+  - when stacking independently trained LoRA adapters / sequential skill add without an inference router → `task:lora-skill-composition`
+
+### task:lora-skill-composition — LoRA Skill Composition
+- **Scope**: Composing / stacking independently trained LoRA skills without inference routers. First hop is READ. Not single-adapter quality, not 4-bit PEFT, not drift-budget instruct freeze.
+- **SOTA**: `method:read-lora` `2609.31600` (as_of 2026-09-28) — Llama-3.2-3B SuperGLUE / Domain; Qwen3-4B GLUE; 32-lineage mean lift: SuperGLUE 0.783 vs 0.605; Domain 0.887 vs 0.846; Qwen GLUE 0.838 vs 0.775; +0.073 (95% CI +0.047–+0.101)
+  - do not use when single-adapter quality LoRA on 24GB (rsLoRA + LR sweep) → `method:lr-matters-lora`
+  - do not use when memory must fit a 4-bit PEFT stack → `method:aqlora-q`
+  - do not use when instruct FT under a behavioral-drift budget / layer-selective freeze → `method:dco`
+  - do not use when RLVR-stable rank-normalized LoRA A → `method:nora`
+- **Redirects**:
+  - when single-adapter quality LoRA / rsLoRA + LR sweep rather than stacking adapters → `task:lora-quality-tuning`
+  - when memory must fit a 4-bit PEFT stack → `task:4bit-peft-quantization`
+  - when instruct FT under a behavioral-drift budget / layer-selective freeze of instruct models rather than LoRA composition → `task:instruct-sft-alignment`
+  - when deployed checkpoint must stay NF4/INT4/MXFP4 with no high-precision adapter → `task:full-lowbit-finetune`
+- **Out of scope**: Single-adapter quality LoRA on 24GB (vanilla LoRA + rsLoRA + LR sweep); 4-bit PEFT stack (AQLoRA-Q / AutoQRA); Instruct FT under a behavioral-drift budget / layer-selective freeze (DCO); RLVR-stable rank-normalized LoRA A (NoRA); Fully low-bit checkpoints with no high-precision adapter (GradCodeS)
 
 ### task:parameter-efficient-fine-tuning — Parameter-Efficient Fine-Tuning (PEFT) & Low-Rank Adaptation
 - **SOTA**: `method:lr-matters-lora` `2602.04998` (as_of 2026-08-26) — Single GPU PEFT / MMLU / GSM8k: Vanilla LoRA + rsLoRA + LR sweep SOTA (NOT DoRA)
+  - do not use when stacking independently trained LoRA adapters / sequential skill add without an inference router → `method:read-lora`
 - **SOTA**: `method:aqlora-q` `2608.23816` (as_of 2026-08-26) — 4-Bit Single GPU PEFT: 4-Bit SOTA Speed/Recipe Default
 - **Redirects**:
   - when instruct FT under a behavioral-drift budget / layer-selective freeze of instruct models rather than LoRA quality → `task:instruct-sft-alignment`
+  - when stacking independently trained LoRA adapters / sequential skill add without an inference router → `task:lora-skill-composition`
 
 ### task:posttrain-attention-sparsification — Post-Training Attention Sparsification
 - **Scope**: Post-train (or mid-train) gated / Top-K sparse attention on a frozen or lightly updated dense LM under a fixed attention budget. Context ranking aligned to LM loss.
@@ -558,6 +577,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 - **Redirects**:
   - when TSD calibration of teacher–student discrepancy during OPD (not teacher update) → `method:cal-opd`
   - when Adaptive Retirement of a privileged self-OPD teacher then pure agent RL → `task:outcome-only-long-horizon-agent-rl`
+  - when privileged teacher co-evolves with the student (DCE) plus shorter verified rewrites (SRCL) → `method:dce-srcl`
 
 ### task:reasoning-rl-alignment — Reinforcement Learning & Reasoning Post-Training
 - **SOTA**: `method:cispo` `2506.13585` (as_of 2026-08-26) — AIME 2024 / MATH-500: SOTA for Dense Long-CoT
@@ -572,6 +592,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when latent OPD collapse / last-layer crossfade into token OPD → `method:lastopd`
   - do not use when Direct-OPD / weak-to-strong policy-shift token selection by teacher–ref JSD → `method:s2d-opd`
 - **SOTA**: `method:open-mopd` `2608.19098` (as_of 2026-08-28) — Multi-Teacher Capability Integration (SmolLM3-3B Benchmark): 83.4% headroom recovery in a single deployable student
+  - do not use when token-level ExpertAlign routing over unlabeled multi-teacher pools (no domain labels, no separate router train) → `method:mopd-router`
 - **Redirects**:
   - when privileged OPD TSD calibration (residual discrepancy during OPD, not teacher retirement) → `method:cal-opd`
   - when Adaptive Retirement of a privileged self-OPD teacher then pure agent RL → `task:outcome-only-long-horizon-agent-rl`
@@ -581,6 +602,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when label-routed multi-teacher OPD of SWE category experts → `task:swe-agent-category-expert-rl`
   - when latent OPD collapse / last-layer crossfade into token OPD → `method:lastopd`
   - when Direct-OPD / weak-to-strong policy-shift token selection by teacher–ref JSD → `method:s2d-opd`
+  - when token-level ExpertAlign routing over unlabeled multi-teacher pools (no domain labels, no separate router train) → `method:mopd-router`
 
 ### task:swe-agent-category-expert-rl — SWE Agent Category-Expert RL
 - **Scope**: Category-aware expert RL plus label-routed integration inside repository-level SWE. First hop is Category-Aware SWE Experts. Not source-only env construction, not async stragglers, not the issue-to-patch harness loop, not the production engine.

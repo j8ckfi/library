@@ -10,6 +10,10 @@ sota_for:
 supersedes:
   - method:dora
   - method:delora
+do_not_use_for:
+  - when: "stacking independently trained LoRA adapters / sequential skill add without an inference router"
+    reason: "Quality default is a single-adapter recipe; READ owns multi-skill composition"
+    use_instead: "method:read-lora"
 papers:
   - paper:lr-matters-lora
   - paper:lora-unified-study
@@ -40,6 +44,7 @@ Re-evaluating low-rank adaptation reveals that with rank-stabilized scaling (\(\
 
 ## Relation to Existing SOTA
 - Remains the 24GB LoRA quality default. `method:nora` is a recommended RLVR-stable adapter upgrade (status active) and is not a completed supersession of this protocol. `method:anlr-lora` is an optional per-rank LR plug-in. `method:iso-lora` is an active optimizer-shape / effective-rank note. Neither replaces the LR sweep.
+- Stacking independently trained LoRA skills is `method:read-lora` on `task:lora-skill-composition` (`arXiv:2609.31600`). Does **not** retarget this quality default.
 
 ## Supersession
 - Supersedes `method:dora` and `method:delora` as the PEFT quality default.

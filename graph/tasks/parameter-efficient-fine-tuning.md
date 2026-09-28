@@ -37,10 +37,13 @@ methods:
   - method:anlr-lora
   - method:iso-lora
   - method:dco
-last_reviewed: "2026-09-16"
+  - method:read-lora
+last_reviewed: "2026-09-28"
 redirects:
   - when: "instruct FT under a behavioral-drift budget / layer-selective freeze of instruct models rather than LoRA quality"
     to: "task:instruct-sft-alignment"
+  - when: "stacking independently trained LoRA adapters / sequential skill add without an inference router"
+    to: "task:lora-skill-composition"
 tags:
   - efficiency
   - peft
@@ -58,3 +61,4 @@ Adapting multi-billion parameter base models to downstream tasks with minimal tr
 - **MoE PEFT consolidation**: `method:ace-moe-peft` (`arXiv:2609.06072`, EMNLP 2026) groups expert adapters. Distinct from `method:ace` (agent memory). Does not replace the dense LoRA quality default.
 - **LoRA Must 4-Bit**: **AQLoRA-Q** (`method:aqlora-q`, 2608.23816) or **AutoQRA** (`method:autoqra`, 2602.22268). Fully low-bit checkpoints with no high-precision adapter: `method:gradcodes` on `task:full-lowbit-finetune`.
 - **Full-Parameter Memory-Efficient Pretrain**: **SCALE** (`method:scale`, 2506.16659) — not GaLore.
+- **Not this task (stack independently trained adapters)**: `method:read-lora` on `task:lora-skill-composition` (`arXiv:2609.31600`). Canonical factors + read-only coupling, then fold. Does not retarget vanilla LoRA + rsLoRA + LR sweep or AQLoRA-Q.

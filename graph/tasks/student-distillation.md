@@ -21,6 +21,8 @@ redirects:
     to: "method:lastopd"
   - when: "Direct-OPD / weak-to-strong policy-shift token selection by teacher–ref JSD"
     to: "method:s2d-opd"
+  - when: "token-level ExpertAlign routing over unlabeled multi-teacher pools (no domain labels, no separate router train)"
+    to: "method:mopd-router"
 current_sota:
   - method: method:opd
     as_of: "2026-08-26"
@@ -66,7 +68,8 @@ methods:
   - method:category-aware-swe-experts
   - method:lastopd
   - method:s2d-opd
-last_reviewed: "2026-09-25"
+  - method:mopd-router
+last_reviewed: "2026-09-28"
 tags:
   - post-training
   - distillation
@@ -101,5 +104,6 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Optional sparse-OPD reliability plug-in**: `method:ier-opd` (`arXiv:2609.24432`) ranks tokens by information-efficiency ratio (gradient signal-to-noise under an optimal scalar baseline) and fuses with usefulness scores. 0.1%–1% budgets match/exceed full OPD. Does not replace OPD, CISPO, sparse-opd-supervision, IDA-OPD, or Cal-OPD.
 - **Optional latent-collapse plug-in**: `method:lastopd` (`arXiv:2609.28845`) applies latent loss only at the last-layer pre-LM-head state and crossfades into reverse top-k OPD over ~10 steps. MATH-500 +5.55 / +4.02 vs token-only OPD on Qwen3-4B/8B → 1.7B. Same-lineage latent-only OPRD-Vanilla can already work; do not retarget OPD or Open-MOPD. Cal-OPD remains TSD calibration.
 - **Optional Direct-OPD JSD keep-mask**: `method:s2d-opd` (`arXiv:2609.29142`) ranks student states by teacher–reference JSD and keeps the top ~10% per response. +0.95 mean held-out Acc over dense Direct-OPD (7/8 settings). Not standard strong-teacher OPD.
+- **Optional token-level multi-teacher router**: `method:mopd-router` (`arXiv:2609.30837`) ExpertAlign-scores the full teacher pool at each token with no domain labels. Unlabeled +5.88 / +12.3% vs Mean; labeled +3.95 / +7.8% vs standard MOPD. Does not replace Open-MOPD, OPD, S2D-OPD, Cal-OPD, IER-OPD, or LastOPD.
 - **Not this task**: Adaptive Retirement of a privileged self-OPD teacher in agent RL is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl`. Distilling optimized-harness behaviors into weights under a fixed target harness is `method:harness-zero` on `task:harness-distillation`. Multi-stage agent continual learning (MMOPD / SDFT / MLE) is `method:aclarena` on `task:agent-continual-learning` and does not retarget Open-MOPD. Label-routed MOPD of SWE category experts is `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`.
 

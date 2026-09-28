@@ -6,6 +6,28 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-28 — weekday SOTA sweep (MOPD-Router, DCE+SRCL, READ)
+- MUST 1–3. One new task (`task:lora-skill-composition`). No current_sota retarget of CISPO / CANOPY / SAO / OPD / Open-MOPD / VISTA / omp2-harness / TTPO / Miles / ACE / BPCO / CodeMidas / DiffusionOPSD / Self-OPD / mini-SWE-agent / Muon2 / NeoHorse-1 / Claude computer-use / RecreationWorld / Harness-Zero / Jev-Mem / RRSI / IER-OPD / Critical-State RL / PACT / JitMem / VHD-Play / RewardVerse / BPO / ACLArena / Category-Aware SWE / AIDE2 / Rufus-Air / LastOPD / SLCA-GRPO / S2D-OPD / lr-matters-lora / AQLoRA-Q.
+- Window: America/Denver 2026-09-28 Librarian weekday sweep. New arXiv 2609.30837, 2609.30652, 2609.31600.
+
+### 2026-09-28 — ingest method:mopd-router (active on task:student-distillation; does not supersede method:open-mopd / method:opd / method:s2d-opd / method:cal-opd / method:ier-opd / method:lastopd)
+- Added paper:mopd-router (2609.30837), method:mopd-router, recipe:mopd-router (`code_status: released`; `repo_url: https://github.com/TURLEing/MOPD-Router`; verl/, benchmarks/, run.sh). Reverse redirect from Open-MOPD for token-level ExpertAlign routing over unlabeled multi-teacher pools; reverse from mopd-router back to Open-MOPD for gap-aware budget / token-share balancing defaults.
+- Status active (`sota_for: []`). Token-level routing over the full teacher pool (no domain labels, no separate router train). ExpertAlign scores whether a teacher's local correction expresses that teacher's post-train specialty. SJTU / GAIR / Alibaba.
+- Evidence: unlabeled mixtures +5.88 / +12.3% overall vs Mean aggregation; labeled +3.95 / +7.8% vs standard MOPD without using domain labels; strong-to-weak + same-size (arXiv:2609.30837); verified: true; evidence_level: preprint.
+- Scope checks: Open-MOPD remains multi-teacher default; OPD remains single-teacher; S2D-OPD / Cal-OPD / IER-OPD / LastOPD remain their own axes.
+
+### 2026-09-28 — ingest method:dce-srcl (active on task:privileged-teacher-opsd; does not supersede method:vista)
+- Added paper:dce-srcl (2609.30652), method:dce-srcl, recipe:dce-srcl (`code_status: none`; `repo_url: none found`; reproducibility promised, no public repo as of 2026-09-28). Reverse redirect from privileged-teacher-opsd for DCE co-evolution + SRCL concise rewrites.
+- Status active (`sota_for: []`). Dynamic Co-Evolution lets the privileged teacher co-evolve with the student (attacks frozen privileged-teacher OPSD); SRCL adds shorter verified rewrites of on-policy responses. Meta AI / UCR.
+- Evidence: Qwen3-8B 65.97% Average@12 on four math contests; +35.62 pp vs their OPSD baseline (~30%); −7.80% mean output length vs DCE alone (arXiv:2609.30652); verified: true; evidence_level: preprint.
+- Scope checks: VISTA remains privileged-OPSD SOTA. This paper's OPSD baseline is NOT comparable to the library VISTA bake-off (~64.8→66.9). Bake before any future retarget. OPD / Self-OPD / LastOPD / S2D-OPD / Open-MOPD remain their own axes.
+
+### 2026-09-28 — ingest method:read-lora (new task:lora-skill-composition; does not supersede method:lr-matters-lora / method:aqlora-q)
+- Added paper:read-lora (2609.31600), method:read-lora, recipe:read-lora (`code_status: none`; no code in paper), task:lora-skill-composition. New task first hop; method status active with `sota_for: [task:lora-skill-composition]`. Reverse redirects from task:parameter-efficient-fine-tuning / task:lora-quality-tuning when stacking independently trained adapters / sequential skill add.
+- Status active. Canonicalize LoRA factors + read-only coupling (new skill may read old input subspaces, must not write old output subspaces); fold into base weights. No routing / no inference overhead.
+- Evidence: Llama-3.2-3B SuperGLUE 0.783 vs 0.605 strongest published same-adapter baseline; Domain 0.887 vs 0.846; Qwen3-4B GLUE 0.838 vs 0.775; shared 32-lineage mean lift +0.073 (95% CI +0.047–+0.101) (arXiv:2609.31600); verified: true; evidence_level: preprint.
+- Scope checks: lr-matters-lora remains 24GB quality; AQLoRA-Q remains 4-bit PEFT. No locked current_sota retarget.
+
 ### 2026-09-25 — weekday SOTA sweep (Rufus-Air, LastOPD, SLCA-GRPO, S2D-OPD)
 - MUST 1–4. One new task (`task:tool-agent-segment-credit`). No current_sota retarget of Miles / OPD / Open-MOPD / CISPO / CANOPY / SAO / ACE / omp2 / TTPO / FoldGRPO / PACT / Cal-OPD / IER-OPD.
 - Window: America/Denver 2026-09-25 Librarian weekday sweep after 2609.27334 / HF Daily through 09-24. New arXiv 2609.28845, 2609.29050, 2609.29142, 2609.29421.

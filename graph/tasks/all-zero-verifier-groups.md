@@ -17,7 +17,8 @@ methods:
   - method:cispo
   - method:cliff
   - method:thinkprior
-last_reviewed: "2026-09-09"
+  - method:graft
+last_reviewed: "2026-09-30"
 tags:
   - post-training
   - reasoning
@@ -34,3 +35,4 @@ Handling hard reasoning problems where all sampled candidate rollouts fail (all-
 - **Primary Method**: **VeriGate** (`method:verigate`, 2605.30451). Unchanged.
 - **Optional first-mistake credit (not a PRM)**: `method:cliff` (`arXiv:2609.02817`) locates one Pitfall Step with an off-the-shelf teacher. Active plug-in. Does not replace VeriGate or CISPO.
 - **Optional cold-start silent-group prompt prior**: `method:thinkprior` (`arXiv:2609.09075`) ranks prompts before GRPO-family training. Cuts waste; not a VeriGate replacement and not a CISPO loss change.
+- **Optional cross-model all-fail salvage (not a PRM)**: `method:graft` (`arXiv:2609.37868`) replaces receiver all-fail groups with mixed peer trajectory groups. Distinct from VeriGate. Does not replace VeriGate or CISPO.

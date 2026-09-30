@@ -8,6 +8,10 @@ sota_for:
   - task:math-code-rl-moe
 supersedes:
   - method:gspo
+do_not_use_for:
+  - when: "MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not SAPO default)"
+    reason: "SAPO remains the MoE/VL optimizer; CIS-RL caps the train–infer mismatch ratio"
+    use_instead: "method:cis-rl"
 papers:
   - paper:sapo
 recipes:

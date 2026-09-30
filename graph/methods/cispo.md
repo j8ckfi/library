@@ -22,7 +22,16 @@ do_not_use_for:
   - when: "structural credit split for tool-call vs natural-language-summary tokens (not Pass@1)"
     reason: "CISPO remains Pass@1; SLCA-GRPO routes GRPO advantages on tool-calling agents"
     use_instead: "task:tool-agent-segment-credit"
-last_reviewed: "2026-09-25"
+  - when: "asymmetric entropy×sign exploration credit (not Pass@1 default)"
+    reason: "CISPO remains Pass@1; EAPO redistributes an existing group advantage"
+    use_instead: "method:eapo"
+  - when: "MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement)"
+    reason: "CISPO is the dense Pass@1 loss; CIS-RL caps the train–infer mismatch ratio"
+    use_instead: "method:cis-rl"
+  - when: "multi-model / all-fail group salvage by peer trajectory exchange"
+    reason: "CISPO remains Pass@1; GRAFT replaces all-fail groups with peer traces"
+    use_instead: "method:graft"
+last_reviewed: "2026-09-30"
 papers:
   - paper:minimax-m1
   - paper:scalerl

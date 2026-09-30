@@ -195,7 +195,12 @@ task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
   when Actor-then-Critic IS-aligned critic after axiomatic token credit (not CISPO default) -> method:pact
   when multi-stage agent capability stacking / continual learning -> task:agent-continual-learning
   when structural credit split for tool-call vs natural-language-summary tokens (not Pass@1) -> task:tool-agent-segment-credit
+  when MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not Pass@1 default) -> method:cis-rl
+  when asymmetric entropy×sign exploration credit (not CISPO default, not first-mistake Cliff) -> method:eapo
+  when multi-model / all-fail group salvage by peer trajectory exchange (not Pass@1 default) -> method:graft
 task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
+  when single-turn dense math/code Pass@1 RLVR -> task:math-code-rl-dense
+  when MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not SAPO default) -> method:cis-rl
 task:mechanism-grounded-agentic-rl-env -> method:vhd-play (2609.27321, 2026-09-24)
   when source-code coding RL envs -> task:coding-agent-rl-environment-construction
   when AppWorld coverage -> task:outcome-only-long-horizon-agent-rl
@@ -248,6 +253,10 @@ task:student-distillation -> method:opd (2604.13016, 2026-08-26) + method:open-m
   when latent OPD collapse / last-layer crossfade into token OPD -> method:lastopd
   when Direct-OPD / weak-to-strong policy-shift token selection by teacher–ref JSD -> method:s2d-opd
   when token-level ExpertAlign routing over unlabeled multi-teacher pools (no domain labels, no separate router train) -> method:mopd-router
+  when domain-feedback-scale calibration of labeled MOPD advantages (not token-share budget or ExpertAlign routing) -> method:dn-mopd
+  when sample-efficient / off-policy OPD (Huber quadratic student–teacher logp matching + replay) -> method:lspd
+  when maximal-coupling-routed teacher supervision / TRB accept-correction routing (not default OPD) -> method:saki
+  when multi-teacher OPD subspace protection / task cycling (not token-share or domain-scale) -> method:pmopd
 task:swe-agent-category-expert-rl -> method:category-aware-swe-experts (2609.23377, 2026-09-23)
   when env construction from source only -> task:coding-agent-rl-environment-construction
   when async algorithm -> task:agentic-async-rl
@@ -334,6 +343,7 @@ task:frontier-rl-posttrain-stack -> method:miles (2609.08368, 2026-09-09)
   when multi-stage agent capability stacking / continual learning -> task:agent-continual-learning
   when category see-saw on heterogeneous SWE RL -> task:swe-agent-category-expert-rl
   when full open post-train recipe / stage order / agentic RL infrastructure playbook -> method:rufus-air
+  when MoE RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not the production stack) -> method:cis-rl
 task:industrial-model-building -> method:poolside-model-factory (2605.27605, 2026-08)
   when full-stack frontier RL post-train engine (SGLang rollouts, Megatron/FSDP, LoRA RL / OPD / async agentic RL), not factory lineage -> task:frontier-rl-posttrain-stack
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
@@ -493,6 +503,13 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 132. **Token-level multi-teacher router**: **MOPD-Router** (`method:mopd-router`, `arXiv:2609.30837`) on `task:student-distillation`. ExpertAlign over the full teacher pool with no domain labels. Active plug-in. Code: TURLEing/MOPD-Router. Does **not** replace Open-MOPD, OPD, S2D-OPD, Cal-OPD, IER-OPD, or LastOPD.
 133. **Privileged-teacher co-evolution**: **DCE+SRCL** (`method:dce-srcl`, `arXiv:2609.30652`) on `task:privileged-teacher-opsd`. DCE refreshes the gold teacher each round; SRCL adds shorter verified rewrites. Active. No public GitHub. Does **not** replace VISTA (paper OPSD ~30% is not the library 64.8→66.9 bake-off).
 134. **LoRA skill composition**: **READ** (`method:read-lora`, `arXiv:2609.31600`) on `task:lora-skill-composition`. Canonical factors + read-only coupling, then fold. Active first hop for that task only. No public code. Does **not** replace lr-matters-lora or AQLoRA-Q.
+135. **Domain-normalized MOPD**: **DN-MOPD** (`method:dn-mopd`, `arXiv:2609.35347`) on `task:student-distillation`. Rescales labeled-routing OPD advantages by batch log-ratio std (clip 0.25–4). Active plug-in. Code: LiXin97/DN-MOPD. Does **not** replace Open-MOPD or MOPD-Router.
+136. **MoE train–infer mismatch IS**: **CIS-RL** (`method:cis-rl`, `arXiv:2609.32444`) on `task:math-code-rl-moe`. Truncates log-odds displacement (confidence-dependent cap), not the raw IS ratio. Active plug-in. Code: kzhao5/CIS-RL. Does **not** replace CISPO, SAPO, or Miles.
+137. **Least-square / off-policy OPD**: **LSPD** (`method:lspd`, `arXiv:2609.35505`) on `task:student-distillation`. Huber quadratic student–teacher logp matching + entropy; LSPD-RB replay. Active plug-in. Code: UNCSciML/LSPD. Does **not** replace OPD.
+138. **Entropy×sign exploration credit**: **EAPO** (`method:eapo`, `arXiv:2609.33781`) on `task:math-code-rl-dense`. Reinforce high-entropy success, penalize low-entropy failure. Active plug-in. Code: wgcyeo/EAPO. Does **not** replace CISPO or Cliff.
+139. **Coupling-routed teacher OPD**: **SAKI** (`method:saki`, `arXiv:2609.36601`) on `task:student-distillation`. TRB maximal coupling: accept keeps reverse-KL, correction is teacher top-1 NLL. Active. No public GitHub. Does **not** replace OPD, TrOPD, or RouteOPD.
+140. **Cross-model all-fail salvage**: **GRAFT** (`method:graft`, `arXiv:2609.37868`) on `task:math-code-rl-dense`. Replace all-fail GRPO groups with mixed peer trajectories. Active plug-in. Distinct from VeriGate. No public GitHub. Does **not** replace CISPO, VeriGate, or Miles.
+141. **Multi-teacher subspace protection**: **PMOPD** (`method:pmopd`, `arXiv:2609.34605`) on `task:student-distillation`. Dual projection of gradients and Adafactor updates; probe + cycling. Active. Paper Open-MOPD 63.54 is not the library 83.4% bake-off. No public GitHub. Does **not** replace Open-MOPD or DN-MOPD.
 
 ---
 
@@ -627,6 +644,13 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `mopd-router` (2609.30837) is an active token-level ExpertAlign plug-in on `task:student-distillation`. It does not supersede `open-mopd`, `opd`, `s2d-opd`, `cal-opd`, `ier-opd`, or `lastopd`.
 - `dce-srcl` (2609.30652) is an active privileged-teacher co-evolution plug-in on `task:privileged-teacher-opsd`. It does not supersede `vista`, `opd`, `self-opd`, `u-opsd`, `lastopd`, `s2d-opd`, or `open-mopd`.
 - `read-lora` (2609.31600) is the active first hop for `task:lora-skill-composition` only. It does not supersede `lr-matters-lora` or `aqlora-q`.
+- `dn-mopd` (2609.35347) is an active domain-feedback-scale plug-in on labeled MOPD. It does not supersede `open-mopd` or `mopd-router`.
+- `cis-rl` (2609.32444) is an active MoE train–infer mismatch IS plug-in. It does not supersede `cispo`, `sapo`, or `miles`.
+- `lspd` (2609.35505) is an active sample-efficient / off-policy OPD plug-in. It does not supersede `opd`.
+- `eapo` (2609.33781) is an active entropy×sign exploration-credit plug-in. It does not supersede `cispo` or `cliff`.
+- `saki` (2609.36601) is an active coupling-routed teacher-guided OPD plug-in. It does not supersede `opd`, `tropd`, or `routeopd`.
+- `graft` (2609.37868) is an active multi-model all-fail salvage plug-in. It does not supersede `cispo`, `verigate`, or `miles`.
+- `pmopd` (2609.34605) is an active multi-teacher subspace-protection plug-in. It does not supersede `open-mopd` or `dn-mopd`.
 
 ---
 

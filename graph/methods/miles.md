@@ -38,11 +38,14 @@ do_not_use_for:
   - when: "full open post-train recipe / stage order / agentic RL infrastructure playbook"
     reason: "Miles is the production engine; Rufus-Air is the documented 8-stage slime recipe"
     use_instead: "method:rufus-air"
+  - when: "MoE RLVR train–infer engine mismatch (calibrated IS on log-odds displacement)"
+    reason: "Miles is the engine; CIS-RL is a mismatch-ratio plug-in inside a GRPO-family host"
+    use_instead: "method:cis-rl"
 assumptions:
   - "Frontier MoE post-train with a split rollout/train fleet. Paper case study: GLM-5.2 744B-A40B on 64 GB300 (32/32), Megatron trainer, optimizer-state streaming to disk."
   - "SGLang rollouts; Megatron or FSDP trainer. LoRA RL is Megatron-only in v0.1."
   - "Does not replace the train-kernel defaults run inside the stack (CISPO, OPD, Muon2)."
-last_reviewed: "2026-09-25"
+last_reviewed: "2026-09-30"
 papers:
   - paper:miles
 recipes:

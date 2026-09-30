@@ -16,6 +16,7 @@ out_of_scope:
   - "Multi-stage agent continual learning (ACLArena)"
   - "Category-aware SWE expert RL (Category-Aware SWE Experts)"
   - "Open 8-stage serial post-train recipe / stage order on slime (Rufus-Air)"
+  - "MoE train–infer mismatch IS correction (CIS-RL)"
 redirects:
   - when: "factory process / experiments-as-code / lineage rather than the RL engine"
     to: "task:industrial-model-building"
@@ -37,6 +38,8 @@ redirects:
     to: "task:swe-agent-category-expert-rl"
   - when: "full open post-train recipe / stage order / agentic RL infrastructure playbook"
     to: "method:rufus-air"
+  - when: "MoE RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not the production stack)"
+    to: "method:cis-rl"
 current_sota:
   - method: method:miles
     as_of: "2026-09-09"
@@ -56,7 +59,8 @@ methods:
   - method:aclarena
   - method:category-aware-swe-experts
   - method:rufus-air
-last_reviewed: "2026-09-25"
+  - method:cis-rl
+last_reviewed: "2026-09-30"
 tags:
   - systems
   - training-systems
@@ -83,3 +87,4 @@ Frontier post-training is a systems problem: multi-turn tool rollouts on trillio
 - **Not this task (multi-stage agent continual learning)**: `method:aclarena` on `task:agent-continual-learning`. Built on slime; not the production engine.
 - **Not this task (category-aware SWE expert RL)**: `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`.
 - **Optional open 8-stage serial recipe (not this engine default)**: `method:rufus-air` (`arXiv:2609.29421`). GLM-4.5-Air-Base SFT→Reasoning RL→Coding RL→IF RL→General/Coding/Search Agent→RLHF on Slime+SGLang+Megatron. Miles remains the production engine.
+- **Optional MoE train–infer mismatch plug-in (not this engine default)**: `method:cis-rl` (`arXiv:2609.32444`). Truncates log-odds displacement between infer and train engines. Does not replace Miles, SAPO, or CISPO.

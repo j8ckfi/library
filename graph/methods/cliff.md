@@ -19,6 +19,9 @@ do_not_use_for:
   - when: "you need a learned step-level reward model"
     reason: "Cliff uses an off-the-shelf teacher as a first-error locator, not a trained PRM"
     use_instead: "method:verigate"
+  - when: "asymmetric entropy×sign exploration credit with no teacher"
+    reason: "Cliff locates a first mistake with a teacher; EAPO redistributes group advantage by policy entropy"
+    use_instead: "method:eapo"
 assumptions:
   - "Host RLVR already samples a group and has a binary (or thresholded) outcome verifier."
   - "An off-the-shelf teacher can produce a reference solution and point at the first student mistake. If the teacher's own solution fails the verifier, fall back to vanilla GRPO for that group."

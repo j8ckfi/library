@@ -4,6 +4,11 @@ type: task
 title: "Mathematical and Code RL Reasoning (MoE Policies)"
 domain: "post-training"
 summary: "Reinforcement learning for large-scale sparse Mixture-of-Experts (MoE) reasoning models."
+redirects:
+  - when: "single-turn dense math/code Pass@1 RLVR"
+    to: "task:math-code-rl-dense"
+  - when: "MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not SAPO default)"
+    to: "method:cis-rl"
 current_sota:
   - method: method:sapo
     as_of: "2026-08-26"
@@ -20,7 +25,8 @@ methods:
   - method:rpb
   - method:esrl
   - method:bpo
-last_reviewed: "2026-09-23"
+  - method:cis-rl
+last_reviewed: "2026-09-30"
 tags:
   - post-training
   - reasoning
@@ -38,4 +44,5 @@ Training sparse Mixture-of-Experts policies with reinforcement learning where dy
 - **Omni / Talker**: **GSPO** (`method:gspo`) only if training Qwen3.5-Omni Talker (`paper:qwen35-omni`).
 - **Optional router soft-anchor**: `method:rpb` (`arXiv:2609.08115`). Active MoE post-train routing candidate. Does not replace SAPO.
 - **Optional expert-space rollout exploration**: `method:esrl` (`arXiv:2609.13058`). Perturb routing like temperature; replay expert IDs. Active beside SAPO. Does not replace SAPO.
+- **Optional train–infer mismatch correction**: `method:cis-rl` (`arXiv:2609.32444`) truncates log-odds displacement (confidence-dependent IS cap), not the raw ratio. Best 5-bench avg on three MoE models vs TIS/IcePop/KPop/Exact. Code: kzhao5/CIS-RL. Does not replace SAPO or CISPO.
 - **Not this task (critic-free PMD on dense math)**: `method:bpo` (`arXiv:2609.15987`) on `task:math-code-rl-dense`. Bake-off used Qwen3-30B-A3B-Base under a CISPO/GSPO/DPPO host; SAPO remains the MoE/VL default.

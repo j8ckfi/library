@@ -4,6 +4,12 @@ type: method
 title: "TrOPD (Trust-Region On-Policy Distillation)"
 category: "distillation"
 status: active
+sota_for: []
+supersedes: []
+do_not_use_for:
+  - when: "maximal-coupling-routed teacher supervision / TRB accept-correction routing"
+    reason: "TrOPD bounds OPD update divergence; SAKI realizes a KL-constrained behavior policy via maximal coupling"
+    use_instead: "method:saki"
 papers:
   - paper:tropd
 recipes:

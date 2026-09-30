@@ -22,6 +22,9 @@ do_not_use_for:
   - when: "verifiable labels exist and the goal is Pass@1 RLVR without a teacher"
     reason: "Labeled dense RLVR stays CISPO"
     use_instead: "method:cispo"
+  - when: "maximal-coupling-routed teacher supervision / TRB accept-correction routing"
+    reason: "RouteOPD is log-odds transport on sampled OPD; SAKI routes TRB coupling events"
+    use_instead: "method:saki"
 assumptions:
   - "White-box teacher and student share tokenizer IDs. Paper checks ordered vocab maps before token-level routing."
   - "Defaults: k=32, m=2, Bmin=log 1.2, Bmax=log 1.5, Huber κ=1. DAPO-Math-17K, Avg@16."

@@ -25,11 +25,17 @@ do_not_use_for:
   - when: "latent OPD collapse / last-layer crossfade"
     reason: "LastOPD is a latent-then-token schedule, not teacher routing"
     use_instead: "method:lastopd"
+  - when: "domain-feedback-scale calibration of labeled MOPD advantages"
+    reason: "MOPD-Router routes unlabeled pools per token; DN-MOPD rescales labeled-routing spread"
+    use_instead: "method:dn-mopd"
+  - when: "multi-teacher OPD subspace protection / task cycling"
+    reason: "MOPD-Router is token routing; PMOPD protects sequential block updates"
+    use_instead: "method:pmopd"
 assumptions:
   - "Sampled-token MOPD host. Teachers share a pre-RL base used by ExpertAlign. Paper: three Qwen3-4B-Non-Thinking RL specialists (math/code/IF); students Qwen3-1.7B and Qwen3-4B non-thinking."
   - "ExpertAlign default: top-k=16, alignment margin δ=1e-6, cosine weighting over the positive-alignment set. Empty set skips OPD at that token."
   - "Official code TURLEing/MOPD-Router (verl + run.sh) released as of 2026-09-28."
-last_reviewed: "2026-09-28"
+last_reviewed: "2026-09-30"
 papers:
   - paper:mopd-router
 recipes:

@@ -405,6 +405,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:all-zero-verifier-groups — All-Zero Verifier Groups & Process Supervision
 - **SOTA**: `method:verigate` `2605.30451` (as_of 2026-08-26) — All-Zero Verifier Group Benchmarks / Process Supervision: Default SOTA for verifier gating
+  - do not use when multi-model / all-fail group salvage by peer trajectory exchange → `method:graft`
 
 ### task:coding-agent-rl-environment-construction — Coding-Agent RL Environment Construction
 - **Scope**: Data and environment factories for coding-agent RL (explore → behavioral specs → execution-grounded tests → filter). First hop is CodeMidas. Not the SWE loop, not AppWorld coverage, not async stragglers, not a production trainer.
@@ -455,6 +456,9 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when Actor-then-Critic IS-aligned critic after axiomatic token credit (not CISPO default) → `method:pact`
   - do not use when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
   - do not use when structural credit split for tool-call vs natural-language-summary tokens (not Pass@1) → `task:tool-agent-segment-credit`
+  - do not use when asymmetric entropy×sign exploration credit (not Pass@1 default) → `method:eapo`
+  - do not use when MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement) → `method:cis-rl`
+  - do not use when multi-model / all-fail group salvage by peer trajectory exchange → `method:graft`
 - **Redirects**:
   - when outcome-only long-horizon interactive agent RL → `task:outcome-only-long-horizon-agent-rl`
   - when train asynchronous RL for a tool-use policy → `task:agentic-async-rl`
@@ -467,10 +471,17 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when Actor-then-Critic IS-aligned critic after axiomatic token credit (not CISPO default) → `method:pact`
   - when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
   - when structural credit split for tool-call vs natural-language-summary tokens (not Pass@1) → `task:tool-agent-segment-credit`
-- **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO); Live-web multi-hop search-agent training (Iris); Pass@K / coverage / no-backward (ES-reasoning / DATPO); Olympiad NL proofs / IMO TTC (Nemotron IMO Gold); Multimodal VL prompt scaffolding / online EPS curriculum (not dense text Pass@1); Multi-stage agent capability stacking / continual learning (ACLArena); Structural tool vs summary credit under GRPO (SLCA-GRPO)
+  - when MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not Pass@1 default) → `method:cis-rl`
+  - when asymmetric entropy×sign exploration credit (not CISPO default, not first-mistake Cliff) → `method:eapo`
+  - when multi-model / all-fail group salvage by peer trajectory exchange (not Pass@1 default) → `method:graft`
+- **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO); Live-web multi-hop search-agent training (Iris); Pass@K / coverage / no-backward (ES-reasoning / DATPO); Olympiad NL proofs / IMO TTC (Nemotron IMO Gold); Multimodal VL prompt scaffolding / online EPS curriculum (not dense text Pass@1); Multi-stage agent capability stacking / continual learning (ACLArena); Structural tool vs summary credit under GRPO (SLCA-GRPO); MoE train–infer engine mismatch IS (CIS-RL)
 
 ### task:math-code-rl-moe — Mathematical and Code RL Reasoning (MoE Policies)
 - **SOTA**: `method:sapo` `2511.20347` (as_of 2026-08-26) — Qwen3 MoE / MATH-500 MoE RL: Default SOTA for MoE/VL RL
+  - do not use when MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not SAPO default) → `method:cis-rl`
+- **Redirects**:
+  - when single-turn dense math/code Pass@1 RLVR → `task:math-code-rl-dense`
+  - when MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not SAPO default) → `method:cis-rl`
 
 ### task:mechanism-grounded-agentic-rl-env — Mechanism-Grounded Agentic RL Environment Synthesis
 - **Scope**: Env factories that start from solved mechanisms / hidden dynamics (VHD-Play). Not source-code coding env factories (CodeMidas), not AppWorld coverage, not async trainers.
@@ -585,14 +596,22 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when Actor-then-Critic IS-aligned critic after axiomatic token credit (not CISPO default) → `method:pact`
   - do not use when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
   - do not use when structural credit split for tool-call vs natural-language-summary tokens (not Pass@1) → `task:tool-agent-segment-credit`
+  - do not use when asymmetric entropy×sign exploration credit (not Pass@1 default) → `method:eapo`
+  - do not use when MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement) → `method:cis-rl`
+  - do not use when multi-model / all-fail group salvage by peer trajectory exchange → `method:graft`
 - **SOTA**: `method:sapo` `2511.20347` (as_of 2026-08-26) — Qwen MoE / VL Reasoning: SOTA for MoE/VL RL
+  - do not use when MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not SAPO default) → `method:cis-rl`
 
 ### task:student-distillation — Small Local Student Distillation from Strong Teacher
 - **SOTA**: `method:opd` `2604.13016` (as_of 2026-08-26) — GSM8k / HumanEval / MT-Bench Student Evaluation: Default SOTA for single-teacher student distillation
   - do not use when latent OPD collapse / last-layer crossfade into token OPD → `method:lastopd`
   - do not use when Direct-OPD / weak-to-strong policy-shift token selection by teacher–ref JSD → `method:s2d-opd`
+  - do not use when sample-efficient / off-policy OPD (Huber quadratic matching + replay) → `method:lspd`
+  - do not use when maximal-coupling-routed teacher supervision / TRB accept-correction routing → `method:saki`
 - **SOTA**: `method:open-mopd` `2608.19098` (as_of 2026-08-28) — Multi-Teacher Capability Integration (SmolLM3-3B Benchmark): 83.4% headroom recovery in a single deployable student
   - do not use when token-level ExpertAlign routing over unlabeled multi-teacher pools (no domain labels, no separate router train) → `method:mopd-router`
+  - do not use when domain-feedback-scale calibration of labeled MOPD advantages (not token-share budget) → `method:dn-mopd`
+  - do not use when multi-teacher OPD subspace protection / task cycling (not token-share) → `method:pmopd`
 - **Redirects**:
   - when privileged OPD TSD calibration (residual discrepancy during OPD, not teacher retirement) → `method:cal-opd`
   - when Adaptive Retirement of a privileged self-OPD teacher then pure agent RL → `task:outcome-only-long-horizon-agent-rl`
@@ -603,6 +622,10 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when latent OPD collapse / last-layer crossfade into token OPD → `method:lastopd`
   - when Direct-OPD / weak-to-strong policy-shift token selection by teacher–ref JSD → `method:s2d-opd`
   - when token-level ExpertAlign routing over unlabeled multi-teacher pools (no domain labels, no separate router train) → `method:mopd-router`
+  - when domain-feedback-scale calibration of labeled MOPD advantages (not token-share budget or ExpertAlign routing) → `method:dn-mopd`
+  - when sample-efficient / off-policy OPD (Huber quadratic student–teacher logp matching + replay) → `method:lspd`
+  - when maximal-coupling-routed teacher supervision / TRB accept-correction routing (not default OPD) → `method:saki`
+  - when multi-teacher OPD subspace protection / task cycling (not token-share or domain-scale) → `method:pmopd`
 
 ### task:swe-agent-category-expert-rl — SWE Agent Category-Expert RL
 - **Scope**: Category-aware expert RL plus label-routed integration inside repository-level SWE. First hop is Category-Aware SWE Experts. Not source-only env construction, not async stragglers, not the issue-to-patch harness loop, not the production engine.
@@ -814,6 +837,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
   - do not use when category see-saw on heterogeneous SWE RL → `task:swe-agent-category-expert-rl`
   - do not use when full open post-train recipe / stage order / agentic RL infrastructure playbook → `method:rufus-air`
+  - do not use when MoE RLVR train–infer engine mismatch (calibrated IS on log-odds displacement) → `method:cis-rl`
 - **Redirects**:
   - when factory process / experiments-as-code / lineage rather than the RL engine → `task:industrial-model-building`
   - when variable environment latency / async stragglers, not the production stack → `task:agentic-async-rl`
@@ -825,7 +849,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
   - when category see-saw on heterogeneous SWE RL → `task:swe-agent-category-expert-rl`
   - when full open post-train recipe / stage order / agentic RL infrastructure playbook → `method:rufus-air`
-- **Out of scope**: Industrial factory process / experiments-as-code / lineage (Poolside); Async straggler algorithm (SAO); Dense math/code Pass@1 loss (CISPO); ~7B dense pretrain optimizer (Muon2); SWE issue-to-patch harness (mini-SWE-agent); AppWorld outcome-only coverage (CANOPY); Full-pipeline FP8 clip calibration (Calibrated Clipping); Multi-stage agent continual learning (ACLArena); Category-aware SWE expert RL (Category-Aware SWE Experts); Open 8-stage serial post-train recipe / stage order on slime (Rufus-Air)
+  - when MoE RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not the production stack) → `method:cis-rl`
+- **Out of scope**: Industrial factory process / experiments-as-code / lineage (Poolside); Async straggler algorithm (SAO); Dense math/code Pass@1 loss (CISPO); ~7B dense pretrain optimizer (Muon2); SWE issue-to-patch harness (mini-SWE-agent); AppWorld outcome-only coverage (CANOPY); Full-pipeline FP8 clip calibration (Calibrated Clipping); Multi-stage agent continual learning (ACLArena); Category-aware SWE expert RL (Category-Aware SWE Experts); Open 8-stage serial post-train recipe / stage order on slime (Rufus-Air); MoE train–infer mismatch IS correction (CIS-RL)
 
 ### task:industrial-model-building — Industrial Model Building (Model Factory Process)
 - **Scope**: Factory process: experiments-as-code, lineage, streamed mixes, shared train+infer codebase. Not the RL post-train engine and not a train kernel.

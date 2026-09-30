@@ -11,7 +11,13 @@ do_not_use_for:
   - when: "token-level ExpertAlign routing over unlabeled multi-teacher pools (no domain labels, no separate router train)"
     reason: "Open-MOPD is gap-aware token-share balancing on labeled domain teachers; MOPD-Router routes the full pool per token"
     use_instead: "method:mopd-router"
-last_reviewed: "2026-09-28"
+  - when: "domain-feedback-scale calibration of labeled MOPD advantages (not token-share budget)"
+    reason: "Open-MOPD allocates budget from remaining gap / token share; DN-MOPD rescales log-ratio spread on labeled routing"
+    use_instead: "method:dn-mopd"
+  - when: "multi-teacher OPD subspace protection / task cycling (not token-share)"
+    reason: "Open-MOPD is the multi-teacher default; PMOPD projects interfering update directions"
+    use_instead: "method:pmopd"
+last_reviewed: "2026-09-30"
 papers:
   - paper:open-mopd
 recipes:

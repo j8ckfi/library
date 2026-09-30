@@ -15,7 +15,13 @@ do_not_use_for:
   - when: "Direct-OPD / weak-to-strong policy-shift token selection by teacher–ref JSD"
     reason: "OPD is strong-teacher matching; S2D-OPD is a Direct-OPD keep-mask"
     use_instead: "method:s2d-opd"
-last_reviewed: "2026-09-25"
+  - when: "sample-efficient / off-policy OPD (Huber quadratic matching + replay)"
+    reason: "OPD remains the matching default; LSPD is least-square + entropy with optional replay"
+    use_instead: "method:lspd"
+  - when: "maximal-coupling-routed teacher supervision / TRB accept-correction routing"
+    reason: "OPD is student-rollout reverse-KL; SAKI routes TRB coupling events"
+    use_instead: "method:saki"
+last_reviewed: "2026-09-30"
 papers:
   - paper:opd
   - paper:opd-one-example

@@ -14,6 +14,7 @@ out_of_scope:
   - "Multimodal VL prompt scaffolding / online EPS curriculum (not dense text Pass@1)"
   - "Multi-stage agent capability stacking / continual learning (ACLArena)"
   - "Structural tool vs summary credit under GRPO (SLCA-GRPO)"
+  - "MoE train–infer engine mismatch IS (CIS-RL)"
 redirects:
   - when: "outcome-only long-horizon interactive agent RL"
     to: "task:outcome-only-long-horizon-agent-rl"
@@ -37,6 +38,12 @@ redirects:
     to: "task:agent-continual-learning"
   - when: "structural credit split for tool-call vs natural-language-summary tokens (not Pass@1)"
     to: "task:tool-agent-segment-credit"
+  - when: "MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not Pass@1 default)"
+    to: "method:cis-rl"
+  - when: "asymmetric entropy×sign exploration credit (not CISPO default, not first-mistake Cliff)"
+    to: "method:eapo"
+  - when: "multi-model / all-fail group salvage by peer trajectory exchange (not Pass@1 default)"
+    to: "method:graft"
 current_sota:
   - method: method:cispo
     as_of: "2026-08-26"
@@ -81,7 +88,10 @@ methods:
   - method:aclarena
   - method:pact
   - method:slca-grpo
-last_reviewed: "2026-09-25"
+  - method:eapo
+  - method:graft
+  - method:cis-rl
+last_reviewed: "2026-09-30"
 tags:
   - post-training
   - reasoning
@@ -123,6 +133,9 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Optional hybrid Think/NoThink length control**: `method:when2think` (`arXiv:2609.19671`) IDAC from offline reference accuracy/token stats. AIME24 Pass@3 +10.0% with tokens −27.9%. Does not replace CISPO.
 - **Optional critic-free PMD candidate (not this Pass@1 default)**: `method:bpo` (`arXiv:2609.15987`) Bellman telescoping of Policy Mirror Descent; complementary-token mismatch weight instead of an IS ratio. Peak AIME24–26 Avg@32 50.5% vs CISPO 47.4% on Qwen3-30B-A3B-Base + DAPO-Math-17k. No public code. Does not replace CISPO.
 - **Optional Actor-then-Critic IS (not this Pass@1 default)**: `method:pact` (`arXiv:2609.26355`) on `task:token-level-critic-rl`. Unique token credit then Actor-then-Critic with critic IS. Does not replace CISPO.
+- **Optional entropy-guided exploration credit**: `method:eapo` (`arXiv:2609.33781`) asymmetric entropy×sign advantage redistribution; no auxiliary model. Code: wgcyeo/EAPO. Does not replace CISPO or Cliff.
+- **Optional multi-model all-fail salvage**: `method:graft` (`arXiv:2609.37868`) replaces all-fail GRPO groups with mixed peer groups (source advantages + compatibility / token IS clip). Distinct from VeriGate. No public GitHub. Does not replace CISPO.
+- **Not this task (MoE train–infer mismatch)**: `method:cis-rl` (`arXiv:2609.32444`) on `task:math-code-rl-moe`. Truncates log-odds displacement, not the CISPO Pass@1 default.
 - **Not this task (structural tool/summary credit)**: `method:slca-grpo` on `task:tool-agent-segment-credit`. Does not replace CISPO.
 - **Not this task (multi-stage agent continual learning)**: `method:aclarena` on `task:agent-continual-learning`. Sequential stage stacking, not a Pass@1 loss.
 - **L2 in-language reasoning SFT (not this Pass@1 task)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.

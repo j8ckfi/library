@@ -6,6 +6,52 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-09-30 — weekday SOTA sweep (DN-MOPD, CIS-RL, LSPD, EAPO, SAKI, GRAFT, PMOPD)
+- MUST 1–4 plus in-scope 5–7. No new task. No current_sota retarget of OPD / Open-MOPD / VISTA / lr-matters-lora / CISPO / Miles / SAPO / VeriGate.
+- Window: 2026-09-30 Librarian weekday sweep after PR 33 watermark 2609.31600. New arXiv 2609.35347, 2609.32444, 2609.35505, 2609.33781, 2609.36601, 2609.37868, 2609.34605. SKIP HDL 2609.36864, KL-free OPD 2609.33791.
+
+### 2026-09-30 — ingest method:dn-mopd (active on task:student-distillation; does not supersede method:open-mopd / method:mopd-router)
+- Added paper:dn-mopd (2609.35347), method:dn-mopd, recipe:dn-mopd (`code_status: released`; `repo_url: https://github.com/LiXin97/DN-MOPD`). Reverse redirect from student-distillation for domain-feedback-scale calibration of labeled MOPD advantages.
+- Status active (`sota_for: []`). Keeps label routing; rescales each domain's OPD advantages by batch log-ratio std (clip 0.25–4). IF log-ratios 2.3–4.4× pooled; 94% of 4B combined gradient.
+- Evidence: Qwen3.5 9B/4B/2B six-task Total 59.6/52.5/29.0 vs label MOPD 58.4/50.3/26.6; 16K +1.17–2.36, 8K +2.47–3.08 (arXiv:2609.35347); verified: true; evidence_level: preprint.
+- Scope checks: Open-MOPD remains multi-teacher default; MOPD-Router remains unlabeled token routing; OPD remains single-teacher.
+
+### 2026-09-30 — ingest method:cis-rl (active on task:math-code-rl-moe; does not supersede method:cispo / method:sapo / method:miles)
+- Added paper:cis-rl (2609.32444), method:cis-rl, recipe:cis-rl (`code_status: released`; `repo_url: https://github.com/kzhao5/CIS-RL`). Reverse redirects from math-code-rl-dense / math-code-rl-moe / frontier-rl-posttrain-stack for MoE train–infer mismatch.
+- Status active (`sota_for: []`). Truncates log-odds displacement, mapping to confidence-dependent cap \(k\le 1+\lambda(1-p)\). Slug `cis-rl` avoids CISPO collision.
+- Evidence: Qwen1.5-MoE 5-bench avg 34.78 vs IcePop 34.18 / TIS 31.40; Qwen3-30B-A3B 69.88 vs IcePop 68.99 / GSPO 69.23 (arXiv:2609.32444); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; SAPO remains MoE/VL loss; Miles remains the engine; GAPO remains scarcity clip width.
+
+### 2026-09-30 — ingest method:lspd (active on task:student-distillation; does not supersede method:opd)
+- Added paper:lspd (2609.35505), method:lspd, recipe:lspd (`code_status: released`; `repo_url: https://github.com/UNCSciML/LSPD`). Reverse redirect for sample-efficient / off-policy OPD.
+- Status active (`sota_for: []`). Reverse-KL OPD as KL-regularized RL; Huber quadratic student–teacher logp matching + entropy; LSPD-RB replay.
+- Evidence: Avg@16 31.60 (+1.59 vs baselines); LSPD-RB 31.51 Avg@16 / 54.86 Pass@16 at ~10 steps / ~25% rollouts (arXiv:2609.35505); verified: true; evidence_level: preprint.
+- Scope checks: OPD remains matching default; Open-MOPD remains multi-teacher; CISPO remains Pass@1.
+
+### 2026-09-30 — ingest method:eapo (active on task:math-code-rl-dense; does not supersede method:cispo / method:cliff)
+- Added paper:eapo (2609.33781), method:eapo, recipe:eapo (`code_status: released`; `repo_url: https://github.com/wgcyeo/EAPO`; project https://eapo-explore.github.io). Reverse redirect for asymmetric entropy×sign exploration credit.
+- Status active (`sota_for: []`). Reinforce high-entropy tokens on success, penalize low-entropy on failure; no auxiliary model.
+- Evidence: Qwen3-4B-Base mean Avg@32 31.0 (+5.6 vs EntropyAdv); 8B-Base 34.0 (+4.3 vs 80/20) (arXiv:2609.33781); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; Cliff remains first-mistake teacher credit; VeriGate remains PRM gating.
+
+### 2026-09-30 — ingest method:saki (active on task:student-distillation; does not supersede method:opd / method:tropd / method:routeopd)
+- Added paper:saki (2609.36601), method:saki, recipe:saki (`code_status: none`; `repo_url: none found`). Reverse redirect for maximal-coupling-routed teacher supervision.
+- Status active (`sota_for: []`). TRB + maximal coupling: accept keeps reverse-KL, correction is teacher top-1 NLL. Meituan / KTH.
+- Evidence: 1.7B Mean@8/Pass@8 29.0/47.5 vs TRB 27.9/44.6; 4.22× speculative throughput (arXiv:2609.36601); verified: true; evidence_level: preprint.
+- Scope checks: OPD remains student-rollout matching; TrOPD remains update trust-region; RouteOPD remains log-odds transport.
+
+### 2026-09-30 — ingest method:graft (active on task:math-code-rl-dense; does not supersede method:cispo / method:verigate / method:miles)
+- Added paper:graft (2609.37868), method:graft, recipe:graft (`code_status: none`; `repo_url: none found`). Reverse redirects from math-code-rl-dense and all-zero-verifier-groups for peer all-fail salvage.
+- Status active (`sota_for: []`). Replace receiver all-fail groups with mixed peer groups; source advantages + compatibility / token IS clip. Distinct from VeriGate.
+- Evidence: +2.1 avg over GRPO n=8 (SmolLM3 32.60→37.06; Qwen3-1.7B 31.20→33.44); stored peer +1.8 (arXiv:2609.37868); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; VeriGate remains PRM gating; Miles remains the engine.
+
+### 2026-09-30 — ingest method:pmopd (active on task:student-distillation; does not supersede method:open-mopd / method:dn-mopd)
+- Added paper:pmopd (2609.34605), method:pmopd, recipe:pmopd (`code_status: none`; `repo_url: none found`). Reverse redirect for multi-teacher OPD subspace protection / cycling.
+- Status active (`sota_for: []`). Dual projection of gradients and Adafactor updates out of protected task SVD bases; conflict probe + cycling. Ant Group.
+- Evidence: Qwen2.5-7B 66.97 vs MOPD 64.43 (+2.54) vs paper Open-MOPD 63.54; Llama-3.1-8B 41.04 vs 38.95 (arXiv:2609.34605); verified: true; evidence_level: preprint.
+- Scope checks: Open-MOPD remains multi-teacher default. Paper Open-MOPD 63.54 is NOT the library 83.4% headroom-recovery bake-off. DN-MOPD remains domain-scale calibration.
+
 ### 2026-09-28 — weekday SOTA sweep (MOPD-Router, DCE+SRCL, READ)
 - MUST 1–3. One new task (`task:lora-skill-composition`). No current_sota retarget of CISPO / CANOPY / SAO / OPD / Open-MOPD / VISTA / omp2-harness / TTPO / Miles / ACE / BPCO / CodeMidas / DiffusionOPSD / Self-OPD / mini-SWE-agent / Muon2 / NeoHorse-1 / Claude computer-use / RecreationWorld / Harness-Zero / Jev-Mem / RRSI / IER-OPD / Critical-State RL / PACT / JitMem / VHD-Play / RewardVerse / BPO / ACLArena / Category-Aware SWE / AIDE2 / Rufus-Air / LastOPD / SLCA-GRPO / S2D-OPD / lr-matters-lora / AQLoRA-Q.
 - Window: America/Denver 2026-09-28 Librarian weekday sweep. New arXiv 2609.30837, 2609.30652, 2609.31600.

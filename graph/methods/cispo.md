@@ -31,7 +31,13 @@ do_not_use_for:
   - when: "multi-model / all-fail group salvage by peer trajectory exchange"
     reason: "CISPO remains Pass@1; GRAFT replaces all-fail groups with peer traces"
     use_instead: "method:graft"
-last_reviewed: "2026-09-30"
+  - when: "length-scaling tax under RLVR; route solved prompts to EMA OPD"
+    reason: "CISPO remains Pass@1; LSD distills solved groups against an EMA of the online policy"
+    use_instead: "method:lsd"
+  - when: "branchy RLVR token cost; hindsight-divergence prefix reuse"
+    reason: "CISPO remains Pass@1; HDL reuses prefixes inside a GRPO-family group"
+    use_instead: "method:hdl"
+last_reviewed: "2026-10-01"
 papers:
   - paper:minimax-m1
   - paper:scalerl

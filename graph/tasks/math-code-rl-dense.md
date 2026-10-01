@@ -44,6 +44,10 @@ redirects:
     to: "method:eapo"
   - when: "multi-model / all-fail group salvage by peer trajectory exchange (not Pass@1 default)"
     to: "method:graft"
+  - when: "length-scaling tax under RLVR; route solved prompts to EMA OPD"
+    to: "method:lsd"
+  - when: "branchy RLVR token cost; hindsight-divergence prefix reuse"
+    to: "method:hdl"
 current_sota:
   - method: method:cispo
     as_of: "2026-08-26"
@@ -91,7 +95,9 @@ methods:
   - method:eapo
   - method:graft
   - method:cis-rl
-last_reviewed: "2026-09-30"
+  - method:lsd
+  - method:hdl
+last_reviewed: "2026-10-01"
 tags:
   - post-training
   - reasoning
@@ -135,6 +141,8 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Optional Actor-then-Critic IS (not this Pass@1 default)**: `method:pact` (`arXiv:2609.26355`) on `task:token-level-critic-rl`. Unique token credit then Actor-then-Critic with critic IS. Does not replace CISPO.
 - **Optional entropy-guided exploration credit**: `method:eapo` (`arXiv:2609.33781`) asymmetric entropy×sign advantage redistribution; no auxiliary model. Code: wgcyeo/EAPO. Does not replace CISPO or Cliff.
 - **Optional multi-model all-fail salvage**: `method:graft` (`arXiv:2609.37868`) replaces all-fail GRPO groups with mixed peer groups (source advantages + compatibility / token IS clip). Distinct from VeriGate. No public GitHub. Does not replace CISPO.
+- **Optional length-scaling tax mix**: `method:lsd` (`arXiv:2609.38854`) routes solved prompt groups to EMA on-policy distillation and keeps RLVR on unsolved groups. LST 19.0%→−3.7% single-turn, 31.4%→13.7% agentic. No public GitHub. Does not replace CISPO or Miles.
+- **Optional hindsight-divergence prefix reuse**: `method:hdl` (`arXiv:2609.36864`) branches GRPO groups at hindsight logp-change positions. Up to 2.5× fewer tokens / 1.8× faster rollouts vs GRPO; agent gains including ScienceWorld. Slime-based, no dedicated repo. Does not replace CISPO or GRAFT.
 - **Not this task (MoE train–infer mismatch)**: `method:cis-rl` (`arXiv:2609.32444`) on `task:math-code-rl-moe`. Truncates log-odds displacement, not the CISPO Pass@1 default.
 - **Not this task (structural tool/summary credit)**: `method:slca-grpo` on `task:tool-agent-segment-credit`. Does not replace CISPO.
 - **Not this task (multi-stage agent continual learning)**: `method:aclarena` on `task:agent-continual-learning`. Sequential stage stacking, not a Pass@1 loss.

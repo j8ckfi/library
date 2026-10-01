@@ -11,6 +11,8 @@ redirects:
     to: "task:outcome-only-long-horizon-agent-rl"
   - when: "privileged teacher co-evolves with the student (DCE) plus shorter verified rewrites (SRCL)"
     to: "method:dce-srcl"
+  - when: "privileged OPSD gains collapse at scale; verified on-policy scaffolds"
+    to: "method:oasis"
 current_sota:
   - method: method:vista
     as_of: "2026-08-31"
@@ -31,7 +33,8 @@ methods:
   - method:retireopd
   - method:cal-opd
   - method:dce-srcl
-last_reviewed: "2026-09-28"
+  - method:oasis
+last_reviewed: "2026-10-01"
 tags:
   - post-training
   - distillation
@@ -61,3 +64,4 @@ Train a problem-only student on its own rollouts using dense token-level targets
 - **Not this task (agent RL retirement)**: `method:retireopd` (`arXiv:2609.20784`) on `task:outcome-only-long-horizon-agent-rl` — Adaptive Retirement of a privileged self-OPD teacher then pure RL on ALFWorld/WebShop. Does not replace VISTA.
 - **Optional TSD calibration (not this first hop)**: `method:cal-opd` (`arXiv:2609.21619`) on `task:student-distillation` — residual discrepancy beyond a probed teacher-self-deviation region. Signal calibration during OPD, not a teacher update. Does not replace VISTA or RetireOPD.
 - **Optional DCE+SRCL co-evolution (not this first hop)**: `method:dce-srcl` (`arXiv:2609.30652`). Privileged teacher refreshes from the student each round; SRCL adds shorter verified rewrites. Qwen3-8B 65.97% Average@12 vs **their** OPSD ~30%. That baseline is **not** the library VISTA bake-off (64.8→66.9). Status active; bake before any retarget. Does not replace VISTA, OPD, Self-OPD, LastOPD, S2D-OPD, or Open-MOPD.
+- **Optional scale-collapse scaffold fix (not this first hop)**: `method:oasis` (`arXiv:2609.37915`). Supervise verified on-policy scaffolds; teacher context is another same-problem rollout (answer labels only). OPSD gains collapse with scale; OASIS stays ~+3 pts and beats OPSD by +3.05 at 8B. Does not replace VISTA or u-OPSD.

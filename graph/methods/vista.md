@@ -7,6 +7,11 @@ status: sota
 sota_for:
   - task:privileged-teacher-opsd
 supersedes: []
+do_not_use_for:
+  - when: "privileged OPSD gains collapse at scale; verified on-policy scaffolds"
+    reason: "VISTA remains privileged-OPSD SOTA; OASIS supervises verified on-policy scaffolds with another rollout as teacher context"
+    use_instead: "method:oasis"
+last_reviewed: "2026-10-01"
 papers:
   - paper:vista
 recipes:
@@ -67,6 +72,7 @@ VISTA keeps the standard on-policy self-distillation (OPSD; Zhao et al., arXiv:2
 - `method:nsd` (`arXiv:2609.11699`) is the actionable anti-collapse trainer (diverge from a negative condition). Does not replace VISTA.
 - TSD calibration of teacher–student discrepancy is `method:cal-opd` (residual advantage during OPD). Not a teacher update and not Adaptive Retirement. Does not replace VISTA.
 - Active sibling `method:dce-srcl` (`arXiv:2609.30652`) co-evolves the privileged teacher (DCE) and adds shorter verified rewrites (SRCL). That paper's OPSD baseline (~30% Average@12, Qwen3-8B non-thinking) is **not** comparable to this library's VISTA bake-off (64.8→66.9). Does **not** enter `current_sota`. Bake before any future retarget.
+- Active scale-collapse scaffold fix `method:oasis` (`arXiv:2609.37915`) supervises verified on-policy scaffolds; teacher context is another same-problem rollout. Does **not** enter `current_sota`. Not a VISTA bake-off retarget.
 
 ## Gotchas & Failure Modes
 - Requires gold solutions plus a rule-based outcome verifier. Without both, this is the wrong shelf (`method:u-opsd` or `method:ttpo`).

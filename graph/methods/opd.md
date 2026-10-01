@@ -21,7 +21,22 @@ do_not_use_for:
   - when: "maximal-coupling-routed teacher supervision / TRB accept-correction routing"
     reason: "OPD is student-rollout reverse-KL; SAKI routes TRB coupling events"
     use_instead: "method:saki"
-last_reviewed: "2026-09-30"
+  - when: "adapting the OPD teacher on student prefixes / off-policy teacher, not frozen-teacher OPD"
+    reason: "OPD keeps a frozen teacher; SCOUT RL-adapts the teacher on student prefixes"
+    use_instead: "method:scout"
+  - when: "distilling RL gains via representation residuals rather than logits"
+    reason: "OPD is reverse-KL matching; RIDE extrapolates RL-induced hidden-state residuals"
+    use_instead: "method:ride"
+  - when: "multi-task OPD and teacher can be wrong on some tasks"
+    reason: "OPD ignores joint outcomes; DuoOPD gates direction and teacher support from who was correct"
+    use_instead: "method:duoopd"
+  - when: "multi-turn agent OPD at pivotal early mistakes (prevent reverse-KL + recover forward-KL)"
+    reason: "OPD is matching; PivotOPD is prevent+recover at pivotal turns"
+    use_instead: "method:pivotopd"
+  - when: "act-first / reason-later multi-turn OPD (inverse dynamics + async full-response distill)"
+    reason: "OPD waits for think-then-act; ActFirst-OPD acts via inverse dynamics then distills asynchronously"
+    use_instead: "method:actfirst-opd"
+last_reviewed: "2026-10-01"
 papers:
   - paper:opd
   - paper:opd-one-example

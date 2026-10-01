@@ -37,7 +37,12 @@ redirects:
     to: "task:coding-agent-rl-environment-construction"
   - when: "multi-stage agent capability stacking / continual learning"
     to: "task:agent-continual-learning"
-last_reviewed: "2026-09-23"
+  - when: "multi-turn agent OPD at pivotal early mistakes (prevent reverse-KL + recover forward-KL)"
+    to: "method:pivotopd"
+  - when: "act-first / reason-later multi-turn OPD (inverse dynamics + async full-response distill)"
+    to: "method:actfirst-opd"
+  - when: "branchy RLVR token cost; hindsight-divergence prefix reuse"
+    to: "method:hdl"
 current_sota:
   - method: method:canopy
     as_of: "2026-09-04"
@@ -60,6 +65,10 @@ methods:
   - method:actobs
   - method:codemidas
   - method:aclarena
+  - method:pivotopd
+  - method:actfirst-opd
+  - method:hdl
+last_reviewed: "2026-10-01"
 tags:
   - post-training
   - agentic
@@ -93,3 +102,6 @@ Two siblings share this task and are not substitutes:
 - **Related SFT init (not this first hop)**: `method:actobs` (`arXiv:2609.20715`) on `task:agentic-async-rl` — observation-token SFT before GRPO. Does not replace CANOPY.
 - **Not this task (coding-agent RL env construction)**: `method:codemidas` (`arXiv:2609.22068`) on `task:coding-agent-rl-environment-construction` — source-code-only env factory then GRPO. Does not replace CANOPY.
 - **Not this task (multi-stage agent continual learning)**: `method:aclarena` (`arXiv:2609.23989`) on `task:agent-continual-learning`. Sequential capability stacking, not AppWorld TGC.
+- **Optional multi-turn agent OPD at pivotal mistakes (not this first hop)**: `method:pivotopd` (`arXiv:2609.40285`). Reverse-KL prevent + forward-KL recovery. Strongest average on ALFWorld/WebShop/Search-QA; +3.2 SWE-Bench Verified. Does not replace CANOPY or OPD.
+- **Optional act-first multi-turn OPD (not this first hop)**: `method:actfirst-opd` (`arXiv:2609.36608`). Inverse dynamics + async full-response distill. 2.3× / 1.8× / 4.9× wall-clock vs Vanilla OPD on ALFWorld/WebShop/ScienceWorld. Does not replace CANOPY or OPD.
+- **Related branchy RLVR token-cost plug-in (not this first hop)**: `method:hdl` (`arXiv:2609.36864`) on `task:math-code-rl-dense`. Hindsight-divergence prefix reuse; ScienceWorld-style agent gains. Does not replace CANOPY.

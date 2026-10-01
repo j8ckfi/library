@@ -19,11 +19,14 @@ do_not_use_for:
   - when: "single-teacher matching distillation from a strong frozen teacher"
     reason: "OPD remains the single-teacher distill default"
     use_instead: "method:opd"
+  - when: "multi-task OPD and teacher can be wrong on some tasks"
+    reason: "PMOPD protects multi-teacher subspaces; DuoOPD gates one teacher's weights by joint outcomes"
+    use_instead: "method:duoopd"
 assumptions:
   - "Sequential (cycled) multi-teacher OPD on shared full-parameter students. Paper: Code/Reason/Math teachers, Qwen2.5-7B and Llama-3.1-8B, Adafactor, K=16 SVD, four cycles, probe order Code→Reason→Math."
   - "Subspace memory from cumulative block ΔW per weight matrix; project gradient then the preconditioned update. Rebuild memory each cycle."
   - "No public GitHub as of 2026-09-30. Paper Open-MOPD 63.54 is not the library 83.4% headroom-recovery bake-off."
-last_reviewed: "2026-09-30"
+last_reviewed: "2026-10-01"
 papers:
   - paper:pmopd
 recipes:
@@ -64,10 +67,10 @@ OPD block displacements \(\Delta W^t=W^{\mathrm{after}}-W^{\mathrm{before}}\) co
 - Labeled multi-teacher OPD on shared full weights where mixing or sequential blocks seesaw capabilities, and you can afford SVD memories per matrix.
 
 ## When NOT to Use
-- Token-share / gap-aware budget → `method:open-mopd`. Domain log-ratio scale → `method:dn-mopd`. Unlabeled token routing → `method:mopd-router`. Single-teacher matching → `method:opd`.
+- Token-share / gap-aware budget → `method:open-mopd`. Domain log-ratio scale → `method:dn-mopd`. Unlabeled token routing → `method:mopd-router`. Single-teacher matching → `method:opd`. Joint-outcome multi-task gating → `method:duoopd`.
 
 ## Relation to Existing SOTA
-- Active plug-in on `task:student-distillation` beside `method:open-mopd` and `method:dn-mopd`. Does **not** enter `current_sota`. Does **not** replace Open-MOPD, DN-MOPD, MOPD-Router, or OPD.
+- Active plug-in on `task:student-distillation` beside `method:open-mopd` and `method:dn-mopd`. Does **not** enter `current_sota`. Does **not** replace Open-MOPD, DN-MOPD, MOPD-Router, OPD, or DuoOPD.
 
 ## Gotchas & Failure Modes
 - Gradient-only projection is incomplete under Adafactor/Adam-style preconditioning. Dual projection is the method.

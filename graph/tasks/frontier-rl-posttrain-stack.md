@@ -40,6 +40,8 @@ redirects:
     to: "method:rufus-air"
   - when: "MoE RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not the production stack)"
     to: "method:cis-rl"
+  - when: "length-scaling tax under RLVR; route solved prompts to EMA OPD"
+    to: "method:lsd"
 current_sota:
   - method: method:miles
     as_of: "2026-09-09"
@@ -60,7 +62,8 @@ methods:
   - method:category-aware-swe-experts
   - method:rufus-air
   - method:cis-rl
-last_reviewed: "2026-09-30"
+  - method:lsd
+last_reviewed: "2026-10-01"
 tags:
   - systems
   - training-systems
@@ -88,3 +91,4 @@ Frontier post-training is a systems problem: multi-turn tool rollouts on trillio
 - **Not this task (category-aware SWE expert RL)**: `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`.
 - **Optional open 8-stage serial recipe (not this engine default)**: `method:rufus-air` (`arXiv:2609.29421`). GLM-4.5-Air-Base SFT→Reasoning RL→Coding RL→IF RL→General/Coding/Search Agent→RLHF on Slime+SGLang+Megatron. Miles remains the production engine.
 - **Optional MoE train–infer mismatch plug-in (not this engine default)**: `method:cis-rl` (`arXiv:2609.32444`). Truncates log-odds displacement between infer and train engines. Does not replace Miles, SAPO, or CISPO.
+- **Optional length-scaling tax mix (not this engine default)**: `method:lsd` (`arXiv:2609.38854`) on `task:math-code-rl-dense`. Routes solved groups to EMA OPD. Does not replace Miles or CISPO.

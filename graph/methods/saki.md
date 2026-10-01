@@ -19,11 +19,14 @@ do_not_use_for:
   - when: "verifiable labels exist and the goal is Pass@1 RLVR without a teacher"
     reason: "Labeled dense RLVR stays CISPO"
     use_instead: "method:cispo"
+  - when: "adapting the OPD teacher on student prefixes / off-policy teacher, not frozen-teacher OPD"
+    reason: "SAKI gates student-side accept/correction for a frozen teacher; SCOUT trains the teacher with RL on student prefixes"
+    use_instead: "method:scout"
 assumptions:
   - "White-box teacher and student share a tokenizer. TRB constructs q_t with D_KL(q_t‖p_t)≤ε. Paper: 0.6B and 1.7B students, seven math benches, Mean@8/Pass@8."
   - "Maximal coupling: accept keeps sampled reverse-KL; correction is NLL on teacher top-1. Residual token continues the rollout."
   - "No public GitHub as of 2026-09-30."
-last_reviewed: "2026-09-30"
+last_reviewed: "2026-10-01"
 papers:
   - paper:saki
 recipes:

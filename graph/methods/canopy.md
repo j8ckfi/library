@@ -38,11 +38,20 @@ do_not_use_for:
   - when: "multi-stage agent capability stacking / continual learning"
     reason: "CANOPY is AppWorld TGC coverage; ACLArena stacks sequential post-train stages"
     use_instead: "task:agent-continual-learning"
+  - when: "multi-turn agent OPD at pivotal early mistakes (prevent reverse-KL + recover forward-KL)"
+    reason: "CANOPY is AppWorld TGC coverage; PivotOPD is prevent+recover multi-turn OPD"
+    use_instead: "method:pivotopd"
+  - when: "act-first / reason-later multi-turn OPD (inverse dynamics + async full-response distill)"
+    reason: "CANOPY is AppWorld TGC coverage; ActFirst-OPD is a wall-clock acting/reasoning split"
+    use_instead: "method:actfirst-opd"
+  - when: "branchy RLVR token cost; hindsight-divergence prefix reuse"
+    reason: "CANOPY is AppWorld TGC coverage; HDL reuses prefixes inside a GRPO-family group"
+    use_instead: "method:hdl"
 assumptions:
   - "A held-out unit-test / patch verifier exists. Sparse fully-correct reward, not pass-fraction."
   - "Paper: Qwen3-14B on AppWorld train split (90 tasks), veRL, n=32, 50 turns / 32k train, 100 turns / 61k test, KL β=1e-4, lr 3e-6, 90 steps, hardest tier kept."
   - "SWE transfer retunes n=16, KL 1e-2, 80 turns / 36k, and -0.2 for no-patch terminals. Not a literal hyperparameter copy."
-last_reviewed: "2026-09-23"
+last_reviewed: "2026-10-01"
 papers:
   - paper:canopy
 recipes:
@@ -97,7 +106,9 @@ Test-time budget transfer raises turns and context without search. Differentiate
 - Multi-turn trainability diagnostic -> `method:critical-state-rl`.
 - Harness distillation into weights -> `method:harness-zero`.
 - Multi-stage agent continual learning -> `method:aclarena`.
-- Multi-stage agent continual learning -> `method:aclarena`.
+- Pivotal-mistake multi-turn OPD -> `method:pivotopd`.
+- Act-first multi-turn OPD -> `method:actfirst-opd`.
+- Hindsight-divergence prefix reuse -> `method:hdl`.
 
 ## Relation to Existing SOTA
 - SOTA only for `task:outcome-only-long-horizon-agent-rl`. Does **not** supersede `method:sao`, `method:foldgrpo`, `method:cispo`, `method:mini-swe-agent`, `method:omp2-harness`, or `method:draco`.

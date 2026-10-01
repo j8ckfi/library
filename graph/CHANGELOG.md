@@ -6,6 +6,58 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-10-01 — weekday SOTA sweep (SCOUT, PivotOPD, OASIS, LSD, HDL, RIDE, DuoOPD, ActFirst-OPD)
+- Eight active plug-ins. No new task. No current_sota retarget of OPD / Open-MOPD / VISTA / CISPO / Miles / CANOPY / mini-SWE-agent / SAPO / VeriGate / u-OPSD / TrOPD / GRAFT / PMOPD.
+- Window: 2026-10-01 Librarian weekday sweep after PR 34 watermark 2609.37868. New arXiv 2609.38360, 2609.40285, 2609.37915, 2609.38854, 2609.36864, 2609.36484, 2609.33711, 2609.36608. HDL 2609.36864 was SKIP on 2026-09-30 and is ingested here.
+
+### 2026-10-01 — ingest method:scout (active on task:student-distillation; does not supersede method:opd / method:tropd)
+- Added paper:scout (2609.38360), method:scout, recipe:scout (`code_status: none`; `repo_url: none found`). Reverse redirect for adapting the OPD teacher on student prefixes / off-policy teacher.
+- Status active (`sota_for: []`). Keeps student reverse-KL OPD; periodically RL-adapts the teacher on student-generated prefixes. Complementary to TrOPD / SAKI student-side gating.
+- Evidence: +1.2–2.6 math / +3.1 code (56.6→59.7) over frozen-teacher OPD (arXiv:2609.38360); verified: true; evidence_level: preprint.
+- Scope checks: OPD remains frozen-teacher matching; TrOPD remains student-side trust-region; SAKI remains coupling-routed frozen-teacher modes; VISTA remains privileged-OPSD.
+
+### 2026-10-01 — ingest method:pivotopd (active on task:outcome-only-long-horizon-agent-rl; does not supersede method:canopy / method:opd)
+- Added paper:pivotopd (2609.40285), method:pivotopd, recipe:pivotopd (`code_status: announced`; project https://research.nvidia.com/labs/lpr/pivotopd/). Reverse redirect for multi-turn agent OPD at pivotal early mistakes. Soft SWE-Bench Verified mention on task:software-engineering-agent-harness.
+- Status active (`sota_for: []`). Reverse-KL prevent + forward-KL recovery at teacher-named pivotal turns.
+- Evidence: strongest average on ALFWorld/WebShop/Search-QA; ALFWorld +5.5 vs strongest of 13 baselines (Qwen3-1.7B); +3.2 SWE-Bench Verified vs OPD +0.2 (arXiv:2609.40285); verified: true; evidence_level: preprint.
+- Scope checks: CANOPY remains AppWorld TGC; OPD remains matching; mini-SWE-agent remains the harness. SWE +3.2 is distill transfer, not a loop ranking.
+
+### 2026-10-01 — ingest method:oasis (active on task:privileged-teacher-opsd; does not supersede method:vista / method:u-opsd)
+- Added paper:oasis (2609.37915), method:oasis, recipe:oasis (`code_status: none`; `repo_url: none found`). Reverse redirect for privileged OPSD gains collapsing at scale / verified on-policy scaffolds.
+- Status active (`sota_for: []`). Supervise shortest verified on-policy scaffolds; teacher context is another same-problem rollout (answer labels only).
+- Evidence: vs base +3.2 to +3.8 at 1.7B/4B/8B while OPSD vs base collapses +3.05 / +1.98 / +0.14; OASIS vs OPSD +3.05 at 8B (arXiv:2609.37915); verified: true; evidence_level: preprint.
+- Scope checks: VISTA remains privileged-OPSD SOTA. Not a VISTA bake-off (64.8→66.9) retarget. u-OPSD remains unlabeled/no-GT.
+
+### 2026-10-01 — ingest method:lsd (active on task:math-code-rl-dense; does not supersede method:cispo / method:miles)
+- Added paper:lsd (2609.38854), method:lsd, recipe:lsd (`code_status: none`; `repo_url: none found`). Reverse redirects from math-code-rl-dense and frontier-rl-posttrain-stack for length-scaling tax / EMA OPD on solved groups.
+- Status active (`sota_for: []`). Route solved prompt groups to on-policy distillation against an EMA of the online policy; keep RLVR on unsolved groups.
+- Evidence: single-turn LST 19.0%→−3.7%; agentic LST 31.4%→13.7% without sacrificing accuracy (arXiv:2609.38854); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; Miles remains the engine; When2Think remains offline Think/NoThink IDAC.
+
+### 2026-10-01 — ingest method:hdl (active on task:math-code-rl-dense; does not supersede method:cispo / method:graft)
+- Added paper:hdl (2609.36864), method:hdl, recipe:hdl (`code_status: none`; slime host `https://github.com/THUDM/slime`). Reverse redirects from math-code-rl-dense and outcome-only-long-horizon-agent-rl for hindsight-divergence prefix reuse.
+- Status active (`sota_for: []`). Branch GRPO groups at hindsight logp-change positions; reuse prefixes, train suffixes. Previously SKIP on 2026-09-30.
+- Evidence: up to 2.5× fewer tokens / 1.8× faster rollouts vs GRPO; agent gains including ScienceWorld up to +12.5 (arXiv:2609.36864); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; GRAFT remains peer all-fail salvage; CANOPY remains AppWorld TGC. GRPO stays retired as Pass@1.
+
+### 2026-10-01 — ingest method:ride (active on task:student-distillation; does not supersede method:opd / method:s2d-opd)
+- Added paper:ride (2609.36484), method:ride, recipe:ride (`code_status: released`; `repo_url: https://github.com/xixixixixxxx/RIDE`). Reverse redirect for distilling RL gains via representation residuals rather than logits.
+- Status active (`sota_for: []`). Layerwise hidden-state residual extrapolation from frozen RL teacher vs pre-RL reference. Same-init required.
+- Evidence: only RIDE's mean meets or exceeds the RL teacher across four base/RL-teacher pairs on AIME24/AIME25/AIMO Avg@16; output-space extrapolation stays below the teacher (arXiv:2609.36484); verified: true; evidence_level: preprint.
+- Scope checks: OPD remains reverse-KL matching; S2D-OPD remains Direct-OPD JSD keep-mask; OPRD remains reverse distill.
+
+### 2026-10-01 — ingest method:duoopd (active on task:student-distillation; does not supersede method:open-mopd / method:pmopd)
+- Added paper:duoopd (2609.33711), method:duoopd, recipe:duoopd (`code_status: released`; `repo_url: https://github.com/YongYuanDeAo/DuoOPD`). Reverse redirect for multi-task OPD when the teacher can be wrong on some tasks.
+- Status active (`sota_for: []`). One teacher; student outcome sets direction, joint teacher–student outcome sets support. Not Open-MOPD token-share.
+- Evidence: Qwen3 / Llama mean macro +2.58 / +5.98 vs OPD (arXiv:2609.33711); verified: true; evidence_level: preprint.
+- Scope checks: Open-MOPD remains multi-teacher default; PMOPD remains subspace cycling; OPD remains matching; OPDVR remains student-only ReLU gate.
+
+### 2026-10-01 — ingest method:actfirst-opd (active on task:outcome-only-long-horizon-agent-rl; does not supersede method:canopy / method:opd)
+- Added paper:actfirst-opd (2609.36608), method:actfirst-opd, recipe:actfirst-opd (`code_status: announced`; `repo_url: https://anonymous.4open.science/r/ActFirst-OPD`). Reverse redirect for act-first / reason-later multi-turn OPD.
+- Status active (`sota_for: []`). Inverse-dynamics acting from reference next observations; async full think-then-act reverse-KL distill.
+- Evidence: 2.3× / 1.8× / 4.9× wall-clock vs Vanilla OPD on ALFWorld / WebShop / ScienceWorld; 8/9 settings match or beat compared OPD baselines (arXiv:2609.36608); verified: true; evidence_level: preprint.
+- Scope checks: CANOPY remains AppWorld TGC; OPD remains matching; PivotOPD remains pivotal-mistake prevent/recover.
+
 ### 2026-09-30 — weekday SOTA sweep (DN-MOPD, CIS-RL, LSPD, EAPO, SAKI, GRAFT, PMOPD)
 - MUST 1–4 plus in-scope 5–7. No new task. No current_sota retarget of OPD / Open-MOPD / VISTA / lr-matters-lora / CISPO / Miles / SAPO / VeriGate.
 - Window: 2026-09-30 Librarian weekday sweep after PR 33 watermark 2609.31600. New arXiv 2609.35347, 2609.32444, 2609.35505, 2609.33781, 2609.36601, 2609.37868, 2609.34605. SKIP HDL 2609.36864, KL-free OPD 2609.33791.

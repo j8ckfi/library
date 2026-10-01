@@ -89,6 +89,7 @@ task:software-engineering-agent-harness -> method:mini-swe-agent (2405.15793, 20
   when multi-stage agent capability stacking / continual learning -> task:agent-continual-learning
   when category see-saw on heterogeneous SWE RL -> task:swe-agent-category-expert-rl
   when token-level critic / Actor-then-Critic rather than a SWE loop -> method:pact
+  when multi-turn agent OPD at pivotal mistakes / SWE-Bench Verified distill, not the issue-to-patch loop -> method:pivotopd
 task:directed-sssp-nonneg -> method:bmssp (2504.17033, 2026-08)
 task:1bit-extreme-quantization -> method:sparse-bitnet (2603.05168, 2026-08-26)
 task:fp4-hardware-training -> method:quartet-ii (2601.22813, 2026-08-26) + method:mxfp4-mi355x (2605.09825, 2026-08-26)
@@ -198,6 +199,8 @@ task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
   when MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not Pass@1 default) -> method:cis-rl
   when asymmetric entropy×sign exploration credit (not CISPO default, not first-mistake Cliff) -> method:eapo
   when multi-model / all-fail group salvage by peer trajectory exchange (not Pass@1 default) -> method:graft
+  when length-scaling tax under RLVR; route solved prompts to EMA OPD -> method:lsd
+  when branchy RLVR token cost; hindsight-divergence prefix reuse -> method:hdl
 task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
   when single-turn dense math/code Pass@1 RLVR -> task:math-code-rl-dense
   when MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not SAPO default) -> method:cis-rl
@@ -237,11 +240,15 @@ task:outcome-only-long-horizon-agent-rl -> method:canopy (2609.01245, 2026-09-04
   when noisy pairwise preference labels (PLC-DPO), not outcome-only agent RL -> task:direct-preference-alignment
   when data/env construction for coding-agent RL from source code -> task:coding-agent-rl-environment-construction
   when multi-stage agent capability stacking / continual learning -> task:agent-continual-learning
+  when multi-turn agent OPD at pivotal early mistakes (prevent reverse-KL + recover forward-KL) -> method:pivotopd
+  when act-first / reason-later multi-turn OPD (inverse dynamics + async full-response distill) -> method:actfirst-opd
+  when branchy RLVR token cost; hindsight-divergence prefix reuse -> method:hdl
 task:passk-reasoning-coverage -> method:es-reasoning (2608.27351, 2026-08-31)
 task:privileged-teacher-opsd -> method:vista (2608.28306, 2026-08-31)
   when TSD calibration of teacher–student discrepancy during OPD (not teacher update) -> method:cal-opd
   when Adaptive Retirement of a privileged self-OPD teacher then pure agent RL -> task:outcome-only-long-horizon-agent-rl
   when privileged teacher co-evolves with the student (DCE) plus shorter verified rewrites (SRCL) -> method:dce-srcl
+  when privileged OPSD gains collapse at scale; verified on-policy scaffolds -> method:oasis
 task:reasoning-rl-alignment -> method:cispo (2506.13585, 2026-08-26) + method:sapo (2511.20347, 2026-08-26)
 task:student-distillation -> method:opd (2604.13016, 2026-08-26) + method:open-mopd (2608.19098, 2026-08-28)
   when privileged OPD TSD calibration (residual discrepancy during OPD, not teacher retirement) -> method:cal-opd
@@ -257,6 +264,9 @@ task:student-distillation -> method:opd (2604.13016, 2026-08-26) + method:open-m
   when sample-efficient / off-policy OPD (Huber quadratic student–teacher logp matching + replay) -> method:lspd
   when maximal-coupling-routed teacher supervision / TRB accept-correction routing (not default OPD) -> method:saki
   when multi-teacher OPD subspace protection / task cycling (not token-share or domain-scale) -> method:pmopd
+  when adapting the OPD teacher on student prefixes / off-policy teacher, not frozen-teacher OPD -> method:scout
+  when distilling RL gains via representation residuals rather than logits -> method:ride
+  when multi-task OPD and teacher can be wrong on some tasks -> method:duoopd
 task:swe-agent-category-expert-rl -> method:category-aware-swe-experts (2609.23377, 2026-09-23)
   when env construction from source only -> task:coding-agent-rl-environment-construction
   when async algorithm -> task:agentic-async-rl
@@ -344,6 +354,7 @@ task:frontier-rl-posttrain-stack -> method:miles (2609.08368, 2026-09-09)
   when category see-saw on heterogeneous SWE RL -> task:swe-agent-category-expert-rl
   when full open post-train recipe / stage order / agentic RL infrastructure playbook -> method:rufus-air
   when MoE RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not the production stack) -> method:cis-rl
+  when length-scaling tax under RLVR; route solved prompts to EMA OPD -> method:lsd
 task:industrial-model-building -> method:poolside-model-factory (2605.27605, 2026-08)
   when full-stack frontier RL post-train engine (SGLang rollouts, Megatron/FSDP, LoRA RL / OPD / async agentic RL), not factory lineage -> task:frontier-rl-posttrain-stack
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
@@ -510,6 +521,14 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 139. **Coupling-routed teacher OPD**: **SAKI** (`method:saki`, `arXiv:2609.36601`) on `task:student-distillation`. TRB maximal coupling: accept keeps reverse-KL, correction is teacher top-1 NLL. Active. No public GitHub. Does **not** replace OPD, TrOPD, or RouteOPD.
 140. **Cross-model all-fail salvage**: **GRAFT** (`method:graft`, `arXiv:2609.37868`) on `task:math-code-rl-dense`. Replace all-fail GRPO groups with mixed peer trajectories. Active plug-in. Distinct from VeriGate. No public GitHub. Does **not** replace CISPO, VeriGate, or Miles.
 141. **Multi-teacher subspace protection**: **PMOPD** (`method:pmopd`, `arXiv:2609.34605`) on `task:student-distillation`. Dual projection of gradients and Adafactor updates; probe + cycling. Active. Paper Open-MOPD 63.54 is not the library 83.4% bake-off. No public GitHub. Does **not** replace Open-MOPD or DN-MOPD.
+142. **Off-policy-teacher OPD adaptation**: **SCOUT** (`method:scout`, `arXiv:2609.38360`) on `task:student-distillation`. RL-adapts the teacher on student-generated prefixes. Complementary to TrOPD/SAKI. Active. No public GitHub. Does **not** replace OPD or TrOPD.
+143. **Pivotal-mistake multi-turn OPD**: **PivotOPD** (`method:pivotopd`, `arXiv:2609.40285`) on `task:outcome-only-long-horizon-agent-rl`. Reverse-KL prevent + forward-KL recovery. +3.2 SWE-Bench Verified is distill transfer, not a harness ranking. Active. Project page. Does **not** replace CANOPY or OPD.
+144. **Scale-collapse OPSD scaffolds**: **OASIS** (`method:oasis`, `arXiv:2609.37915`) on `task:privileged-teacher-opsd`. Supervise verified on-policy scaffolds; teacher context is another same-problem rollout. Active. No public GitHub. Does **not** replace VISTA or u-OPSD.
+145. **Length-scaling tax mix**: **LSD** (`method:lsd`, `arXiv:2609.38854`) on `task:math-code-rl-dense`. Route solved groups to EMA OPD; keep RLVR on unsolved. Active. No public GitHub. Does **not** replace CISPO or Miles.
+146. **Hindsight-divergence prefix reuse**: **HDL** (`method:hdl`, `arXiv:2609.36864`) on `task:math-code-rl-dense`. Branch GRPO groups at hindsight logp-change positions. Up to 2.5× fewer tokens / 1.8× faster rollouts vs GRPO. Active. Slime-based, no dedicated repo. Does **not** replace CISPO or GRAFT.
+147. **Representation-residual distill**: **RIDE** (`method:ride`, `arXiv:2609.36484`) on `task:student-distillation`. Extrapolate RL-induced hidden-state residuals layerwise. Active. Code xixixixixxxx/RIDE. Does **not** replace OPD or S2D-OPD.
+148. **Joint-outcome multi-task OPD**: **DuoOPD** (`method:duoopd`, `arXiv:2609.33711`) on `task:student-distillation`. Student outcome sets direction; joint teacher–student outcome sets support. Active. Code YongYuanDeAo/DuoOPD. Does **not** replace Open-MOPD or PMOPD.
+149. **Act-first multi-turn OPD**: **ActFirst-OPD** (`method:actfirst-opd`, `arXiv:2609.36608`) on `task:outcome-only-long-horizon-agent-rl`. Inverse dynamics + async full-response distill. Active. Review-anonymous code. Does **not** replace CANOPY or OPD.
 
 ---
 
@@ -651,6 +670,14 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `saki` (2609.36601) is an active coupling-routed teacher-guided OPD plug-in. It does not supersede `opd`, `tropd`, or `routeopd`.
 - `graft` (2609.37868) is an active multi-model all-fail salvage plug-in. It does not supersede `cispo`, `verigate`, or `miles`.
 - `pmopd` (2609.34605) is an active multi-teacher subspace-protection plug-in. It does not supersede `open-mopd` or `dn-mopd`.
+- `scout` (2609.38360) is an active off-policy-teacher OPD plug-in. It does not supersede `opd` or `tropd`.
+- `pivotopd` (2609.40285) is an active multi-turn pivotal-mistake OPD plug-in. It does not supersede `canopy` or `opd`.
+- `oasis` (2609.37915) is an active privileged-OPSD scale-collapse scaffold plug-in. It does not supersede `vista` or `u-opsd`.
+- `lsd` (2609.38854) is an active length-scaling tax mix plug-in. It does not supersede `cispo` or `miles`.
+- `hdl` (2609.36864) is an active hindsight-divergence prefix-reuse plug-in. It does not supersede `cispo` or `graft`.
+- `ride` (2609.36484) is an active representation-residual distill plug-in. It does not supersede `opd` or `s2d-opd`.
+- `duoopd` (2609.33711) is an active joint-outcome multi-task OPD plug-in. It does not supersede `open-mopd` or `pmopd`.
+- `actfirst-opd` (2609.36608) is an active act-first multi-turn OPD plug-in. It does not supersede `canopy` or `opd`.
 
 ---
 

@@ -7,6 +7,11 @@ status: sota
 sota_for:
   - task:label-free-reasoner-posttrain
 supersedes: []
+do_not_use_for:
+  - when: "privileged OPSD gains collapse at scale; verified on-policy scaffolds"
+    reason: "u-OPSD is unlabeled consensus; OASIS needs answer labels and verified on-policy scaffolds"
+    use_instead: "method:oasis"
+last_reviewed: "2026-10-01"
 papers:
   - paper:u-opsd
 recipes:
@@ -44,4 +49,5 @@ Unsupervised On-Policy Self-Distillation (u-OPSD) enables genuine self-distillat
 ## Relation to Existing SOTA
 - When ground truth or rule-based verifiers are available, prefer `method:opdvr` (for verifiable distillation) or `method:cispo` (for RLVR). In purely unlabeled regimes (existing problems, no Challenger), `method:u-opsd` is the date-stamped SOTA.
 - For data-free self-evolution covering unverifiable/open-ended domains with a Challenger–Solver–Judge loop, use `method:j-zero`. For privileged-teacher OPSD with gold solutions, use `method:vista`.
+- Active scale-collapse scaffold fix `method:oasis` (`arXiv:2609.37915`) on `task:privileged-teacher-opsd` needs answer labels. Does not replace u-OPSD.
 - Teacher-free on-policy self-adaptation without consensus pseudo-solutions is `method:opsa` on `task:teacher-free-on-policy-self-adaptation`. That does not replace u-OPSD.

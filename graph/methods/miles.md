@@ -41,11 +41,14 @@ do_not_use_for:
   - when: "MoE RLVR train–infer engine mismatch (calibrated IS on log-odds displacement)"
     reason: "Miles is the engine; CIS-RL is a mismatch-ratio plug-in inside a GRPO-family host"
     use_instead: "method:cis-rl"
+  - when: "length-scaling tax under RLVR; route solved prompts to EMA OPD"
+    reason: "Miles is the engine; LSD is an accuracy-routed EMA OPD mix on an RLVR host"
+    use_instead: "method:lsd"
 assumptions:
   - "Frontier MoE post-train with a split rollout/train fleet. Paper case study: GLM-5.2 744B-A40B on 64 GB300 (32/32), Megatron trainer, optimizer-state streaming to disk."
   - "SGLang rollouts; Megatron or FSDP trainer. LoRA RL is Megatron-only in v0.1."
   - "Does not replace the train-kernel defaults run inside the stack (CISPO, OPD, Muon2)."
-last_reviewed: "2026-09-30"
+last_reviewed: "2026-10-01"
 papers:
   - paper:miles
 recipes:

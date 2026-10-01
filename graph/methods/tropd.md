@@ -10,6 +10,10 @@ do_not_use_for:
   - when: "maximal-coupling-routed teacher supervision / TRB accept-correction routing"
     reason: "TrOPD bounds OPD update divergence; SAKI realizes a KL-constrained behavior policy via maximal coupling"
     use_instead: "method:saki"
+  - when: "adapting the OPD teacher on student prefixes / off-policy teacher, not frozen-teacher OPD"
+    reason: "TrOPD gates a frozen teacher; SCOUT RL-adapts the teacher on student prefixes"
+    use_instead: "method:scout"
+last_reviewed: "2026-10-01"
 papers:
   - paper:tropd
 recipes:

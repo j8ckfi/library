@@ -19,11 +19,14 @@ do_not_use_for:
   - when: "outcome-only long-horizon agent RL"
     reason: "CANOPY remains coverage/anti-drift; this is single-turn hybrid reasoning length"
     use_instead: "method:canopy"
+  - when: "length-scaling tax under RLVR; route solved prompts to EMA OPD"
+    reason: "When2Think is offline IDAC Think/NoThink control; LSD is online solved-prompt EMA distillation"
+    use_instead: "method:lsd"
 assumptions:
   - "Hybrid Think/NoThink reasoner with a verifier. Paper uses pre-computed reference accuracy and token-usage statistics; no learned RM and no online reference-model queries."
   - "Math-only evidence in the abstract (AIME24/AIME25). Host Pass@1 algorithm stays CISPO."
   - "GitHub JJunShim/When2Think is a stub README as of 2026-09-18."
-last_reviewed: "2026-09-18"
+last_reviewed: "2026-10-01"
 papers:
   - paper:when2think
 recipes:
@@ -65,7 +68,7 @@ When2Think is a post-training length-control plug-in for hybrid reasoners. Easy 
 - Hybrid Think/NoThink math reasoners that waste tokens on easy items and you can precompute reference accuracy/length stats.
 
 ## When NOT to Use
-- Pass@1 kernel → `method:cispo`. MoE/VL loss → `method:sapo`. Pass@K / no-backward → `method:es-reasoning`. Agents → `method:canopy`.
+- Pass@1 kernel → `method:cispo`. MoE/VL loss → `method:sapo`. Pass@K / no-backward → `method:es-reasoning`. Agents → `method:canopy`. Length-scaling tax mix → `method:lsd`.
 
 ## Relation to Existing SOTA
 - Active efficiency plug-in on `task:math-code-rl-dense`. Does **not** enter `current_sota`. Does **not** supersede `method:cispo`.

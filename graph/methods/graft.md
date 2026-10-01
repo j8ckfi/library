@@ -19,11 +19,14 @@ do_not_use_for:
   - when: "single-teacher distillation is the goal"
     reason: "GRAFT exchanges verified peer traces, not teacher log-probabilities"
     use_instead: "method:opd"
+  - when: "branchy RLVR token cost; hindsight-divergence prefix reuse"
+    reason: "GRAFT salvages all-fail groups with peer traces; HDL branches one model's roots"
+    use_instead: "method:hdl"
 assumptions:
   - "Two (or more) heterogeneous policies on the same prompt distribution with a binary verifier. Paper: three pairs including SmolLM3-3B-Base × Qwen3-1.7B-Base, n=8, five math benches."
   - "Transfer only receiver all-fail × peer mixed-success groups. Keep source advantages. Sequence compatibility + token IS clip. Peer minibatches after on-policy ones."
   - "No public GitHub as of 2026-09-30. Tokenizers may differ; compatibility is an empirical logp proxy, not an exact cross-tokenizer IS ratio."
-last_reviewed: "2026-09-30"
+last_reviewed: "2026-10-01"
 papers:
   - paper:graft
 recipes:
@@ -64,7 +67,7 @@ GRPO all-fail groups have zero advantage. GRAFT gates replacement: if receiver \
 - Multi-model RLVR where heterogeneous peers solve complementary prompts and all-fail groups waste the rollout budget.
 
 ## When NOT to Use
-- Pass@1 default → `method:cispo`. Same-model PRM gating → `method:verigate`. Production engine → `method:miles`. Teacher distillation → `method:opd`.
+- Pass@1 default → `method:cispo`. Same-model PRM gating → `method:verigate`. Production engine → `method:miles`. Teacher distillation → `method:opd`. Hindsight-divergence prefix reuse → `method:hdl`.
 
 ## Relation to Existing SOTA
 - Active plug-in on `task:math-code-rl-dense` with a mention on `task:all-zero-verifier-groups`. Does **not** enter `current_sota`. Does **not** replace CISPO, VeriGate, Miles, or OPD.

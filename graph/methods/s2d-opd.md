@@ -22,11 +22,14 @@ do_not_use_for:
   - when: "weak-to-strong reverse distillation that rescales a verifier gradient along the teacher shift"
     reason: "OPRD is reverse distill; S2D-OPD keeps Direct-OPD's log-ratio reward on a JSD subset"
     use_instead: "method:oprd"
+  - when: "distilling RL gains via representation residuals rather than logits"
+    reason: "S2D-OPD is an output-space Direct-OPD keep-mask; RIDE extrapolates layerwise hidden-state residuals"
+    use_instead: "method:ride"
 assumptions:
   - "Host is Direct-OPD: post-RL teacher vs pre-RL reference log-ratio on the student's top-K candidates, plus student-anchor KL. Paper does not run RL; it uses public teacher pairs."
   - "Paper: R1-Distill-1.5B→JustRL-1.5B and Nemotron-1.5B→QuestA-1.5B into Qwen3-1.7B/4B/8B and R1-Distill-7B; Skywork-OR1-RL-Data; ρ=0.1; Avg@32."
   - "Review-anonymous code as of 2026-09-25: anonymous.4open.science/r/S2D-OPD-8868."
-last_reviewed: "2026-09-25"
+last_reviewed: "2026-10-01"
 papers:
   - paper:s2d-opd
 recipes:
@@ -70,10 +73,10 @@ OPD remains strong-teacher matching. Cal-OPD / IER-OPD / LastOPD are different a
 - Already running Direct-OPD / weak-to-strong policy-shift transfer, and you want to drop low-JSD states that can still carry a large log-ratio.
 
 ## When NOT to Use
-- Strong-teacher OPD → `method:opd`. TSD calibration → `method:cal-opd`. IER sparse reverse-KL → `method:ier-opd`. Latent collapse → `method:lastopd`. Verifier-aligned reverse distill → `method:oprd`.
+- Strong-teacher OPD → `method:opd`. TSD calibration → `method:cal-opd`. IER sparse reverse-KL → `method:ier-opd`. Latent collapse → `method:lastopd`. Verifier-aligned reverse distill → `method:oprd`. Representation residuals → `method:ride`.
 
 ## Relation to Existing SOTA
-- Active plug-in on `task:student-distillation` for Direct-OPD. Does **not** enter `current_sota`. Does **not** replace `method:opd`, `method:open-mopd`, `method:cal-opd`, `method:ier-opd`, `method:lastopd`, or `method:oprd`.
+- Active plug-in on `task:student-distillation` for Direct-OPD. Does **not** enter `current_sota`. Does **not** replace `method:opd`, `method:open-mopd`, `method:cal-opd`, `method:ier-opd`, `method:lastopd`, `method:oprd`, or `method:ride`.
 
 ## Gotchas & Failure Modes
 - Code is review-anonymous as of 2026-09-25. Do not treat it as a named public GitHub.

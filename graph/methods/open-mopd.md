@@ -17,7 +17,10 @@ do_not_use_for:
   - when: "multi-teacher OPD subspace protection / task cycling (not token-share)"
     reason: "Open-MOPD is the multi-teacher default; PMOPD projects interfering update directions"
     use_instead: "method:pmopd"
-last_reviewed: "2026-09-30"
+  - when: "multi-task OPD and teacher can be wrong on some tasks"
+    reason: "Open-MOPD is token-share / gap-aware budget across teachers; DuoOPD gates one teacher's weights by joint outcomes"
+    use_instead: "method:duoopd"
+last_reviewed: "2026-10-01"
 papers:
   - paper:open-mopd
 recipes:
@@ -54,3 +57,4 @@ Open-MOPD is the state-of-the-art framework for consolidating multiple domain-sp
 - Co-exists with `method:opd` under `task:student-distillation`: `method:opd` is the single-teacher default; `method:open-mopd` is the multi-teacher distillation default as of 2026-08-28. Privileged same-model gold-solution OPSD is `method:vista` and does not replace Open-MOPD.
 - Multi-stage agent continual learning (`method:aclarena`) uses MMOPD as a paper baseline, not a retarget of this method. Label-routed MOPD of SWE category experts is `method:category-aware-swe-experts`.
 - Token-level ExpertAlign routing over unlabeled multi-teacher pools is `method:mopd-router` (`arXiv:2609.30837`). Active plug-in. Does **not** replace Open-MOPD as the gap-aware budget / token-share balancing default.
+- Joint-outcome multi-task gating of one teacher is `method:duoopd` (`arXiv:2609.33711`). Does **not** replace Open-MOPD.

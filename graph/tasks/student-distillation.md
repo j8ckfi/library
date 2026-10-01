@@ -31,6 +31,12 @@ redirects:
     to: "method:saki"
   - when: "multi-teacher OPD subspace protection / task cycling (not token-share or domain-scale)"
     to: "method:pmopd"
+  - when: "adapting the OPD teacher on student prefixes / off-policy teacher, not frozen-teacher OPD"
+    to: "method:scout"
+  - when: "distilling RL gains via representation residuals rather than logits"
+    to: "method:ride"
+  - when: "multi-task OPD and teacher can be wrong on some tasks"
+    to: "method:duoopd"
 current_sota:
   - method: method:opd
     as_of: "2026-08-26"
@@ -81,7 +87,10 @@ methods:
   - method:lspd
   - method:saki
   - method:pmopd
-last_reviewed: "2026-09-30"
+  - method:scout
+  - method:ride
+  - method:duoopd
+last_reviewed: "2026-10-01"
 tags:
   - post-training
   - distillation
@@ -121,5 +130,8 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Optional sample-efficient / off-policy OPD**: `method:lspd` (`arXiv:2609.35505`) Huber quadratic student–teacher logp matching + entropy; LSPD-RB matches OPD with ~25% rollouts. Code: UNCSciML/LSPD. Does not replace OPD.
 - **Optional coupling-routed teacher-guided OPD**: `method:saki` (`arXiv:2609.36601`) TRB maximal coupling: accept keeps reverse-KL, correction is teacher top-1 NLL. No public GitHub. Does not replace OPD, TrOPD, or RouteOPD.
 - **Optional multi-teacher subspace protection**: `method:pmopd` (`arXiv:2609.34605`) projects gradients and Adafactor updates out of protected task SVD bases, with probe ordering and cycling. Paper Open-MOPD 63.54 is not the library 83.4% bake-off. No public GitHub. Does not replace Open-MOPD or DN-MOPD.
+- **Optional off-policy-teacher adaptation**: `method:scout` (`arXiv:2609.38360`) RL-adapts the teacher on student-generated prefixes. Complementary to TrOPD/SAKI student-side gating. +1.2–2.6 math / +3.1 code over frozen-teacher OPD. No public GitHub. Does not replace OPD or TrOPD.
+- **Optional representation-residual distill**: `method:ride` (`arXiv:2609.36484`) extrapolates RL-induced hidden-state residuals layerwise. Beats output-space extrapolation; code xixixixixxxx/RIDE. Does not replace OPD or S2D-OPD.
+- **Optional joint-outcome multi-task OPD**: `method:duoopd` (`arXiv:2609.33711`) student outcome sets direction, joint teacher–student outcome sets support. +2.58 / +5.98 mean macro vs OPD on Qwen3 / Llama. Code YongYuanDeAo/DuoOPD. Does not replace Open-MOPD or PMOPD.
 - **Not this task**: Adaptive Retirement of a privileged self-OPD teacher in agent RL is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl`. Distilling optimized-harness behaviors into weights under a fixed target harness is `method:harness-zero` on `task:harness-distillation`. Multi-stage agent continual learning (MMOPD / SDFT / MLE) is `method:aclarena` on `task:agent-continual-learning` and does not retarget Open-MOPD. Label-routed MOPD of SWE category experts is `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`.
 

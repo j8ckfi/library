@@ -64,6 +64,8 @@ redirects:
     to: "task:swe-agent-category-expert-rl"
   - when: "token-level critic / Actor-then-Critic rather than a SWE loop"
     to: "method:pact"
+  - when: "multi-turn agent OPD at pivotal mistakes / SWE-Bench Verified distill, not the issue-to-patch loop"
+    to: "method:pivotopd"
 current_sota:
   - method: method:mini-swe-agent
     as_of: "2026-09"
@@ -85,7 +87,8 @@ methods:
   - method:aclarena
   - method:category-aware-swe-experts
   - method:pact
-last_reviewed: "2026-09-24"
+  - method:pivotopd
+last_reviewed: "2026-10-01"
 tags:
   - agents
   - agent
@@ -118,3 +121,4 @@ Choose the loop, ACI, and tools for repository-level software engineering (issue
 - **Not this task (multi-stage agent continual learning)**: `method:aclarena` on `task:agent-continual-learning`.
 - **Not this task (category-aware SWE expert RL)**: `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`. SWE Labeler + RRE experts + label-routed MOPD. Does not replace mini-SWE-agent.
 - **Not this task (token-level critic / Actor-then-Critic)**: `method:pact` on `task:token-level-critic-rl`. SWE-Verified numbers are critic-path evidence, not a harness ranking retarget.
+- **Not this task (multi-turn agent OPD / pivotal-mistake recovery)**: `method:pivotopd` on `task:outcome-only-long-horizon-agent-rl`. +3.2 SWE-Bench Verified is distill transfer, not a loop ranking.

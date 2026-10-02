@@ -32,6 +32,9 @@ do_not_use_for:
   - when: "recursive self-rewrite of a research-agent harness (accepted rewrite is the next incumbent)"
     reason: "omp² is the kernel spec; AIDE2 recursively rewrites a research-agent harness"
     use_instead: "method:aide2"
+  - when: "harness curriculum as a non-stationary bandit over failure-pattern arms"
+    reason: "omp² is the kernel spec; ActiveSaddler schedules training scenarios"
+    use_instead: "method:activesaddler"
 assumptions:
   - "You are implementing a harness kernel, not wrapping a 100-line ReAct loop."
   - "The four envelope tests must hold: multiplexed workspace, remote driver, spectator, untrusted factory."

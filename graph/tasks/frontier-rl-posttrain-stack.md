@@ -17,6 +17,7 @@ out_of_scope:
   - "Category-aware SWE expert RL (Category-Aware SWE Experts)"
   - "Open 8-stage serial post-train recipe / stage order on slime (Rufus-Air)"
   - "MoE train–infer mismatch IS correction (CIS-RL)"
+  - "Cancellation-aware off-policy sequence masking (CARM)"
 redirects:
   - when: "factory process / experiments-as-code / lineage rather than the RL engine"
     to: "task:industrial-model-building"
@@ -42,6 +43,8 @@ redirects:
     to: "method:cis-rl"
   - when: "length-scaling tax under RLVR; route solved prompts to EMA OPD"
     to: "method:lsd"
+  - when: "cancellation-aware off-policy response mask (absolute token log-ratios)"
+    to: "method:carm"
 current_sota:
   - method: method:miles
     as_of: "2026-09-09"
@@ -63,7 +66,8 @@ methods:
   - method:rufus-air
   - method:cis-rl
   - method:lsd
-last_reviewed: "2026-10-01"
+  - method:carm
+last_reviewed: "2026-10-02"
 tags:
   - systems
   - training-systems
@@ -92,3 +96,4 @@ Frontier post-training is a systems problem: multi-turn tool rollouts on trillio
 - **Optional open 8-stage serial recipe (not this engine default)**: `method:rufus-air` (`arXiv:2609.29421`). GLM-4.5-Air-Base SFT→Reasoning RL→Coding RL→IF RL→General/Coding/Search Agent→RLHF on Slime+SGLang+Megatron. Miles remains the production engine.
 - **Optional MoE train–infer mismatch plug-in (not this engine default)**: `method:cis-rl` (`arXiv:2609.32444`). Truncates log-odds displacement between infer and train engines. Does not replace Miles, SAPO, or CISPO.
 - **Optional length-scaling tax mix (not this engine default)**: `method:lsd` (`arXiv:2609.38854`) on `task:math-code-rl-dense`. Routes solved groups to EMA OPD. Does not replace Miles or CISPO.
+- **Optional cancellation-aware off-policy mask (not this engine default)**: `method:carm` (`arXiv:2610.02039`) averages absolute token log-ratios before the sequence threshold. Complements CIS-RL. No public code. Does not replace Miles, CISPO, or CIS-RL.

@@ -37,12 +37,19 @@ do_not_use_for:
   - when: "branchy RLVR token cost; hindsight-divergence prefix reuse"
     reason: "CISPO remains Pass@1; HDL reuses prefixes inside a GRPO-family group"
     use_instead: "method:hdl"
-last_reviewed: "2026-10-01"
+  - when: "multi-reward GRPO aggregation (Pearson covariance or density-aware)"
+    reason: "CISPO remains Pass@1; CorrGRPO/DARA own multi-reward aggregation"
+    use_instead: "task:multi-reward-rlvr"
+  - when: "cancellation-aware off-policy response mask (absolute token log-ratios)"
+    reason: "CISPO remains Pass@1; CARM is a sequence-level off-policy mask"
+    use_instead: "method:carm"
+last_reviewed: "2026-10-02"
 papers:
   - paper:minimax-m1
   - paper:scalerl
   - paper:spurious-advantage-grpo
   - paper:rlvr-group-correlation
+  - paper:sharpening-tax
 recipes:
   - recipe:cispo
 claims:

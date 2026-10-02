@@ -13,6 +13,10 @@ redirects:
     to: "method:dce-srcl"
   - when: "privileged OPSD gains collapse at scale; verified on-policy scaffolds"
     to: "method:oasis"
+  - when: "MLLM privileged OPSD with textual spatial guidance from synthetic scenes (not crop-zoom teachers)"
+    to: "method:where-opd"
+  - when: "neighborhood expert privileged OPSD (frozen local perturbations)"
+    to: "method:n-opsd"
 current_sota:
   - method: method:vista
     as_of: "2026-08-31"
@@ -34,7 +38,9 @@ methods:
   - method:cal-opd
   - method:dce-srcl
   - method:oasis
-last_reviewed: "2026-10-01"
+  - method:where-opd
+  - method:n-opsd
+last_reviewed: "2026-10-02"
 tags:
   - post-training
   - distillation
@@ -65,3 +71,5 @@ Train a problem-only student on its own rollouts using dense token-level targets
 - **Optional TSD calibration (not this first hop)**: `method:cal-opd` (`arXiv:2609.21619`) on `task:student-distillation` — residual discrepancy beyond a probed teacher-self-deviation region. Signal calibration during OPD, not a teacher update. Does not replace VISTA or RetireOPD.
 - **Optional DCE+SRCL co-evolution (not this first hop)**: `method:dce-srcl` (`arXiv:2609.30652`). Privileged teacher refreshes from the student each round; SRCL adds shorter verified rewrites. Qwen3-8B 65.97% Average@12 vs **their** OPSD ~30%. That baseline is **not** the library VISTA bake-off (64.8→66.9). Status active; bake before any retarget. Does not replace VISTA, OPD, Self-OPD, LastOPD, S2D-OPD, or Open-MOPD.
 - **Optional scale-collapse scaffold fix (not this first hop)**: `method:oasis` (`arXiv:2609.37915`). Supervise verified on-policy scaffolds; teacher context is another same-problem rollout (answer labels only). OPSD gains collapse with scale; OASIS stays ~+3 pts and beats OPSD by +3.05 at 8B. Does not replace VISTA or u-OPSD.
+- **Optional MLLM spatial-hint OPSD (not this first hop)**: `method:where-opd` (`arXiv:2610.02117`). Teacher gets textual object/coord hints from synthetic scenes; student sees the same image. Real-world avg +3.23 on Qwen3.5-4B. VISTA stays text-math first hop. Mention on `task:mllm-finegrained-perception-rl`. Does not replace VISTA, OASIS, or Vision-RL2.
+- **Optional neighborhood-expert OPSD (not this first hop)**: `method:n-opsd` (`arXiv:2609.39687`). Frozen local perturbations → denser supervision; Avg@12 +2.75/+1.67/+1.94 vs OPSD. No public code. Not a VISTA bake-off (64.8→66.9) retarget. Does not replace VISTA, OASIS, or DCE+SRCL.

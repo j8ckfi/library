@@ -11,7 +11,13 @@ do_not_use_for:
   - when: "privileged OPSD gains collapse at scale; verified on-policy scaffolds"
     reason: "VISTA remains privileged-OPSD SOTA; OASIS supervises verified on-policy scaffolds with another rollout as teacher context"
     use_instead: "method:oasis"
-last_reviewed: "2026-10-01"
+  - when: "MLLM privileged OPSD with textual spatial guidance from synthetic scenes (not crop-zoom teachers)"
+    reason: "VISTA remains text-math privileged-OPSD SOTA; Where-OPD is MLLM spatial-hint OPSD"
+    use_instead: "method:where-opd"
+  - when: "neighborhood expert privileged OPSD (frozen local perturbations)"
+    reason: "VISTA remains this task's first hop; N-OPSD densifies supervision with a frozen neighborhood pool"
+    use_instead: "method:n-opsd"
+last_reviewed: "2026-10-02"
 papers:
   - paper:vista
 recipes:

@@ -6,6 +6,60 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-10-02 — weekday SOTA sweep (CorrGRPO, DARA, TACO, Where-OPD, ActiveSaddler, CARM, N-OPSD)
+- Seven active plug-ins plus new `task:multi-reward-rlvr` (dual-active CorrGRPO + DARA). No current_sota retarget of CISPO / VISTA / muon2 / omp2-harness / SCALE / Miles / SAPO / ES-reasoning / NeoHorse-1 / Vision-RL2.
+- Window: 2026-10-02 Librarian weekday sweep after PR 35 watermark 2609.40285. New arXiv 2609.36820, 2610.00574, 2610.02199, 2610.02117, 2610.00906, 2610.02039, 2609.39687. Optional claim notes: Sharpening Tax 2610.01509, OPD same-family scaling 2609.32722.
+
+### 2026-10-02 — ingest task:multi-reward-rlvr (dual-active method:corrgrpo + method:dara; does not supersede method:cispo)
+- Added task:multi-reward-rlvr with current_sota CorrGRPO + DARA (methods stay `status: active`, `sota_for: []`). Reverse redirects from math-code-rl-dense / math-code-rl-moe.
+- No head-to-head. CorrGRPO Pearson-normalizes summed GRPO covariances; DARA inverse-sqrt density on GDPO-style advantages. GDPO is prior art, not a library node.
+
+### 2026-10-02 — ingest method:corrgrpo (active on task:multi-reward-rlvr; does not supersede method:cispo)
+- Added paper:corrgrpo (2609.36820), method:corrgrpo, recipe:corrgrpo (`code_status: released`; `repo_url: https://github.com/HKUST-KnowComp/CorrGRPO`). Reverse redirect for Pearson-normalize multi-reward GRPO covariances.
+- Status active (`sota_for: []`). Dual-active first hop with DARA. Plug-in mention on math-code-rl-dense / GRPO family.
+- Evidence: Qwen2.5-Coder-7B-Instruct coding Avg Pass@1 51.49 vs GRPO 47.28 / GDPO 48.88 / base 47.64 (arXiv:2609.36820); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; DARA remains density-energy; SAPO remains MoE/VL; CARM remains off-policy sequence masking.
+
+### 2026-10-02 — ingest method:dara (active on task:multi-reward-rlvr; does not supersede method:cispo / method:corrgrpo)
+- Added paper:dara (2610.00574), method:dara, recipe:dara (`code_status: released`; `repo_url: https://github.com/zhaihaotian/DARA`). Reverse redirect for density-aware multi-reward aggregation.
+- Status active (`sota_for: []`). Dual-active first hop with CorrGRPO. Default DARA-Asym.
+- Evidence: up to 26% fewer steps to high tool-format compliance / 65% fewer steps to near-saturated math length compliance vs GDPO (arXiv:2610.00574); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; CorrGRPO remains Pearson scale; GDPO is not a library method.
+
+### 2026-10-02 — ingest method:taco (active on task:full-param-memory-efficient-pretrain; does not supersede method:scale / method:muon2)
+- Added paper:taco (2610.02199), method:taco, recipe:taco (`code_status: released`; `repo_url: https://github.com/Jichao2357/TACO_optimizer`). Reverse redirects from full-param-memory-efficient-pretrain and llm-pretraining-optimization for ternary column-wise one-sparse FT.
+- Status active (`sota_for: []`). FT-axis plug-in beside SCALE. Not a pretrain-from-scratch recipe.
+- Evidence: OPT-13B SST-2 94.22% at 27.5 GB peak / 0.16 GB optimizer state vs AdamW8bit 80.6 / 27.7 GB (174× state, 2.9× peak); OPT-30B / Qwen3-32B fit on one 80 GB H100 (arXiv:2610.02199); verified: true; evidence_level: preprint.
+- Scope checks: SCALE remains the subspace first hop; Muon2 remains the ~7B pretrain optimizer; Quartet-II remains FP4 hardware; lr-matters-lora remains quality LoRA.
+
+### 2026-10-02 — ingest method:where-opd (active on task:privileged-teacher-opsd; does not supersede method:vista / method:oasis / method:vision-rl2)
+- Added paper:where-opd (2610.02117), method:where-opd, recipe:where-opd (`code_status: released`; `repo_url: https://github.com/sirkosophia/Where-OPD`). Reverse redirects from privileged-teacher-opsd and mllm-finegrained-perception-rl for textual spatial-hint MLLM OPSD.
+- Status active (`sota_for: []`). Teacher gets object/coord hints from synthetic scenes; student sees the same image.
+- Evidence: Qwen3.5-4B real-world avg +3.23; ChartQA / EvoChart +7.20 / +10.11 (arXiv:2610.02117); verified: true; evidence_level: preprint.
+- Scope checks: VISTA remains text-math privileged-OPSD SOTA; Vision-RL2 remains region-level RL; OASIS remains scale-collapse scaffolds; u-OPSD remains no-GT.
+
+### 2026-10-02 — ingest method:activesaddler (active on task:agent-harness-runtime; does not supersede method:omp2-harness / method:rrsi / method:aide2)
+- Added paper:activesaddler (2610.00906), method:activesaddler, recipe:activesaddler (`code_status: released`; `repo_url: https://github.com/microsoft/AutoSaddler`). Reverse redirects from agent-harness-runtime and agentic-rsi-routing-posttrain for harness curriculum as a non-stationary bandit.
+- Status active (`sota_for: []`). Curriculum dimension; harness-update operator unchanged.
+- Evidence: GAIA2 +4.4 pp / Terminal-Bench 2.0 +7.5 pp vs the same optimizer with a frozen scenario order (arXiv:2610.00906); verified: true; evidence_level: preprint.
+- Scope checks: omp2 remains the kernel; RRSI remains frozen-backbone RSI; AIDE2 remains recursive rewrite; Harness-Zero remains distill-into-weights; NeoHorse-1 remains routing-guided weight post-train.
+
+### 2026-10-02 — ingest method:carm (active on task:frontier-rl-posttrain-stack; does not supersede method:cispo / method:cis-rl / method:miles)
+- Added paper:carm (2610.02039), method:carm, recipe:carm (`code_status: none`; `repo_url: none found`). Reverse redirects from frontier-rl-posttrain-stack, math-code-rl-dense, and math-code-rl-moe for cancellation-aware off-policy sequence masking.
+- Status active (`sota_for: []`). Averages absolute token log-ratios before the threshold. Token PPO/GRPO clipping unchanged.
+- Evidence: math mean@16 up to +3.13 pp vs GeoMean; four-code pass@1 +2.88 pp vs strongest baseline (arXiv:2610.02039); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; CIS-RL remains per-token train–infer IS; Miles remains the engine; SAPO remains MoE/VL.
+
+### 2026-10-02 — ingest method:n-opsd (active on task:privileged-teacher-opsd; does not supersede method:vista / method:oasis / method:dce-srcl)
+- Added paper:n-opsd (2609.39687), method:n-opsd, recipe:n-opsd (`code_status: none`; `repo_url: none found`). Reverse redirect for neighborhood-expert privileged OPSD.
+- Status active (`sota_for: []`). Offline greedy frozen perturbation pool; online MaxPeak + quantile routing.
+- Evidence: Avg@12 +2.75 / +1.67 / +1.94 vs OPSD on Qwen3-1.7B/4B/8B, three independent runs (arXiv:2609.39687); verified: true; evidence_level: preprint.
+- Scope checks: VISTA remains first hop (64.8→66.9 bake-off unchanged); OASIS remains scaffolds; DCE+SRCL remains co-evolution; u-OPSD remains no-GT.
+
+### 2026-10-02 — claim notes paper:sharpening-tax / paper:opd-same-family-scaling (no new methods)
+- Added paper:sharpening-tax (2610.01509) on method:es-reasoning / method:cispo / task:passk-reasoning-coverage. Coverage diagnostic; PTGS is not a library method.
+- Added paper:opd-same-family-scaling (2609.32722) on method:opd. Early useful-transfer linear in \(\sqrt{\mathrm{KL}}\); peak gold score saturates near student scale.
+
 ### 2026-10-01 — weekday SOTA sweep (SCOUT, PivotOPD, OASIS, LSD, HDL, RIDE, DuoOPD, ActFirst-OPD)
 - Eight active plug-ins. No new task. No current_sota retarget of OPD / Open-MOPD / VISTA / CISPO / Miles / CANOPY / mini-SWE-agent / SAPO / VeriGate / u-OPSD / TrOPD / GRAFT / PMOPD.
 - Window: 2026-10-01 Librarian weekday sweep after PR 34 watermark 2609.37868. New arXiv 2609.38360, 2609.40285, 2609.37915, 2609.38854, 2609.36864, 2609.36484, 2609.33711, 2609.36608. HDL 2609.36864 was SKIP on 2026-09-30 and is ingested here.

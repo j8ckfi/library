@@ -35,6 +35,9 @@ do_not_use_for:
   - when: "recursive self-rewrite of a research-agent harness (accepted rewrite is the next incumbent)"
     reason: "NeoHorse updates weights from routing traces; AIDE2 rewrites harness code"
     use_instead: "method:aide2"
+  - when: "harness curriculum as a non-stationary bandit over failure-pattern arms"
+    reason: "NeoHorse updates weights from routing traces; ActiveSaddler schedules harness-optimization scenarios"
+    use_instead: "method:activesaddler"
 assumptions:
   - "A deployed routing harness over a heterogeneous model pool that logs predicted demand, selected tier, and the interaction."
   - "Paper: 4B and 9B agent-native models; SGLang v0.5.17; thinking mode; eval on ten harness/tool/code/IF benches."

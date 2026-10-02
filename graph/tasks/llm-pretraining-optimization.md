@@ -16,6 +16,8 @@ redirects:
     to: "task:diffusion-augmented-ar"
   - when: "latent-space / next-concept LM architecture rather than the optimizer"
     to: "task:latent-space-lm-pretrain"
+  - when: "full-param FT optimizer-state memory (ternary column-wise one-sparse)"
+    to: "method:taco"
 methods:
   - method:muon2
   - method:soap-muon-scale
@@ -34,7 +36,8 @@ methods:
   - method:optimizer-memory-schedules
   - method:adana
   - method:musec
-last_reviewed: "2026-09-11"
+  - method:taco
+last_reviewed: "2026-10-02"
 tags:
   - pretraining
   - optimizer
@@ -53,3 +56,4 @@ Pretraining modern neural network models involves minimizing cross-entropy loss 
 - **Optional layer sparsity**: `method:layer-dropout` (`arXiv:2609.05275`, ICML 2026) reintroduces structured layer dropout with $r_{\mathrm{train}}=1/\rho$. Same-FLOPs lower loss; same-steps up to ~25% FLOP save. Does not replace Muon2.
 - **OT-horizon HP guidance**: `method:optimizer-memory-schedules` (`arXiv:2609.04577`) — preferred LR schedule can reverse across overtraining; WD $\sim\sqrt{\mathrm{OT}}$; longer OT favors longer fixed memory. ADANA (`method:adana`, 2602.05298) is a named baseline in that study, not a 7B default. Does not replace Muon2.
 - **Optional Muon stability plug-in**: `method:musec` (`arXiv:2609.11655`) clips momentum singular values instead of flattening them. Does not replace Muon2 or MuonClip.
+- **Not this task (full-param FT memory geometry)**: `method:taco` (`arXiv:2610.02199`) on `task:full-param-memory-efficient-pretrain`. Ternary column-wise one-sparse FT. Does not replace Muon2.

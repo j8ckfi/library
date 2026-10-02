@@ -19,6 +19,9 @@ do_not_use_for:
   - when: "distill optimized-harness behaviors into weights under a fixed target harness"
     reason: "Harness-Zero is agent-as-harness SFT; AIDE2 keeps improving the harness code itself"
     use_instead: "method:harness-zero"
+  - when: "harness curriculum as a non-stationary bandit over failure-pattern arms"
+    reason: "AIDE2 rewrites the harness codebase; ActiveSaddler schedules training scenarios"
+    use_instead: "method:activesaddler"
 assumptions:
   - "The object of optimization is the research agent's own code. Inner-loop agents run at a fixed per-task dollar budget. Outer-loop selection uses a private grade the inner agent never sees."
   - "Paper: 8-day run, 100 nodes, seven accepted rewrites. Outer loop Claude Opus 4.7; inner loop Gemini 3 Flash. Baseline AIDE_human is Weco's production research agent."

@@ -25,6 +25,9 @@ do_not_use_for:
   - when: "recursive self-rewrite of a research-agent harness (accepted rewrite is the next incumbent)"
     reason: "RRSI searches edits around a frozen backbone; AIDE2 accepts a rewrite as the next agent"
     use_instead: "method:aide2"
+  - when: "harness curriculum as a non-stationary bandit over failure-pattern arms"
+    reason: "RRSI searches harness edits; ActiveSaddler chooses which scenarios drive those updates"
+    use_instead: "method:activesaddler"
 assumptions:
   - "Frozen backbone. Search edits prompts, control flow, tools, skills, memory, context, sub-agents. Paper: Claude Opus 4.8 / Gemini 3.5 Flash as search policy; Vertex AI."
   - "One evolve suite per domain; transfer is measured on held-out and OOD benches with the harness frozen."

@@ -19,6 +19,9 @@ do_not_use_for:
   - when: "adaptive IS clip width from group correctness scarcity"
     reason: "GAPO widens PPO/GSPO clip on scarce-correct rollouts; CIS caps the train–infer mismatch ratio"
     use_instead: "method:gapo"
+  - when: "cancellation-aware off-policy response mask (absolute token log-ratios)"
+    reason: "CIS truncates per-token mismatch ratios; CARM accepts or rejects the whole response"
+    use_instead: "method:carm"
 assumptions:
   - "Rollouts from vLLM/SGLang, gradients from FSDP/Megatron. Paper: Qwen1.5-MoE, DeepSeek-V2-Lite, Qwen3-30B-A3B on five math benches."
   - "Default λ=2.3 (positive-displacement cap k≤1+λ(1-p)). Optional two-sided floor with κ=5e-3."

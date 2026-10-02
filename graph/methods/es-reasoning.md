@@ -9,6 +9,7 @@ sota_for:
 supersedes: []
 papers:
   - paper:es-reasoning
+  - paper:sharpening-tax
 recipes:
   - recipe:es-reasoning
 claims:
@@ -58,3 +59,4 @@ Full-parameter one-point Evolution Strategies post-trains an LLM from verifier r
 - Do not switch to two-point / antithetic ZO for reasoning; regenerated CoT breaks paired covariance that helps supervised ZO.
 - Sequential ES then GRPO is a Pareto mix under a shared budget, not a reason to pick GRPO alone.
 - Inner GRPO in `method:j-zero` can be swapped for ES when coverage matters; do not rewrite J-Zero's paper recipe.
+- Sharpening Tax (`paper:sharpening-tax`, `arXiv:2610.01509`) is a coverage diagnostic, including on agentic tasks. PTGS in that paper is not a library method and does not replace this first hop.

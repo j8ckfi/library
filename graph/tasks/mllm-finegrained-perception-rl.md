@@ -10,6 +10,7 @@ out_of_scope:
   - "Video annotation-as-rollout / fine-grained video perception RL (OraRL)"
   - "Single-turn dense text math/code Pass@1 RLVR (CISPO)"
   - "MoE/VL RLVR loss rather than region proposal (SAPO)"
+  - "MLLM privileged OPSD with textual spatial guidance (Where-OPD)"
 redirects:
   - when: "online adaptive prompt selection / teacher scaffolding for image/VL GRPO"
     to: "task:mllm-rl-prompt-curriculum"
@@ -19,6 +20,8 @@ redirects:
     to: "task:math-code-rl-dense"
   - when: "MoE/VL RLVR loss rather than region proposal"
     to: "task:math-code-rl-moe"
+  - when: "MLLM privileged OPSD with textual spatial guidance from synthetic scenes (not crop-zoom teachers)"
+    to: "method:where-opd"
 current_sota:
   - method: method:vision-rl2
     as_of: "2026-09-21"
@@ -32,7 +35,8 @@ methods:
   - method:orarl
   - method:cispo
   - method:sapo
-last_reviewed: "2026-09-21"
+  - method:where-opd
+last_reviewed: "2026-10-02"
 tags:
   - post-training
   - multimodal-rl
@@ -54,3 +58,4 @@ This is not a prompt curriculum and not video annotation-as-rollout.
 ## SOTA Recommendation (as of 2026-09-21)
 - **Primary Method (this task only)**: **Vision-RL2** (`method:vision-rl2`, `paper:vision-rl2` `arXiv:2609.19745`). Status `active`. Listed here as first hop; method `sota_for` stays empty.
 - **Not This Task**: `method:eps-prompt-scaffolding` remains the multimodal prompt-curriculum first hop; `method:orarl` remains video annotation-as-rollout; `method:cispo` remains dense Pass@1; `method:sapo` remains the MoE/VL loss.
+- **Not this task (MLLM spatial-hint OPSD)**: `method:where-opd` (`arXiv:2610.02117`) on `task:privileged-teacher-opsd`. Textual coords from synthetic scenes, not a RoI proposal network. Does not replace Vision-RL2.

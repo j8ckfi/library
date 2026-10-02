@@ -44,6 +44,9 @@ do_not_use_for:
   - when: "length-scaling tax under RLVR; route solved prompts to EMA OPD"
     reason: "Miles is the engine; LSD is an accuracy-routed EMA OPD mix on an RLVR host"
     use_instead: "method:lsd"
+  - when: "cancellation-aware off-policy response mask (absolute token log-ratios)"
+    reason: "Miles is the engine; CARM is a sequence-level off-policy mask"
+    use_instead: "method:carm"
 assumptions:
   - "Frontier MoE post-train with a split rollout/train fleet. Paper case study: GLM-5.2 744B-A40B on 64 GB300 (32/32), Megatron trainer, optimizer-state streaming to disk."
   - "SGLang rollouts; Megatron or FSDP trainer. LoRA RL is Megatron-only in v0.1."

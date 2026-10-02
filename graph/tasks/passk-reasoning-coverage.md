@@ -17,7 +17,7 @@ methods:
   - method:grpo
   - method:dapo
   - method:datpo
-last_reviewed: "2026-09-09"
+last_reviewed: "2026-10-02"
 tags:
   - post-training
   - rl-alignment
@@ -38,4 +38,5 @@ Post-train a dense reasoner on verifiable math/code rewards when repeated-sampli
 ## SOTA Recommendation (as of 2026-09-09)
 - **Primary Method (Pass@K / coverage / no-backward)**: **ES-reasoning** (`method:es-reasoning`, `paper:es-reasoning` `arXiv:2608.27351`). Unchanged.
 - **Tree-rollout coverage sibling**: `method:datpo` (`arXiv:2609.08650`) difficulty-adaptive sentence-entropy trees. Active. Does not replace ES-reasoning or CISPO.
+- **Gotcha (sharpening vs coverage)**: `paper:sharpening-tax` (`arXiv:2610.01509`). RL post-training can raise Pass@1 while collapsing Pass@K, including on agentic tasks. Diagnostic, not a trainer. PTGS in that paper is not a library method. Does not replace ES-reasoning or CISPO.
 - **Pass@1 default when labels exist**: **CISPO** (`method:cispo`) on `task:math-code-rl-dense`. Sequential ES then GRPO is a Pareto composition in the ES paper, not a GRPO revival.

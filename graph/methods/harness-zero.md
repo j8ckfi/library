@@ -31,6 +31,9 @@ do_not_use_for:
   - when: "recursive self-rewrite of a research-agent harness (accepted rewrite is the next incumbent)"
     reason: "Harness-Zero distills harness behaviors into weights under a fixed target; AIDE2 rewrites the harness"
     use_instead: "method:aide2"
+  - when: "harness curriculum as a non-stationary bandit over failure-pattern arms"
+    reason: "Harness-Zero maps harness behaviors into weights; ActiveSaddler is curriculum, not distillation"
+    use_instead: "method:activesaddler"
 assumptions:
   - "Target harness h is a fixed mini-SWE-agent-style bash loop. Evolved student harness h* is adapted into a private reference K for the harnessing agent. Review discussion is not visible to the student."
   - "Paper: Qwen3.5-9B SFT student; SpreadsheetBench Verified / AppWorld / USPTO Retrosynthesis. Harbor Docker sandboxes. Tinker SFT recipe."

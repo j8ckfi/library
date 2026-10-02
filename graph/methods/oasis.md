@@ -19,6 +19,12 @@ do_not_use_for:
   - when: "privileged teacher co-evolves with the student (DCE) plus shorter verified rewrites (SRCL)"
     reason: "DCE+SRCL co-evolves the gold teacher; OASIS keeps the OPSD objective and changes the scaffold/context"
     use_instead: "method:dce-srcl"
+  - when: "MLLM privileged OPSD with textual spatial guidance from synthetic scenes (not crop-zoom teachers)"
+    reason: "OASIS is a text-math scaffold fix; Where-OPD is MLLM spatial-hint OPSD"
+    use_instead: "method:where-opd"
+  - when: "neighborhood expert privileged OPSD (frozen local perturbations)"
+    reason: "OASIS changes the scaffold/context; N-OPSD changes the teacher pool"
+    use_instead: "method:n-opsd"
 assumptions:
   - "Answer labels / a deterministic verifier. Sample K on-policy rollouts; supervise the shortest verified scaffold. Teacher context is another same-problem rollout, not a written gold solution."
   - "Paper: Qwen3-1.7B/4B/8B, AIME 2024/2025 and HMMT 2025, Avg@12."

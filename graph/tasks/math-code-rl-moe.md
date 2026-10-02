@@ -9,6 +9,10 @@ redirects:
     to: "task:math-code-rl-dense"
   - when: "MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not SAPO default)"
     to: "method:cis-rl"
+  - when: "cancellation-aware off-policy response mask (absolute token log-ratios)"
+    to: "method:carm"
+  - when: "multi-reward GRPO aggregation (Pearson covariance or density-aware)"
+    to: "task:multi-reward-rlvr"
 current_sota:
   - method: method:sapo
     as_of: "2026-08-26"
@@ -26,7 +30,8 @@ methods:
   - method:esrl
   - method:bpo
   - method:cis-rl
-last_reviewed: "2026-09-30"
+  - method:carm
+last_reviewed: "2026-10-02"
 tags:
   - post-training
   - reasoning
@@ -45,4 +50,5 @@ Training sparse Mixture-of-Experts policies with reinforcement learning where dy
 - **Optional router soft-anchor**: `method:rpb` (`arXiv:2609.08115`). Active MoE post-train routing candidate. Does not replace SAPO.
 - **Optional expert-space rollout exploration**: `method:esrl` (`arXiv:2609.13058`). Perturb routing like temperature; replay expert IDs. Active beside SAPO. Does not replace SAPO.
 - **Optional train–infer mismatch correction**: `method:cis-rl` (`arXiv:2609.32444`) truncates log-odds displacement (confidence-dependent IS cap), not the raw ratio. Best 5-bench avg on three MoE models vs TIS/IcePop/KPop/Exact. Code: kzhao5/CIS-RL. Does not replace SAPO or CISPO.
+- **Optional cancellation-aware off-policy mask**: `method:carm` (`arXiv:2610.02039`) averages absolute token log-ratios before the sequence threshold. No public code. Does not replace SAPO, CISPO, CIS-RL, or Miles.
 - **Not this task (critic-free PMD on dense math)**: `method:bpo` (`arXiv:2609.15987`) on `task:math-code-rl-dense`. Bake-off used Qwen3-30B-A3B-Base under a CISPO/GSPO/DPPO host; SAPO remains the MoE/VL default.

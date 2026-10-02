@@ -35,6 +35,7 @@ task:agent-harness-runtime -> method:omp2-harness (2026-09-02)
   when regularized harness RSI (annealed edit budget / anti-memorization critic) -> method:rrsi
   when distill optimized-harness behaviors into weights under a fixed target harness -> task:harness-distillation
   when recursive self-rewrite of a research-agent harness (accepted rewrite is the next incumbent) -> method:aide2
+  when harness curriculum as a non-stationary bandit over failure-pattern arms -> method:activesaddler
 task:agent-memory -> method:ace (2510.04618, 2025-10)
   when dumped corpus ≫ window -> task:long-context-prompt-offload
   when SWE issue-to-patch without a playbook -> task:software-engineering-agent-harness
@@ -112,6 +113,10 @@ task:full-lowbit-finetune -> method:gradcodes (2608.30908, 2026-09-01)
   when native FP4 forward/backward hardware training from scratch -> task:fp4-hardware-training
   when quality LoRA on 24GB without a fully quantized checkpoint constraint -> task:lora-quality-tuning
 task:full-param-memory-efficient-pretrain -> method:scale (2506.16659, 2026-08-26)
+  when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
+  when ternary abs-max column-wise one-sparse optimizer for full-param LLM FT -> method:taco
+  when native FP4 forward/backward hardware training from scratch -> task:fp4-hardware-training
+  when quality LoRA on 24GB without a fully quantized checkpoint constraint -> task:lora-quality-tuning
 task:lora-quality-tuning -> method:lr-matters-lora (2602.04998, 2026-08-26)
   when stacking independently trained LoRA adapters / sequential skill add without an inference router -> task:lora-skill-composition
 task:lora-skill-composition -> method:read-lora (2609.31600, 2026-09-28)
@@ -167,6 +172,7 @@ task:agentic-rsi-routing-posttrain -> method:neohorse-1 (2609.08183, 2026-09-09)
   when regularized harness RSI with a frozen backbone, not routing-guided OPD -> method:rrsi
   when distill optimized-harness behaviors into weights under a fixed target harness -> task:harness-distillation
   when recursive self-rewrite of a research-agent harness, not routing-guided OPD -> method:aide2
+  when harness curriculum as a non-stationary bandit over failure-pattern arms -> method:activesaddler
 task:all-zero-verifier-groups -> method:verigate (2605.30451, 2026-08-26)
 task:coding-agent-rl-environment-construction -> method:codemidas (2609.22068, 2026-09-21)
   when programmatic checker exists and sparse outcome RL is the protocol (AppWorld TGC) -> task:outcome-only-long-horizon-agent-rl
@@ -201,9 +207,13 @@ task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
   when multi-model / all-fail group salvage by peer trajectory exchange (not Pass@1 default) -> method:graft
   when length-scaling tax under RLVR; route solved prompts to EMA OPD -> method:lsd
   when branchy RLVR token cost; hindsight-divergence prefix reuse -> method:hdl
+  when multi-reward GRPO aggregation (Pearson covariance or density-aware) -> task:multi-reward-rlvr
+  when cancellation-aware off-policy response mask (absolute token log-ratios) -> method:carm
 task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
   when single-turn dense math/code Pass@1 RLVR -> task:math-code-rl-dense
   when MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not SAPO default) -> method:cis-rl
+  when cancellation-aware off-policy response mask (absolute token log-ratios) -> method:carm
+  when multi-reward GRPO aggregation (Pearson covariance or density-aware) -> task:multi-reward-rlvr
 task:mechanism-grounded-agentic-rl-env -> method:vhd-play (2609.27321, 2026-09-24)
   when source-code coding RL envs -> task:coding-agent-rl-environment-construction
   when AppWorld coverage -> task:outcome-only-long-horizon-agent-rl
@@ -213,12 +223,19 @@ task:mllm-finegrained-perception-rl -> method:vision-rl2 (2609.19745, 2026-09-21
   when video annotation-as-rollout / fine-grained video perception RL -> task:rl-video-mllm
   when single-turn dense text math/code Pass@1 RLVR -> task:math-code-rl-dense
   when MoE/VL RLVR loss rather than region proposal -> task:math-code-rl-moe
+  when MLLM privileged OPSD with textual spatial guidance from synthetic scenes (not crop-zoom teachers) -> method:where-opd
 task:mllm-rl-prompt-curriculum -> method:eps-prompt-scaffolding (2609.15051, 2026-09-15)
   when video annotation-as-rollout / fine-grained video perception RL -> task:rl-video-mllm
   when single-turn dense text math/code Pass@1 RLVR -> task:math-code-rl-dense
   when MoE/VL RLVR loss rather than prompt curriculum -> task:math-code-rl-moe
   when outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) -> task:outcome-only-long-horizon-agent-rl
   when region-level RL / fine-grained MLLM perception (not prompt scaffolding) -> task:mllm-finegrained-perception-rl
+task:multi-reward-rlvr -> method:corrgrpo (2609.36820, 2026-10-02) + method:dara (2610.00574, 2026-10-02)
+  when single-turn dense math/code Pass@1 RLVR (one verifier reward, not multi-reward aggregation) -> task:math-code-rl-dense
+  when MoE/VL RLVR loss rather than multi-reward aggregation -> task:math-code-rl-moe
+  when MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement) -> method:cis-rl
+  when cancellation-aware off-policy response mask (absolute token log-ratios) -> method:carm
+  when outcome-only long-horizon interactive agent RL -> task:outcome-only-long-horizon-agent-rl
 task:multilingual-l2-reasoning-sft -> method:tiny-aya-l2-thinker (2609.10445, 2026-09-14)
   when open pretrain mix / Dolma-3 recipe -> task:open-data-recipe
   when general chat / instruct SFT without L2 language fidelity -> task:instruct-sft-alignment
@@ -249,6 +266,8 @@ task:privileged-teacher-opsd -> method:vista (2608.28306, 2026-08-31)
   when Adaptive Retirement of a privileged self-OPD teacher then pure agent RL -> task:outcome-only-long-horizon-agent-rl
   when privileged teacher co-evolves with the student (DCE) plus shorter verified rewrites (SRCL) -> method:dce-srcl
   when privileged OPSD gains collapse at scale; verified on-policy scaffolds -> method:oasis
+  when MLLM privileged OPSD with textual spatial guidance from synthetic scenes (not crop-zoom teachers) -> method:where-opd
+  when neighborhood expert privileged OPSD (frozen local perturbations) -> method:n-opsd
 task:reasoning-rl-alignment -> method:cispo (2506.13585, 2026-08-26) + method:sapo (2511.20347, 2026-08-26)
 task:student-distillation -> method:opd (2604.13016, 2026-08-26) + method:open-mopd (2608.19098, 2026-08-28)
   when privileged OPD TSD calibration (residual discrepancy during OPD, not teacher retirement) -> method:cal-opd
@@ -316,6 +335,7 @@ task:linear-time-sequence-modeling -> method:mamba-2 (2405.21060, 2024-05)
 task:llm-pretraining-optimization -> method:muon2 (2604.09967, 2026-08-26)
   when lossless multi-token / diffusion-augmented AR serving rather than the pretrain optimizer -> task:diffusion-augmented-ar
   when latent-space / next-concept LM architecture rather than the optimizer -> task:latent-space-lm-pretrain
+  when full-param FT optimizer-state memory (ternary column-wise one-sparse) -> method:taco
 task:open-data-recipe -> method:olmo-3 (2512.13961, 2026-08-26)
   when in-language (L2) reasoning SFT rather than a pretrain mix -> task:multilingual-l2-reasoning-sft
 task:pretrain-dense-7b -> method:muon2 (2604.09967, 2026-08-26)
@@ -355,6 +375,7 @@ task:frontier-rl-posttrain-stack -> method:miles (2609.08368, 2026-09-09)
   when full open post-train recipe / stage order / agentic RL infrastructure playbook -> method:rufus-air
   when MoE RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not the production stack) -> method:cis-rl
   when length-scaling tax under RLVR; route solved prompts to EMA OPD -> method:lsd
+  when cancellation-aware off-policy response mask (absolute token log-ratios) -> method:carm
 task:industrial-model-building -> method:poolside-model-factory (2605.27605, 2026-08)
   when full-stack frontier RL post-train engine (SGLang rollouts, Megatron/FSDP, LoRA RL / OPD / async agentic RL), not factory lineage -> task:frontier-rl-posttrain-stack
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
@@ -529,6 +550,13 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 147. **Representation-residual distill**: **RIDE** (`method:ride`, `arXiv:2609.36484`) on `task:student-distillation`. Extrapolate RL-induced hidden-state residuals layerwise. Active. Code xixixixixxxx/RIDE. Does **not** replace OPD or S2D-OPD.
 148. **Joint-outcome multi-task OPD**: **DuoOPD** (`method:duoopd`, `arXiv:2609.33711`) on `task:student-distillation`. Student outcome sets direction; joint teacher–student outcome sets support. Active. Code YongYuanDeAo/DuoOPD. Does **not** replace Open-MOPD or PMOPD.
 149. **Act-first multi-turn OPD**: **ActFirst-OPD** (`method:actfirst-opd`, `arXiv:2609.36608`) on `task:outcome-only-long-horizon-agent-rl`. Inverse dynamics + async full-response distill. Active. Review-anonymous code. Does **not** replace CANOPY or OPD.
+150. **Multi-reward RLVR aggregation**: **CorrGRPO** (`method:corrgrpo`, `arXiv:2609.36820`) + **DARA** (`method:dara`, `arXiv:2610.00574`) on `task:multi-reward-rlvr`. Dual-active (no head-to-head). Pearson covariance-norm vs inverse-sqrt density. Active. Code HKUST-KnowComp/CorrGRPO and zhaihaotian/DARA. Does **not** replace CISPO.
+151. **Ternary column-wise one-sparse FT optimizer**: **TACO** (`method:taco`, `arXiv:2610.02199`) on `task:full-param-memory-efficient-pretrain`. 174× optimizer-state vs AdamW8bit on OPT-13B SST-2. Active. Code Jichao2357/TACO_optimizer. Does **not** replace SCALE or Muon2.
+152. **MLLM spatial-hint privileged OPSD**: **Where-OPD** (`method:where-opd`, `arXiv:2610.02117`) on `task:privileged-teacher-opsd`. Textual object/coord hints from synthetic scenes. Active. Code sirkosophia/Where-OPD. Does **not** replace VISTA or Vision-RL2.
+153. **Harness failure-pattern curriculum**: **ActiveSaddler** (`method:activesaddler`, `arXiv:2610.00906`) on `task:agent-harness-runtime`. Non-stationary bandit over failure-pattern arms. Active. Code microsoft/AutoSaddler. Does **not** replace omp2, RRSI, AIDE2, or NeoHorse-1.
+154. **Cancellation-aware off-policy sequence mask**: **CARM** (`method:carm`, `arXiv:2610.02039`) on `task:frontier-rl-posttrain-stack`. Absolute token log-ratios before the threshold. Active. No public code. Does **not** replace CISPO, CIS-RL, or Miles.
+155. **Neighborhood-expert privileged OPSD**: **N-OPSD** (`method:n-opsd`, `arXiv:2609.39687`) on `task:privileged-teacher-opsd`. Frozen local perturbations → denser supervision. Active. No public code. Does **not** replace VISTA, OASIS, or DCE+SRCL.
+156. **Sharpening Tax / same-family OPD scaling** (claim notes, no new methods): `paper:sharpening-tax` (`arXiv:2610.01509`) on `task:passk-reasoning-coverage`; `paper:opd-same-family-scaling` (`arXiv:2609.32722`) on `method:opd`.
 
 ---
 
@@ -678,6 +706,14 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `ride` (2609.36484) is an active representation-residual distill plug-in. It does not supersede `opd` or `s2d-opd`.
 - `duoopd` (2609.33711) is an active joint-outcome multi-task OPD plug-in. It does not supersede `open-mopd` or `pmopd`.
 - `actfirst-opd` (2609.36608) is an active act-first multi-turn OPD plug-in. It does not supersede `canopy` or `opd`.
+- `corrgrpo` (2609.36820) and `dara` (2610.00574) are dual-active first hops for `task:multi-reward-rlvr` only. They do not supersede `cispo`. GDPO is prior art, not a library node.
+- `taco` (2610.02199) is an active full-param FT memory plug-in on `task:full-param-memory-efficient-pretrain`. It does not supersede `scale` or `muon2`.
+- `where-opd` (2610.02117) is an active MLLM spatial-hint OPSD plug-in. It does not supersede `vista` or `vision-rl2`.
+- `activesaddler` (2610.00906) is an active harness-curriculum plug-in. It does not supersede `omp2-harness`, `rrsi`, `aide2`, `harness-zero`, or `neohorse-1`.
+- `carm` (2610.02039) is an active off-policy sequence-mask plug-in. It does not supersede `cispo`, `cis-rl`, or `miles`.
+- `n-opsd` (2609.39687) is an active neighborhood-expert privileged-OPSD plug-in. It does not supersede `vista`, `oasis`, or `dce-srcl`.
+- `paper:sharpening-tax` (2610.01509) is a Pass@K coverage diagnostic. PTGS is not a library method and does not retarget `es-reasoning` or `cispo`.
+- `paper:opd-same-family-scaling` (2609.32722) is an OPD scaling claim note. It does not supersede `opd`.
 
 ---
 

@@ -19,6 +19,9 @@ do_not_use_for:
   - when: "MoE/VL RLVR loss rather than region proposal"
     reason: "SAPO remains the MoE/VL algorithm"
     use_instead: "method:sapo"
+  - when: "MLLM privileged OPSD with textual spatial guidance from synthetic scenes (not crop-zoom teachers)"
+    reason: "Vision-RL2 trains a region head; Where-OPD distills textual spatial guidance"
+    use_instead: "method:where-opd"
 assumptions:
   - "Starts from a trained SD-RPN predictor attached to a frozen MLLM. RL pool: 7K VisualCoT QA (5K InfographicVQA, 1K TextVQA, 1K DocVQA). Train source-image limit 576 tokens. One epoch, batch 32, lr 1.5e-5."
   - "Reader is the frozen backbone scoring leave-one-out gold-answer log-odds. No region boxes, no response sampling, no CoT trajectories."

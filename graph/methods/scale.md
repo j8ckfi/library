@@ -8,6 +8,13 @@ sota_for:
   - task:full-param-memory-efficient-pretrain
 supersedes:
   - method:galore
+do_not_use_for:
+  - when: "ternary abs-max column-wise one-sparse optimizer for full-param LLM FT"
+    reason: "SCALE remains the subspace-projection first hop; TACO is an FT-axis sparse geometry"
+    use_instead: "method:taco"
+  - when: "choosing the ~7B dense pretrain optimizer"
+    reason: "Muon2 remains the 7B pretrain default"
+    use_instead: "method:muon2"
 papers:
   - paper:scale
 recipes:
@@ -37,6 +44,7 @@ SCALE (ICML 2026) develops scaled subspace gradient projections for full-paramet
 
 ## When to Use
 - Default SOTA method for full-parameter memory-efficient pretraining and fine-tuning on consumer hardware (NOT GaLore).
+- Optional FT-axis sparse optimizer (`method:taco`) does not replace SCALE.
 
 ## Supersession
 - Supersedes `method:galore` for memory-efficient full-parameter pretraining.

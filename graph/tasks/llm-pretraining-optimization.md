@@ -18,6 +18,10 @@ redirects:
     to: "task:latent-space-lm-pretrain"
   - when: "full-param FT optimizer-state memory (ternary column-wise one-sparse)"
     to: "method:taco"
+  - when: "fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds"
+    to: "task:synthetic-single-stage-pretrain"
+  - when: "zero-natural-data self-play pretraining (UTM programs, no natural text)"
+    to: "task:zero-natural-data-self-play-pretrain"
 methods:
   - method:muon2
   - method:soap-muon-scale
@@ -37,7 +41,9 @@ methods:
   - method:adana
   - method:musec
   - method:taco
-last_reviewed: "2026-10-02"
+  - method:synth
+  - method:self-play-pretraining
+last_reviewed: "2026-10-03"
 tags:
   - pretraining
   - optimizer
@@ -57,3 +63,5 @@ Pretraining modern neural network models involves minimizing cross-entropy loss 
 - **OT-horizon HP guidance**: `method:optimizer-memory-schedules` (`arXiv:2609.04577`) — preferred LR schedule can reverse across overtraining; WD $\sim\sqrt{\mathrm{OT}}$; longer OT favors longer fixed memory. ADANA (`method:adana`, 2602.05298) is a named baseline in that study, not a 7B default. Does not replace Muon2.
 - **Optional Muon stability plug-in**: `method:musec` (`arXiv:2609.11655`) clips momentum singular values instead of flattening them. Does not replace Muon2 or MuonClip.
 - **Not this task (full-param FT memory geometry)**: `method:taco` (`arXiv:2610.02199`) on `task:full-param-memory-efficient-pretrain`. Ternary column-wise one-sparse FT. Does not replace Muon2.
+- **Not this task (seed-grounded synthetic single-stage pretrain)**: `method:synth` (`arXiv:2609.37891`) on `task:synthetic-single-stage-pretrain`. AdamW NTP on SYNTH; not a Muon2 retarget.
+- **Not this task (zero-natural-data UTM self-play)**: `method:self-play-pretraining` (`arXiv:2609.30063`) on `task:zero-natural-data-self-play-pretrain`. Experimental <25M.

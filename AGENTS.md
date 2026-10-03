@@ -183,6 +183,10 @@ task:coding-agent-rl-environment-construction -> method:codemidas (2609.22068, 2
   when category see-saw on heterogeneous SWE RL (already-executable tasks) -> task:swe-agent-category-expert-rl
   when mechanism-first stateful tool envs (not OSS source) -> task:mechanism-grounded-agentic-rl-env
 task:data-free-self-evolution -> method:j-zero (2608.26582, 2026-08-31)
+  when zero-natural-data self-play pretraining from random init (generator proposes UTM programs) -> task:zero-natural-data-self-play-pretrain
+  when seed-grounded synthetic single-stage pretraining from Wikipedia/Wikibooks seeds -> task:synthetic-single-stage-pretrain
+  when unlabeled existing math problems with majority-vote pseudo-solutions -> task:label-free-reasoner-posttrain
+  when test-time adaptation on unlabeled queries -> task:label-free-test-time-reasoner
 task:direct-preference-alignment -> method:olmo-3 (2512.13961, 2026-08-26)
 task:distill-reasoner-verifier -> method:opdvr (2608.24696, 2026-08-27)
 task:instruct-sft-alignment -> method:olmo-3 (2512.13961, 2026-08-26) + method:nemotron-cascade-2 (2603.19220, 2026-08-26)
@@ -209,6 +213,7 @@ task:math-code-rl-dense -> method:cispo (2506.13585, 2026-08-26)
   when branchy RLVR token cost; hindsight-divergence prefix reuse -> method:hdl
   when multi-reward GRPO aggregation (Pearson covariance or density-aware) -> task:multi-reward-rlvr
   when cancellation-aware off-policy response mask (absolute token log-ratios) -> method:carm
+  when MCMC / Metropolis–Hastings projection sampling of expert traces then ordinary SFT (not CISPO default) -> method:sampling-sft
 task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
   when single-turn dense math/code Pass@1 RLVR -> task:math-code-rl-dense
   when MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not SAPO default) -> method:cis-rl
@@ -268,6 +273,7 @@ task:privileged-teacher-opsd -> method:vista (2608.28306, 2026-08-31)
   when privileged OPSD gains collapse at scale; verified on-policy scaffolds -> method:oasis
   when MLLM privileged OPSD with textual spatial guidance from synthetic scenes (not crop-zoom teachers) -> method:where-opd
   when neighborhood expert privileged OPSD (frozen local perturbations) -> method:n-opsd
+  when MCMC projection sampling of expert traces then ordinary SFT (not a privileged-teacher update) -> method:sampling-sft
 task:reasoning-rl-alignment -> method:cispo (2506.13585, 2026-08-26) + method:sapo (2511.20347, 2026-08-26)
 task:student-distillation -> method:opd (2604.13016, 2026-08-26) + method:open-mopd (2608.19098, 2026-08-28)
   when privileged OPD TSD calibration (residual discrepancy during OPD, not teacher retirement) -> method:cal-opd
@@ -299,6 +305,7 @@ task:teacher-free-on-policy-self-adaptation -> method:opsa (2608.31046, 2026-09-
   when zero external problems, including unverifiable domains -> task:data-free-self-evolution
   when flow matching or continuous diffusion post-training -> task:posttrain-diffusion
   when verifier-grounded same-model self-improvement with privileged hindsight -> task:math-code-rl-dense
+  when zero-natural-data self-play pretraining from random init (UTM programs) -> task:zero-natural-data-self-play-pretrain
 task:token-level-critic-rl -> method:bpco (2608.23566, 2026-08-27)
   when Actor-then-Critic IS-aligned critic after axiomatic token credit -> method:pact
   when structural credit split for tool-call vs natural-language-summary tokens (not Actor-then-Critic) -> task:tool-agent-segment-credit
@@ -336,10 +343,16 @@ task:llm-pretraining-optimization -> method:muon2 (2604.09967, 2026-08-26)
   when lossless multi-token / diffusion-augmented AR serving rather than the pretrain optimizer -> task:diffusion-augmented-ar
   when latent-space / next-concept LM architecture rather than the optimizer -> task:latent-space-lm-pretrain
   when full-param FT optimizer-state memory (ternary column-wise one-sparse) -> method:taco
+  when fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds -> task:synthetic-single-stage-pretrain
+  when zero-natural-data self-play pretraining (UTM programs, no natural text) -> task:zero-natural-data-self-play-pretrain
 task:open-data-recipe -> method:olmo-3 (2512.13961, 2026-08-26)
   when in-language (L2) reasoning SFT rather than a pretrain mix -> task:multilingual-l2-reasoning-sft
+  when fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds (no web mix) -> task:synthetic-single-stage-pretrain
+  when zero-natural-data self-play pretraining (generator proposes UTM programs) -> task:zero-natural-data-self-play-pretrain
 task:pretrain-dense-7b -> method:muon2 (2604.09967, 2026-08-26)
   when latent-space / next-concept LM architecture rather than dense NTP 7B -> task:latent-space-lm-pretrain
+  when fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds -> task:synthetic-single-stage-pretrain
+  when zero-natural-data self-play pretraining (UTM programs, no natural text) -> task:zero-natural-data-self-play-pretrain
 task:pretrain-moe-frontier -> method:deepseek-v4 (2606.19348, 2026-08-26) + method:kimi-k3 (2607.24653, 2026-08-26)
   when input-heavy agentic / KV-footprint / CED serving, not general MoE pretrain template -> task:input-heavy-agentic-moe-serving
   when compute-matched looped MoE (middle layers twice), not V4/K3 architecture -> task:compute-matched-moe-looped-pretrain
@@ -354,6 +367,18 @@ task:recurrent-encoder-decoder-lm -> method:recurrent-looped-transformer (2026-0
   when GitHub issue to patch / SWE harness -> task:software-engineering-agent-harness
   when building a production engine (rewind, sandbox, remote, TUI) -> task:agent-harness-runtime
   when compute-matched looped MoE pretrain (middle layers twice) -> task:compute-matched-moe-looped-pretrain
+task:synthetic-single-stage-pretrain -> method:synth (2609.37891, 2026-10-03)
+  when open pretrain mix / Dolma-3 recipe rather than seed-grounded synthetic pretrain -> task:open-data-recipe
+  when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
+  when standard dense ~7B NTP from scratch on web/open data -> task:pretrain-dense-7b
+  when zero-natural-data self-play pretraining (generator proposes programs, no Wikipedia seeds) -> task:zero-natural-data-self-play-pretrain
+  when data-free post-train self-evolution (Challenger-Solver-Judge) -> task:data-free-self-evolution
+task:zero-natural-data-self-play-pretrain -> method:self-play-pretraining (2609.30063, 2026-10-03)
+  when data-free post-train self-evolution (Challenger-Solver-Judge, not pretrain-from-scratch) -> task:data-free-self-evolution
+  when seed-grounded synthetic pretraining from Wikipedia/Wikibooks seeds -> task:synthetic-single-stage-pretrain
+  when open pretrain mix / Dolma-3 recipe -> task:open-data-recipe
+  when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
+  when teacher-free on-policy self-adaptation on an existing unlabeled prompt set -> task:teacher-free-on-policy-self-adaptation
 task:operator-foundation -> method:poseidon (2405.19101, 2026-08-28) + method:unisolver (2405.17527, 2026-08-28)
 task:operator-fourier-adapt -> method:f-adapter (2509.23173, 2026-08-28)
 task:operator-grid-pde -> method:cvit (2405.13998, 2026-08-28) + method:poseidon (2405.19101, 2026-08-28)
@@ -557,6 +582,9 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 154. **Cancellation-aware off-policy sequence mask**: **CARM** (`method:carm`, `arXiv:2610.02039`) on `task:frontier-rl-posttrain-stack`. Absolute token log-ratios before the threshold. Active. No public code. Does **not** replace CISPO, CIS-RL, or Miles.
 155. **Neighborhood-expert privileged OPSD**: **N-OPSD** (`method:n-opsd`, `arXiv:2609.39687`) on `task:privileged-teacher-opsd`. Frozen local perturbations → denser supervision. Active. No public code. Does **not** replace VISTA, OASIS, or DCE+SRCL.
 156. **Sharpening Tax / same-family OPD scaling** (claim notes, no new methods): `paper:sharpening-tax` (`arXiv:2610.01509`) on `task:passk-reasoning-coverage`; `paper:opd-same-family-scaling` (`arXiv:2609.32722`) on `method:opd`.
+157. **Fully synthetic single-stage LLM pretrain**: **SYNTH / Baguettotron** (`method:synth`, `arXiv:2609.37891`) on `task:synthetic-single-stage-pretrain`. Wikipedia/Wikibooks seeds amplified into ~80B synthetic tokens; no separate SFT/RL. First hop is Baguettotron-600M (594M, 158B tokens, FActScore Table 1). Does **not** replace OLMo-3, Muon2, or Puro-2B. Distinct from `method:hive-synth`.
+158. **Zero-natural-data self-play pretrain**: **Self-Play Pretraining with Zero Data** (`method:self-play-pretraining`, `arXiv:2609.30063`) on `task:zero-natural-data-self-play-pretrain`. Experimental first hop (`sota_for: []`): UTM generator + byte NTP from random init, scale <25M. Does **not** replace J-Zero (post-train) or SYNTH (Wikipedia seeds).
+159. **Sampling SFT**: **Sampling SFT** (`method:sampling-sft`, `arXiv:2610.02140`) on `task:math-code-rl-dense`. Active plug-in. MCMC-projects expert traces then ordinary SFT. Vanilla SFT still loses to GRPO; Sampling SFT then GRPO is best. Mention on `task:privileged-teacher-opsd`. Does **not** replace CISPO or VISTA.
 
 ---
 
@@ -714,6 +742,9 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `n-opsd` (2609.39687) is an active neighborhood-expert privileged-OPSD plug-in. It does not supersede `vista`, `oasis`, or `dce-srcl`.
 - `paper:sharpening-tax` (2610.01509) is a Pass@K coverage diagnostic. PTGS is not a library method and does not retarget `es-reasoning` or `cispo`.
 - `paper:opd-same-family-scaling` (2609.32722) is an OPD scaling claim note. It does not supersede `opd`.
+- `synth` (2609.37891) is the first hop for `task:synthetic-single-stage-pretrain` only. It does not supersede `olmo-3`, `muon2`, or `puro-2b`. Distinct from `hive-synth`.
+- `self-play-pretraining` (2609.30063) is the experimental first hop for `task:zero-natural-data-self-play-pretrain` only. It does not supersede `j-zero`, `synth`, or `opsa`.
+- `sampling-sft` (2610.02140) is an active SFT-data plug-in on `task:math-code-rl-dense`. It does not supersede `cispo` or `vista`. Vanilla SFT is not this method.
 
 ---
 

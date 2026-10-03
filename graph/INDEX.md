@@ -443,7 +443,14 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 - **Out of scope**: Programmatic-checker outcome-only agent RL (CANOPY / AppWorld TGC); Variable tool latency / async stragglers (SAO); GitHub issue → patch harness (mini-SWE-agent); Production post-train engine (Miles); Single-turn math/code Pass@1 RLVR (CISPO); Live-web multi-hop search-agent training (Iris); Category-aware SWE expert RL on already-executable tasks (Category-Aware SWE Experts); Mechanism-first stateful tool envs from solved math dynamics (VHD-Play)
 
 ### task:data-free-self-evolution — Data-Free Self-Evolution across Verifiable and Unverifiable Domains
+- **Scope**: Post-train Challenger–Solver–Judge co-evolution from a pretrained chat/base checkpoint with zero external tasks. First hop is J-Zero. Not pretrain-from-scratch.
 - **SOTA**: `method:j-zero` `2608.26582` (as_of 2026-08-31) — Verifiable overall avg and unverifiable overall avg (Qwen3-4B-Base / Qwen3-8B-Base): Verifiable 54.38 / 58.55; unverifiable 20.81 / 23.41
+- **Redirects**:
+  - when zero-natural-data self-play pretraining from random init (generator proposes UTM programs) → `task:zero-natural-data-self-play-pretrain`
+  - when seed-grounded synthetic single-stage pretraining from Wikipedia/Wikibooks seeds → `task:synthetic-single-stage-pretrain`
+  - when unlabeled existing math problems with majority-vote pseudo-solutions → `task:label-free-reasoner-posttrain`
+  - when test-time adaptation on unlabeled queries → `task:label-free-test-time-reasoner`
+- **Out of scope**: Zero-natural-data self-play pretraining from random init (UTM programs / byte NTP); Seed-grounded synthetic pretraining from Wikipedia/Wikibooks (SYNTH); Unlabeled existing math problems (u-OPSD); Test-time unlabeled adaptation (TTPO)
 
 ### task:direct-preference-alignment — Direct Preference Alignment & Offline Post-Training
 - **SOTA**: `method:olmo-3` `2512.13961` (as_of 2026-08-26) — AlpacaEval 2 / Arena-Hard: OLMo-3 Dolci Open Stack
@@ -498,7 +505,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when branchy RLVR token cost; hindsight-divergence prefix reuse → `method:hdl`
   - when multi-reward GRPO aggregation (Pearson covariance or density-aware) → `task:multi-reward-rlvr`
   - when cancellation-aware off-policy response mask (absolute token log-ratios) → `method:carm`
-- **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO); Live-web multi-hop search-agent training (Iris); Pass@K / coverage / no-backward (ES-reasoning / DATPO); Olympiad NL proofs / IMO TTC (Nemotron IMO Gold); Multimodal VL prompt scaffolding / online EPS curriculum (not dense text Pass@1); Multi-stage agent capability stacking / continual learning (ACLArena); Structural tool vs summary credit under GRPO (SLCA-GRPO); MoE train–infer engine mismatch IS (CIS-RL); Multi-reward GRPO aggregation (CorrGRPO / DARA); Cancellation-aware off-policy sequence masking (CARM)
+  - when MCMC / Metropolis–Hastings projection sampling of expert traces then ordinary SFT (not CISPO default) → `method:sampling-sft`
+- **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO); Live-web multi-hop search-agent training (Iris); Pass@K / coverage / no-backward (ES-reasoning / DATPO); Olympiad NL proofs / IMO TTC (Nemotron IMO Gold); Multimodal VL prompt scaffolding / online EPS curriculum (not dense text Pass@1); Multi-stage agent capability stacking / continual learning (ACLArena); Structural tool vs summary credit under GRPO (SLCA-GRPO); MoE train–infer engine mismatch IS (CIS-RL); Multi-reward GRPO aggregation (CorrGRPO / DARA); Cancellation-aware off-policy sequence masking (CARM); MCMC projection sampling then ordinary SFT (Sampling SFT)
 
 ### task:math-code-rl-moe — Mathematical and Code RL Reasoning (MoE Policies)
 - **SOTA**: `method:sapo` `2511.20347` (as_of 2026-08-26) — Qwen3 MoE / MATH-500 MoE RL: Default SOTA for MoE/VL RL
@@ -649,6 +657,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when privileged OPSD gains collapse at scale; verified on-policy scaffolds → `method:oasis`
   - when MLLM privileged OPSD with textual spatial guidance from synthetic scenes (not crop-zoom teachers) → `method:where-opd`
   - when neighborhood expert privileged OPSD (frozen local perturbations) → `method:n-opsd`
+  - when MCMC projection sampling of expert traces then ordinary SFT (not a privileged-teacher update) → `method:sampling-sft`
 
 ### task:reasoning-rl-alignment — Reinforcement Learning & Reasoning Post-Training
 - **SOTA**: `method:cispo` `2506.13585` (as_of 2026-08-26) — AIME 2024 / MATH-500: SOTA for Dense Long-CoT
@@ -733,7 +742,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when zero external problems, including unverifiable domains → `task:data-free-self-evolution`
   - when flow matching or continuous diffusion post-training → `task:posttrain-diffusion`
   - when verifier-grounded same-model self-improvement with privileged hindsight → `task:math-code-rl-dense`
-- **Out of scope**: Labeled math/code RLVR with verifiable rewards (CISPO); Single-teacher or multi-teacher student distillation (OPD / Open-MOPD); Privileged-teacher OPSD with gold solutions (VISTA); Unlabeled existing math problems using rollout-consensus pseudo-solutions (u-OPSD); Test-time unlabeled adaptation (TTPO); Data-free Challenger-Solver-Judge curriculum generation (J-Zero); Teacher-free flow-matching / diffusion alignment (Self-OPD); Verifier-grounded privileged-hindsight trajectory balance (FlowBalance)
+  - when zero-natural-data self-play pretraining from random init (UTM programs) → `task:zero-natural-data-self-play-pretrain`
+- **Out of scope**: Labeled math/code RLVR with verifiable rewards (CISPO); Single-teacher or multi-teacher student distillation (OPD / Open-MOPD); Privileged-teacher OPSD with gold solutions (VISTA); Unlabeled existing math problems using rollout-consensus pseudo-solutions (u-OPSD); Test-time unlabeled adaptation (TTPO); Data-free Challenger-Solver-Judge curriculum generation (J-Zero); Teacher-free flow-matching / diffusion alignment (Self-OPD); Verifier-grounded privileged-hindsight trajectory balance (FlowBalance); Zero-natural-data self-play pretraining from random init (UTM programs)
 
 ### task:token-level-critic-rl — Token-Level Advantage Estimation with Single-Sample Critics
 - **SOTA**: `method:bpco` `2608.23566` (as_of 2026-08-27) — Mathematical Reasoning & Rubric Evaluation (1.5B to 30B-A3B): Matches or exceeds group-relative GRPO baseline with 1 response per prompt
@@ -824,17 +834,23 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when lossless multi-token / diffusion-augmented AR serving rather than the pretrain optimizer → `task:diffusion-augmented-ar`
   - when latent-space / next-concept LM architecture rather than the optimizer → `task:latent-space-lm-pretrain`
   - when full-param FT optimizer-state memory (ternary column-wise one-sparse) → `method:taco`
+  - when fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds → `task:synthetic-single-stage-pretrain`
+  - when zero-natural-data self-play pretraining (UTM programs, no natural text) → `task:zero-natural-data-self-play-pretrain`
 
 ### task:open-data-recipe — Open Foundation Data Recipe & Pretraining Mix
 - **SOTA**: `method:olmo-3` `2512.13961` (as_of 2026-08-26) — Dolma-3 Open Token Mix: Default SOTA open data recipe
 - **Redirects**:
   - when in-language (L2) reasoning SFT rather than a pretrain mix → `task:multilingual-l2-reasoning-sft`
+  - when fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds (no web mix) → `task:synthetic-single-stage-pretrain`
+  - when zero-natural-data self-play pretraining (generator proposes UTM programs) → `task:zero-natural-data-self-play-pretrain`
 
 ### task:pretrain-dense-7b — Pretrain Dense ~7B Language Model from Scratch
 - **SOTA**: `method:muon2` `2604.09967` (as_of 2026-08-26) — Moonlight Scaling Laws / FineWeb Token Mix: ~2x token efficiency vs AdamW
   - do not use when full-param FT optimizer-state memory (ternary column-wise one-sparse) → `method:taco`
 - **Redirects**:
   - when latent-space / next-concept LM architecture rather than dense NTP 7B → `task:latent-space-lm-pretrain`
+  - when fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds → `task:synthetic-single-stage-pretrain`
+  - when zero-natural-data self-play pretraining (UTM programs, no natural text) → `task:zero-natural-data-self-play-pretrain`
 
 ### task:pretrain-moe-frontier — Pretrain Mixture-of-Experts (MoE) Architecture at Scale
 - **Scope**: Frontier MoE pretrain architecture template. Co-default is DeepSeek-V4 + Kimi-K3.
@@ -866,6 +882,36 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when building a production engine (rewind, sandbox, remote, TUI) → `task:agent-harness-runtime`
   - when compute-matched looped MoE pretrain (middle layers twice) → `task:compute-matched-moe-looped-pretrain`
 - **Out of scope**: Standard dense ~7B NTP from scratch (Muon2 / OLMo-3); Frontier MoE pretrain template (DeepSeek-V4 / Kimi-K3); Latent-space / next-concept LM (NCP-ArchPreview); Input-heavy agentic MoE serving / KV-compressed CED (DeepSeek-V4.1-Flash); SWE issue-to-patch harness (mini-SWE-agent); Production harness kernel (omp2); Compute-matched MoE looping of middle layers (SMELT)
+
+### task:synthetic-single-stage-pretrain — Fully Synthetic Single-Stage LLM Pretraining
+- **Scope**: Seed-grounded synthetic pretraining that collapses pre-/mid-/post-training into one NTP stage (Wikipedia/Wikibooks seeds amplified by auxiliary models). First hop is SYNTH as trained into Baguettotron-600M. Not the open web mix and not zero-natural-data self-play.
+- **SOTA**: `method:synth` `2609.37891` (as_of 2026-10-03) — FActScore-style Wikipedia seed entities n=500, Baguettotron-600M chat 158B: 79.3%±2.1 precision / 41.7%±2.2 macro vs Qwen3-0.6B 65.7%/31.6% (~36T) and Phi-4-mini 77.4%/29.5% (~5T)
+  - do not use when choosing the open pretrain mix / Dolma-3 recipe → `method:olmo-3`
+  - do not use when choosing the ~7B dense pretrain optimizer → `method:muon2`
+  - do not use when zero-natural-data self-play pretraining (no Wikipedia seeds) → `method:self-play-pretraining`
+  - do not use when data-free post-train Challenger-Solver-Judge → `method:j-zero`
+- **Redirects**:
+  - when open pretrain mix / Dolma-3 recipe rather than seed-grounded synthetic pretrain → `task:open-data-recipe`
+  - when choosing the ~7B dense pretrain optimizer → `task:llm-pretraining-optimization`
+  - when standard dense ~7B NTP from scratch on web/open data → `task:pretrain-dense-7b`
+  - when zero-natural-data self-play pretraining (generator proposes programs, no Wikipedia seeds) → `task:zero-natural-data-self-play-pretrain`
+  - when data-free post-train self-evolution (Challenger-Solver-Judge) → `task:data-free-self-evolution`
+- **Out of scope**: Open multi-trillion-token web/Dolma mix (OLMo-3 / Dolma-3); ~7B dense NTP optimizer choice (Muon2); Consumer-GPU ~1.5-2B open-mix pretrain (Puro-2B); Zero-natural-data self-play pretraining (programs on a UTM, no Wikipedia seeds); Data-free post-train Challenger-Solver-Judge (J-Zero)
+
+### task:zero-natural-data-self-play-pretrain — Zero-Natural-Data Self-Play Pretraining
+- **Scope**: Tabula-rasa pretraining with no natural-language corpus. Generator proposes Brainfuck-like UTM programs; learner NTP on output bytes; generator RL on a learning-progress reward. First hop is Self-Play Pretraining with Zero Data. Not J-Zero post-train and not SYNTH Wikipedia amplification.
+- **SOTA**: `method:self-play-pretraining` `2609.30063` (as_of 2026-10-03) — Zero-shot DCLM byte-loss scaling exponent vs literature NTP: 0.123 vs literature 0.048–0.099
+  - do not use when data-free post-train Challenger-Solver-Judge → `method:j-zero`
+  - do not use when seed-grounded synthetic pretraining from Wikipedia/Wikibooks → `method:synth`
+  - do not use when choosing the open pretrain mix → `method:olmo-3`
+  - do not use when teacher-free on-policy self-adaptation on existing unlabeled prompts → `method:opsa`
+- **Redirects**:
+  - when data-free post-train self-evolution (Challenger-Solver-Judge, not pretrain-from-scratch) → `task:data-free-self-evolution`
+  - when seed-grounded synthetic pretraining from Wikipedia/Wikibooks seeds → `task:synthetic-single-stage-pretrain`
+  - when open pretrain mix / Dolma-3 recipe → `task:open-data-recipe`
+  - when choosing the ~7B dense pretrain optimizer → `task:llm-pretraining-optimization`
+  - when teacher-free on-policy self-adaptation on an existing unlabeled prompt set → `task:teacher-free-on-policy-self-adaptation`
+- **Out of scope**: Data-free post-train Challenger-Solver-Judge (J-Zero); Seed-grounded synthetic pretraining from Wikipedia/Wikibooks (SYNTH); Open web/Dolma mix (OLMo-3); ~7B dense NTP optimizer (Muon2); Teacher-free on-policy self-adaptation on existing unlabeled prompts (OPSA)
 
 ## scientific-ml
 

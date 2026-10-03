@@ -19,10 +19,16 @@ methods:
   - method:op-mix
   - method:ncp-archpreview
   - method:tiny-aya-l2-thinker
+  - method:synth
+  - method:self-play-pretraining
 redirects:
   - when: "in-language (L2) reasoning SFT rather than a pretrain mix"
     to: "task:multilingual-l2-reasoning-sft"
-last_reviewed: "2026-09-14"
+  - when: "fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds (no web mix)"
+    to: "task:synthetic-single-stage-pretrain"
+  - when: "zero-natural-data self-play pretraining (generator proposes UTM programs)"
+    to: "task:zero-natural-data-self-play-pretrain"
+last_reviewed: "2026-10-03"
 tags:
   - pretraining
   - open-data
@@ -41,3 +47,5 @@ Constructing transparent, reproducible, and open multi-trillion token pretrainin
 - **Not a 7B substitute**: Consumer-GPU ~2B pretrain with a proxy-guided mix is `method:puro-2b`, not a replacement for Dolma-3.
 - **Latent-space LM that used Dolma-3 (not this mix default)**: `method:ncp-archpreview` on `task:latent-space-lm-pretrain`.
 - **L2 reasoning SFT mix (not this pretrain mix)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.
+- **Fully synthetic single-stage pretrain (not this mix)**: `method:synth` on `task:synthetic-single-stage-pretrain`. Wikipedia/Wikibooks seeds, no Dolma-3 replacement.
+- **Zero-natural-data self-play pretrain (not this mix)**: `method:self-play-pretraining` on `task:zero-natural-data-self-play-pretrain`.

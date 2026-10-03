@@ -17,6 +17,7 @@ out_of_scope:
   - "MoE train–infer engine mismatch IS (CIS-RL)"
   - "Multi-reward GRPO aggregation (CorrGRPO / DARA)"
   - "Cancellation-aware off-policy sequence masking (CARM)"
+  - "MCMC projection sampling then ordinary SFT (Sampling SFT)"
 redirects:
   - when: "outcome-only long-horizon interactive agent RL"
     to: "task:outcome-only-long-horizon-agent-rl"
@@ -54,6 +55,8 @@ redirects:
     to: "task:multi-reward-rlvr"
   - when: "cancellation-aware off-policy response mask (absolute token log-ratios)"
     to: "method:carm"
+  - when: "MCMC / Metropolis–Hastings projection sampling of expert traces then ordinary SFT (not CISPO default)"
+    to: "method:sampling-sft"
 current_sota:
   - method: method:cispo
     as_of: "2026-08-26"
@@ -106,7 +109,8 @@ methods:
   - method:corrgrpo
   - method:dara
   - method:carm
-last_reviewed: "2026-10-02"
+  - method:sampling-sft
+last_reviewed: "2026-10-03"
 tags:
   - post-training
   - reasoning
@@ -154,6 +158,7 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Optional hindsight-divergence prefix reuse**: `method:hdl` (`arXiv:2609.36864`) branches GRPO groups at hindsight logp-change positions. Up to 2.5× fewer tokens / 1.8× faster rollouts vs GRPO; agent gains including ScienceWorld. Slime-based, no dedicated repo. Does not replace CISPO or GRAFT.
 - **Not this task (multi-reward aggregation)**: `task:multi-reward-rlvr` / `method:corrgrpo` (`arXiv:2609.36820`) Pearson-normalizes summed GRPO covariances; `method:dara` (`arXiv:2610.00574`) inverse-sqrt density on GDPO-style advantages. Dual-active on that task. Not a CISPO replacement.
 - **Optional cancellation-aware off-policy mask**: `method:carm` (`arXiv:2610.02039`) averages absolute token log-ratios before the sequence threshold. No public code. Does not replace CISPO, CIS-RL, or Miles.
+- **Optional Sampling SFT (not this Pass@1 default)**: `method:sampling-sft` (`arXiv:2610.02140`) MCMC-projects off-policy expert traces toward the base model then runs ordinary SFT. Qwen2.5-3B MATH(3,4,5) 0.495 vs GRPO 0.457 vs vanilla SFT 0.243; MATH500 0.582 vs GRPO 0.313. Vanilla SFT still loses to GRPO. Sampling SFT then GRPO is best (0.545 / 0.652). Chemistry beats OPSD; medical is roughly tied and forgets less. Mention on `task:privileged-teacher-opsd`. Does not replace CISPO or VISTA.
 - **Not this task (MoE train–infer mismatch)**: `method:cis-rl` (`arXiv:2609.32444`) on `task:math-code-rl-moe`. Truncates log-odds displacement, not the CISPO Pass@1 default.
 - **Not this task (structural tool/summary credit)**: `method:slca-grpo` on `task:tool-agent-segment-credit`. Does not replace CISPO.
 - **Not this task (multi-stage agent continual learning)**: `method:aclarena` on `task:agent-continual-learning`. Sequential stage stacking, not a Pass@1 loss.

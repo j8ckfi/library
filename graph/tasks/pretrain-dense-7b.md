@@ -14,6 +14,10 @@ current_sota:
 redirects:
   - when: "latent-space / next-concept LM architecture rather than dense NTP 7B"
     to: "task:latent-space-lm-pretrain"
+  - when: "fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds"
+    to: "task:synthetic-single-stage-pretrain"
+  - when: "zero-natural-data self-play pretraining (UTM programs, no natural text)"
+    to: "task:zero-natural-data-self-play-pretrain"
 methods:
   - method:muon2
   - method:soap-muon-scale
@@ -31,7 +35,9 @@ methods:
   - method:optimizer-memory-schedules
   - method:musec
   - method:ncp-archpreview
-last_reviewed: "2026-09-11"
+  - method:synth
+  - method:self-play-pretraining
+last_reviewed: "2026-10-03"
 tags:
   - pretraining
   - dense-lm
@@ -52,3 +58,5 @@ Training a ~7B dense language model from scratch requires optimizing billions of
 - **OT-horizon HP guidance**: `method:optimizer-memory-schedules` (`arXiv:2609.04577`). 51M–253M study; do not retarget this 7B optimizer.
 - **Optional Muon stability plug-in**: `method:musec` (`arXiv:2609.11655`). Does not replace Muon2.
 - **Latent-space LM architecture (not this task)**: `method:ncp-archpreview` on `task:latent-space-lm-pretrain`.
+- **Fully synthetic single-stage pretrain (not this 7B web/open NTP)**: `method:synth` on `task:synthetic-single-stage-pretrain`. Baguettotron-600M is 594M on SYNTH, not a 7B Dolma run.
+- **Zero-natural-data self-play pretrain (not this task)**: `method:self-play-pretraining` on `task:zero-natural-data-self-play-pretrain`.

@@ -14,6 +14,7 @@ out_of_scope:
   - "Data-free Challenger-Solver-Judge curriculum generation (J-Zero)"
   - "Teacher-free flow-matching / diffusion alignment (Self-OPD)"
   - "Verifier-grounded privileged-hindsight trajectory balance (FlowBalance)"
+  - "Zero-natural-data self-play pretraining from random init (UTM programs)"
 redirects:
   - when: "verifiable labels exist and the goal is Pass@1 RLVR"
     to: "task:math-code-rl-dense"
@@ -29,6 +30,8 @@ redirects:
     to: "task:posttrain-diffusion"
   - when: "verifier-grounded same-model self-improvement with privileged hindsight"
     to: "task:math-code-rl-dense"
+  - when: "zero-natural-data self-play pretraining from random init (UTM programs)"
+    to: "task:zero-natural-data-self-play-pretrain"
 current_sota:
   - method: method:opsa
     as_of: "2026-09-01"
@@ -48,7 +51,7 @@ methods:
   - method:flowbalance
   - method:opsd-collapse-review
   - method:nsd
-last_reviewed: "2026-09-11"
+last_reviewed: "2026-10-03"
 tags:
   - post-training
   - on-policy

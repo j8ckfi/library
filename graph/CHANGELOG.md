@@ -6,6 +6,24 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-10-03 — ingest method:sampling-sft (active on task:math-code-rl-dense; does not supersede method:cispo / method:vista)
+- Added paper:sampling-sft (2610.02140), method:sampling-sft, recipe:sampling-sft (`code_status: none`; `repo_url: none found`; project https://aakaran.github.io/finetuning_with_sampling/). Reverse redirects from math-code-rl-dense and privileged-teacher-opsd.
+- Status active (`sota_for: []`). MCMC / Metropolis–Hastings projection sampling rewrites off-policy expert traces toward the base model, then ordinary SFT. Vanilla SFT still loses to GRPO; do not headline “SFT beats GRPO.” Sampling SFT then GRPO is best in the math table.
+- Evidence: Qwen2.5-3B MATH(3,4,5) 0.495 vs GRPO 0.457 vs UFT 0.470 vs vanilla SFT 0.243 vs base 0.315; MATH500 0.582 vs GRPO 0.313; Sampling SFT+RL 0.545 / 0.652. Chemistry 0.660 vs OPSD 0.618. Medical 0.458 vs OPSD 0.466, prior avg 0.516 vs 0.501 (arXiv:2610.02140); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; VISTA remains privileged-teacher OPSD; OPD remains matching distillation.
+
+### 2026-10-03 — ingest task:zero-natural-data-self-play-pretrain (experimental first hop method:self-play-pretraining; does not supersede method:j-zero)
+- Added task:zero-natural-data-self-play-pretrain, paper:self-play-pretraining (2609.30063), method:self-play-pretraining (`status: experimental`, `sota_for: []`, listed in the new task `current_sota`), recipe:self-play-pretraining (`code_status: released`; `repo_url: https://github.com/nourya-aliz/self_play_pretraining`). Reverse redirects from data-free-self-evolution, open-data-recipe, llm-pretraining-optimization, pretrain-dense-7b, teacher-free-on-policy-self-adaptation.
+- Title confirmed from arXiv: “Self-Play Pretraining with Zero Data.” This is pretraining from random init with zero natural text (UTM generator + byte NTP), not a J-Zero post-train sibling, so it gets its own task rather than an active plug-in on task:data-free-self-evolution. J-Zero `current_sota` is unchanged.
+- Evidence: DCLM exponent b=0.123 vs literature 0.048–0.099; CIFAR-10 image bytes b=0.145; Fibonacci discovery round 512 vs E[first]>53,000; 24.4M warm start ESC-50 320M vs 496M, CIFAR-10 421M vs 588M (arXiv:2609.30063); verified: true; evidence_level: preprint. Scale <25M.
+- Scope checks: J-Zero remains post-train Challenger–Solver–Judge; SYNTH remains Wikipedia-seeded synthetic pretrain; OLMo-3 remains the open mix; OPSA remains unlabeled-prompt self-adaptation.
+
+### 2026-10-03 — ingest task:synthetic-single-stage-pretrain (first hop method:synth; does not supersede method:olmo-3 / method:muon2)
+- Added task:synthetic-single-stage-pretrain, paper:synth (2609.37891), method:synth (`status: sota`, `sota_for: [task:synthetic-single-stage-pretrain]`), recipe:synth (`code_status: partial`; dataset `PleIAs/SYNTH` / `SYNTH-Initiative/SYNTH`; HF `PleIAs/Baguettotron` is the 321M/200B card, not the 594M FActScore run). Reverse redirects from open-data-recipe, llm-pretraining-optimization, pretrain-dense-7b.
+- Seed-grounded synthetic pretraining (58,698 Wikipedia articles + Wikibooks), not self-play and not a Dolma-3 replacement. No separate SFT/RL. Distinct from `method:hive-synth`.
+- Evidence: Baguettotron-600M (594M, 158B tokens) Table 1 S/(S+C) 79.3%±2.1 / macro 41.7%±2.2 vs Qwen3-0.6B 65.7%/31.6% (~36T) and Phi-4-mini 77.4%/29.5% (~5T); iso-compute +16–17 MC / +11–14 open-ended vs FineWiki/FinePDFs-Edu; TeleQnA 41.6→56.7, 3GPP FactScore 21.5→38.8; held-out abstain 67% vs 20% in-seed (arXiv:2609.37891); verified: true; evidence_level: preprint.
+- Scope checks: OLMo-3 remains the open mix; Muon2 remains the ~7B optimizer; Puro-2B remains consumer-GPU open-mix ~2B. Locked method files were not edited.
+
 ### 2026-10-02 — weekday SOTA sweep (CorrGRPO, DARA, TACO, Where-OPD, ActiveSaddler, CARM, N-OPSD)
 - Seven active plug-ins plus new `task:multi-reward-rlvr` (dual-active CorrGRPO + DARA). No current_sota retarget of CISPO / VISTA / muon2 / omp2-harness / SCALE / Miles / SAPO / ES-reasoning / NeoHorse-1 / Vision-RL2.
 - Window: 2026-10-02 Librarian weekday sweep after PR 35 watermark 2609.40285. New arXiv 2609.36820, 2610.00574, 2610.02199, 2610.02117, 2610.00906, 2610.02039, 2609.39687. Optional claim notes: Sharpening Tax 2610.01509, OPD same-family scaling 2609.32722.

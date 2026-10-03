@@ -4,6 +4,21 @@ type: task
 title: "Data-Free Self-Evolution across Verifiable and Unverifiable Domains"
 domain: "post-training"
 summary: "Closed-loop self-evolution with no external training data, covering both verifiable tasks and unverifiable/open-ended domains via co-evolving Challenger, Solver, and Judge."
+scope: "Post-train Challenger–Solver–Judge co-evolution from a pretrained chat/base checkpoint with zero external tasks. First hop is J-Zero. Not pretrain-from-scratch."
+out_of_scope:
+  - "Zero-natural-data self-play pretraining from random init (UTM programs / byte NTP)"
+  - "Seed-grounded synthetic pretraining from Wikipedia/Wikibooks (SYNTH)"
+  - "Unlabeled existing math problems (u-OPSD)"
+  - "Test-time unlabeled adaptation (TTPO)"
+redirects:
+  - when: "zero-natural-data self-play pretraining from random init (generator proposes UTM programs)"
+    to: "task:zero-natural-data-self-play-pretrain"
+  - when: "seed-grounded synthetic single-stage pretraining from Wikipedia/Wikibooks seeds"
+    to: "task:synthetic-single-stage-pretrain"
+  - when: "unlabeled existing math problems with majority-vote pseudo-solutions"
+    to: "task:label-free-reasoner-posttrain"
+  - when: "test-time adaptation on unlabeled queries"
+    to: "task:label-free-test-time-reasoner"
 current_sota:
   - method: method:j-zero
     as_of: "2026-08-31"
@@ -16,6 +31,9 @@ methods:
   - method:u-opsd
   - method:ttpo
   - method:cispo
+  - method:self-play-pretraining
+  - method:synth
+last_reviewed: "2026-10-03"
 tags:
   - post-training
   - self-evolution
@@ -37,3 +55,5 @@ Improve a language model with zero external training tasks or labels. A Challeng
 ## SOTA Recommendation (as of 2026-08-31)
 - **Primary Method**: **J-Zero** (`method:j-zero`, `paper:j-zero` `arXiv:2608.26582`) for Challenger–Solver–Judge co-evolution from zero data.
 - **Not This Task**: `method:u-opsd` remains the unlabeled existing-math-problems default; `method:ttpo` remains test-time; `method:cispo` / `method:sapo` / `method:sao` remain labeled and agentic RL defaults.
+- **Not this task (pretrain from zero natural text)**: `method:self-play-pretraining` (`arXiv:2609.30063`) on `task:zero-natural-data-self-play-pretrain`. UTM generator + byte NTP from random init. Does not retarget J-Zero.
+- **Not this task (Wikipedia-seeded synthetic pretrain)**: `method:synth` on `task:synthetic-single-stage-pretrain`.

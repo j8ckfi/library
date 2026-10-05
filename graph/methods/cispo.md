@@ -43,7 +43,13 @@ do_not_use_for:
   - when: "cancellation-aware off-policy response mask (absolute token log-ratios)"
     reason: "CISPO remains Pass@1; CARM is a sequence-level off-policy mask"
     use_instead: "method:carm"
-last_reviewed: "2026-10-02"
+  - when: "catastrophic strategy collapse in RLVR (coach prompting + strategy-balancing heads)"
+    reason: "CISPO remains Pass@1; Mesh Learning keeps concurrent strategy heads from collapsing"
+    use_instead: "method:mesh-learning"
+  - when: "on-policy parameter update direction SFT (OPSFT), not Pass@1 RLVR"
+    reason: "CISPO remains Pass@1; OPSFT is cheaper SFT aligned with the on-policy gradient"
+    use_instead: "method:opsft"
+last_reviewed: "2026-10-05"
 papers:
   - paper:minimax-m1
   - paper:scalerl

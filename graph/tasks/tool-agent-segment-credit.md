@@ -22,6 +22,8 @@ redirects:
     to: "method:critical-state-rl"
   - when: "single-turn math/code Pass@1 RLVR"
     to: "task:math-code-rl-dense"
+  - when: "per-state shrinkage of step-level advantage for agentic RL (GiGPO-style groups)"
+    to: "method:adastep"
 current_sota:
   - method: method:slca-grpo
     as_of: "2026-09-25"
@@ -36,7 +38,8 @@ methods:
   - method:pact
   - method:critical-state-rl
   - method:cispo
-last_reviewed: "2026-09-25"
+  - method:adastep
+last_reviewed: "2026-10-05"
 tags:
   - post-training
   - agentic
@@ -56,4 +59,5 @@ Tool-calling rollouts mix structured tool invocations with a user-facing natural
 
 ## SOTA Recommendation (as of 2026-09-25)
 - **Primary Method (this task only)**: **SLCA-GRPO** (`method:slca-grpo`, `paper:slca-grpo` `arXiv:2609.29050`). Status `active`. Listed here as first hop; method `sota_for` stays empty.
+- **Optional per-state step-advantage shrinkage**: `method:adastep` (`arXiv:2610.03223`). Qwen3-4B vs GiGPO 93.01/86.58/88.76/80.27/48.70 vs 88.02/83.07/87.34/78.28/46.67. Mention on `task:outcome-only-long-horizon-agent-rl`. Does not replace SLCA-GRPO.
 - **Not This Task**: `method:foldgrpo` remains folding; `method:sao` remains async stragglers; `method:pact` remains Actor-then-Critic token credit; `method:critical-state-rl` remains which-turn trainability; `method:cispo` remains Pass@1.

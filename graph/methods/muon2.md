@@ -14,6 +14,10 @@ do_not_use_for:
   - when: "full-param FT optimizer-state memory (ternary column-wise one-sparse)"
     reason: "Muon2 remains the ~7B pretrain optimizer; TACO is an FT memory geometry"
     use_instead: "method:taco"
+  - when: "Muon-style norm-aware update for embedding tables (1->2) and LM head (2->inf) instead of AdamW"
+    reason: "Muon2 remains the hidden-layer / 7B default; MuonIO only replaces AdamW on embeddings and the LM head"
+    use_instead: "method:muonio"
+last_reviewed: "2026-10-05"
 papers:
   - paper:muon2
 recipes:
@@ -40,7 +44,7 @@ Muon2 is a second-generation matrix orthogonalization momentum optimizer designe
 
 ## When to Use
 - Default SOTA optimizer for pretraining dense 7B language models from scratch.
-- Hidden matrix layers in multi-layer perceptrons and attention projections. Keep embeddings and `lm_head` on AdamW.
+- Hidden matrix layers in multi-layer perceptrons and attention projections. Default I/O layers stay AdamW; use `method:muonio` when embeddings / `lm_head` should get Muon-style \(1\to 2\) / \(2\to\infty\) updates instead.
 - Qwen3.8-Next's Muon+AdamW split (`method:qwen38-next`) is a production architecture recipe, not a replacement of this 7B optimizer default.
 - Optional structured layer dropout (`method:layer-dropout`) is a residual-path regularizer, not a replacement of this optimizer.
 - Overtraining-axis HP guidance (`method:optimizer-memory-schedules`) does not change this method's `sota_for`. ADANA (`method:adana`) is a named baseline in that 51M–253M study, not a 7B default.
@@ -48,5 +52,5 @@ Muon2 is a second-generation matrix orthogonalization momentum optimizer designe
 - Full-param FT sparse geometry (`method:taco`) is not a replacement of this 7B optimizer default.
 
 ## Gotchas & Failure Modes
-- Embedding tables, 1D vectors, and normalization scale factors should be optimized with standard AdamW rather than matrix orthogonalization.
+- Embedding tables, 1D vectors, and normalization scale factors should be optimized with standard AdamW rather than matrix orthogonalization, unless `method:muonio` is in scope for embeddings / `lm_head`.
 - **MuonH** (Muon + hyperball; used in `method:puro-2b`) wraps scale-invariant 2D attn/MLP matrices, projects each back to $R=\|W_0\|_F$ after the step, and runs Hyperball LR at $10\times$ the AdamW base. It is a documented Muon/Muon2-family variant for consumer-GPU ~2B pretrain. It does **not** change this method's `sota_for`: dense ~7B still uses Muon2 (+ KL-SOAP if memory allows).

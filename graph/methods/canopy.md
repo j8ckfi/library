@@ -47,11 +47,20 @@ do_not_use_for:
   - when: "branchy RLVR token cost; hindsight-divergence prefix reuse"
     reason: "CANOPY is AppWorld TGC coverage; HDL reuses prefixes inside a GRPO-family group"
     use_instead: "method:hdl"
+  - when: "structured planning/subtask credit + local-context distillation for long-horizon agents"
+    reason: "CANOPY remains coverage / anti-drift; SCAD is structured planning/execution credit plus local distill"
+    use_instead: "method:scad"
+  - when: "learning rubric rewards for rubric-based RL (vacuous credit)"
+    reason: "CANOPY needs a programmatic checker; MetaRubric learns the rubric judge"
+    use_instead: "method:metarubric"
+  - when: "per-state shrinkage of step-level advantage for agentic RL (GiGPO-style groups)"
+    reason: "CANOPY scales same-task groups; AdaStep shrinks GiGPO step advantages"
+    use_instead: "method:adastep"
 assumptions:
   - "A held-out unit-test / patch verifier exists. Sparse fully-correct reward, not pass-fraction."
   - "Paper: Qwen3-14B on AppWorld train split (90 tasks), veRL, n=32, 50 turns / 32k train, 100 turns / 61k test, KL β=1e-4, lr 3e-6, 90 steps, hardest tier kept."
   - "SWE transfer retunes n=16, KL 1e-2, 80 turns / 36k, and -0.2 for no-patch terminals. Not a literal hyperparameter copy."
-last_reviewed: "2026-10-01"
+last_reviewed: "2026-10-05"
 papers:
   - paper:canopy
 recipes:

@@ -18,6 +18,8 @@ redirects:
     to: "task:synthetic-single-stage-pretrain"
   - when: "zero-natural-data self-play pretraining (UTM programs, no natural text)"
     to: "task:zero-natural-data-self-play-pretrain"
+  - when: "Muon-style norm-aware update for embedding tables (1->2) and LM head (2->inf) instead of AdamW"
+    to: "method:muonio"
 methods:
   - method:muon2
   - method:soap-muon-scale
@@ -37,7 +39,8 @@ methods:
   - method:ncp-archpreview
   - method:synth
   - method:self-play-pretraining
-last_reviewed: "2026-10-03"
+  - method:muonio
+last_reviewed: "2026-10-05"
 tags:
   - pretraining
   - dense-lm
@@ -50,7 +53,7 @@ tags:
 Training a ~7B dense language model from scratch requires optimizing billions of parameters over trillions of tokens with maximal compute and wall-clock efficiency.
 
 ## SOTA Recommendation (as of 2026-09-08)
-- **Primary Optimizer**: **Muon2** (`method:muon2`, 2604.09967) + **KL-SOAP** (`method:soap-muon-scale`, 2607.20548) if GPU memory allows. Keep embeddings and `lm_head` on AdamW. Unchanged.
+- **Primary Optimizer**: **Muon2** (`method:muon2`, 2604.09967) + **KL-SOAP** (`method:soap-muon-scale`, 2607.20548) if GPU memory allows. Default I/O layers stay AdamW; optional `method:muonio` (`arXiv:2610.02705`) for embedding \(1\to 2\) / LM-head \(2\to\infty\). Unchanged hidden-layer default.
 - **Data Recipe**: **OLMo-3 / Dolma-3** (`paper:olmo-3`, 2512.13961).
 - **Not this scale**: ~1.5-2B on consumer GPUs / tight budget is `method:puro-2b` (`task:budget-consumer-pretrain`), not this 7B default.
 - **Adjacent hybrid residual / Qwen-style production architecture**: `method:qwen38-next`. Does not replace Muon2 as the 7B optimizer.

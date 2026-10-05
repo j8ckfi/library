@@ -22,11 +22,14 @@ do_not_use_for:
   - when: "you will run only RLVR or only OPD"
     reason: "There is nothing to sequence; use the matching first hop"
     use_instead: "method:cispo"
+  - when: "rubric-privileged OPD warm start before rubric-based RL"
+    reason: "OPD-then-RLVR is verifiable OPD then labeled RLVR; RP-OPD is rubric-privileged then rubric RL"
+    use_instead: "method:rp-opd"
 assumptions:
   - "You will run both OPD and RLVR. Paper: Qwen3-1.7B-Base student, Qwen3-8B non-thinking teacher, veRL, G=8, AdamW 1e-6, clip 0.2, no KL penalty, mask student EOS in the teacher term."
   - "Default switch S=60 of 150 (logic) / 120 (DeepMath) steps. Switch when OPD validation saturates, not on a fixed step if the curve is still climbing."
   - "Does not retarget method:opd or method:cispo. It is the stacking order when both are used, against joint one-step fusion."
-last_reviewed: "2026-09-08"
+last_reviewed: "2026-10-05"
 papers:
   - paper:opd-then-rlvr
 recipes:

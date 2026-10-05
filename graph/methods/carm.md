@@ -23,9 +23,10 @@ assumptions:
   - "Rollout policy and train policy can differ (minibatch staleness, actor-learner delay, vLLM/SGLang vs FSDP/Megatron). Token ratios r_t = pi_theta / pi_rollout on sampled tokens."
   - "Paper: math mean@16 on AIME 2024/2025/2026 + BeyondAIME; four code benches pass@1. GeoMean / DeepSeek-V3.2 signed-log sequence mask is the cancellation baseline."
   - "No public code as of 2026-10-02 (`code_status: none`)."
-last_reviewed: "2026-10-02"
+last_reviewed: "2026-10-05"
 papers:
   - paper:carm
+  - paper:probe-the-harness
 recipes:
   - recipe:carm
 claims:

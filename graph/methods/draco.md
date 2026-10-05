@@ -19,10 +19,13 @@ do_not_use_for:
   - when: "the problem is folding a long tool trajectory"
     reason: "FoldGRPO folds context; DRACO redistributes rubric scores"
     use_instead: "method:foldgrpo"
+  - when: "learning rubric rewards for rubric-based RL (vacuous credit)"
+    reason: "DRACO writes outcome-blind rubrics without a learned judge; MetaRubric adapts the rubric against Vacuous Credit"
+    use_instead: "method:metarubric"
 assumptions:
   - "No ground-truth success signal at train time. A frozen judge can propose and score rubrics and cite responsible steps."
   - "Paper: Qwen3.6-27B and Qwen2.5-32B-Instruct LoRA GRPO, 8x H100, B=16, G=6, GPT-5.4 judge. AppWorld train 90 tasks. Ground-truth tests used only at eval."
-last_reviewed: "2026-09-04"
+last_reviewed: "2026-10-05"
 papers:
   - paper:draco
 recipes:

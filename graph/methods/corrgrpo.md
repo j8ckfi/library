@@ -19,11 +19,14 @@ do_not_use_for:
   - when: "cancellation-aware off-policy response mask"
     reason: "CARM filters drifted rollouts; CorrGRPO rescales on-policy multi-reward advantages"
     use_instead: "method:carm"
+  - when: "lexicographic priority multi-objective OPD from reward-specialist teachers (not scalarized multi-reward RL)"
+    reason: "CorrGRPO Pearson-normalizes GRPO rewards; LMOPD is priority-ordered teacher OPD"
+    use_instead: "method:lmopd"
 assumptions:
   - "Several sequence-level reward components on a GRPO-family host. Paper: Qwen2.5-Coder 0.5B–7B coding; also tool calling and agent security. GDPO is a paper baseline, not a library method."
   - "Zero-variance reward rows/columns of the correlation matrix are zeroed, including the diagonal."
   - "Official code HKUST-KnowComp/CorrGRPO released as of 2026-10-01."
-last_reviewed: "2026-10-02"
+last_reviewed: "2026-10-05"
 papers:
   - paper:corrgrpo
 recipes:

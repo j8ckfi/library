@@ -43,6 +43,12 @@ redirects:
     to: "method:actfirst-opd"
   - when: "branchy RLVR token cost; hindsight-divergence prefix reuse"
     to: "method:hdl"
+  - when: "per-state shrinkage of step-level advantage for agentic RL (GiGPO-style groups)"
+    to: "method:adastep"
+  - when: "structured planning/subtask credit + local-context distillation for long-horizon agents"
+    to: "method:scad"
+  - when: "learning rubric rewards for rubric-based RL (vacuous credit)"
+    to: "method:metarubric"
 current_sota:
   - method: method:canopy
     as_of: "2026-09-04"
@@ -68,7 +74,10 @@ methods:
   - method:pivotopd
   - method:actfirst-opd
   - method:hdl
-last_reviewed: "2026-10-01"
+  - method:adastep
+  - method:scad
+  - method:metarubric
+last_reviewed: "2026-10-05"
 tags:
   - post-training
   - agentic
@@ -104,4 +113,7 @@ Two siblings share this task and are not substitutes:
 - **Not this task (multi-stage agent continual learning)**: `method:aclarena` (`arXiv:2609.23989`) on `task:agent-continual-learning`. Sequential capability stacking, not AppWorld TGC.
 - **Optional multi-turn agent OPD at pivotal mistakes (not this first hop)**: `method:pivotopd` (`arXiv:2609.40285`). Reverse-KL prevent + forward-KL recovery. Strongest average on ALFWorld/WebShop/Search-QA; +3.2 SWE-Bench Verified. Does not replace CANOPY or OPD.
 - **Optional act-first multi-turn OPD (not this first hop)**: `method:actfirst-opd` (`arXiv:2609.36608`). Inverse dynamics + async full-response distill. 2.3× / 1.8× / 4.9× wall-clock vs Vanilla OPD on ALFWorld/WebShop/ScienceWorld. Does not replace CANOPY or OPD.
+- **Optional per-state step-advantage shrinkage (not this first hop)**: `method:adastep` (`arXiv:2610.03223`) on `task:tool-agent-segment-credit`. Mention here for long-horizon agent RL. Does not replace CANOPY or SLCA-GRPO.
+- **Optional structured planning/subtask credit (not this first hop)**: `method:scad` (`arXiv:2610.03372`). Qwen3-4B text Avg 46.10 vs ATOD 41.62 / FoldGRPO 39.60. Does not replace CANOPY or PivotOPD.
+- **Optional learned rubric rewards (not this first hop)**: `method:metarubric` (`arXiv:2610.02824`). Qwen3-4B PubMedQA 78.40 vs GRPO 72.40. Code metarubric/metarubric. Does not replace CANOPY or DRACO.
 - **Related branchy RLVR token-cost plug-in (not this first hop)**: `method:hdl` (`arXiv:2609.36864`) on `task:math-code-rl-dense`. Hindsight-divergence prefix reuse; ScienceWorld-style agent gains. Does not replace CANOPY.

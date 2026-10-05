@@ -19,6 +19,10 @@ redirects:
     to: "method:n-opsd"
   - when: "MCMC projection sampling of expert traces then ordinary SFT (not a privileged-teacher update)"
     to: "method:sampling-sft"
+  - when: "adaptive iterative error-to-repair guidance for OPSD"
+    to: "method:air-opd"
+  - when: "root-cause diagnosis of the student's own failed reasoning then differentiated prefix/error distillation"
+    to: "method:rc-opd"
 current_sota:
   - method: method:vista
     as_of: "2026-08-31"
@@ -43,7 +47,9 @@ methods:
   - method:where-opd
   - method:n-opsd
   - method:sampling-sft
-last_reviewed: "2026-10-03"
+  - method:air-opd
+  - method:rc-opd
+last_reviewed: "2026-10-05"
 tags:
   - post-training
   - distillation
@@ -76,4 +82,6 @@ Train a problem-only student on its own rollouts using dense token-level targets
 - **Optional scale-collapse scaffold fix (not this first hop)**: `method:oasis` (`arXiv:2609.37915`). Supervise verified on-policy scaffolds; teacher context is another same-problem rollout (answer labels only). OPSD gains collapse with scale; OASIS stays ~+3 pts and beats OPSD by +3.05 at 8B. Does not replace VISTA or u-OPSD.
 - **Optional MLLM spatial-hint OPSD (not this first hop)**: `method:where-opd` (`arXiv:2610.02117`). Teacher gets textual object/coord hints from synthetic scenes; student sees the same image. Real-world avg +3.23 on Qwen3.5-4B. VISTA stays text-math first hop. Mention on `task:mllm-finegrained-perception-rl`. Does not replace VISTA, OASIS, or Vision-RL2.
 - **Optional neighborhood-expert OPSD (not this first hop)**: `method:n-opsd` (`arXiv:2609.39687`). Frozen local perturbations → denser supervision; Avg@12 +2.75/+1.67/+1.94 vs OPSD. No public code. Not a VISTA bake-off (64.8→66.9) retarget. Does not replace VISTA, OASIS, or DCE+SRCL.
+- **Optional error-to-repair iterative OPSD (not this first hop)**: `method:air-opd` (`arXiv:2610.02700`). Qwen3-4B Math Avg External-G 66.7 / Self-G 65.8 vs OPSD 63.1 / GRPO 62.3. Does not replace VISTA or OASIS.
+- **Optional root-cause-guided OPD (not this first hop)**: `method:rc-opd` (`arXiv:2610.03515`). Qwen3-1.7B/4B/8B Avg@4 44.17/66.11/66.94 vs OPSD 40.28/62.50/63.33. Code Starrylay/RC-OPD. Does not replace VISTA or OASIS.
 - **See also (SFT data projection, not this first hop)**: `method:sampling-sft` (`arXiv:2610.02140`) on `task:math-code-rl-dense`. MCMC-projects off-policy traces then ordinary SFT. Chemistry (Qwen2.5-7B-Instruct) 0.660 vs OPSD 0.618; medical 0.458 vs OPSD 0.466 with prior avg 0.516 vs 0.501. Not a privileged-teacher update. Does not replace VISTA.

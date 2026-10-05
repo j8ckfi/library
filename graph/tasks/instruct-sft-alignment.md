@@ -29,12 +29,15 @@ methods:
   - method:tiny-aya-l2-thinker
   - method:plc-dpo
   - method:dco
+  - method:opsft
 redirects:
   - when: "in-language (L2) reasoning SFT rather than general instruct"
     to: "task:multilingual-l2-reasoning-sft"
   - when: "24GB quality LoRA rather than drift-budget instruct FT"
     to: "task:parameter-efficient-fine-tuning"
-last_reviewed: "2026-09-16"
+  - when: "on-policy parameter update direction SFT (OPSFT)"
+    to: "method:opsft"
+last_reviewed: "2026-10-05"
 tags:
   - post-training
   - instruct
@@ -55,3 +58,4 @@ Transforming base pre-trained models into safe, capable, instruction-following c
 - **L2 in-language reasoning (not this general instruct task)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.
 - **Noisy preference labels**: `method:plc-dpo` on `task:direct-preference-alignment`. Does not replace Dolci.
 - **Optional drift-budget instruct FT**: `method:dco` (`arXiv:2609.13680`) chooses update direction (layer-selective probe) under an anchored-KL budget. Reverses QA-only FT failure while keeping reasoning. Does not replace OLMo-3 / Cascade / Delta Learning / Open-MOPD / LoRA quality.
+- **Optional on-policy-direction SFT**: `method:opsft` (`arXiv:2609.36659`). Qwen3-4B DeepMath mean 40.11 vs GRPO 38.96 vs SFT 34.22 (6.4h vs 16.5h). Mention on `task:math-code-rl-dense`. Code ssfgunner/OPSFT. Does not replace OLMo-3 or CISPO.

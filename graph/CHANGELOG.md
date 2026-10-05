@@ -6,6 +6,106 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-10-05 — weekday SOTA sweep (MuonIO, SF-MOPD, LMOPD, Latent-MOPD, RP-OPD, Air-OPD, RC-OPD, AdaStep, FTW, SCAD, Mesh Learning, TACM, LESSER, OPSFT, MetaRubric)
+- Fifteen active plug-ins plus four claim-note papers. No current_sota retarget of muon2 / CISPO / VISTA / OPD / Open-MOPD / CANOPY / SLCA-GRPO / CorrGRPO / DARA / RLM / SAO / Miles.
+- Window: 2026-10-05 Librarian weekday sweep after PR 37; watermark was 2610.02199 from PR 36. New arXiv 2610.02705, 2610.02324, 2610.02359, 2610.02381, 2610.02781, 2610.02700, 2610.03515, 2610.03223, 2610.03361, 2610.03372, 2610.02835, 2610.02404, 2610.03702, 2609.36659, 2610.02824. Claim notes 2610.03185, 2609.35259, 2610.03529, 2610.02911.
+
+### 2026-10-05 — claim notes paper:opd-gains-collapse / paper:on-policy-or-off-policy / paper:divergence-entropy-distillation / paper:probe-the-harness (no new methods)
+- Added paper:opd-gains-collapse (2610.03185) on method:opd. Teacher as implicit reward; masking 4B→Base avg 10.16→13.24. Code HancCui/opd_hacking (`code_status: released`).
+- Added paper:on-policy-or-off-policy (2609.35259) on method:opd. KL direction dominates rollout on-policyness. No code.
+- Added paper:divergence-entropy-distillation (2610.03529) on method:opd. Forward KL inflates student entropy; reverse KL deflates. Code NicolasZucchet/Entropy-in-distillation (`code_status: released`).
+- Added paper:probe-the-harness (2610.02911) on method:cis-rl / method:carm / method:sao. TIS vs SAN ranking reversals in verl. SAN is not a library method. No code.
+
+### 2026-10-05 — ingest method:metarubric (active on task:outcome-only-long-horizon-agent-rl; does not supersede method:canopy / method:draco)
+- Added paper:metarubric (2610.02824), method:metarubric, recipe:metarubric (`code_status: released`; `repo_url: https://github.com/metarubric/metarubric`). Reverse redirect for learned rubric rewards.
+- Status active (`sota_for: []`). Learns rubric rewards against Vacuous Credit.
+- Evidence: Qwen3-4B PubMedQA 78.40 vs GRPO 72.40 (+6.00); Gemma-e2b 72.00 vs 51.60; HealthBench-Hard 4B 13.02 vs 10.56 (arXiv:2610.02824); verified: true; evidence_level: preprint.
+- Scope checks: CANOPY remains checker coverage; DRACO remains outcome-blind dynamic rubrics.
+
+### 2026-10-05 — ingest method:opsft (active on task:instruct-sft-alignment; does not supersede method:olmo-3 / method:cispo)
+- Added paper:opsft (2609.36659), method:opsft, recipe:opsft (`code_status: released`; `repo_url: https://github.com/ssfgunner/OPSFT`). Reverse redirects from instruct-sft-alignment and math-code-rl-dense.
+- Status active (`sota_for: []`). Projects SFT onto the on-policy parameter-update direction.
+- Evidence: Qwen3-4B DeepMath mean 40.11 vs GRPO 38.96 vs SFT 34.22 (6.4h vs 16.5h); Qwen3-8B 41.67 vs GRPO 40.31 vs SFT 38.41; post-GRPO continue 38.96→41.36 vs SFT drop 36.25 (arXiv:2609.36659); verified: true; evidence_level: preprint.
+- Scope checks: OLMo-3 remains instruct default; CISPO remains Pass@1.
+
+### 2026-10-05 — ingest method:lesser (active on task:training-data-attribution; does not supersede method:magic)
+- Added paper:lesser (2610.03702), method:lesser, recipe:lesser (`code_status: none`; `repo_url: none found`). Reverse redirect for output-layer-gradient SFT/RL selection.
+- Status active (`sota_for: []`). Cheaper gradient features for selection wrappers.
+- Evidence: 9.7× SFT / 3.0× RL vs 4-ckpt LESS on Llama-2-7B; Jaccard 0.53 vs random 0.075; same final RL acc as GradAlign (arXiv:2610.03702); verified: true; evidence_level: preprint.
+- Scope checks: MAGIC remains peak-LDS first hop.
+
+### 2026-10-05 — ingest method:tacm (active on task:long-context-prompt-offload; does not supersede method:rlm)
+- Added paper:tacm (2610.02404), method:tacm, recipe:tacm (`code_status: released`; `repo_url: https://github.com/brycesandlund/infinite-context`). Reverse redirect for trained self-call + range-read harness.
+- Status active (`sota_for: []`). 8K context matching a 1M baseline on OOLONG-synth at some lengths.
+- Evidence: Qwen3.6-35B-A3B 8K vs GPT-5.4 1M OOLONG-synth 40K 0.535 vs 0.600, 80K 0.561 vs 0.539, 160K 0.464 vs 0.556, 320K 0.470 vs 0.479 (arXiv:2610.02404); verified: true; evidence_level: preprint.
+- Scope checks: RLM remains dumped-prompt first hop.
+
+### 2026-10-05 — ingest method:mesh-learning (active on task:math-code-rl-dense; does not supersede method:cispo)
+- Added paper:mesh-learning (2610.02835), method:mesh-learning, recipe:mesh-learning (`code_status: released`; `repo_url: https://github.com/Ayanami-0123/Open-Mesh-Learning`). Reverse redirect for catastrophic strategy collapse.
+- Status active (`sota_for: []`). Coach Prompting + strategy-balancing regularization.
+- Evidence: Qwen3-4B m=4 AIME26 56.7 vs GRPO 43.3; Qwen2.5-7B m=4 AIME26 13.3 vs GRPO 9.2 (arXiv:2610.02835); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1.
+
+### 2026-10-05 — ingest method:scad (active on task:outcome-only-long-horizon-agent-rl; does not supersede method:canopy / method:pivotopd)
+- Added paper:scad (2610.03372), method:scad, recipe:scad (`code_status: none`; `repo_url: none found`). Reverse redirect for structured planning/subtask credit.
+- Status active (`sota_for: []`). Local-context distillation for long-horizon agents.
+- Evidence: Qwen3-4B text Avg 46.10 vs ATOD 41.62 / HiPER 41.49 / FoldGRPO 39.60 (+4.48); multimodal +4.19 (arXiv:2610.03372); verified: true; evidence_level: preprint. ATOD/HiPER are paper baselines, not library methods.
+- Scope checks: CANOPY remains checker coverage; PivotOPD remains pivotal-mistake OPD.
+
+### 2026-10-05 — ingest method:ftw (active on task:agentic-async-rl; does not supersede method:sao)
+- Added paper:ftw (2610.03361), method:ftw, recipe:ftw (`code_status: none`; `repo_url: none found`). Reverse redirect for CEM-style critic-free RFT from replay.
+- Status active (`sota_for: []`). NeurIPS 2026. Use when group rollouts are impractical.
+- Evidence: Search-R1 Qwen2.5-3B-Instruct FTW-K1-C4 35.46±0.15 vs GRPO 33.6 vs PPO 32.5; Sokoban is curves only (arXiv:2610.03361); verified: true; evidence_level: peer-reviewed.
+- Scope checks: SAO remains async straggler replay.
+
+### 2026-10-05 — ingest method:adastep (active on task:tool-agent-segment-credit; does not supersede method:slca-grpo / method:canopy)
+- Added paper:adastep (2610.03223), method:adastep, recipe:adastep (`code_status: none`; `repo_url: none found`). Reverse redirects from tool-agent-segment-credit and outcome-only-long-horizon-agent-rl.
+- Status active (`sota_for: []`). Per-state shrinkage of step-level advantage.
+- Evidence: Qwen3-4B 93.01/86.58/88.76/80.27/48.70 vs GiGPO 88.02/83.07/87.34/78.28/46.67; Qwen3-1.7B Δ vs GiGPO +2.60/+1.73/+0.75/+0.66/+9.36 (arXiv:2610.03223); verified: true; evidence_level: preprint. GiGPO is a paper baseline, not a library method.
+- Scope checks: SLCA-GRPO remains segment-credit first hop; CANOPY remains checker coverage.
+
+### 2026-10-05 — ingest method:rc-opd (active on task:privileged-teacher-opsd; does not supersede method:vista / method:oasis)
+- Added paper:rc-opd (2610.03515), method:rc-opd, recipe:rc-opd (`code_status: released`; `repo_url: https://github.com/Starrylay/RC-OPD`). Reverse redirect for root-cause-guided OPD.
+- Status active (`sota_for: []`). Diagnoses the student's own failed reasoning then differentiates prefix/error distillation.
+- Evidence: Table 1 Avg@4 Qwen3-1.7B/4B/8B 44.17/66.11/66.94 vs OPSD 40.28/62.50/63.33; 8B AIME25 76.67 vs OPSD 64.17 (arXiv:2610.03515); verified: true; evidence_level: preprint.
+- Scope checks: VISTA remains privileged-OPSD SOTA (64.8→66.9 bake-off unchanged).
+
+### 2026-10-05 — ingest method:air-opd (active on task:privileged-teacher-opsd; does not supersede method:vista / method:oasis)
+- Added paper:air-opd (2610.02700), method:air-opd, recipe:air-opd (`code_status: none`; `repo_url: none found`). Reverse redirect for adaptive iterative error-to-repair OPSD.
+- Status active (`sota_for: []`). Iterates error-specific repair guidance.
+- Evidence: Qwen3-4B Math Avg External-G 66.7 / Self-G 65.8 vs OPSD 63.1 / GRPO 62.3 / base 61.2; 8B 67.4 / 66.9 vs OPSD 64.7 (arXiv:2610.02700); verified: true; evidence_level: preprint.
+- Scope checks: VISTA remains first hop; OASIS remains scale-collapse scaffolds.
+
+### 2026-10-05 — ingest method:rp-opd (active on task:student-distillation; does not supersede method:opd / method:opd-then-rlvr)
+- Added paper:rp-opd (2610.02781), method:rp-opd, recipe:rp-opd (`code_status: none`; `repo_url: none found`). Reverse redirects from student-distillation; do_not_use_for on opd-then-rlvr.
+- Status active (`sota_for: []`). NeurIPS 2026. Rubric-privileged OPD warm start then rubric RL.
+- Evidence: Qwen2.5-7B HealthBench/ResearchQA/RubricHub 0.673/0.797/0.829 vs SFT+RL 0.607/0.721/0.815; 3B 0.632/0.776/0.735; Llama-3.1-8B HealthBench 0.634 vs 0.526 (arXiv:2610.02781); verified: true; evidence_level: peer-reviewed.
+- Scope checks: OPD remains matching distillation; OPD-then-RLVR remains verifiable OPD then labeled RLVR.
+
+### 2026-10-05 — ingest method:latent-mopd (active on task:student-distillation; does not supersede method:open-mopd)
+- Added paper:latent-mopd (2610.02381), method:latent-mopd, recipe:latent-mopd (`code_status: released`; `repo_url: https://github.com/fangzy96/Latent-MOPD`). Reverse redirect for hidden-state multi-teacher OPD.
+- Status active (`sota_for: []`). Representation-level specialist matching.
+- Evidence: same-family 1.5B last-3 Norm 1.05 vs token-only 0.90 vs uniform 0.79; GYM 52.4 / BBH 66.3 / AIME24 50.8 vs 51.8/65.4/46.0; cross-family last-1 Linear Norm 0.26 vs 0.16 (arXiv:2610.02381); verified: true; evidence_level: preprint.
+- Scope checks: Open-MOPD remains token-share / gap-aware budget.
+
+### 2026-10-05 — ingest method:lmopd (active on task:student-distillation; does not supersede method:open-mopd / method:corrgrpo / method:dara)
+- Added paper:lmopd (2610.02359), method:lmopd, recipe:lmopd (`code_status: none`; `repo_url: none found`). Reverse redirects from student-distillation and multi-reward-rlvr.
+- Status active (`sota_for: []`). Lexicographic priority among reward-specialist teachers.
+- Evidence: 30B-A3B two-expert retained-gain pass@1 102.9 / RQ 103.3 / Conc 46.9 avg 84.4 vs Rewarded Soup 67.1 / GDPO(25,1,1) 18.9; four-expert avg 39.6 vs gated RLVR 34.4; raw pass@1 0.7450 vs base 0.7109 (arXiv:2610.02359); verified: true; evidence_level: preprint. GDPO is prior art, not a library method.
+- Scope checks: Open-MOPD remains multi-teacher default; CorrGRPO/DARA remain scalarized multi-reward RL.
+
+### 2026-10-05 — ingest method:sf-mopd (active on task:student-distillation; does not supersede method:open-mopd)
+- Added paper:sf-mopd (2610.02324), method:sf-mopd, recipe:sf-mopd (`code_status: none`; `repo_url: none found`). Reverse redirect for slow/fast EMA student coupling.
+- Status active (`sota_for: []`). Capability preservation in multi-teacher OPD.
+- Evidence: Qwen3-VL All Avg 8B 67.7 vs MOPD 65.5 vs Open-MOPD 64.2; 4B 64.8 vs 63.6; 2B 54.2 vs 53.3 (arXiv:2610.02324); verified: true; evidence_level: preprint. Paper Open-MOPD 64.2 is not the library 83.4% bake-off.
+- Scope checks: Open-MOPD remains token-share / gap-aware budget.
+
+### 2026-10-05 — ingest method:muonio (active on task:llm-pretraining-optimization; does not supersede method:muon2)
+- Added paper:muonio (2610.02705), method:muonio, recipe:muonio (`code_status: none`; `repo_url: none found`). Reverse redirects from llm-pretraining-optimization and pretrain-dense-7b.
+- Status active (`sota_for: []`). Muon-style \(1\to 2\) embeddings and \(2\to\infty\) LM head instead of AdamW.
+- Evidence: C4 val PPL 60M/130M/1B 28.366/23.617/14.374 vs Muon Tuned 28.502/24.238/14.527; Polar Express IO 1B 14.160 vs PE Tuned 14.361; I/O FLOPs 7Vd+3V vs AdamW 13Vd; state Vd vs 2Vd (arXiv:2610.02705); verified: true; evidence_level: preprint.
+- Scope checks: Muon2 remains the hidden-layer / 7B default.
+
 ### 2026-10-03 — ingest method:sampling-sft (active on task:math-code-rl-dense; does not supersede method:cispo / method:vista)
 - Added paper:sampling-sft (2610.02140), method:sampling-sft, recipe:sampling-sft (`code_status: none`; `repo_url: none found`; project https://aakaran.github.io/finetuning_with_sampling/). Reverse redirects from math-code-rl-dense and privileged-teacher-opsd.
 - Status active (`sota_for: []`). MCMC / Metropolis–Hastings projection sampling rewrites off-policy expert traces toward the base model, then ordinary SFT. Vanilla SFT still loses to GRPO; do not headline “SFT beats GRPO.” Sampling SFT then GRPO is best in the math table.

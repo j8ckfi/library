@@ -17,11 +17,14 @@ do_not_use_for:
   - when: "mix-ratio search or replacing an open pretrain mix"
     reason: "MAGIC scores items for a query; it does not search source weights"
     use_instead: "method:olmo-3"
+  - when: "output-layer-gradient data selection for SFT/RL (cheaper LESS/GradAlign features)"
+    reason: "MAGIC remains peak-LDS when you control the trainer; LESSER cheapens LM-head gradient features"
+    use_instead: "method:lesser"
 assumptions:
   - "You control the trainer (Bergson twice-differentiable trainer or an equivalent recorded trajectory)."
   - "Check metasmoothness (`bergson metasmoothness`) before trusting LDS; untuned runs can collapse to ~0."
   - "Paper/Bergson LDS is GPT-2 WikiText fine-tune, not a 7B from-scratch pretrain."
-last_reviewed: "2026-09-01"
+last_reviewed: "2026-10-05"
 papers:
   - paper:magic
   - paper:bergson

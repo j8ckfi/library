@@ -37,9 +37,13 @@ do_not_use_for:
   - when: "structural credit split for tool-call vs natural-language-summary tokens, not async stragglers"
     reason: "SAO remains async first hop; SLCA-GRPO routes segment advantages"
     use_instead: "task:tool-agent-segment-credit"
-last_reviewed: "2026-09-25"
+  - when: "CEM-style critic-free RFT from replay when group rollouts are impractical (stateful sandboxes)"
+    reason: "SAO remains async straggler replay; FTW is CEM-style ordinal filter on replay when GRPO groups cannot be reconstructed"
+    use_instead: "method:ftw"
+last_reviewed: "2026-10-05"
 papers:
   - paper:sao
+  - paper:probe-the-harness
 recipes:
   - recipe:sao
 claims:

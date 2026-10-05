@@ -22,6 +22,8 @@ redirects:
     to: "method:carm"
   - when: "outcome-only long-horizon interactive agent RL"
     to: "task:outcome-only-long-horizon-agent-rl"
+  - when: "lexicographic priority multi-objective OPD from reward-specialist teachers (not scalarized multi-reward RL)"
+    to: "method:lmopd"
 current_sota:
   - method: method:corrgrpo
     as_of: "2026-10-02"
@@ -42,7 +44,8 @@ methods:
   - method:grpo
   - method:dr-grpo
   - method:carm
-last_reviewed: "2026-10-02"
+  - method:lmopd
+last_reviewed: "2026-10-05"
 tags:
   - post-training
   - rl-alignment
@@ -67,3 +70,4 @@ This is **not** single-reward CISPO, not SAPO, and not CARM's off-policy sequenc
 - **Primary (correlation / scale, this task only)**: **CorrGRPO** (`method:corrgrpo`, `paper:corrgrpo` `arXiv:2609.36820`). Keep the centered total reward; replace covariance-sum std with Pearson-correlation-sum. Status `active`. Dual-active with DARA.
 - **Primary (density / sparse rewards, this task only)**: **DARA** (`method:dara`, `paper:dara` `arXiv:2610.00574`). Inverse-sqrt active-group density on GDPO-style reward-wise advantages. Status `active`. Dual-active with CorrGRPO.
 - **Not This Task**: `method:cispo` remains dense Pass@1; `method:sapo` remains MoE/VL; `method:cis-rl` remains train–infer IS; `method:carm` remains off-policy sequence masking.
+- **Optional priority-ordered multi-teacher OPD (not this scalarized RL task)**: `method:lmopd` (`arXiv:2610.02359`) on `task:student-distillation`. Lexicographic specialist OPD, not Pearson/density GRPO aggregation. Does not replace CorrGRPO or DARA.

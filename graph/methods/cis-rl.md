@@ -26,9 +26,10 @@ assumptions:
   - "Rollouts from vLLM/SGLang, gradients from FSDP/Megatron. Paper: Qwen1.5-MoE, DeepSeek-V2-Lite, Qwen3-30B-A3B on five math benches."
   - "Default λ=2.3 (positive-displacement cap k≤1+λ(1-p)). Optional two-sided floor with κ=5e-3."
   - "Official code kzhao5/CIS-RL released as of 2026-09-30."
-last_reviewed: "2026-09-30"
+last_reviewed: "2026-10-05"
 papers:
   - paper:cis-rl
+  - paper:probe-the-harness
 recipes:
   - recipe:cis-rl
 claims:

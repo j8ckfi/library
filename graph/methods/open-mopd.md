@@ -20,7 +20,16 @@ do_not_use_for:
   - when: "multi-task OPD and teacher can be wrong on some tasks"
     reason: "Open-MOPD is token-share / gap-aware budget across teachers; DuoOPD gates one teacher's weights by joint outcomes"
     use_instead: "method:duoopd"
-last_reviewed: "2026-10-01"
+  - when: "slow (EMA) / fast student coupling in multi-teacher OPD for capability preservation"
+    reason: "Open-MOPD remains token-share / gap-aware budget; SF-MOPD is slow/fast EMA coupling"
+    use_instead: "method:sf-mopd"
+  - when: "lexicographic priority multi-objective OPD from reward-specialist teachers"
+    reason: "Open-MOPD remains token-share / gap-aware budget; LMOPD is lexicographic priority among specialists"
+    use_instead: "method:lmopd"
+  - when: "representation-level (hidden-state) multi-teacher OPD"
+    reason: "Open-MOPD remains token-share / gap-aware budget; Latent-MOPD matches specialist hidden states"
+    use_instead: "method:latent-mopd"
+last_reviewed: "2026-10-05"
 papers:
   - paper:open-mopd
 recipes:

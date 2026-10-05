@@ -18,7 +18,9 @@ redirects:
     to: "task:long-horizon-tool-agent"
   - when: "post-train sparse attention / context ranking under a fixed budget"
     to: "task:posttrain-attention-sparsification"
-last_reviewed: "2026-09-14"
+  - when: "trained self-call + range-read harness (8K window matching a 1M native model on long docs)"
+    to: "method:tacm"
+last_reviewed: "2026-10-05"
 current_sota:
   - method: method:rlm
     as_of: "2025-12"
@@ -31,6 +33,7 @@ methods:
   - method:coding-agent-file-offload
   - method:lambda-rlm
   - method:rah
+  - method:tacm
 tags:
   - agents
   - agent-recursion
@@ -50,5 +53,6 @@ The input is a dense dumped string far larger than the model window. Do not comp
 ## SOTA Landscape
 - **current_sota**: RLM (`method:rlm`).
 - **Active**: coding-agent file offload.
+- **Optional trained 8K harness (not this dumped-prompt default)**: `method:tacm` (`arXiv:2610.02404`). Qwen3.6-35B-A3B 8K vs GPT-5.4 1M on OOLONG-synth 80K 0.561 vs 0.539. Code brycesandlund/infinite-context. Does not replace RLM.
 - **Niche**: λ-RLM, RAH (no public code).
 - Recursion depth >1 is not default (3.6s → 344.5s).

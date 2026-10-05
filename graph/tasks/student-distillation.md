@@ -37,6 +37,14 @@ redirects:
     to: "method:ride"
   - when: "multi-task OPD and teacher can be wrong on some tasks"
     to: "method:duoopd"
+  - when: "slow (EMA) / fast student coupling in multi-teacher OPD for capability preservation"
+    to: "method:sf-mopd"
+  - when: "lexicographic priority multi-objective OPD from reward-specialist teachers"
+    to: "method:lmopd"
+  - when: "representation-level (hidden-state) multi-teacher OPD"
+    to: "method:latent-mopd"
+  - when: "rubric-privileged OPD warm start before rubric-based RL"
+    to: "method:rp-opd"
 current_sota:
   - method: method:opd
     as_of: "2026-08-26"
@@ -90,7 +98,11 @@ methods:
   - method:scout
   - method:ride
   - method:duoopd
-last_reviewed: "2026-10-01"
+  - method:sf-mopd
+  - method:lmopd
+  - method:latent-mopd
+  - method:rp-opd
+last_reviewed: "2026-10-05"
 tags:
   - post-training
   - distillation
@@ -133,5 +145,12 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Optional off-policy-teacher adaptation**: `method:scout` (`arXiv:2609.38360`) RL-adapts the teacher on student-generated prefixes. Complementary to TrOPD/SAKI student-side gating. +1.2–2.6 math / +3.1 code over frozen-teacher OPD. No public GitHub. Does not replace OPD or TrOPD.
 - **Optional representation-residual distill**: `method:ride` (`arXiv:2609.36484`) extrapolates RL-induced hidden-state residuals layerwise. Beats output-space extrapolation; code xixixixixxxx/RIDE. Does not replace OPD or S2D-OPD.
 - **Optional joint-outcome multi-task OPD**: `method:duoopd` (`arXiv:2609.33711`) student outcome sets direction, joint teacher–student outcome sets support. +2.58 / +5.98 mean macro vs OPD on Qwen3 / Llama. Code YongYuanDeAo/DuoOPD. Does not replace Open-MOPD or PMOPD.
+- **Optional slow/fast multi-teacher coupling**: `method:sf-mopd` (`arXiv:2610.02324`) EMA slow student + fast student. Qwen3-VL All Avg 8B 67.7 vs MOPD 65.5 vs Open-MOPD 64.2 (paper Open-MOPD 64.2 is not the library 83.4% bake-off). Does not replace Open-MOPD.
+- **Optional lexicographic multi-objective OPD**: `method:lmopd` (`arXiv:2610.02359`) priority-ordered specialist teachers. 30B-A3B two-expert retained-gain avg 84.4 vs Rewarded Soup 67.1. Mention on `task:multi-reward-rlvr`. Does not replace Open-MOPD or CorrGRPO/DARA.
+- **Optional representation-level multi-teacher OPD**: `method:latent-mopd` (`arXiv:2610.02381`) hidden-state matching. Same-family 1.5B last-3 Norm 1.05 vs token-only 0.90. Code fangzy96/Latent-MOPD. Does not replace Open-MOPD.
+- **Optional rubric-privileged OPD then rubric RL**: `method:rp-opd` (`arXiv:2610.02781`, NeurIPS 2026) Qwen2.5-7B HealthBench/ResearchQA/RubricHub 0.673/0.797/0.829 vs SFT+RL 0.607/0.721/0.815. Beside `method:opd-then-rlvr` (verifiable). Does not replace OPD.
+- **Gotcha (OPD as implicit RL / collapse)**: `paper:opd-gains-collapse` (`arXiv:2610.03185`). Teacher as implicit reward; masking 4B→Base avg 10.16→13.24. Code HancCui/opd_hacking. Does not replace OPD.
+- **Gotcha (on- vs off-policy distill dynamics)**: `paper:on-policy-or-off-policy` (`arXiv:2609.35259`). KL direction dominates rollout on-policyness. Does not replace OPD.
+- **Gotcha (divergence vs entropy)**: `paper:divergence-entropy-distillation` (`arXiv:2610.03529`). Forward KL inflates student entropy; reverse KL deflates. Code NicolasZucchet/Entropy-in-distillation. Does not replace OPD.
 - **Not this task**: Adaptive Retirement of a privileged self-OPD teacher in agent RL is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl`. Distilling optimized-harness behaviors into weights under a fixed target harness is `method:harness-zero` on `task:harness-distillation`. Multi-stage agent continual learning (MMOPD / SDFT / MLE) is `method:aclarena` on `task:agent-continual-learning` and does not retarget Open-MOPD. Label-routed MOPD of SWE category experts is `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`.
 

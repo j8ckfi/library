@@ -50,6 +50,8 @@ redirects:
     to: "method:pact"
   - when: "structural credit split for tool-call vs natural-language-summary tokens, not async stragglers"
     to: "task:tool-agent-segment-credit"
+  - when: "CEM-style critic-free RFT from replay when group rollouts are impractical (stateful sandboxes)"
+    to: "method:ftw"
 current_sota:
   - method: method:sao
     as_of: "2026-08-26"
@@ -77,7 +79,8 @@ methods:
   - method:category-aware-swe-experts
   - method:pact
   - method:slca-grpo
-last_reviewed: "2026-09-25"
+  - method:ftw
+last_reviewed: "2026-10-05"
 tags:
   - post-training
   - agentic
@@ -104,3 +107,5 @@ This is **policy training**. Building a software-engineering agent loop is `task
 - **Not this task (category-aware SWE expert RL)**: `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`. Does not replace SAO.
 - **Optional Actor-then-Critic IS (not this async default)**: `method:pact` (`arXiv:2609.26355`) on `task:token-level-critic-rl`. SWE-Verified +3.8 vs SAO is mention-only. SAO remains the straggler first hop.
 - **Not this task (structural tool/summary credit)**: `method:slca-grpo` on `task:tool-agent-segment-credit`. Does not replace SAO.
+- **Optional CEM-style critic-free RFT from replay (not this async default)**: `method:ftw` (`arXiv:2610.03361`, NeurIPS 2026) when group rollouts are impractical. Search-R1 Qwen2.5-3B-Instruct FTW-K1-C4 35.46±0.15 vs GRPO 33.6 vs PPO 32.5. Does not replace SAO.
+- **Gotcha (stale-data RL harness)**: `paper:probe-the-harness` (`arXiv:2610.02911`). TIS vs SAN ranking reversals in verl. SAN is not a library method. Does not replace SAO, CIS-RL, or CARM.

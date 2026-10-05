@@ -19,11 +19,14 @@ do_not_use_for:
   - when: "cancellation-aware off-policy response mask"
     reason: "CARM filters drifted rollouts; DARA reweights on-policy multi-reward energy"
     use_instead: "method:carm"
+  - when: "lexicographic priority multi-objective OPD from reward-specialist teachers (not scalarized multi-reward RL)"
+    reason: "DARA is density-aware GRPO/GDPO aggregation; LMOPD is priority-ordered teacher OPD"
+    use_instead: "method:lmopd"
 assumptions:
   - "Several sequence-level rewards on a GDPO-style host (reward-wise group norm, then aggregate). Paper: Qwen2.5-1.5B/3B tool calling (ToolRL) and math length+correctness."
   - "Default is DARA-Asym (amplify positive advantages of low-density rewards; keep negatives at GDPO scale). Cap w_max on inverse-sqrt density."
   - "Official code zhaihaotian/DARA. GDPO is prior art, not a library method."
-last_reviewed: "2026-10-02"
+last_reviewed: "2026-10-05"
 papers:
   - paper:dara
 recipes:

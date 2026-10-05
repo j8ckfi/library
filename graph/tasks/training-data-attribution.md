@@ -18,7 +18,9 @@ redirects:
     to: "task:mechanistic-interpretability-dictionaries"
   - when: "factory process / experiments-as-code / lineage"
     to: "task:industrial-model-building"
-last_reviewed: "2026-09-01"
+  - when: "output-layer-gradient data selection for SFT/RL (cheaper LESS/GradAlign features)"
+    to: "method:lesser"
+last_reviewed: "2026-10-05"
 current_sota:
   - method: method:magic
     as_of: "2026-09-01"
@@ -32,6 +34,7 @@ methods:
   - method:trackstar
   - method:ek-fac
   - method:source-unrolling
+  - method:lesser
 tags:
   - interpretability
   - data-attribution
@@ -65,4 +68,5 @@ This is a **diagnostic / tooling** task, not a training kernel. It does **not** 
 - **Primary Method**: **MAGIC** (`method:magic`, `paper:magic` `arXiv:2504.16430`) for unrolled differentiation when you control the trainer. Implemented in **Bergson** (`method:bergson`, `paper:bergson` `arXiv:2606.11660`).
 - **Small-lab filtering default**: **TrackStar** (`method:trackstar`) compressed influence / fact-tracing path.
 - **Influence baseline**: **EK-FAC** (`method:ek-fac`). **SOURCE** (`method:source-unrolling`) is a few-checkpoint unroll, status `niche`.
+- **Optional cheaper output-layer-gradient selection**: `method:lesser` (`arXiv:2610.03702`) 9.7× SFT / 3.0× RL vs 4-ckpt LESS; Jaccard 0.53 vs random 0.075. Does not replace MAGIC.
 - **Not This Task**: mix search, SAE circuits, train kernels, unlearning trainers, fused MoE expert attribution.

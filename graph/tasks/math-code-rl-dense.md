@@ -57,6 +57,10 @@ redirects:
     to: "method:carm"
   - when: "MCMC / Metropolis–Hastings projection sampling of expert traces then ordinary SFT (not CISPO default)"
     to: "method:sampling-sft"
+  - when: "catastrophic strategy collapse in RLVR (coach prompting + strategy-balancing heads)"
+    to: "method:mesh-learning"
+  - when: "on-policy parameter update direction SFT (OPSFT), not Pass@1 RLVR"
+    to: "method:opsft"
 current_sota:
   - method: method:cispo
     as_of: "2026-08-26"
@@ -110,7 +114,9 @@ methods:
   - method:dara
   - method:carm
   - method:sampling-sft
-last_reviewed: "2026-10-03"
+  - method:mesh-learning
+  - method:opsft
+last_reviewed: "2026-10-05"
 tags:
   - post-training
   - reasoning
@@ -159,6 +165,9 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Not this task (multi-reward aggregation)**: `task:multi-reward-rlvr` / `method:corrgrpo` (`arXiv:2609.36820`) Pearson-normalizes summed GRPO covariances; `method:dara` (`arXiv:2610.00574`) inverse-sqrt density on GDPO-style advantages. Dual-active on that task. Not a CISPO replacement.
 - **Optional cancellation-aware off-policy mask**: `method:carm` (`arXiv:2610.02039`) averages absolute token log-ratios before the sequence threshold. No public code. Does not replace CISPO, CIS-RL, or Miles.
 - **Optional Sampling SFT (not this Pass@1 default)**: `method:sampling-sft` (`arXiv:2610.02140`) MCMC-projects off-policy expert traces toward the base model then runs ordinary SFT. Qwen2.5-3B MATH(3,4,5) 0.495 vs GRPO 0.457 vs vanilla SFT 0.243; MATH500 0.582 vs GRPO 0.313. Vanilla SFT still loses to GRPO. Sampling SFT then GRPO is best (0.545 / 0.652). Chemistry beats OPSD; medical is roughly tied and forgets less. Mention on `task:privileged-teacher-opsd`. Does not replace CISPO or VISTA.
+- **Optional strategy-collapse regularizer (not this Pass@1 default)**: `method:mesh-learning` (`arXiv:2610.02835`) Coach Prompting + strategy-balancing heads. Qwen3-4B m=4 AIME26 56.7 vs GRPO 43.3. Code Ayanami-0123/Open-Mesh-Learning. Does not replace CISPO.
+- **Optional on-policy-direction SFT (not this Pass@1 default)**: `method:opsft` (`arXiv:2609.36659`) on `task:instruct-sft-alignment`. Qwen3-4B DeepMath mean 40.11 vs GRPO 38.96 vs SFT 34.22. Does not replace CISPO.
+- **Gotcha (stale-data RL harness)**: `paper:probe-the-harness` (`arXiv:2610.02911`) on CIS-RL / CARM / SAO. TIS vs SAN ranking reversals in verl. SAN is not a library method.
 - **Not this task (MoE train–infer mismatch)**: `method:cis-rl` (`arXiv:2609.32444`) on `task:math-code-rl-moe`. Truncates log-odds displacement, not the CISPO Pass@1 default.
 - **Not this task (structural tool/summary credit)**: `method:slca-grpo` on `task:tool-agent-segment-credit`. Does not replace CISPO.
 - **Not this task (multi-stage agent continual learning)**: `method:aclarena` on `task:agent-continual-learning`. Sequential stage stacking, not a Pass@1 loss.

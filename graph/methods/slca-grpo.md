@@ -22,11 +22,14 @@ do_not_use_for:
   - when: "single-turn math/code Pass@1 RLVR"
     reason: "CISPO remains Pass@1; SLCA hosts GRPO on tool-calling agents"
     use_instead: "method:cispo"
+  - when: "per-state shrinkage of step-level advantage for agentic RL (GiGPO-style groups)"
+    reason: "SLCA-GRPO splits tool vs summary tokens; AdaStep shrinks GiGPO-style step advantages"
+    use_instead: "method:adastep"
 assumptions:
   - "Trajectory splits into a tool/execution segment and a final contiguous summary segment. HierR (or equivalent) supplies separate tool and summary returns. Group size G=16 in the paper."
   - "Paper: Qwen2.5-3B/7B-Instruct and Qwen3-8B-Base; SGLS mocker; Toucan filter 42,423 SFT / 31,818 RL; one RL epoch."
   - "GitHub SLCA-GRPO/SLCA-GRPO 404 as of 2026-09-25. Dataset YanZhanPKU/SLCA-GRPO-Datasets is public."
-last_reviewed: "2026-09-25"
+last_reviewed: "2026-10-05"
 papers:
   - paper:slca-grpo
 recipes:

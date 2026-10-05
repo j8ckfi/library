@@ -26,10 +26,13 @@ do_not_use_for:
   - when: "corpus already on a filesystem you can grep"
     reason: "give them a filesystem, not a 10M prompt"
     use_instead: "method:coding-agent-file-offload"
+  - when: "trained self-call + range-read harness (8K window matching a 1M native model on long docs)"
+    reason: "RLM is dumped-prompt REPL offload; TACM finetunes a self-call + range-read policy at 8K"
+    use_instead: "method:tacm"
 assumptions:
   - "Dense dumped input ≫ window. Prompt is a REPL variable. Depth 1 default."
   - "No 405B-style claims. Do not cite unofficial BrowseComp+ 47.3; paper Table 1 is 91.3."
-last_reviewed: "2026-09-01"
+last_reviewed: "2026-10-05"
 papers:
   - paper:rlm
 recipes:

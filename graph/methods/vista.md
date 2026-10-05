@@ -17,7 +17,13 @@ do_not_use_for:
   - when: "neighborhood expert privileged OPSD (frozen local perturbations)"
     reason: "VISTA remains this task's first hop; N-OPSD densifies supervision with a frozen neighborhood pool"
     use_instead: "method:n-opsd"
-last_reviewed: "2026-10-02"
+  - when: "adaptive iterative error-to-repair guidance for OPSD"
+    reason: "VISTA remains privileged-OPSD SOTA; Air-OPD iterates error-specific repair guidance"
+    use_instead: "method:air-opd"
+  - when: "root-cause diagnosis of the student's own failed reasoning then differentiated prefix/error distillation"
+    reason: "VISTA remains privileged-OPSD SOTA; RC-OPD repairs the student's own failed reasoning"
+    use_instead: "method:rc-opd"
+last_reviewed: "2026-10-05"
 papers:
   - paper:vista
 recipes:

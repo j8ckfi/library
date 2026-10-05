@@ -36,13 +36,19 @@ do_not_use_for:
   - when: "act-first / reason-later multi-turn OPD (inverse dynamics + async full-response distill)"
     reason: "OPD waits for think-then-act; ActFirst-OPD acts via inverse dynamics then distills asynchronously"
     use_instead: "method:actfirst-opd"
-last_reviewed: "2026-10-01"
+  - when: "rubric-privileged OPD warm start before rubric-based RL"
+    reason: "OPD remains matching distillation; RP-OPD is a rubric-privileged warm start then rubric RL"
+    use_instead: "method:rp-opd"
+last_reviewed: "2026-10-05"
 papers:
   - paper:opd
   - paper:opd-one-example
   - paper:opd-hard-cot-selection
   - paper:opd-eos
   - paper:opd-same-family-scaling
+  - paper:opd-gains-collapse
+  - paper:on-policy-or-off-policy
+  - paper:divergence-entropy-distillation
 recipes:
   - recipe:opd
 claims:

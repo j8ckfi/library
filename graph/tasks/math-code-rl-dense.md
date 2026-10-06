@@ -19,6 +19,10 @@ out_of_scope:
   - "Cancellation-aware off-policy sequence masking (CARM)"
   - "MCMC projection sampling then ordinary SFT (Sampling SFT)"
 redirects:
+  - when: "exploration-preserving advantage shaping (surprisal + pass rate) for RLVR"
+    to: "method:exppo"
+  - when: "low-rank gradient sketches + predicted-KL step control for RL memory"
+    to: "method:logra"
   - when: "outcome-only long-horizon interactive agent RL"
     to: "task:outcome-only-long-horizon-agent-rl"
   - when: "train asynchronous RL for a tool-use policy"
@@ -69,6 +73,8 @@ current_sota:
     value: "Default SOTA for Dense RL"
     notes: "CISPO via MiniMax-M1 (2506.13585) + ScaleRL (2510.13786)."
 methods:
+  - method:exppo
+  - method:logra
   - method:cispo
   - method:es-reasoning
   - method:bpco
@@ -116,7 +122,7 @@ methods:
   - method:sampling-sft
   - method:mesh-learning
   - method:opsft
-last_reviewed: "2026-10-05"
+last_reviewed: "2026-10-06"
 tags:
   - post-training
   - reasoning

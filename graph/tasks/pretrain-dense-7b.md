@@ -12,6 +12,8 @@ current_sota:
     value: "~2x token efficiency vs AdamW"
     notes: "Muon2 (2604.09967) + KL-SOAP (2607.20548) if memory allows."
 redirects:
+  - when: "unique-token epoch / repetition geometry under a finite pretrain corpus"
+    to: "task:data-constrained-pretrain"
   - when: "latent-space / next-concept LM architecture rather than dense NTP 7B"
     to: "task:latent-space-lm-pretrain"
   - when: "fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds"
@@ -21,6 +23,9 @@ redirects:
   - when: "Muon-style norm-aware update for embedding tables (1->2) and LM head (2->inf) instead of AdamW"
     to: "method:muonio"
 methods:
+  - method:clean
+  - method:dga-muon
+  - method:orca
   - method:muon2
   - method:soap-muon-scale
   - method:muon-scalable
@@ -40,7 +45,7 @@ methods:
   - method:synth
   - method:self-play-pretraining
   - method:muonio
-last_reviewed: "2026-10-05"
+last_reviewed: "2026-10-06"
 tags:
   - pretraining
   - dense-lm

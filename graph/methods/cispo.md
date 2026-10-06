@@ -10,6 +10,12 @@ sota_for:
 supersedes:
   - method:dapo
 do_not_use_for:
+  - when: "exploration-preserving advantage shaping (surprisal + pass rate) for RLVR"
+    reason: "CISPO remains Pass@1; ExPPO reshapes the existing group advantage"
+    use_instead: "method:exppo"
+  - when: "low-rank gradient sketches + predicted-KL step control for RL memory"
+    reason: "CISPO remains Pass@1; LoGRA is an RL memory sketch"
+    use_instead: "method:logra"
   - when: "critic-free PMD / Bellman telescoping RLVR (not CISPO default)"
     reason: "CISPO remains Pass@1; BPO is a matched-settings candidate that replaces the IS ratio with a complementary-token weight"
     use_instead: "method:bpo"
@@ -49,8 +55,10 @@ do_not_use_for:
   - when: "on-policy parameter update direction SFT (OPSFT), not Pass@1 RLVR"
     reason: "CISPO remains Pass@1; OPSFT is cheaper SFT aligned with the on-policy gradient"
     use_instead: "method:opsft"
-last_reviewed: "2026-10-05"
+last_reviewed: "2026-10-06"
 papers:
+  - paper:exppo
+  - paper:logra
   - paper:minimax-m1
   - paper:scalerl
   - paper:spurious-advantage-grpo

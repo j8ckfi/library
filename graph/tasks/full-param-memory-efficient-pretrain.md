@@ -10,6 +10,10 @@ out_of_scope:
   - "Native FP4 hardware training from scratch (Quartet-II)"
   - "Quality LoRA on 24GB (vanilla LoRA + rsLoRA + LR sweep)"
 redirects:
+  - when: "Nyström-sketched SOAP preconditioners / linear optimizer memory (Clean / Q-Clean)"
+    to: "method:clean"
+  - when: "low-rank gradient sketches + predicted-KL step control for RL memory"
+    to: "method:logra"
   - when: "choosing the ~7B dense pretrain optimizer"
     to: "task:llm-pretraining-optimization"
   - when: "ternary abs-max column-wise one-sparse optimizer for full-param LLM FT"
@@ -26,10 +30,12 @@ current_sota:
     value: "Default SOTA for memory-efficient full-parameter training"
     notes: "SCALE (2506.16659, ICML 2026) not GaLore."
 methods:
+  - method:clean
+  - method:logra
   - method:scale
   - method:galore
   - method:taco
-last_reviewed: "2026-10-02"
+last_reviewed: "2026-10-06"
 tags:
   - efficiency
   - optimizer

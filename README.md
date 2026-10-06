@@ -1,6 +1,6 @@
 # j8ckfi/library
 
-> Sprawling, agent-navigable knowledge graph of cutting-edge machine learning research, SOTA methods, primary literature, and executable training recipes (As-of: 2026-08-31).
+> Sprawling, agent-navigable knowledge graph of cutting-edge machine learning research, SOTA methods, primary literature, and executable training recipes (As-of: 2026-10-06).
 
 ---
 
@@ -24,7 +24,7 @@
 
 ---
 
-## 2. Agent Routing Cheat-Sheet (2026-08-31 SOTA Index)
+## 2. Agent Routing Cheat-Sheet (2026-10-06 SOTA Index)
 
 ```
 task: pretrain dense 7B optimizer  -> muon2 (2604.09967) + kl-soap (2607.20548) if memory allows
@@ -67,6 +67,7 @@ task: operator, physics-informed     -> pi-cvit (2606.06164) + SOAP; not a 2021 
 task: operator, Fourier LoRA/adapt   -> f-adapter (2509.23173) NOT vanilla LoRA
 task: operator, weather/climate      -> fourcastnet-3 (2507.12144) (forecast cousin, not CAE)
 task: industrial model-building / factory -> poolside-model-factory (Laguna 2605.27605). Process default, not a train-kernel default. Small lab: configs-as-code + Dagster lineage + streamed mixes; skip custom scheduler. CISPO/Muon stay the train defaults. [2026-08-31]
+task: data-constrained pretrain (epoch / r) -> repeated-token-worth (2610.05591) + repetition-count-selection (2610.05126); NOT olmo-3 mix, NOT moe-data-repetition
 task: directed SSSP distances, sparse, comparison-addition -> BMSSP; need vertex order or typical n -> Dijkstra
 ```
 
@@ -116,6 +117,7 @@ task: directed SSSP distances, sparse, comparison-addition -> BMSSP; need vertex
 | **Operator, Fourier PEFT/Adapt** | **F-Adapter** (`method:f-adapter`) | `arXiv:2509.23173` | `https://github.com/fogradio/F-Adapter` |
 | **Operator, Weather/Climate** | **FourCastNet 3** (`method:fourcastnet-3`) | `arXiv:2507.12144` | `none found` (NVIDIA Earth-2) |
 | **Industrial Model-Building / Factory** | **Poolside Model Factory** (`method:poolside-model-factory`) | Laguna `arXiv:2605.27605` | `https://github.com/pytorch/torchtitan` (Titan seed; factory internals closed). Process default, not a train kernel. CISPO/Muon unchanged. |
+| **Data-Constrained Pretrain (epoch / r)** | **Repeated-Token Worth** + **Repetition-Count Selection** | `arXiv:2610.05591` / `2610.05126` | `none found` |
 | **Directed SSSP Distances (sparse, comparison-addition)** | **BMSSP** (`method:bmssp`); Dijkstra if you need vertex order or typical \(n\) | `arXiv:2504.17033` | unofficial `https://github.com/hparreao/BMSSP-Python` / `https://github.com/NicholasCartaxo/BMSSP-SSSP` |
 
 ---

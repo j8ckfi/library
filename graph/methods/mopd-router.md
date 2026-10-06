@@ -35,8 +35,9 @@ assumptions:
   - "Sampled-token MOPD host. Teachers share a pre-RL base used by ExpertAlign. Paper: three Qwen3-4B-Non-Thinking RL specialists (math/code/IF); students Qwen3-1.7B and Qwen3-4B non-thinking."
   - "ExpertAlign default: top-k=16, alignment margin δ=1e-6, cosine weighting over the positive-alignment set. Empty set skips OPD at that token."
   - "Official code TURLEing/MOPD-Router (verl + run.sh) released as of 2026-09-28."
-last_reviewed: "2026-09-30"
+last_reviewed: "2026-10-06"
 papers:
+  - paper:rethink-mopd
   - paper:mopd-router
 recipes:
   - recipe:mopd-router

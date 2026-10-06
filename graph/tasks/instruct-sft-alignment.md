@@ -18,6 +18,7 @@ current_sota:
     value: "Industrial SOTA Alt"
     notes: "Nemotron-Cascade-2 (2603.19220) for industrial multi-stage SFT."
 methods:
+  - method:onepo
   - method:olmo-3
   - method:nemotron-cascade-2
   - method:tulu3-rlvr
@@ -31,13 +32,15 @@ methods:
   - method:dco
   - method:opsft
 redirects:
+  - when: "SFT-free RL-only domain adaptation from a base model (OnePO / HuatuoGPT-3)"
+    to: "method:onepo"
   - when: "in-language (L2) reasoning SFT rather than general instruct"
     to: "task:multilingual-l2-reasoning-sft"
   - when: "24GB quality LoRA rather than drift-budget instruct FT"
     to: "task:parameter-efficient-fine-tuning"
   - when: "on-policy parameter update direction SFT (OPSFT)"
     to: "method:opsft"
-last_reviewed: "2026-10-05"
+last_reviewed: "2026-10-06"
 tags:
   - post-training
   - instruct

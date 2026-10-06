@@ -13,6 +13,8 @@ out_of_scope:
   - "Input-heavy agentic CED serving (DeepSeek-V4.1-Flash)"
   - "~7B dense NTP optimizer (Muon2)"
 redirects:
+  - when: "Huginn-style dense fixed-point looped LMs (learned depth prior / terminal KV sharing)"
+    to: "method:looped-models-done-right"
   - when: "choosing the frontier MoE architecture template"
     to: "task:pretrain-moe-frontier"
   - when: "expert-parallel all-to-all layout rather than looping"
@@ -37,7 +39,7 @@ methods:
   - method:ce-moe
   - method:deepseek-v4
   - method:kimi-k3
-last_reviewed: "2026-09-12"
+last_reviewed: "2026-10-06"
 tags:
   - pretraining
   - moe

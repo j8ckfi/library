@@ -8,7 +8,12 @@ sota_for:
   - task:pretrain-moe-frontier
 supersedes:
   - method:muon-scalable
+do_not_use_for:
+  - when: "per-expert Muon step-size multipliers from update–gradient alignment"
+    reason: "MuonClip is the Kimi-K2 trillion-scale recipe; ExpertMuon-Compass is a per-expert step multiplier on FineWeb-Edu"
+    use_instead: "method:expertmuon-compass"
 papers:
+  - paper:expertmuon-compass
   - paper:muonclip-kimi-k2
 recipes:
   - recipe:muon-pretraining
@@ -20,6 +25,7 @@ claims:
     date: "2025-07"
     verified: true
     notes: "Introduces MuonClip gradient clipping and numerical stabilization for trillion-scale MoE training."
+last_reviewed: "2026-10-06"
 tags:
   - optimizer
   - moe

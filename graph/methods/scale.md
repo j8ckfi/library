@@ -9,6 +9,9 @@ sota_for:
 supersedes:
   - method:galore
 do_not_use_for:
+  - when: "low-rank gradient sketches + predicted-KL step control for RL memory"
+    reason: "SCALE remains full-param pretrain memory; LoGRA is an RL-step memory sketch"
+    use_instead: "method:logra"
   - when: "ternary abs-max column-wise one-sparse optimizer for full-param LLM FT"
     reason: "SCALE remains the subspace-projection first hop; TACO is an FT-axis sparse geometry"
     use_instead: "method:taco"
@@ -16,6 +19,7 @@ do_not_use_for:
     reason: "Muon2 remains the 7B pretrain default"
     use_instead: "method:muon2"
 papers:
+  - paper:logra
   - paper:scale
 recipes:
   - recipe:scale
@@ -27,6 +31,7 @@ claims:
     date: "2026-08-26"
     verified: true
     notes: "Scaled subspace gradient projections for smooth trajectory updates without SVD latency stalls."
+last_reviewed: "2026-10-06"
 tags:
   - optimizer
   - pretraining

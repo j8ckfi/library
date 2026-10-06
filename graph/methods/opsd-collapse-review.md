@@ -7,6 +7,12 @@ status: niche
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "outcome-guided FKL/RKL OPSD with entropy prefix cutoff"
+    reason: "This card is a survey playbook; OG-OPSD is a trainer"
+    use_instead: "method:og-opsd"
+  - when: "entropy-overshoot OPSD trainer (exemplar-guided + entropy-aware KL)"
+    reason: "This card is a survey playbook; E2-OPSD is a trainer"
+    use_instead: "method:e2-opsd"
   - when: "choosing privileged-teacher OPSD"
     reason: "This is a survey playbook; VISTA remains the privileged-teacher first hop"
     use_instead: "method:vista"
@@ -18,8 +24,10 @@ do_not_use_for:
     use_instead: "method:cispo"
 assumptions:
   - "Mathematical reasoning OPSD/OPSD-adjacent literature. No new experiments in the paper."
-last_reviewed: "2026-09-09"
+last_reviewed: "2026-10-06"
 papers:
+  - paper:og-opsd
+  - paper:e2-opsd
   - paper:opsd-collapse-review
 recipes:
   - recipe:opsd-collapse-review

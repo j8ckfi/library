@@ -8,7 +8,12 @@ sota_for:
   - task:pretrain-dense-7b
 supersedes:
   - method:soap
+do_not_use_for:
+  - when: "Nyström-sketched SOAP / linear optimizer-state memory (Clean / Q-Clean)"
+    reason: "KL-SOAP remains unconstrained-memory large-batch SOAP; Clean is the linear-memory sketch"
+    use_instead: "method:clean"
 papers:
+  - paper:clean
   - paper:soap-muon-scale
 recipes:
   - recipe:muon-pretraining
@@ -20,6 +25,7 @@ claims:
     date: "2026-07"
     verified: true
     notes: "Recommended over Muon when memory is unconstrained and batch sizes scale towards 100M tokens."
+last_reviewed: "2026-10-06"
 tags:
   - optimizer
   - megatron

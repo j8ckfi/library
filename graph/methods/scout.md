@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "RL-train the teacher on fixed student prefixes then freeze before distillation (prepare-then-freeze)"
+    reason: "SCOUT interleaves teacher RL on student prefixes; Prep-OPD prepares then freezes"
+    use_instead: "method:prep-opd"
   - when: "single-teacher matching distillation from a strong frozen teacher (default OPD)"
     reason: "OPD remains student-rollout reverse-KL matching; SCOUT additionally adapts the teacher on student prefixes"
     use_instead: "method:opd"
@@ -23,8 +26,9 @@ assumptions:
   - "White-box teacher that can be updated with outcome RL on student prefixes. Paper: Qwen3 teacher–student pairs, math plus a code transfer setting."
   - "Teacher update interval f OPD steps; student-prefix ratio rises linearly. Gradients on teacher-generated continuation tokens only."
   - "No public GitHub as of 2026-10-01."
-last_reviewed: "2026-10-01"
+last_reviewed: "2026-10-06"
 papers:
+  - paper:prep-opd
   - paper:scout
 recipes:
   - recipe:scout

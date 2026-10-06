@@ -6,7 +6,12 @@ category: "optimizer"
 status: active
 sota_for: []
 supersedes: []
+do_not_use_for:
+  - when: "Nyström-sketched SOAP / linear optimizer-state memory (Clean / Q-Clean)"
+    reason: "SOAP is the second-order primitive; Clean sketches its preconditioners"
+    use_instead: "method:clean"
 papers:
+  - paper:clean
   - paper:soap
 recipes: []
 claims:
@@ -17,6 +22,7 @@ claims:
     date: "2024-09"
     verified: true
     notes: "Maintains second-order preconditioning in eigenbasis without full Kronecker inverse costs."
+last_reviewed: "2026-10-06"
 tags:
   - optimizer
   - second-order

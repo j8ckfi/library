@@ -14,6 +14,8 @@ out_of_scope:
   - "Production harness kernel (omp2)"
   - "Compute-matched MoE looping of middle layers (SMELT)"
 redirects:
+  - when: "Huginn-style dense fixed-point looped LMs (learned depth prior, terminal KV sharing, cheaper RL from saved states)"
+    to: "method:looped-models-done-right"
   - when: "standard dense ~7B NTP from scratch"
     to: "task:pretrain-dense-7b"
   - when: "frontier MoE architecture / DeepSeek-V4 template"
@@ -36,11 +38,12 @@ current_sota:
     value: "none reported"
     notes: "RLT (2026-09-12). Experimental. Report develops encoder memory + all-token recurrence; does not report measured results. Conceptual sibling of DeepSeek-V4.1-Flash CED, not a replacement."
 methods:
+  - method:looped-models-done-right
   - method:recurrent-looped-transformer
   - method:deepseek-v41-flash
   - method:ncp-archpreview
   - method:deepseek-v4
-last_reviewed: "2026-09-12"
+last_reviewed: "2026-10-06"
 tags:
   - pretraining
   - architecture

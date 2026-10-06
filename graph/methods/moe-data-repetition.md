@@ -7,6 +7,9 @@ status: niche
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "dense unique-token epoch / repetition geometry (not MoE sparsity overfit)"
+    reason: "This card is MoE sparsity × repeats; dense epoch pricing is the data-constrained task"
+    use_instead: "task:data-constrained-pretrain"
   - when: "choosing the frontier MoE architecture"
     reason: "Gotcha on repetition × sparsity, not DeepSeek-V4 / Kimi-K3"
     use_instead: "method:deepseek-v4"
@@ -19,7 +22,7 @@ do_not_use_for:
 assumptions:
   - "MoE pretrain with repeated data. Paper: 80M–1B active, up to 8.5B total. Not a 100B+ architecture bake-off."
   - "No official code as of 2026-09-11."
-last_reviewed: "2026-09-11"
+last_reviewed: "2026-10-06"
 papers:
   - paper:moe-data-repetition
 recipes:

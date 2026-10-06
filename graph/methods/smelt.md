@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "Huginn-style dense fixed-point looped LMs (learned depth prior / terminal KV sharing)"
+    reason: "SMELT loops MoE layers at matched FLOPs; Looped Models Done Right is dense Huginn-style"
+    use_instead: "method:looped-models-done-right"
   - when: "choosing the frontier MoE architecture template"
     reason: "SMELT is a compute-matched looping recipe on an internal MoE baseline, not DeepSeek-V4 or Kimi-K3"
     use_instead: "method:deepseek-v4"
@@ -23,7 +26,7 @@ assumptions:
   - "Match per-token FLOPs, total non-embedding parameters, and KV cache against an unlooped MoE Baseline. Typical residual mismatch: FLOPs <4%, params <1%, KV <4%."
   - "Locked recipe: loop middle 50% of layers twice; physical depth matches the Baseline; scale looped residuals by 1/r with r=2; narrow H and raise expert count; GQA/head-size for KV."
   - "Paper ladder: 100M/200M/600M/1.6B active, up to 54B non-embedding, S≈85/95/97%. Internal corpus, AdamW WSD. No public code as of 2026-09-12."
-last_reviewed: "2026-09-12"
+last_reviewed: "2026-10-06"
 papers:
   - paper:smelt
 recipes:

@@ -23,8 +23,9 @@ assumptions:
   - "Labeled domain routing (math/code/IF). Host is sampled-token clipped OPD / Uni-OPD. Paper: independently trained Qwen3.5 specialists at 9B/4B/2B."
   - "Per-batch population std of teacher–rollout log-ratios; clip multipliers to [0.25, 4]. w_d=1 if a domain has <2 observations or a std is zero."
   - "Official code LiXin97/DN-MOPD released as of 2026-09-30."
-last_reviewed: "2026-09-30"
+last_reviewed: "2026-10-06"
 papers:
+  - paper:rethink-mopd
   - paper:dn-mopd
 recipes:
   - recipe:dn-mopd

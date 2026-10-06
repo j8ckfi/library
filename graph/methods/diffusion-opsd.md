@@ -7,7 +7,12 @@ status: sota
 sota_for:
   - task:posttrain-diffusion
 supersedes: []
+do_not_use_for:
+  - when: "flow-model RL via proximal velocity matching (~100 updates vs Flow-GRPO ~4k)"
+    reason: "DiffusionOPSD remains image-policy OPSD; MEND is flow RL by proximal velocity matching"
+    use_instead: "method:mend"
 papers:
+  - paper:mend
   - paper:diffusion-opsd
 recipes:
   - recipe:diffusion-opsd
@@ -19,6 +24,7 @@ claims:
     date: "2026-08-27"
     verified: true
     notes: "Translates image-level reward gradients into bounded positive/negative clean-output targets for intermediate denoising queries."
+last_reviewed: "2026-10-06"
 tags:
   - diffusion
   - post-training

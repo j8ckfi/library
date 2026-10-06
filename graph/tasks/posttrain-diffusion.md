@@ -18,16 +18,19 @@ current_sota:
     value: "Outperforms Flow-GRPO, Flow-OPD, and DiffusionNFT without external task-specific teachers"
     notes: "Self-OPD (2608.26872) provides teacher-free per-step pull-push distillation for flow matching multi-objective alignment."
 methods:
+  - method:mend
   - method:diffusion-opsd
   - method:self-opd
   - method:canvasanneal
   - method:rewardverse
 redirects:
+  - when: "flow-model RL via proximal velocity matching (~100 updates vs Flow-GRPO ~4k)"
+    to: "method:mend"
   - when: "lossless multi-token / diffusion-augmented AR serving, not image-policy alignment"
     to: "task:diffusion-augmented-ar"
   - when: "training a stable video reward model / rubric-guided RM PO"
     to: "method:rewardverse"
-last_reviewed: "2026-09-24"
+last_reviewed: "2026-10-06"
 tags:
   - diffusion
   - post-training

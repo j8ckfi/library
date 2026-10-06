@@ -8,6 +8,9 @@ sota_for:
   - task:student-distillation
 supersedes: []
 do_not_use_for:
+  - when: "MOPD vs tuned off-policy SFT/Soft-KD after matching training design (GPU-hour confound)"
+    reason: "Open-MOPD remains the multi-teacher matching default; rethink-mopd is a caveat that a tuned off-policy baseline may suffice"
+    use_instead: "paper:rethink-mopd"
   - when: "token-level ExpertAlign routing over unlabeled multi-teacher pools (no domain labels, no separate router train)"
     reason: "Open-MOPD is gap-aware token-share balancing on labeled domain teachers; MOPD-Router routes the full pool per token"
     use_instead: "method:mopd-router"
@@ -29,7 +32,7 @@ do_not_use_for:
   - when: "representation-level (hidden-state) multi-teacher OPD"
     reason: "Open-MOPD remains token-share / gap-aware budget; Latent-MOPD matches specialist hidden states"
     use_instead: "method:latent-mopd"
-last_reviewed: "2026-10-05"
+last_reviewed: "2026-10-06"
 papers:
   - paper:open-mopd
 recipes:
@@ -57,6 +60,9 @@ Open-MOPD is the state-of-the-art framework for consolidating multiple domain-sp
 1. **Token-Share Balancing**: Normalizes token-level loss contributions per domain to prevent verbose chain-of-thought teachers (e.g. math/code) from monopolizing gradients over concise instruction-following tasks.
 2. **Gap-Aware Dynamic Budget Allocation**: Monitors the capability gap between student and respective domain teachers in real time, dynamically steering the optimization budget to lagging domains.
 3. **Student Reward Refresh**: Refreshes on-policy student references and teacher advantage scores to eliminate staleness during asynchronous policy updates.
+
+## Training-design caveat
+`paper:rethink-mopd` (`arXiv:2610.04272`) finds that after matching training design and hyperparameters, tuned SFT / Soft-KD can approach MOPD while MOPD costs 14.8–23.1× SFT GPU-hours. That does **not** retarget this card's 83.4% bake-off. Try a tuned off-policy baseline before paying on-policy multi-teacher cost.
 
 ## When to Use
 - When distilling capabilities from multiple specialized expert teachers (e.g., math, code, conversational instruction, tool-use) into a single compact generalist student.

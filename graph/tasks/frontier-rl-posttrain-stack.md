@@ -19,6 +19,8 @@ out_of_scope:
   - "MoE train–infer mismatch IS correction (CIS-RL)"
   - "Cancellation-aware off-policy sequence masking (CARM)"
 redirects:
+  - when: "lossless (no-staleness) overlap of GRPO/OPD gradient computation with rollout, not the production engine"
+    to: "method:thundersyncrl"
   - when: "factory process / experiments-as-code / lineage rather than the RL engine"
     to: "task:industrial-model-building"
   - when: "variable environment latency / async stragglers, not the production stack"
@@ -53,6 +55,7 @@ current_sota:
     value: "263s median (first 30 steps); KL mean 0.0369; reward 0.438→0.556 (single run)"
     notes: "Miles v0.1 (2609.08368). Process/system SOTA for the frontier post-train engine. Does not replace Poolside factory, SAO, CISPO, Muon2, or mini-SWE-agent. Reward rise is a single-run observation."
 methods:
+  - method:thundersyncrl
   - method:miles
   - method:poolside-model-factory
   - method:sao
@@ -67,7 +70,7 @@ methods:
   - method:cis-rl
   - method:lsd
   - method:carm
-last_reviewed: "2026-10-02"
+last_reviewed: "2026-10-06"
 tags:
   - systems
   - training-systems

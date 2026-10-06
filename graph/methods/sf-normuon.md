@@ -4,7 +4,12 @@ type: method
 title: "SF-NorMuon (Scale-Free Normalized Muon)"
 category: "optimizer"
 status: active
+do_not_use_for:
+  - when: "NorMuon adaptivity is orthogonalization geometry; decoupled geometry-aligned scaling"
+    reason: "SF-NorMuon is scale-free LR transfer; DGA-Muon decouples NorMuon-style adaptive scaling"
+    use_instead: "method:dga-muon"
 papers:
+  - paper:dga-muon
   - paper:sf-normuon
 recipes:
   - recipe:sf-normuon
@@ -16,6 +21,7 @@ claims:
     date: "2026-08-26"
     verified: true
     notes: "Scale-free parameter update formulation for zero-shot hyperparameter transfer."
+last_reviewed: "2026-10-06"
 tags:
   - optimizer
   - pretraining

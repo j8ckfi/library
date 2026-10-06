@@ -23,8 +23,9 @@ assumptions:
   - "Labeled multi-teacher OPD host. Fast student takes each teacher update; slow student is an EMA of the fast student and is the deployable checkpoint."
   - "Paper: Qwen3-VL-8B/4B/2B Instruct All Avg. Paper Open-MOPD 64.2 is not the library 83.4% bake-off."
   - "No public code as of 2026-10-05 (`code_status: none`)."
-last_reviewed: "2026-10-05"
+last_reviewed: "2026-10-06"
 papers:
+  - paper:rethink-mopd
   - paper:sf-mopd
 recipes:
   - recipe:sf-mopd

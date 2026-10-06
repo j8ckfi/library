@@ -19,8 +19,9 @@ do_not_use_for:
 assumptions:
   - "Existing domain specialists; no extra teacher training. Same-family 1.5B last-3 is the main table; cross-family last-1 Linear is the transfer check."
   - "Official code fangzy96/Latent-MOPD released as of 2026-10-05."
-last_reviewed: "2026-10-05"
+last_reviewed: "2026-10-06"
 papers:
+  - paper:rethink-mopd
   - paper:latent-mopd
 recipes:
   - recipe:latent-mopd

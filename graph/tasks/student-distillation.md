@@ -5,6 +5,18 @@ title: "Small Local Student Distillation from Strong Teacher"
 domain: "post-training"
 summary: "Distilling reasoning and conversational capabilities from multi-hundred-billion parameter frontier teachers into small local student models."
 redirects:
+  - when: "MOPD vs tuned off-policy SFT/Soft-KD confound (training design / GPU-hour cost)"
+    to: "paper:rethink-mopd"
+  - when: "SMC / sequence-level power distillation from a frozen teacher (one generation)"
+    to: "method:oppd"
+  - when: "difficulty-gated mixing of OPD teacher signal with GRPO outcome reward"
+    to: "method:diffgate"
+  - when: "RL-train the teacher on fixed student prefixes then freeze before distillation (prepare-then-freeze)"
+    to: "method:prep-opd"
+  - when: "adaptive per-trajectory OPD rollout horizon via first-passage of low teacher–student compatibility"
+    to: "method:flash-opd"
+  - when: "unbiased full-vocab reverse-KL under sparse Top-k / sampled-token OPD payloads (tail residualization)"
+    to: "method:resopd"
   - when: "privileged OPD TSD calibration (residual discrepancy during OPD, not teacher retirement)"
     to: "method:cal-opd"
   - when: "Adaptive Retirement of a privileged self-OPD teacher then pure agent RL"
@@ -59,6 +71,11 @@ current_sota:
     value: "83.4% headroom recovery in a single deployable student"
     notes: "Open-MOPD (2608.19098) fixes multi-teacher imbalance with token-share balancing and gap-aware dynamic budgeting."
 methods:
+  - method:oppd
+  - method:diffgate
+  - method:prep-opd
+  - method:flash-opd
+  - method:resopd
   - method:opd
   - method:open-mopd
   - method:opdvr
@@ -102,7 +119,7 @@ methods:
   - method:lmopd
   - method:latent-mopd
   - method:rp-opd
-last_reviewed: "2026-10-05"
+last_reviewed: "2026-10-06"
 tags:
   - post-training
   - distillation
@@ -152,5 +169,11 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Gotcha (OPD as implicit RL / collapse)**: `paper:opd-gains-collapse` (`arXiv:2610.03185`). Teacher as implicit reward; masking 4B→Base avg 10.16→13.24. Code HancCui/opd_hacking. Does not replace OPD.
 - **Gotcha (on- vs off-policy distill dynamics)**: `paper:on-policy-or-off-policy` (`arXiv:2609.35259`). KL direction dominates rollout on-policyness. Does not replace OPD.
 - **Gotcha (divergence vs entropy)**: `paper:divergence-entropy-distillation` (`arXiv:2610.03529`). Forward KL inflates student entropy; reverse KL deflates. Code NicolasZucchet/Entropy-in-distillation. Does not replace OPD.
+- **Optional sparse-payload residual**: `method:resopd` (`arXiv:2610.04882`) unbiased full-vocab reverse-KL under Top-k / sampled-token payloads via tail residualization. GitHub InternLM/ResOPD 404 as of 2026-10-06. Does not replace OPD or sparse-opd-supervision.
+- **Optional adaptive OPD horizon**: `method:flash-opd` (`arXiv:2610.06105`) first-passage of low teacher–student compatibility; 2.2×–7.5× vs OPD. Code Onedean/Flash-OPD. Does not replace OPD.
+- **Optional prepare-then-freeze teacher**: `method:prep-opd` (`arXiv:2610.04950`) RL-trains the teacher on fixed student prefixes then freezes. Beside SCOUT (interleaved). 4B→1.7B +8.28 vs OPD. No public code. Does not replace OPD or SCOUT.
+- **Optional difficulty-gated OPD+GRPO**: `method:diffgate` (`arXiv:2610.04596`) mixes teacher signal with GRPO on failed trajectories. Beside OPD-then-RLVR. Does not replace OPD or CISPO.
+- **Optional sequence-level power distill**: `method:oppd` (`arXiv:2610.06804`) SMC against a frozen teacher's power distribution. MATH500 +23.0 / GSM8K +27.3 vs untrained. Code ArminAzizi98/OPPD. Does not replace OPD or CISPO.
+- **Gotcha (MOPD training-design confound)**: `paper:rethink-mopd` (`arXiv:2610.04272`). Tuned SFT/Soft-KD can approach MOPD; MOPD 14.8–23.1× SFT GPU-h. Announced GitHub 404. Does not retarget Open-MOPD.
 - **Not this task**: Adaptive Retirement of a privileged self-OPD teacher in agent RL is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl`. Distilling optimized-harness behaviors into weights under a fixed target harness is `method:harness-zero` on `task:harness-distillation`. Multi-stage agent continual learning (MMOPD / SDFT / MLE) is `method:aclarena` on `task:agent-continual-learning` and does not retarget Open-MOPD. Label-routed MOPD of SWE category experts is `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`.
 

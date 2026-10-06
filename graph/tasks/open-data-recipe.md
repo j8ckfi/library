@@ -12,6 +12,8 @@ current_sota:
     value: "Default SOTA open data recipe"
     notes: "OLMo-3 / Dolma-3 (2512.13961)."
 methods:
+  - method:repetition-count-selection
+  - method:repeated-token-worth
   - method:olmo-3
   - method:olmo-2-curriculum
   - method:demix
@@ -22,13 +24,15 @@ methods:
   - method:synth
   - method:self-play-pretraining
 redirects:
+  - when: "unique-token epoch / repetition geometry under a finite pretrain corpus (not the open mix)"
+    to: "task:data-constrained-pretrain"
   - when: "in-language (L2) reasoning SFT rather than a pretrain mix"
     to: "task:multilingual-l2-reasoning-sft"
   - when: "fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds (no web mix)"
     to: "task:synthetic-single-stage-pretrain"
   - when: "zero-natural-data self-play pretraining (generator proposes UTM programs)"
     to: "task:zero-natural-data-self-play-pretrain"
-last_reviewed: "2026-10-03"
+last_reviewed: "2026-10-06"
 tags:
   - pretraining
   - open-data

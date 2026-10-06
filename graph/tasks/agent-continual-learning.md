@@ -13,6 +13,8 @@ out_of_scope:
   - "GitHub issue → patch SWE harness (mini-SWE-agent)"
   - "Single-teacher text distillation default (OPD) or multi-teacher distill default (Open-MOPD) without a continual-learning curriculum"
 redirects:
+  - when: "off-policy merging / donor-checkpoint grafting instead of OPSD for continual learning"
+    to: "method:off-policy-grafting"
   - when: "single-turn math Pass@1"
     to: "task:math-code-rl-dense"
   - when: "async stragglers"
@@ -31,6 +33,7 @@ current_sota:
     value: "MLE AIME26 21.04, NQ 49.7, Retail 32.9, IF-Eval 85.0 vs Seq-Final 10.21 / 33.5 / 29.6 / 84.8"
     notes: "ACLArena (2609.23989). Active first hop. Method status active (not sota). Does not replace CISPO / SAO / CANOPY / Miles / mini-SWE-agent."
 methods:
+  - method:off-policy-grafting
   - method:aclarena
   - method:cispo
   - method:sao
@@ -39,7 +42,7 @@ methods:
   - method:mini-swe-agent
   - method:opd
   - method:open-mopd
-last_reviewed: "2026-09-23"
+last_reviewed: "2026-10-06"
 tags:
   - post-training
   - agentic

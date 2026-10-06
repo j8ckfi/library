@@ -8,6 +8,9 @@ sota_for:
   - task:frontier-rl-posttrain-stack
 supersedes: []
 do_not_use_for:
+  - when: "lossless (no-staleness) overlap of GRPO/OPD gradient computation with rollout"
+    reason: "Miles remains the production engine; ThunderSyncRL is a no-staleness overlap algorithm"
+    use_instead: "method:thundersyncrl"
   - when: "factory process / experiments-as-code / lineage is the job"
     reason: "Miles is the RL post-train engine, not the industrial factory control plane"
     use_instead: "method:poolside-model-factory"
@@ -51,8 +54,9 @@ assumptions:
   - "Frontier MoE post-train with a split rollout/train fleet. Paper case study: GLM-5.2 744B-A40B on 64 GB300 (32/32), Megatron trainer, optimizer-state streaming to disk."
   - "SGLang rollouts; Megatron or FSDP trainer. LoRA RL is Megatron-only in v0.1."
   - "Does not replace the train-kernel defaults run inside the stack (CISPO, OPD, Muon2)."
-last_reviewed: "2026-10-01"
+last_reviewed: "2026-10-06"
 papers:
+  - paper:thundersyncrl
   - paper:miles
 recipes:
   - recipe:miles

@@ -6,6 +6,111 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-10-06 — weekday SOTA sweep (ORCA, ExpertMuon-Compass, Clean, DGA-Muon, Repeated-Token Worth, Repetition-Count Selection, Looped Models Done Right, ResOPD, Flash-OPD, Prep-OPD, DiffGate, OPPD, E2-OPSD, OG-OPSD, off-policy grafting, ThunderSyncRL, LoGRA, ExPPO, MEND, OnePO)
+- Twenty active plug-ins, one new dual-active task (`task:data-constrained-pretrain`), and one claim-note paper (`paper:rethink-mopd`). No current_sota retarget of muon2 / CISPO / VISTA / OPD / Open-MOPD / SAO / Miles / ACLArena / Self-OPD / OLMo-3 / RLT / SMELT.
+- Window: 2026-10-06 Librarian weekday sweep after PR 38; watermark was 2610.03702. New arXiv 2610.06116, 2610.04140, 2610.04204, 2610.06578, 2610.05591, 2610.05126, 2610.06833, 2610.04882, 2610.06105, 2610.04950, 2610.04596, 2610.06804, 2610.05048, 2610.05070, 2610.04272, 2610.05872, 2610.05935, 2610.06647, 2610.04011, 2610.05954, 2610.05966.
+
+### 2026-10-06 — claim note paper:rethink-mopd (no new method)
+- Added paper:rethink-mopd (2610.04272) on method:open-mopd and siblings (sf-mopd / mopd-router / dn-mopd / pmopd / latent-mopd). Tuned SFT/Soft-KD ≈ MOPD after matching HPs; MOPD 14.8–23.1× SFT GPU-h. Announced GitHub apple-aiml-research/ml-rethink-mopd 404 as of 2026-10-06. Does not retarget Open-MOPD.
+
+### 2026-10-06 — ingest method:onepo (active on task:instruct-sft-alignment; does not supersede method:olmo-3 / method:cispo)
+- Added paper:onepo (2610.05966), method:onepo, recipe:onepo (`code_status: released`; `repo_url: https://github.com/FreedomIntelligence/HuatuoGPT-3`). Reverse redirect for SFT-free RL-only domain adaptation.
+- Status active (`sota_for: []`). OnePO Adaptive Objective Evolution + Teacher Retirement; HuatuoGPT-3 27B.
+- Evidence: HealthBench Total 67.2 / 20K, +2.7 vs SFT+RL / +7.4 vs pure RL; 27B 70.1 Total / 71.4 Professional (arXiv:2610.05966); verified: true; evidence_level: preprint.
+- Scope checks: OLMo-3 remains instruct default; CISPO remains Pass@1.
+
+### 2026-10-06 — ingest method:mend (active on task:posttrain-diffusion; does not supersede method:diffusion-opsd / method:self-opd)
+- Added paper:mend (2610.05954), method:mend, recipe:mend (`code_status: none`; `repo_url: none found`). Reverse redirect for proximal velocity matching.
+- Status active (`sota_for: []`). ~100 updates vs Flow-GRPO ~4k.
+- Evidence: 5/6 evaluators at matched distance to base images; beats ReFL and DiffusionNFT under equal budget (arXiv:2610.05954); verified: true; evidence_level: preprint.
+- Scope checks: DiffusionOPSD / Self-OPD remain diffusion post-train defaults.
+
+### 2026-10-06 — ingest method:exppo (active on task:math-code-rl-dense; does not supersede method:cispo)
+- Added paper:exppo (2610.04011), method:exppo, recipe:exppo (`code_status: released`; `repo_url: https://github.com/jinhangzhan/ExPPO`). Reverse redirect for surprisal+pass-rate advantage shaping.
+- Status active (`sota_for: []`). Exploration-preserving advantage on an existing group reward.
+- Evidence: abstract has no numeric table (arXiv:2610.04011); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1.
+
+### 2026-10-06 — ingest method:logra (active on task:math-code-rl-dense / task:full-param-memory-efficient-pretrain; does not supersede method:cispo / method:scale)
+- Added paper:logra (2610.06647), method:logra, recipe:logra (`code_status: none`; `repo_url: none found`). Reverse redirects for RL memory sketches.
+- Status active (`sota_for: []`). Low-rank gradient sketches + predicted-KL step control.
+- Evidence: up to 45.7% RL memory reduction; 27B 1100+ steps on 8 GPUs (arXiv:2610.06647); verified: true; evidence_level: preprint.
+- Scope checks: CISPO remains Pass@1; SCALE remains full-param pretrain memory.
+
+### 2026-10-06 — ingest method:thundersyncrl (active on task:agentic-async-rl; does not supersede method:sao / method:miles)
+- Added paper:thundersyncrl (2610.05935), method:thundersyncrl, recipe:thundersyncrl (`code_status: none`; `repo_url: none found`). Reverse redirects from agentic-async-rl and frontier-rl-posttrain-stack.
+- Status active (`sota_for: []`). Lossless no-staleness overlap of gradient with GRPO/OPD rollout.
+- Evidence: 1.9× vs sync; +2.47pp vs async (arXiv:2610.05935); verified: true; evidence_level: preprint.
+- Scope checks: SAO remains async stragglers; Miles remains the production engine.
+
+### 2026-10-06 — ingest method:off-policy-grafting (active on task:agent-continual-learning; does not supersede method:aclarena)
+- Added paper:off-policy-grafting (2610.05872), method:off-policy-grafting, recipe:off-policy-grafting (`code_status: none`; `repo_url: none found`). Reverse redirect against OPSD for continual learning.
+- Status active (`sota_for: []`). Donor-checkpoint SFT then scaled merge. Distinct from method:graft (all-fail salvage).
+- Evidence: off-policy merging beats on-policy self-distillation for CL in the paper (arXiv:2610.05872); verified: true; evidence_level: preprint.
+- Scope checks: ACLArena remains the agent continual-learning first hop.
+
+### 2026-10-06 — ingest method:e2-opsd / method:og-opsd (active on task:privileged-teacher-opsd; does not supersede method:vista / method:u-opsd)
+- Added paper:e2-opsd (2610.05048), method:e2-opsd, recipe:e2-opsd (`code_status: none`). Entropy-overshoot fix; up to +4.3 mean@16 vs OPSD.
+- Added paper:og-opsd (2610.05070), method:og-opsd, recipe:og-opsd (`code_status: none`). Outcome-guided FKL/RKL + entropy prefix cutoff; improves vanilla OPSD on Qwen3 1.7B/4B/8B and Qwen3-VL-2B (no numeric table in abstract).
+- Linked from method:opsd-collapse-review. Status active (`sota_for: []`).
+- Scope checks: VISTA remains privileged-OPSD first hop.
+
+### 2026-10-06 — ingest method:oppd (active on task:student-distillation; does not supersede method:opd / method:cispo)
+- Added paper:oppd (2610.06804), method:oppd, recipe:oppd (`code_status: released`; `repo_url: https://github.com/ArminAzizi98/OPPD`).
+- Status active (`sota_for: []`). SMC against a frozen teacher's sequence-level power distribution.
+- Evidence: MATH500 +23.0 / GSM8K +27.3 vs untrained; +3.8 / +4.0 / +5.4 vs GRPO on MATH500 / GSM8K / AIME (arXiv:2610.06804); verified: true; evidence_level: preprint.
+
+### 2026-10-06 — ingest method:diffgate (active on task:student-distillation; does not supersede method:opd / method:opd-then-rlvr / method:cispo)
+- Added paper:diffgate (2610.04596), method:diffgate, recipe:diffgate (`code_status: none`; verl cited, no dedicated repo).
+- Status active (`sota_for: []`). Difficulty-gated OPD+GRPO on failed trajectories.
+- Evidence: Qwen3-0.6B/1.7B code avg@8 +1.7/+1.8, pass@8 +1.6/+5.7 vs GRPO (arXiv:2610.04596); verified: true; evidence_level: preprint.
+
+### 2026-10-06 — ingest method:prep-opd (active on task:student-distillation; does not supersede method:opd / method:scout)
+- Added paper:prep-opd (2610.04950), method:prep-opd, recipe:prep-opd (`code_status: none`). Prepare-then-freeze vs SCOUT interleaved teacher RL.
+- Status active (`sota_for: []`).
+- Evidence: 4B→1.7B +8.28 vs OPD, +2.30 vs Relay-OPD (arXiv:2610.04950); verified: true; evidence_level: preprint. Relay-OPD is a paper baseline, not a library method.
+
+### 2026-10-06 — ingest method:flash-opd (active on task:student-distillation; does not supersede method:opd)
+- Added paper:flash-opd (2610.06105), method:flash-opd, recipe:flash-opd (`code_status: released`; `repo_url: https://github.com/Onedean/Flash-OPD`).
+- Status active (`sota_for: []`). First-passage adaptive rollout horizon.
+- Evidence: 2.2×–7.5× vs OPD (arXiv:2610.06105); verified: true; evidence_level: preprint.
+
+### 2026-10-06 — ingest method:resopd (active on task:student-distillation; does not supersede method:opd / method:sparse-opd-supervision)
+- Added paper:resopd (2610.04882), method:resopd, recipe:resopd (`code_status: announced`; InternLM/ResOPD HTTP 404 as of 2026-10-06).
+- Status active (`sota_for: []`). Tail residualization for sparse reverse-KL OPD.
+- Evidence: unbiased full-vocab reverse KL and substantial variance reduction (abstract; no numeric table) (arXiv:2610.04882); verified: true; evidence_level: preprint.
+
+### 2026-10-06 — ingest method:looped-models-done-right (active on task:recurrent-encoder-decoder-lm; does not supersede method:recurrent-looped-transformer / method:smelt)
+- Added paper:looped-models-done-right (2610.06833), method:looped-models-done-right, recipe:looped-models-done-right (`code_status: released`; `repo_url: https://github.com/ifm-ai/xllm-loop`). Reverse redirect from compute-matched-moe-looped-pretrain.
+- Status active (`sota_for: []`). Huginn-style fixed-point loops; learned depth prior + terminal KV sharing.
+- Evidence: 1.6B 3× smaller KV matches fixed-depth full-cache average; prefill distill up to 1.79×; RL saved-state grads 2× (arXiv:2610.06833); verified: true; evidence_level: preprint.
+- Scope checks: RLT remains the CED experimental hop (no measurements); SMELT remains MoE looping.
+
+### 2026-10-06 — ingest task:data-constrained-pretrain (dual-active method:repeated-token-worth + method:repetition-count-selection; does not supersede method:olmo-3 / method:moe-data-repetition)
+- Added paper:repeated-token-worth (2610.05591) and paper:repetition-count-selection (2610.05126) with methods/recipes (`code_status: none`). New task current_sota lists both; method `sota_for` stays empty.
+- Evidence: second epoch nearly as valuable as fresh; ~15 epochs at 127M to ~4 at 2B; consecutive shard replay up to +0.46 bits/byte (2610.05591). 520M Proof-Pile-2 r=8 beats r=16 with fewer tokens (2610.05126); verified: true; evidence_level: preprint.
+- Scope checks: OLMo-3 remains the open mix; MoE data-repetition remains the sparsity gotcha.
+
+### 2026-10-06 — ingest method:dga-muon (active on task:llm-pretraining-optimization; does not supersede method:muon2 / method:sf-normuon)
+- Added paper:dga-muon (2610.06578), method:dga-muon, recipe:dga-muon (`code_status: none`).
+- Status active (`sota_for: []`). Decoupled geometry-aligned scaling; NorMuon adaptivity is mostly orthogonalization geometry.
+- Evidence: empirical superiority over NorMuon (abstract; no numeric table) (arXiv:2610.06578); verified: true; evidence_level: preprint.
+
+### 2026-10-06 — ingest method:clean (active on task:llm-pretraining-optimization; does not supersede method:soap / method:soap-muon-scale / method:muon2)
+- Added paper:clean (2610.04204), method:clean, recipe:clean (`code_status: none`). Nyström SOAP + Q-Clean.
+- Status active (`sota_for: []`).
+- Evidence: Q-Clean >50% optimizer memory vs Muon on LLaMA-1.3B; Clean 26% faster wall-clock to AdamW final quality; 13B on one 80GB GPU (arXiv:2610.04204); verified: true; evidence_level: preprint.
+
+### 2026-10-06 — ingest method:expertmuon-compass (active on task:llm-pretraining-optimization / task:pretrain-moe-frontier; does not supersede method:muon2 / method:muonclip-kimi-k2)
+- Added paper:expertmuon-compass (2610.04140), method:expertmuon-compass, recipe:expertmuon-compass (`code_status: none`).
+- Status active (`sota_for: []`). Per-expert Muon step multipliers from update–gradient alignment.
+- Evidence: FineWeb-Edu; strongest on blocked multilingual (arXiv:2610.04140); verified: true; evidence_level: preprint.
+
+### 2026-10-06 — ingest method:orca (active on task:llm-pretraining-optimization; does not supersede method:muon2)
+- Added paper:orca (2610.06116), method:orca, recipe:orca (`code_status: none`). Temporary soft-orthogonality then remove.
+- Status active (`sota_for: []`).
+- Evidence: LLaMA / Qwen3 / fine-grained MoE 130M–8B; lower final val loss than Muon; Muon-relative drop matches or exceeds Muon's vs Adam (arXiv:2610.06116); verified: true; evidence_level: preprint. Do not invent 0.02–0.04 or 60k-vs-100k.
+
 ### 2026-10-05 — weekday SOTA sweep (MuonIO, SF-MOPD, LMOPD, Latent-MOPD, RP-OPD, Air-OPD, RC-OPD, AdaStep, FTW, SCAD, Mesh Learning, TACM, LESSER, OPSFT, MetaRubric)
 - Fifteen active plug-ins plus four claim-note papers. No current_sota retarget of muon2 / CISPO / VISTA / OPD / Open-MOPD / CANOPY / SLCA-GRPO / CorrGRPO / DARA / RLM / SAO / Miles.
 - Window: 2026-10-05 Librarian weekday sweep after PR 37; watermark was 2610.02199 from PR 36. New arXiv 2610.02705, 2610.02324, 2610.02359, 2610.02381, 2610.02781, 2610.02700, 2610.03515, 2610.03223, 2610.03361, 2610.03372, 2610.02835, 2610.02404, 2610.03702, 2609.36659, 2610.02824. Claim notes 2610.03185, 2609.35259, 2610.03529, 2610.02911.

@@ -9,6 +9,15 @@ sota_for:
 supersedes:
   - method:on-policy-distillation
 do_not_use_for:
+  - when: "RL-train the teacher on fixed student prefixes then freeze before distillation"
+    reason: "OPD keeps a frozen teacher; Prep-OPD is prepare-then-freeze, SCOUT is interleaved"
+    use_instead: "method:prep-opd"
+  - when: "SMC / sequence-level power distillation from a frozen teacher (one generation)"
+    reason: "OPD is token-level reverse-KL; OPPD trains against a sequence-level power distribution"
+    use_instead: "method:oppd"
+  - when: "adaptive per-trajectory OPD rollout horizon via first-passage of low teacher–student compatibility"
+    reason: "OPD remains matching; Flash-OPD stops rollouts at a compatibility first-passage"
+    use_instead: "method:flash-opd"
   - when: "latent OPD collapse / last-layer crossfade into token OPD"
     reason: "OPD remains the matching default; LastOPD is a latent-collapse schedule on reverse top-k OPD"
     use_instead: "method:lastopd"
@@ -39,8 +48,12 @@ do_not_use_for:
   - when: "rubric-privileged OPD warm start before rubric-based RL"
     reason: "OPD remains matching distillation; RP-OPD is a rubric-privileged warm start then rubric RL"
     use_instead: "method:rp-opd"
-last_reviewed: "2026-10-05"
+last_reviewed: "2026-10-06"
 papers:
+  - paper:rethink-mopd
+  - paper:prep-opd
+  - paper:oppd
+  - paper:flash-opd
   - paper:opd
   - paper:opd-one-example
   - paper:opd-hard-cot-selection

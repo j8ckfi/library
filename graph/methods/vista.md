@@ -8,6 +8,12 @@ sota_for:
   - task:privileged-teacher-opsd
 supersedes: []
 do_not_use_for:
+  - when: "outcome-guided FKL/RKL OPSD with entropy prefix cutoff"
+    reason: "VISTA remains privileged-teacher first hop; OG-OPSD is an outcome-gated KL schedule"
+    use_instead: "method:og-opsd"
+  - when: "OPSD entropy overshoot (student entropy past the teacher)"
+    reason: "VISTA remains privileged-teacher first hop; E2-OPSD is an entropy-overshoot trainer"
+    use_instead: "method:e2-opsd"
   - when: "privileged OPSD gains collapse at scale; verified on-policy scaffolds"
     reason: "VISTA remains privileged-OPSD SOTA; OASIS supervises verified on-policy scaffolds with another rollout as teacher context"
     use_instead: "method:oasis"
@@ -23,8 +29,10 @@ do_not_use_for:
   - when: "root-cause diagnosis of the student's own failed reasoning then differentiated prefix/error distillation"
     reason: "VISTA remains privileged-OPSD SOTA; RC-OPD repairs the student's own failed reasoning"
     use_instead: "method:rc-opd"
-last_reviewed: "2026-10-05"
+last_reviewed: "2026-10-06"
 papers:
+  - paper:og-opsd
+  - paper:e2-opsd
   - paper:vista
 recipes:
   - recipe:vista

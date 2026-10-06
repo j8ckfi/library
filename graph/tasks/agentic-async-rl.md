@@ -22,6 +22,8 @@ out_of_scope:
   - "Category-aware SWE expert RL (Category-Aware SWE Experts)"
   - "Structural tool vs summary credit under GRPO (SLCA-GRPO)"
 redirects:
+  - when: "lossless (no-staleness) overlap of GRPO/OPD gradient computation with rollout"
+    to: "method:thundersyncrl"
   - when: "build an agent rather than train a policy"
     to: "task:software-engineering-agent-harness"
   - when: "outcome-only long-horizon agent RL (coverage / anti-drift), not async stragglers"
@@ -60,6 +62,7 @@ current_sota:
     value: "Default SOTA for agentic async RL"
     notes: "SAO (2607.07508) decouples environment tool execution from policy optimization with importance-corrected replay buffers."
 methods:
+  - method:thundersyncrl
   - method:sao
   - method:bpco
   - method:dr-grpo
@@ -80,7 +83,7 @@ methods:
   - method:pact
   - method:slca-grpo
   - method:ftw
-last_reviewed: "2026-10-05"
+last_reviewed: "2026-10-06"
 tags:
   - post-training
   - agentic

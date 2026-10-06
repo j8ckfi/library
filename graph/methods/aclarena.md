@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "off-policy merging / donor-checkpoint grafting instead of OPSD for continual learning"
+    reason: "ACLArena remains the agent continual-learning first hop; off-policy grafting is a caveat against OPSD for CL"
+    use_instead: "method:off-policy-grafting"
   - when: "single-turn math/code Pass@1 RLVR"
     reason: "CISPO remains Pass@1; ACLArena is multi-stage capability stacking, not a math loss"
     use_instead: "method:cispo"
@@ -26,8 +29,9 @@ assumptions:
   - "Multiple post-train stages with heterogeneous environments (paper: Math → Search → E-commerce → IF). Forgetting is the complaint, not a missing Pass@1 kernel."
   - "MLE: offline replay of filtered specialist trajectories (SDFT), then a routed network of LoRA experts each specialized by RL."
   - "Code: WillDreamer/ACLArena. HF collection willhx/aclarena. Built on slime."
-last_reviewed: "2026-09-23"
+last_reviewed: "2026-10-06"
 papers:
+  - paper:off-policy-grafting
   - paper:aclarena
 recipes:
   - recipe:aclarena

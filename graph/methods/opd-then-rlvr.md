@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "difficulty-gated mixing of OPD teacher signal with GRPO on failed trajectories"
+    reason: "OPD-then-RLVR sequences stages; DiffGate mixes signals inside the RL stage on hard traces"
+    use_instead: "method:diffgate"
   - when: "choosing the single-teacher distillation algorithm"
     reason: "This is a stacking order on top of OPD then RLVR, not a new distill default"
     use_instead: "method:opd"
@@ -29,8 +32,9 @@ assumptions:
   - "You will run both OPD and RLVR. Paper: Qwen3-1.7B-Base student, Qwen3-8B non-thinking teacher, veRL, G=8, AdamW 1e-6, clip 0.2, no KL penalty, mask student EOS in the teacher term."
   - "Default switch S=60 of 150 (logic) / 120 (DeepMath) steps. Switch when OPD validation saturates, not on a fixed step if the curve is still climbing."
   - "Does not retarget method:opd or method:cispo. It is the stacking order when both are used, against joint one-step fusion."
-last_reviewed: "2026-10-05"
+last_reviewed: "2026-10-06"
 papers:
+  - paper:diffgate
   - paper:opd-then-rlvr
 recipes:
   - recipe:opd-then-rlvr

@@ -8,10 +8,13 @@ sota_for:
   - task:label-free-reasoner-posttrain
 supersedes: []
 do_not_use_for:
+  - when: "OPSD entropy overshoot on a privileged / gold-conditioned teacher"
+    reason: "u-OPSD is unlabeled consensus; E2-OPSD still uses solved neighbors"
+    use_instead: "method:e2-opsd"
   - when: "privileged OPSD gains collapse at scale; verified on-policy scaffolds"
     reason: "u-OPSD is unlabeled consensus; OASIS needs answer labels and verified on-policy scaffolds"
     use_instead: "method:oasis"
-last_reviewed: "2026-10-01"
+last_reviewed: "2026-10-06"
 papers:
   - paper:u-opsd
 recipes:

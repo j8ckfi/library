@@ -10,6 +10,9 @@ supersedes:
   - method:grpo
   - method:dr-grpo
 do_not_use_for:
+  - when: "lossless (no-staleness) overlap of GRPO/OPD gradient computation with rollout"
+    reason: "SAO remains async straggler replay; ThunderSyncRL overlaps gradient with rollout without staleness"
+    use_instead: "method:thundersyncrl"
   - when: "sparse-outcome coverage / anti-drift on a small revisited task pool, not async latency"
     reason: "SAO is the async straggler default; CANOPY/DRACO own outcome-only long-horizon agent RL"
     use_instead: "task:outcome-only-long-horizon-agent-rl"
@@ -40,7 +43,7 @@ do_not_use_for:
   - when: "CEM-style critic-free RFT from replay when group rollouts are impractical (stateful sandboxes)"
     reason: "SAO remains async straggler replay; FTW is CEM-style ordinal filter on replay when GRPO groups cannot be reconstructed"
     use_instead: "method:ftw"
-last_reviewed: "2026-10-05"
+last_reviewed: "2026-10-06"
 papers:
   - paper:sao
   - paper:probe-the-harness

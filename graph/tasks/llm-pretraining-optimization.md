@@ -12,6 +12,16 @@ current_sota:
     value: "~2x token efficiency vs AdamW"
     notes: "Muon2 (2604.09967) + KL-SOAP (2607.20548) if memory allows."
 redirects:
+  - when: "unique-token epoch / repetition geometry under a finite pretrain corpus"
+    to: "task:data-constrained-pretrain"
+  - when: "NorMuon adaptivity is orthogonalization geometry; decoupled geometry-aligned scaling (DGA-Muon)"
+    to: "method:dga-muon"
+  - when: "Nyström-sketched SOAP preconditioners / linear optimizer memory (Clean / Q-Clean)"
+    to: "method:clean"
+  - when: "per-expert Muon step-size multipliers from update–gradient alignment (ExpertMuon-Compass)"
+    to: "method:expertmuon-compass"
+  - when: "temporary strong soft-orthogonality early in Muon-family pretrain, then remove (ORCA)"
+    to: "method:orca"
   - when: "lossless multi-token / diffusion-augmented AR serving rather than the pretrain optimizer"
     to: "task:diffusion-augmented-ar"
   - when: "latent-space / next-concept LM architecture rather than the optimizer"
@@ -25,6 +35,10 @@ redirects:
   - when: "Muon-style norm-aware update for embedding tables (1->2) and LM head (2->inf) instead of AdamW"
     to: "method:muonio"
 methods:
+  - method:dga-muon
+  - method:clean
+  - method:expertmuon-compass
+  - method:orca
   - method:muon2
   - method:soap-muon-scale
   - method:muon-scalable
@@ -46,7 +60,7 @@ methods:
   - method:synth
   - method:self-play-pretraining
   - method:muonio
-last_reviewed: "2026-10-05"
+last_reviewed: "2026-10-06"
 tags:
   - pretraining
   - optimizer

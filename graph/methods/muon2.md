@@ -11,14 +11,24 @@ supersedes:
   - method:muon
   - method:muon-scalable
 do_not_use_for:
+  - when: "NorMuon adaptivity is orthogonalization geometry; decoupled geometry-aligned scaling"
+    reason: "Muon2 remains the 7B default; DGA-Muon is a NorMuon-geometry fix"
+    use_instead: "method:dga-muon"
+  - when: "per-expert Muon step-size multipliers from update–gradient alignment"
+    reason: "Muon2 remains the 7B default; ExpertMuon-Compass is an MoE per-expert step multiplier"
+    use_instead: "method:expertmuon-compass"
+  - when: "temporary strong soft-orthogonality early in Muon-family pretrain, then remove"
+    reason: "Muon2 remains the 7B default; ORCA is a cooled spectral regularizer on that trainer"
+    use_instead: "method:orca"
   - when: "full-param FT optimizer-state memory (ternary column-wise one-sparse)"
     reason: "Muon2 remains the ~7B pretrain optimizer; TACO is an FT memory geometry"
     use_instead: "method:taco"
   - when: "Muon-style norm-aware update for embedding tables (1->2) and LM head (2->inf) instead of AdamW"
     reason: "Muon2 remains the hidden-layer / 7B default; MuonIO only replaces AdamW on embeddings and the LM head"
     use_instead: "method:muonio"
-last_reviewed: "2026-10-05"
+last_reviewed: "2026-10-06"
 papers:
+  - paper:orca
   - paper:muon2
 recipes:
   - recipe:muon2-pretraining

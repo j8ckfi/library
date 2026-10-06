@@ -26,8 +26,9 @@ assumptions:
   - "Sequential (cycled) multi-teacher OPD on shared full-parameter students. Paper: Code/Reason/Math teachers, Qwen2.5-7B and Llama-3.1-8B, Adafactor, K=16 SVD, four cycles, probe order Code→Reason→Math."
   - "Subspace memory from cumulative block ΔW per weight matrix; project gradient then the preconditioned update. Rebuild memory each cycle."
   - "No public GitHub as of 2026-09-30. Paper Open-MOPD 63.54 is not the library 83.4% headroom-recovery bake-off."
-last_reviewed: "2026-10-01"
+last_reviewed: "2026-10-06"
 papers:
+  - paper:rethink-mopd
   - paper:pmopd
 recipes:
   - recipe:pmopd

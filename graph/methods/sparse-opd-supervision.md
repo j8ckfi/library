@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "unbiased full-vocab reverse-KL under a sparse Top-k / sampled-token payload (tail residualization)"
+    reason: "Sparse OPD drops tokens by usefulness; ResOPD residualizes the unobserved tail under the same sparse payload"
+    use_instead: "method:resopd"
   - when: "choosing the single-teacher distillation algorithm"
     reason: "This is a keep-mask on OPD tokens, not a new distill default"
     use_instead: "method:opd"
@@ -29,8 +32,9 @@ assumptions:
   - "Host is reverse-KL / sampled-token OPD with per-token A_t = log π_T(y_t|h_t) − log π_θ(y_t|h_t). Paper: veRL 0.8.0, DAPO-Math-17K, n=1 OPD rollout, max response 8192, lr 1e-6, clip 0.2, Qwen3 no-think."
   - "Table 2 names: mintok = highest-reward token; maxtok = lowest-reward token. Figure 1 caption swaps those adjectives — follow Table 2."
   - "No official code as of 2026-09-08."
-last_reviewed: "2026-09-08"
+last_reviewed: "2026-10-06"
 papers:
+  - paper:resopd
   - paper:sparse-opd-supervision
 recipes:
   - recipe:sparse-opd-supervision

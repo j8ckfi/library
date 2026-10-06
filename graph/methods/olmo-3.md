@@ -11,6 +11,13 @@ sota_for:
 supersedes:
   - method:olmo-2-curriculum
   - method:tulu3-rlvr
+do_not_use_for:
+  - when: "unique-token epoch / repetition geometry under a finite pretrain corpus"
+    reason: "OLMo-3 remains the open mix; data-constrained pretrain owns epoch/r schedules"
+    use_instead: "task:data-constrained-pretrain"
+  - when: "SFT-free RL-only domain adaptation from a base model"
+    reason: "OLMo-3 remains the open instruct stack; OnePO is RL-only domain adaptation"
+    use_instead: "method:onepo"
 papers:
   - paper:olmo-3
 recipes:
@@ -23,6 +30,7 @@ claims:
     date: "2026-08-26"
     verified: true
     notes: "Dolma-3 multi-trillion token open mix + Dolci curated SFT and verifiable reward alignment."
+last_reviewed: "2026-10-06"
 tags:
   - pretraining
   - open-data

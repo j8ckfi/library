@@ -13,6 +13,8 @@ out_of_scope:
   - "NVL72 fused dispatch megakernel (Mixture-of-Kittens)"
   - "Olympiad specialist post-train (Nemotron IMO Gold)"
 redirects:
+  - when: "per-expert Muon step-size multipliers from update–gradient alignment (ExpertMuon-Compass)"
+    to: "method:expertmuon-compass"
   - when: "input-heavy agentic / KV-footprint / CED serving, not general MoE pretrain template"
     to: "task:input-heavy-agentic-moe-serving"
   - when: "compute-matched looped MoE (middle layers twice), not V4/K3 architecture"
@@ -37,6 +39,7 @@ current_sota:
     value: "Frontier Co-Default SOTA"
     notes: "Kimi-K3 (2607.24653) architecture co-default with DeepSeek-V4."
 methods:
+  - method:expertmuon-compass
   - method:deepseek-v4
   - method:kimi-k3
   - method:deepseek-v3
@@ -54,7 +57,7 @@ methods:
   - method:smelt
   - method:deepseek-v41-flash
   - method:recurrent-looped-transformer
-last_reviewed: "2026-09-12"
+last_reviewed: "2026-10-06"
 tags:
   - pretraining
   - moe

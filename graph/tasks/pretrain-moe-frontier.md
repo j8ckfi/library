@@ -13,6 +13,10 @@ out_of_scope:
   - "NVL72 fused dispatch megakernel (Mixture-of-Kittens)"
   - "Olympiad specialist post-train (Nemotron IMO Gold)"
 redirects:
+  - when: "distributionally robust MoE load-balancing objective (DRMoET / FLAME-MoE)"
+    to: "method:drmoet"
+  - when: "dense-to-MoE upcycling via learned binary-mask experts over a frozen FFN"
+    to: "task:dense-to-moe-upcycling"
   - when: "per-expert Muon step-size multipliers from update–gradient alignment (ExpertMuon-Compass)"
     to: "method:expertmuon-compass"
   - when: "input-heavy agentic / KV-footprint / CED serving, not general MoE pretrain template"
@@ -57,7 +61,9 @@ methods:
   - method:smelt
   - method:deepseek-v41-flash
   - method:recurrent-looped-transformer
-last_reviewed: "2026-10-06"
+  - method:drmoet
+  - method:maskerade
+last_reviewed: "2026-10-07"
 tags:
   - pretraining
   - moe
@@ -80,4 +86,6 @@ Training sparse Mixture-of-Experts models enables scaling parameter capacity int
 - **Experimental recurrent CED LM (not this template)**: `method:recurrent-looped-transformer` on `task:recurrent-encoder-decoder-lm`.
 - **Optional LR/batch vs activation-ratio transfer**: `method:moe-sparsity-hp-scaling` (`arXiv:2609.08690`). Pretrain HP guidance. Does not replace DeepSeek-V4 / Kimi-K3.
 - **Gotcha (repetition × sparsity)**: `method:moe-data-repetition` (`arXiv:2609.11917`). MoEs degrade from ~4× repeats; dense 80M tolerated 8×. Does not replace DeepSeek-V4 / Kimi-K3.
+- **Optional DRO load-balancing objective**: `method:drmoet` (`arXiv:2610.07207`, NeurIPS 2026). FLAME-MoE 10.3B seven-task avg 0.6767 vs FLAME 0.6625. Does not replace DeepSeek-V4 / Kimi-K3.
+- **Not this task (dense-to-MoE upcycling)**: `method:maskerade` on `task:dense-to-moe-upcycling` (`arXiv:2610.07809`). Does not replace DeepSeek-V4 / Kimi-K3.
 - **Olympiad specialist post-train on Ultra (not this architecture task)**: `method:nemotron-imo-gold` on `task:olympiad-math-posttrain`.

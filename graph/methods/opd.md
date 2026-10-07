@@ -9,6 +9,15 @@ sota_for:
 supersedes:
   - method:on-policy-distillation
 do_not_use_for:
+  - when: "cross-tokenizer OPD (strict 1:1 coverage / student-selected top-16 shared-vocab reverse-KL)"
+    reason: "OPD remains same-tokenizer matching; Cross-Tokenizer OPD owns disagreeing vocabs"
+    use_instead: "method:cross-tokenizer-opd"
+  - when: "negative-policy rollouts complement teacher OPD when overlap is low"
+    reason: "OPD remains matching; NP-OPD adds negative-policy rollouts"
+    use_instead: "method:np-opd"
+  - when: "OPD used for safety alignment / backdoor transfer risk"
+    reason: "A backdoored safety teacher transfers hidden behavior under OPD"
+    use_instead: "paper:opd-safety-backdoor"
   - when: "RL-train the teacher on fixed student prefixes then freeze before distillation"
     reason: "OPD keeps a frozen teacher; Prep-OPD is prepare-then-freeze, SCOUT is interleaved"
     use_instead: "method:prep-opd"
@@ -48,8 +57,11 @@ do_not_use_for:
   - when: "rubric-privileged OPD warm start before rubric-based RL"
     reason: "OPD remains matching distillation; RP-OPD is a rubric-privileged warm start then rubric RL"
     use_instead: "method:rp-opd"
-last_reviewed: "2026-10-06"
+last_reviewed: "2026-10-07"
 papers:
+  - paper:opd-safety-backdoor
+  - paper:cross-tokenizer-opd
+  - paper:np-opd
   - paper:rethink-mopd
   - paper:prep-opd
   - paper:oppd

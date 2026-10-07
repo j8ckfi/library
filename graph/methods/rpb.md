@@ -16,6 +16,9 @@ do_not_use_for:
   - when: "choosing the frontier MoE architecture"
     reason: "RPB does not retarget DeepSeek-V4 / Kimi-K3"
     use_instead: "method:deepseek-v4"
+  - when: "hierarchical routing control for agentic RL on MoE (operation-type experts)"
+    reason: "RPB soft-anchors the live router to the base prior; hierarchical control constrains operation-type experts"
+    use_instead: "method:hierarchical-moe-routing-control"
 assumptions:
   - "Post-training an MoE whose pretrained router is already non-uniform. Paper: Moonlight-16B-A3B and Qwen3-30B-A3B-Base math post-train."
   - "Do not re-impose a uniformity load-balancing loss. Do not freeze the router as a hard assignment."

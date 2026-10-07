@@ -9,6 +9,7 @@ sota_for: []
 supersedes: []
 papers:
   - paper:adamw-paper
+  - paper:adam-beta-cubic
 recipes: []
 claims:
   - benchmark: "Standard Transformer Pretraining"

@@ -6,6 +6,10 @@ category: "quantization"
 status: sota
 sota_for:
   - task:fp4-hardware-training
+do_not_use_for:
+  - when: "FP4 RL train-side vs rollout-side quantization mismatch"
+    reason: "Quartet-II is native FP4 hardware training from scratch; TRACE / TRIAGE own RL train–rollout alignment"
+    use_instead: "task:fp4-rl-train-rollout-alignment"
 papers:
   - paper:quartet-ii
 recipes:

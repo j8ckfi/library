@@ -8,6 +8,9 @@ sota_for:
   - task:frontier-rl-posttrain-stack
 supersedes: []
 do_not_use_for:
+  - when: "bit-exact delta-compressed weight sync / refit for disaggregated agentic RL"
+    reason: "Miles remains the production engine; NeMo-DCR is a weight-sync plug-in"
+    use_instead: "method:nemo-dcr"
   - when: "lossless (no-staleness) overlap of GRPO/OPD gradient computation with rollout"
     reason: "Miles remains the production engine; ThunderSyncRL is a no-staleness overlap algorithm"
     use_instead: "method:thundersyncrl"

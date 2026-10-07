@@ -19,6 +19,8 @@ out_of_scope:
   - "MoE train–infer mismatch IS correction (CIS-RL)"
   - "Cancellation-aware off-policy sequence masking (CARM)"
 redirects:
+  - when: "bit-exact delta-compressed weight sync / refit for disaggregated agentic RL (NeMo-DCR)"
+    to: "method:nemo-dcr"
   - when: "lossless (no-staleness) overlap of GRPO/OPD gradient computation with rollout, not the production engine"
     to: "method:thundersyncrl"
   - when: "factory process / experiments-as-code / lineage rather than the RL engine"
@@ -70,7 +72,8 @@ methods:
   - method:cis-rl
   - method:lsd
   - method:carm
-last_reviewed: "2026-10-06"
+  - method:nemo-dcr
+last_reviewed: "2026-10-07"
 tags:
   - systems
   - training-systems
@@ -100,3 +103,4 @@ Frontier post-training is a systems problem: multi-turn tool rollouts on trillio
 - **Optional MoE train–infer mismatch plug-in (not this engine default)**: `method:cis-rl` (`arXiv:2609.32444`). Truncates log-odds displacement between infer and train engines. Does not replace Miles, SAPO, or CISPO.
 - **Optional length-scaling tax mix (not this engine default)**: `method:lsd` (`arXiv:2609.38854`) on `task:math-code-rl-dense`. Routes solved groups to EMA OPD. Does not replace Miles or CISPO.
 - **Optional cancellation-aware off-policy mask (not this engine default)**: `method:carm` (`arXiv:2610.02039`) averages absolute token log-ratios before the sequence threshold. Complements CIS-RL. No public code. Does not replace Miles, CISPO, or CIS-RL.
+- **Optional bit-exact delta-compressed weight sync**: `method:nemo-dcr` (`arXiv:2610.08430`). ~1% of BF16 weights change per step; 1T relay-tree 150s vs 87.5 min. Code NVIDIA-NeMo/RL PR #2444. Does not replace Miles.

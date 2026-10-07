@@ -95,10 +95,17 @@ task:software-engineering-agent-harness -> method:mini-swe-agent (2405.15793, 20
 task:directed-sssp-nonneg -> method:bmssp (2504.17033, 2026-08)
 task:1bit-extreme-quantization -> method:sparse-bitnet (2603.05168, 2026-08-26)
 task:fp4-hardware-training -> method:quartet-ii (2601.22813, 2026-08-26) + method:mxfp4-mi355x (2605.09825, 2026-08-26)
+  when FP4 RL train-side vs rollout-side quantization mismatch (TRACE / TRIAGE) -> task:fp4-rl-train-rollout-alignment
 task:post-training-ternary-quantization -> method:scaleq-158 (2608.01078, 2026-08-26)
 task:continuous-control-world-model -> method:efficienttdmpc (2605.16692, 2026-08-26) + method:dream-mpc (2605.04568, 2026-08-26)
 task:visuomotor-servo-control -> method:td-mpc2 (2310.16828, 2026-08-26)
+task:diffusion-lm-ar-delta-recycle -> method:a2d (2610.08108, 2026-10-07)
+  when aligning text-to-image diffusion or flow models with rewards -> task:posttrain-diffusion
+  when curriculum RL for a discrete diffusion LM (canvas anneal), not AR-delta recycle -> method:canvasanneal
+  when lossless multi-token / diffusion-augmented AR serving -> task:diffusion-augmented-ar
+  when single-turn dense math/code Pass@1 RLVR -> task:math-code-rl-dense
 task:posttrain-diffusion -> method:diffusion-opsd (2610.05954, 2026-08-27) + method:self-opd (2610.05954, 2026-08-28)
+  when recycle an AR post-training weight delta onto a converted dLLM (not image/flow alignment) -> task:diffusion-lm-ar-delta-recycle
   when flow-model RL via proximal velocity matching (~100 updates vs Flow-GRPO ~4k) -> method:mend
   when lossless multi-token / diffusion-augmented AR serving, not image-policy alignment -> task:diffusion-augmented-ar
   when training a stable video reward model / rubric-guided RM PO -> method:rewardverse
@@ -190,6 +197,10 @@ task:coding-agent-rl-environment-construction -> method:codemidas (2609.22068, 2
   when single-turn math/code Pass@1 RLVR -> task:math-code-rl-dense
   when category see-saw on heterogeneous SWE RL (already-executable tasks) -> task:swe-agent-category-expert-rl
   when mechanism-first stateful tool envs (not OSS source) -> task:mechanism-grounded-agentic-rl-env
+task:cross-tokenizer-opd -> method:cross-tokenizer-opd (2610.08448, 2026-10-07)
+  when same-tokenizer single-teacher matching distillation -> task:student-distillation
+  when privileged same-size gold teacher OPSD -> task:privileged-teacher-opsd
+  when OPD used for safety alignment / backdoor transfer risk -> paper:opd-safety-backdoor
 task:data-free-self-evolution -> method:j-zero (2608.26582, 2026-08-31)
   when zero-natural-data self-play pretraining from random init (generator proposes UTM programs) -> task:zero-natural-data-self-play-pretrain
   when seed-grounded synthetic single-stage pretraining from Wikipedia/Wikibooks seeds -> task:synthetic-single-stage-pretrain
@@ -197,14 +208,20 @@ task:data-free-self-evolution -> method:j-zero (2608.26582, 2026-08-31)
   when test-time adaptation on unlabeled queries -> task:label-free-test-time-reasoner
 task:direct-preference-alignment -> method:olmo-3 (2512.13961, 2026-08-26)
 task:distill-reasoner-verifier -> method:opdvr (2608.24696, 2026-08-27)
+task:fp4-rl-train-rollout-alignment -> method:trace (2610.07767, 2026-10-07) + method:triage (2610.07043, 2026-10-07)
+  when native FP4 forward/backward hardware training from scratch, not RL train–rollout mismatch -> task:fp4-hardware-training
+  when single-turn dense math/code Pass@1 RLVR -> task:math-code-rl-dense
+  when MoE/VL RLVR loss rather than FP4 train–rollout alignment -> task:math-code-rl-moe
+  when production post-train stack rather than FP4 RL numerics -> task:frontier-rl-posttrain-stack
 task:instruct-sft-alignment -> method:olmo-3 (2512.13961, 2026-08-26) + method:nemotron-cascade-2 (2603.19220, 2026-08-26)
   when SFT-free RL-only domain adaptation from a base model (OnePO / HuatuoGPT-3) -> method:onepo
   when in-language (L2) reasoning SFT rather than general instruct -> task:multilingual-l2-reasoning-sft
   when 24GB quality LoRA rather than drift-budget instruct FT -> task:parameter-efficient-fine-tuning
   when on-policy parameter update direction SFT (OPSFT) -> method:opsft
-task:label-free-reasoner-posttrain -> method:u-opsd (2608.06296, 2026-08-28)
+task:label-free-reasoner-posttrain -> method:u-opsd (2610.07842, 2026-08-28)
 task:label-free-test-time-reasoner -> method:ttpo (2608.27448, 2026-08-28)
 task:math-code-rl-dense -> method:cispo (2610.04011, 2026-08-26)
+  when adaptive ground-truth rationale scaffolding for sparse-reward RLVR (RGPO / GA-GRPO) -> method:rgpo
   when exploration-preserving advantage shaping (surprisal + pass rate) for RLVR -> method:exppo
   when low-rank gradient sketches + predicted-KL step control for RL memory -> method:logra
   when outcome-only long-horizon interactive agent RL -> task:outcome-only-long-horizon-agent-rl
@@ -229,6 +246,7 @@ task:math-code-rl-dense -> method:cispo (2610.04011, 2026-08-26)
   when catastrophic strategy collapse in RLVR (coach prompting + strategy-balancing heads) -> method:mesh-learning
   when on-policy parameter update direction SFT (OPSFT), not Pass@1 RLVR -> method:opsft
 task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
+  when hierarchical routing control for agentic RL on MoE (operation-type experts) -> method:hierarchical-moe-routing-control
   when single-turn dense math/code Pass@1 RLVR -> task:math-code-rl-dense
   when MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not SAPO default) -> method:cis-rl
   when cancellation-aware off-policy response mask (absolute token log-ratios) -> method:carm
@@ -283,8 +301,10 @@ task:outcome-only-long-horizon-agent-rl -> method:canopy (2609.01245, 2026-09-04
   when per-state shrinkage of step-level advantage for agentic RL (GiGPO-style groups) -> method:adastep
   when structured planning/subtask credit + local-context distillation for long-horizon agents -> method:scad
   when learning rubric rewards for rubric-based RL (vacuous credit) -> method:metarubric
+  when hierarchical MoE routing control during agentic RL (operation-type experts) -> method:hierarchical-moe-routing-control
 task:passk-reasoning-coverage -> method:es-reasoning (2608.27351, 2026-08-31)
-task:privileged-teacher-opsd -> method:vista (2610.05070, 2026-08-31)
+task:privileged-teacher-opsd -> method:vista (2610.07842, 2026-08-31)
+  when privileged-context content (demo vs feedback vs rephrase) as OPSD drift, not a trainer -> method:privileged-context-drift
   when outcome-guided FKL/RKL OPSD with entropy prefix cutoff -> method:og-opsd
   when OPSD entropy overshoot (student entropy past the teacher; exemplar-guided + entropy-aware KL) -> method:e2-opsd
   when TSD calibration of teacher–student discrepancy during OPD (not teacher update) -> method:cal-opd
@@ -297,7 +317,10 @@ task:privileged-teacher-opsd -> method:vista (2610.05070, 2026-08-31)
   when adaptive iterative error-to-repair guidance for OPSD -> method:air-opd
   when root-cause diagnosis of the student's own failed reasoning then differentiated prefix/error distillation -> method:rc-opd
 task:reasoning-rl-alignment -> method:cispo (2610.04011, 2026-08-26) + method:sapo (2511.20347, 2026-08-26)
-task:student-distillation -> method:opd (2610.04272, 2026-08-26) + method:open-mopd (2608.19098, 2026-08-28)
+task:student-distillation -> method:opd (2610.07654, 2026-08-26) + method:open-mopd (2608.19098, 2026-08-28)
+  when cross-tokenizer OPD (strict 1:1 coverage / student-selected top-16 shared-vocab reverse-KL) -> task:cross-tokenizer-opd
+  when negative-policy rollouts complement teacher OPD when overlap is low -> method:np-opd
+  when OPD used for safety alignment / backdoor transfer risk -> paper:opd-safety-backdoor
   when MOPD vs tuned off-policy SFT/Soft-KD confound (training design / GPU-hour cost) -> paper:rethink-mopd
   when SMC / sequence-level power distillation from a frozen teacher (one generation) -> method:oppd
   when difficulty-gated mixing of OPD teacher signal with GRPO outcome reward -> method:diffgate
@@ -325,6 +348,7 @@ task:student-distillation -> method:opd (2610.04272, 2026-08-26) + method:open-m
   when representation-level (hidden-state) multi-teacher OPD -> method:latent-mopd
   when rubric-privileged OPD warm start before rubric-based RL -> method:rp-opd
 task:swe-agent-category-expert-rl -> method:category-aware-swe-experts (2609.23377, 2026-09-23)
+  when failure-conditioned recovery (reuse failed patch + verifier feedback) -> method:fc-swe
   when env construction from source only -> task:coding-agent-rl-environment-construction
   when async algorithm -> task:agentic-async-rl
   when issue-to-patch harness loop -> task:software-engineering-agent-harness
@@ -370,6 +394,10 @@ task:data-constrained-pretrain -> method:repeated-token-worth (2610.05591, 2026-
   when MoE sparsity × data-repetition overfit (not dense epoch pricing) -> method:moe-data-repetition
   when fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds -> task:synthetic-single-stage-pretrain
   when zero-natural-data self-play pretraining (generator proposes UTM programs) -> task:zero-natural-data-self-play-pretrain
+task:dense-to-moe-upcycling -> method:maskerade (2610.07809, 2026-10-07)
+  when choosing the frontier MoE architecture template rather than upcycling a dense FFN -> task:pretrain-moe-frontier
+  when MoE/VL RLVR loss rather than dense-to-MoE conversion -> task:math-code-rl-moe
+  when communication-efficient expert layout rather than mask-expert upcycling -> method:ce-moe
 task:latent-space-lm-pretrain -> method:ncp-archpreview (2609.10715, 2026-09-11)
   when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
   when open pretrain mix / Dolma-3 recipe -> task:open-data-recipe
@@ -379,7 +407,9 @@ task:latent-space-lm-pretrain -> method:ncp-archpreview (2609.10715, 2026-09-11)
   when recurrent CED-style architecture, not next-concept latent LM -> task:recurrent-encoder-decoder-lm
 task:linear-time-sequence-modeling -> method:mamba-2 (2405.21060, 2024-05)
   when post-train sparse attention on a dense Transformer under a fixed budget -> task:posttrain-attention-sparsification
-task:llm-pretraining-optimization -> method:muon2 (2610.06116, 2026-08-26)
+task:llm-pretraining-optimization -> method:muon2 (2610.07497, 2026-08-26)
+  when pilot-run cubic rule for Adam's shared beta (β1=β2=β) -> method:adam-beta-cubic
+  when two-band Marchenko-Pastur spectral reweighting for Muon (BulkBoost) -> method:bulkboost
   when unique-token epoch / repetition geometry under a finite pretrain corpus -> task:data-constrained-pretrain
   when NorMuon adaptivity is orthogonalization geometry; decoupled geometry-aligned scaling (DGA-Muon) -> method:dga-muon
   when Nyström-sketched SOAP preconditioners / linear optimizer memory (Clean / Q-Clean) -> method:clean
@@ -396,13 +426,15 @@ task:open-data-recipe -> method:olmo-3 (2512.13961, 2026-08-26)
   when in-language (L2) reasoning SFT rather than a pretrain mix -> task:multilingual-l2-reasoning-sft
   when fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds (no web mix) -> task:synthetic-single-stage-pretrain
   when zero-natural-data self-play pretraining (generator proposes UTM programs) -> task:zero-natural-data-self-play-pretrain
-task:pretrain-dense-7b -> method:muon2 (2610.06116, 2026-08-26)
+task:pretrain-dense-7b -> method:muon2 (2610.07497, 2026-08-26)
   when unique-token epoch / repetition geometry under a finite pretrain corpus -> task:data-constrained-pretrain
   when latent-space / next-concept LM architecture rather than dense NTP 7B -> task:latent-space-lm-pretrain
   when fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds -> task:synthetic-single-stage-pretrain
   when zero-natural-data self-play pretraining (UTM programs, no natural text) -> task:zero-natural-data-self-play-pretrain
   when Muon-style norm-aware update for embedding tables (1->2) and LM head (2->inf) instead of AdamW -> method:muonio
 task:pretrain-moe-frontier -> method:deepseek-v4 (2606.19348, 2026-08-26) + method:kimi-k3 (2607.24653, 2026-08-26)
+  when distributionally robust MoE load-balancing objective (DRMoET / FLAME-MoE) -> method:drmoet
+  when dense-to-MoE upcycling via learned binary-mask experts over a frozen FFN -> task:dense-to-moe-upcycling
   when per-expert Muon step-size multipliers from update–gradient alignment (ExpertMuon-Compass) -> method:expertmuon-compass
   when input-heavy agentic / KV-footprint / CED serving, not general MoE pretrain template -> task:input-heavy-agentic-moe-serving
   when compute-matched looped MoE (middle layers twice), not V4/K3 architecture -> task:compute-matched-moe-looped-pretrain
@@ -439,6 +471,7 @@ task:operator-weather -> method:fourcastnet-3 (2507.12144, 2026-08-28)
 task:snn-sequence-modeling -> method:longspike (2606.12895, 2026-08-26)
 task:spiking-neural-networks-training -> method:longspike (2606.12895, 2026-08-26) + method:a2sg (2606.11236, 2026-08-26)
 task:frontier-rl-posttrain-stack -> method:miles (2610.05935, 2026-09-09)
+  when bit-exact delta-compressed weight sync / refit for disaggregated agentic RL (NeMo-DCR) -> method:nemo-dcr
   when lossless (no-staleness) overlap of GRPO/OPD gradient computation with rollout, not the production engine -> method:thundersyncrl
   when factory process / experiments-as-code / lineage rather than the RL engine -> task:industrial-model-building
   when variable environment latency / async stragglers, not the production stack -> task:agentic-async-rl
@@ -672,6 +705,21 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 192. **MEND**: **MEND** (`method:mend`, `arXiv:2610.05954`) on `task:posttrain-diffusion`. Active plug-in. Proximal velocity matching; ~100 updates vs Flow-GRPO ~4k. No public code. Does **not** replace DiffusionOPSD or Self-OPD.
 193. **OnePO**: **OnePO** (`method:onepo`, `arXiv:2610.05966`) on `task:instruct-sft-alignment`. Active plug-in. SFT-free RL-only domain adaptation; HealthBench 67.2 / 20K. Code FreedomIntelligence/HuatuoGPT-3. Does **not** replace OLMo-3 or CISPO.
 194. **MOPD / OPD claim notes** (no new methods): `paper:rethink-mopd` (`arXiv:2610.04272`) on `method:open-mopd` (tuned SFT/Soft-KD may suffice; announced GitHub 404).
+195. **Cross-Tokenizer OPD**: **Cross-Tokenizer OPD** (`method:cross-tokenizer-opd`, `arXiv:2610.08448`) on `task:cross-tokenizer-opd`. Active first hop (`sota_for: []`). Strict 1:1 covers 85.57–96.98% of student tokens; k=16 retains ≥96% of full shared-vocab OPD. Does **not** replace OPD.
+196. **TRACE / TRIAGE**: **TRACE** (`method:trace`, `arXiv:2610.07767`) + **TRIAGE** (`method:triage`, `arXiv:2610.07043`) on `task:fp4-rl-train-rollout-alignment`. Dual-active first hops (`sota_for: []`). Rollout-guided QAT vs direction-aware NVFP4 mismatch. No head-to-head. Does **not** replace Quartet-II.
+197. **NeMo-DCR**: **NeMo-DCR** (`method:nemo-dcr`, `arXiv:2610.08430`) on `task:frontier-rl-posttrain-stack`. Active plug-in. Bit-exact delta-compressed refit; ~1% of BF16 weights change per step. Code NVIDIA-NeMo/RL PR #2444. Does **not** replace Miles.
+198. **NP-OPD**: **NP-OPD** (`method:np-opd`, `arXiv:2610.07874`) on `task:student-distillation`. Active plug-in. Negative-policy rollouts when teacher/student overlap is low. Code naver-ai/np-opd. Related to NSD. Does **not** replace OPD or NSD.
+199. **Adam shared-β cubic rule**: **Adam Shared-Beta Cubic Rule** (`method:adam-beta-cubic`, `arXiv:2610.08624`) on `task:llm-pretraining-optimization`. Active plug-in. 200-update pilot; 40.7% lower mean relative val gap vs β=0.95. Code AlbertoFdezHdez/Adam_beta_rule_cubic. Does **not** replace Muon2 or AdamW.
+200. **BulkBoost**: **BulkBoost** (`method:bulkboost`, `arXiv:2610.07497`) on `task:llm-pretraining-optimization`. Active plug-in. Two-band MP-calibrated Muon spectral reweight; fine-grained maps unnecessary. Does **not** replace Muon2.
+201. **DRMoET**: **DRMoET** (`method:drmoet`, `arXiv:2610.07207`, NeurIPS 2026) on `task:pretrain-moe-frontier`. Active plug-in. DRO MoE load-balancing; FLAME-MoE 10.3B 0.6767 vs 0.6625. Code MAPS-research/DRMoET. Does **not** replace DeepSeek-V4 / Kimi-K3.
+202. **Hierarchical MoE routing control**: **Hierarchical MoE Routing Control** (`method:hierarchical-moe-routing-control`, `arXiv:2610.07332`) on `task:math-code-rl-moe`. Active plug-in. Operation-type experts during agentic RL; >10-point AppWorld / AutomationBench. Beside ESRL / RPB. Does **not** replace SAPO or CANOPY.
+203. **FC-SWE**: **FC-SWE** (`method:fc-swe`, `arXiv:2610.07898`) on `task:swe-agent-category-expert-rl`. Active plug-in. Failure-conditioned recovery. SWE-bench Verified 500 Resolved@1 41.7 vs GRPO 38.9. Does **not** replace Category-Aware SWE Experts.
+204. **RGPO / GA-GRPO**: **RGPO** (`method:rgpo`, `arXiv:2610.07342`, NeurIPS 2026) on `task:math-code-rl-dense`. Active plug-in. Adaptive GT rationale scaffolding. Theory sibling `paper:ga-grpo` (`arXiv:2610.06861`). Code VietHoang1512/rgpo. Does **not** replace CISPO.
+205. **Privileged Context as Drift**: **Privileged Context as Drift** (`method:privileged-context-drift`, `arXiv:2610.07842`) on `task:privileged-teacher-opsd`. Niche evidence. Content drives KL 5.1× more than source. Does **not** replace VISTA.
+206. **OPD-for-safety backdoor** (no new method): `paper:opd-safety-backdoor` (`arXiv:2610.07654`) on `method:opd`. 3% poison → up to 70% ASR. Warning on OPD used for safety alignment.
+207. **A2D**: **A2D** (`method:a2d`, `arXiv:2610.08108`) on `task:diffusion-lm-ar-delta-recycle`. Active first hop (`sota_for: []`). Recycle an AR post-training delta onto a converted dLLM. Does **not** replace DiffusionOPSD / Self-OPD / CanvasAnneal.
+208. **MASKerade**: **MASKerade** (`method:maskerade`, `arXiv:2610.07809`) on `task:dense-to-moe-upcycling`. Active first hop (`sota_for: []`). Learned binary-mask experts over a frozen FFN. Code Ming-K9/MASKerade. Does **not** replace DeepSeek-V4 / Kimi-K3.
+209. **DART-ES**: **DART-ES** (`method:dart-es`, `arXiv:2610.06993`) on `task:passk-reasoning-coverage`. Active plug-in. Difficulty-aware reweight + targeted replay. Code szs777/DART-ES-Code. Does **not** replace ES-reasoning or CISPO.
 
 ---
 
@@ -868,6 +916,21 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `mend` (2610.05954) is an active flow proximal-velocity-matching plug-in. It does not supersede `diffusion-opsd` or `self-opd`.
 - `onepo` (2610.05966) is an active RL-only domain-adaptation plug-in. It does not supersede `olmo-3` or `cispo`.
 - `paper:rethink-mopd` (2610.04272) is a multi-teacher training-design caveat. It does not supersede `open-mopd`.
+- `cross-tokenizer-opd` (2610.08448) is the active first hop for `task:cross-tokenizer-opd` only. It does not supersede `opd`.
+- `trace` (2610.07767) and `triage` (2610.07043) are dual-active first hops for `task:fp4-rl-train-rollout-alignment` only. They do not supersede `quartet-ii`.
+- `nemo-dcr` (2610.08430) is an active delta-compressed weight-sync plug-in. It does not supersede `miles`.
+- `np-opd` (2610.07874) is an active negative-policy OPD plug-in. Related to `nsd`. It does not supersede `opd` or `nsd`.
+- `adam-beta-cubic` (2610.08624) is an active Adam shared-β HP plug-in. It does not supersede `muon2` or `adamw-optimizer`.
+- `bulkboost` (2610.07497) is an active two-band Muon spectral-reweight plug-in. It does not supersede `muon2`.
+- `drmoet` (2610.07207) is an active DRO MoE load-balancing plug-in. It does not supersede `deepseek-v4` or `kimi-k3`.
+- `hierarchical-moe-routing-control` (2610.07332) is an active agentic MoE routing plug-in. It does not supersede `sapo`, `esrl`, `rpb`, or `canopy`.
+- `fc-swe` (2610.07898) is an active failure-conditioned SWE RL plug-in. It does not supersede `category-aware-swe-experts`.
+- `rgpo` (2610.07342) is an active rationale-scaffolding plug-in; `paper:ga-grpo` (2610.06861) is the theory sibling. They do not supersede `cispo`.
+- `privileged-context-drift` (2610.07842) is a niche OPSD evidence card. It does not supersede `vista` or `u-opsd`.
+- `paper:opd-safety-backdoor` (2610.07654) is an OPD-for-safety caution. It does not supersede `opd`.
+- `a2d` (2610.08108) is the active first hop for `task:diffusion-lm-ar-delta-recycle` only. It does not supersede `diffusion-opsd`, `self-opd`, or `canvasanneal`.
+- `maskerade` (2610.07809) is the active first hop for `task:dense-to-moe-upcycling` only. It does not supersede `deepseek-v4` or `kimi-k3`.
+- `dart-es` (2610.06993) is an active ES reweight/replay plug-in. It does not supersede `es-reasoning` or `cispo`.
 
 ---
 

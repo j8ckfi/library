@@ -5,6 +5,12 @@ title: "Small Local Student Distillation from Strong Teacher"
 domain: "post-training"
 summary: "Distilling reasoning and conversational capabilities from multi-hundred-billion parameter frontier teachers into small local student models."
 redirects:
+  - when: "cross-tokenizer OPD (strict 1:1 coverage / student-selected top-16 shared-vocab reverse-KL)"
+    to: "task:cross-tokenizer-opd"
+  - when: "negative-policy rollouts complement teacher OPD when overlap is low"
+    to: "method:np-opd"
+  - when: "OPD used for safety alignment / backdoor transfer risk"
+    to: "paper:opd-safety-backdoor"
   - when: "MOPD vs tuned off-policy SFT/Soft-KD confound (training design / GPU-hour cost)"
     to: "paper:rethink-mopd"
   - when: "SMC / sequence-level power distillation from a frozen teacher (one generation)"
@@ -71,6 +77,8 @@ current_sota:
     value: "83.4% headroom recovery in a single deployable student"
     notes: "Open-MOPD (2608.19098) fixes multi-teacher imbalance with token-share balancing and gap-aware dynamic budgeting."
 methods:
+  - method:cross-tokenizer-opd
+  - method:np-opd
   - method:oppd
   - method:diffgate
   - method:prep-opd
@@ -119,7 +127,7 @@ methods:
   - method:lmopd
   - method:latent-mopd
   - method:rp-opd
-last_reviewed: "2026-10-06"
+last_reviewed: "2026-10-07"
 tags:
   - post-training
   - distillation
@@ -174,6 +182,9 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Optional prepare-then-freeze teacher**: `method:prep-opd` (`arXiv:2610.04950`) RL-trains the teacher on fixed student prefixes then freezes. Beside SCOUT (interleaved). 4B→1.7B +8.28 vs OPD. No public code. Does not replace OPD or SCOUT.
 - **Optional difficulty-gated OPD+GRPO**: `method:diffgate` (`arXiv:2610.04596`) mixes teacher signal with GRPO on failed trajectories. Beside OPD-then-RLVR. Does not replace OPD or CISPO.
 - **Optional sequence-level power distill**: `method:oppd` (`arXiv:2610.06804`) SMC against a frozen teacher's power distribution. MATH500 +23.0 / GSM8K +27.3 vs untrained. Code ArminAzizi98/OPPD. Does not replace OPD or CISPO.
+- **Optional cross-tokenizer OPD (not this same-tokenizer default)**: `method:cross-tokenizer-opd` on `task:cross-tokenizer-opd` (`arXiv:2610.08448`). Strict 1:1 covers 85.57–96.98% of student tokens; k=16 retains ≥96% of full shared-vocab OPD. Does not replace OPD.
+- **Optional negative-policy OPD**: `method:np-opd` (`arXiv:2610.07874`) complements teacher supervision when overlap is low. Code naver-ai/np-opd. Related to NSD, not a replacement of OPD.
+- **Gotcha (OPD-for-safety backdoor)**: `paper:opd-safety-backdoor` (`arXiv:2610.07654`). 3% poison → up to 70% ASR; more epochs amplify. Warning on OPD used for safety alignment. Does not retarget OPD matching.
 - **Gotcha (MOPD training-design confound)**: `paper:rethink-mopd` (`arXiv:2610.04272`). Tuned SFT/Soft-KD can approach MOPD; MOPD 14.8–23.1× SFT GPU-h. Announced GitHub 404. Does not retarget Open-MOPD.
 - **Not this task**: Adaptive Retirement of a privileged self-OPD teacher in agent RL is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl`. Distilling optimized-harness behaviors into weights under a fixed target harness is `method:harness-zero` on `task:harness-distillation`. Multi-stage agent continual learning (MMOPD / SDFT / MLE) is `method:aclarena` on `task:agent-continual-learning` and does not retarget Open-MOPD. Label-routed MOPD of SWE category experts is `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`.
 

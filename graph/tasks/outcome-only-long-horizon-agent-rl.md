@@ -49,6 +49,8 @@ redirects:
     to: "method:scad"
   - when: "learning rubric rewards for rubric-based RL (vacuous credit)"
     to: "method:metarubric"
+  - when: "hierarchical MoE routing control during agentic RL (operation-type experts)"
+    to: "method:hierarchical-moe-routing-control"
 current_sota:
   - method: method:canopy
     as_of: "2026-09-04"
@@ -77,7 +79,8 @@ methods:
   - method:adastep
   - method:scad
   - method:metarubric
-last_reviewed: "2026-10-05"
+  - method:hierarchical-moe-routing-control
+last_reviewed: "2026-10-07"
 tags:
   - post-training
   - agentic

@@ -19,6 +19,9 @@ do_not_use_for:
   - when: "outcome-only long-horizon coverage / anti-drift"
     reason: "CANOPY / DRACO own that shelf; MInTRL is single-turn math/code interventions"
     use_instead: "method:canopy"
+  - when: "adaptive ground-truth rationale scaffolding for sparse-reward RLVR"
+    reason: "MInTRL is sparse local intervention; RGPO scaffolds GT rationales"
+    use_instead: "method:rgpo"
 assumptions:
   - "Host is on-policy RLVR with a verifiable outcome. Paper: Qwen3-1.7B/4B non-thinking, judge Qwen3-4B-Instruct-2507, AceReason-Nemotron math + DeepCoder-Preview code."
   - "Advantage-regression objective (no IS). MInTRL-Const outperformed MInTRL-Proxy in the main tables."

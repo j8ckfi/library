@@ -5,6 +5,8 @@ title: "Privileged-Teacher On-Policy Self-Distillation"
 domain: "post-training"
 summary: "On-policy self-distillation where a same-size teacher is privileged with a gold reference solution and a deterministic outcome verifier, rather than a larger frozen teacher model."
 redirects:
+  - when: "privileged-context content (demo vs feedback vs rephrase) as OPSD drift, not a trainer"
+    to: "method:privileged-context-drift"
   - when: "outcome-guided FKL/RKL OPSD with entropy prefix cutoff"
     to: "method:og-opsd"
   - when: "OPSD entropy overshoot (student entropy past the teacher; exemplar-guided + entropy-aware KL)"
@@ -35,6 +37,7 @@ current_sota:
     value: "VISTA 44.0 / 64.3 / 66.9 vs OPSD 43.4 / 63.6 / 64.8 vs GRPO 37.7 / 62.7 / 64.0"
     notes: "VISTA (2608.28306) keeps the OPSD student update and adapts the privileged teacher on verified rollouts at top-k teacher-first KL positions."
 methods:
+  - method:privileged-context-drift
   - method:og-opsd
   - method:e2-opsd
   - method:vista
@@ -55,7 +58,7 @@ methods:
   - method:sampling-sft
   - method:air-opd
   - method:rc-opd
-last_reviewed: "2026-10-06"
+last_reviewed: "2026-10-07"
 tags:
   - post-training
   - distillation
@@ -80,6 +83,7 @@ Train a problem-only student on its own rollouts using dense token-level targets
 - **Adjacent inner-loop (not this method)**: `method:flowbalance` uses privileged hindsight as a stopped trajectory-balance feature, not a teacher update. VISTA stays this task's first hop.
 - **Optional evidence-regularized sibling**: `method:verpo` (`arXiv:2609.06100`). Treats privileged evidence as a proposal on an outcome objective. Does not replace VISTA or CISPO.
 - **Collapse playbook (survey)**: `method:opsd-collapse-review` (`arXiv:2608.25936`). Three levers; no code. Does not replace VISTA.
+- **Evidence (privileged-context content vs source)**: `method:privileged-context-drift` (`arXiv:2610.07842`). Content (demo vs feedback vs rephrase) drives KL 5.1× more than source. Niche; not a trainer. Does not replace VISTA.
 - **Actionable anti-collapse trainer (not this first hop)**: `method:nsd` (`arXiv:2609.11699`). Diverges from a self-generated negative condition instead of imitating privileged traces. Active sibling. VISTA stays this task's first hop.
 - **Optional Fisher-subspace OPSD auxiliary (not this first hop)**: `method:scope-opsd` (`arXiv:2609.12579`). Projects the privileged residual onto a frozen rank-64 Fisher-sensitive subspace; matched Random control. Does not replace VISTA, NSD, OPSA, OPD, or CISPO.
 - **Not this task (agent RL retirement)**: `method:retireopd` (`arXiv:2609.20784`) on `task:outcome-only-long-horizon-agent-rl` — Adaptive Retirement of a privileged self-OPD teacher then pure RL on ALFWorld/WebShop. Does not replace VISTA.

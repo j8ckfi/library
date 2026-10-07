@@ -14,8 +14,12 @@ do_not_use_for:
   - when: "privileged OPSD gains collapse at scale; verified on-policy scaffolds"
     reason: "u-OPSD is unlabeled consensus; OASIS needs answer labels and verified on-policy scaffolds"
     use_instead: "method:oasis"
-last_reviewed: "2026-10-06"
+  - when: "privileged-context content as OPSD drift rather than unlabeled consensus"
+    reason: "u-OPSD remains unlabeled; Privileged Context as Drift is an evidence card"
+    use_instead: "method:privileged-context-drift"
+last_reviewed: "2026-10-07"
 papers:
+  - paper:privileged-context-drift
   - paper:u-opsd
 recipes:
   - recipe:u-opsd

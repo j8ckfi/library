@@ -12,6 +12,10 @@ current_sota:
     value: "~2x token efficiency vs AdamW"
     notes: "Muon2 (2604.09967) + KL-SOAP (2607.20548) if memory allows."
 redirects:
+  - when: "pilot-run cubic rule for Adam's shared beta (β1=β2=β)"
+    to: "method:adam-beta-cubic"
+  - when: "two-band Marchenko-Pastur spectral reweighting for Muon (BulkBoost)"
+    to: "method:bulkboost"
   - when: "unique-token epoch / repetition geometry under a finite pretrain corpus"
     to: "task:data-constrained-pretrain"
   - when: "NorMuon adaptivity is orthogonalization geometry; decoupled geometry-aligned scaling (DGA-Muon)"
@@ -60,7 +64,9 @@ methods:
   - method:synth
   - method:self-play-pretraining
   - method:muonio
-last_reviewed: "2026-10-06"
+  - method:adam-beta-cubic
+  - method:bulkboost
+last_reviewed: "2026-10-07"
 tags:
   - pretraining
   - optimizer
@@ -80,6 +86,8 @@ Pretraining modern neural network models involves minimizing cross-entropy loss 
 - **OT-horizon HP guidance**: `method:optimizer-memory-schedules` (`arXiv:2609.04577`) — preferred LR schedule can reverse across overtraining; WD $\sim\sqrt{\mathrm{OT}}$; longer OT favors longer fixed memory. ADANA (`method:adana`, 2602.05298) is a named baseline in that study, not a 7B default. Does not replace Muon2.
 - **Optional Muon stability plug-in**: `method:musec` (`arXiv:2609.11655`) clips momentum singular values instead of flattening them. Does not replace Muon2 or MuonClip.
 - **Not this task (full-param FT memory geometry)**: `method:taco` (`arXiv:2610.02199`) on `task:full-param-memory-efficient-pretrain`. Ternary column-wise one-sparse FT. Does not replace Muon2.
+- **Optional Adam shared-β cubic rule (not this hidden-layer default)**: `method:adam-beta-cubic` (`arXiv:2610.08624`). 200-update pilot; 40.7% lower mean relative val gap vs β=0.95. Code AlbertoFdezHdez/Adam_beta_rule_cubic. Does not replace Muon2 or AdamW.
+- **Optional two-band Muon spectral reweight**: `method:bulkboost` (`arXiv:2610.07497`). Fine-grained spectral maps unnecessary in the paper. Does not replace Muon2.
 - **Optional I/O-layer Muon (not this hidden-layer default)**: `method:muonio` (`arXiv:2610.02705`). \(1\to 2\) embeddings / \(2\to\infty\) LM head instead of AdamW. C4 val PPL 60M/130M/1B 28.366/23.617/14.374 vs Muon Tuned 28.502/24.238/14.527. Does not replace Muon2.
 - **Not this task (seed-grounded synthetic single-stage pretrain)**: `method:synth` (`arXiv:2609.37891`) on `task:synthetic-single-stage-pretrain`. AdamW NTP on SYNTH; not a Muon2 retarget.
 - **Not this task (zero-natural-data UTM self-play)**: `method:self-play-pretraining` (`arXiv:2609.30063`) on `task:zero-natural-data-self-play-pretrain`. Experimental <25M.

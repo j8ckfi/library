@@ -22,10 +22,14 @@ do_not_use_for:
   - when: "labeled Pass@1 RLVR"
     reason: "CISPO remains the Pass@1 kernel; GRPO stays retired"
     use_instead: "method:cispo"
+  - when: "privileged-context content (demo vs feedback vs rephrase) as OPSD drift"
+    reason: "This card is the three-lever survey; Privileged Context as Drift isolates content vs source"
+    use_instead: "method:privileged-context-drift"
 assumptions:
   - "Mathematical reasoning OPSD/OPSD-adjacent literature. No new experiments in the paper."
 last_reviewed: "2026-10-06"
 papers:
+  - paper:privileged-context-drift
   - paper:og-opsd
   - paper:e2-opsd
   - paper:opsd-collapse-review

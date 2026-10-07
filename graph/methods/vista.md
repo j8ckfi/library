@@ -29,8 +29,12 @@ do_not_use_for:
   - when: "root-cause diagnosis of the student's own failed reasoning then differentiated prefix/error distillation"
     reason: "VISTA remains privileged-OPSD SOTA; RC-OPD repairs the student's own failed reasoning"
     use_instead: "method:rc-opd"
-last_reviewed: "2026-10-06"
+  - when: "privileged-context content (demo vs feedback vs rephrase) as OPSD drift, not a trainer"
+    reason: "VISTA remains the trainer; Privileged Context as Drift is an evidence card"
+    use_instead: "method:privileged-context-drift"
+last_reviewed: "2026-10-07"
 papers:
+  - paper:privileged-context-drift
   - paper:og-opsd
   - paper:e2-opsd
   - paper:vista

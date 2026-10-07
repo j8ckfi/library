@@ -6,6 +6,72 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-10-07 — weekday SOTA sweep (Cross-Tokenizer OPD, TRACE, TRIAGE, NeMo-DCR, NP-OPD, Adam shared-β cubic, BulkBoost, DRMoET, Hierarchical MoE routing, FC-SWE, RGPO, GA-GRPO, Privileged Context as Drift, OPD-safety backdoor, A2D, MASKerade, DART-ES)
+- Four new tasks (`task:cross-tokenizer-opd`, `task:fp4-rl-train-rollout-alignment` dual-active TRACE+TRIAGE, `task:diffusion-lm-ar-delta-recycle`, `task:dense-to-moe-upcycling`), fifteen active/niche methods, two paper-only notes (`paper:ga-grpo`, `paper:opd-safety-backdoor`). No current_sota retarget of CISPO / VISTA / OPD / Muon2 / AdamW / Miles / Quartet-II / ES-reasoning / Category-Aware SWE Experts / SAPO / DeepSeek-V4 / Kimi-K3 / CanvasAnneal / DiffusionOPSD.
+- Window: 2026-10-07 Librarian weekday sweep after PR 39; watermark was 2610.06833. New arXiv 2610.08448, 2610.07767, 2610.07043, 2610.08430, 2610.07874, 2610.08624, 2610.07497, 2610.07207, 2610.07332, 2610.07898, 2610.07342, 2610.06861, 2610.07842, 2610.07654, 2610.08108, 2610.07809, 2610.06993.
+
+### 2026-10-07 — ingest method:cross-tokenizer-opd (active first hop on task:cross-tokenizer-opd; does not supersede method:opd)
+- Added paper:cross-tokenizer-opd (2610.08448), method:cross-tokenizer-opd, recipe:cross-tokenizer-opd (`code_status: none`). Reverse redirect from student-distillation.
+- Status active (`sota_for: []`). Strict 1:1 covers 85.57–96.98% of student tokens; k=16 retains ≥96% of full shared-vocab OPD.
+- Evidence: arXiv:2610.08448; verified: true; evidence_level: preprint. Top HF Daily paper 2026-10-07.
+
+### 2026-10-07 — ingest method:trace / method:triage (dual-active on task:fp4-rl-train-rollout-alignment; does not supersede method:quartet-ii)
+- Added paper:trace (2610.07767), method:trace, recipe:trace (`code_status: none`). Rollout-guided QAT; up to 5.4× rollout.
+- Added paper:triage (2610.07043), method:triage, recipe:triage (`code_status: none`). Direction-aware NVFP4 mismatch; up to 2.3× rollout vs BF16.
+- Status active (`sota_for: []`). No head-to-head. Reverse redirect from fp4-hardware-training.
+
+### 2026-10-07 — ingest method:nemo-dcr (active on task:frontier-rl-posttrain-stack; does not supersede method:miles)
+- Added paper:nemo-dcr (2610.08430), method:nemo-dcr, recipe:nemo-dcr (`code_status: released`; NVIDIA-NeMo/RL PR #2444).
+- Status active (`sota_for: []`). Bit-exact delta-compressed refit; ~1% of BF16 weights change per step; 1T 150s vs 87.5 min.
+
+### 2026-10-07 — ingest method:np-opd (active on task:student-distillation; does not supersede method:opd / method:nsd)
+- Added paper:np-opd (2610.07874), method:np-opd, recipe:np-opd (`code_status: released`; `repo_url: https://github.com/naver-ai/np-opd`).
+- Status active (`sota_for: []`). Negative-policy rollouts when teacher/student overlap is low.
+
+### 2026-10-07 — ingest method:adam-beta-cubic (active on task:llm-pretraining-optimization; does not supersede method:muon2 / method:adamw-optimizer)
+- Added paper:adam-beta-cubic (2610.08624), method:adam-beta-cubic, recipe:adam-beta-cubic (`code_status: released`; AlbertoFdezHdez/Adam_beta_rule_cubic).
+- Status active (`sota_for: []`). 40.7% lower mean relative val gap vs β=0.95 on 11 workloads.
+
+### 2026-10-07 — ingest method:bulkboost (active on task:llm-pretraining-optimization; does not supersede method:muon2)
+- Added paper:bulkboost (2610.07497), method:bulkboost, recipe:bulkboost (`code_status: none`).
+- Status active (`sota_for: []`). Two-band MP-calibrated spectral reweight; 0.073–0.147% loss reduction vs Muon flat.
+
+### 2026-10-07 — ingest method:drmoet (active on task:pretrain-moe-frontier; does not supersede method:deepseek-v4 / method:kimi-k3)
+- Added paper:drmoet (2610.07207), method:drmoet, recipe:drmoet (`code_status: released`; MAPS-research/DRMoET). NeurIPS 2026.
+- Status active (`sota_for: []`). FLAME-MoE 10.3B seven-task avg 0.6767 vs 0.6625.
+
+### 2026-10-07 — ingest method:hierarchical-moe-routing-control (active on task:math-code-rl-moe; does not supersede method:sapo / method:esrl / method:rpb)
+- Added paper:hierarchical-moe-routing-control (2610.07332), method:hierarchical-moe-routing-control, recipe:hierarchical-moe-routing-control (`code_status: none`).
+- Status active (`sota_for: []`). >10-point AppWorld / AutomationBench. Mention on outcome-only agent RL.
+
+### 2026-10-07 — ingest method:fc-swe (active on task:swe-agent-category-expert-rl; does not supersede method:category-aware-swe-experts)
+- Added paper:fc-swe (2610.07898), method:fc-swe, recipe:fc-swe (`code_status: none`).
+- Status active (`sota_for: []`). SWE-bench Verified 500 Resolved@1 41.7 vs GRPO 38.9.
+
+### 2026-10-07 — ingest method:rgpo (active on task:math-code-rl-dense; does not supersede method:cispo) + claim note paper:ga-grpo
+- Added paper:rgpo (2610.07342), method:rgpo, recipe:rgpo (`code_status: released`; VietHoang1512/rgpo). NeurIPS 2026.
+- Added paper:ga-grpo (2610.06861) theory/evidence on RGPO / MInTRL / CISPO. λ*=σ0²/(σ0²+Rmax²δ²T). No new method.
+- Status active (`sota_for: []`). Adaptive GT rationale scaffolding.
+
+### 2026-10-07 — ingest method:privileged-context-drift (niche on task:privileged-teacher-opsd; does not supersede method:vista)
+- Added paper:privileged-context-drift (2610.07842), method:privileged-context-drift, recipe:privileged-context-drift (`code_status: none`).
+- Status niche (`sota_for: []`). Content drives KL 5.1× more than source.
+
+### 2026-10-07 — claim note paper:opd-safety-backdoor (no new method)
+- Added paper:opd-safety-backdoor (2610.07654) on method:opd. 3% poison → up to 70% ASR. Warning on OPD used for safety alignment. Does not retarget OPD.
+
+### 2026-10-07 — ingest method:a2d (active first hop on task:diffusion-lm-ar-delta-recycle; does not supersede method:diffusion-opsd / method:canvasanneal)
+- Added paper:a2d (2610.08108), method:a2d, recipe:a2d (`code_status: none`). Reverse redirect from posttrain-diffusion.
+- Status active (`sota_for: []`). AR delta on converted dLLM approaches direct diffusion PT.
+
+### 2026-10-07 — ingest method:maskerade (active first hop on task:dense-to-moe-upcycling; does not supersede method:deepseek-v4)
+- Added paper:maskerade (2610.07809), method:maskerade, recipe:maskerade (`code_status: released`; Ming-K9/MASKerade). Reverse redirect from pretrain-moe-frontier.
+- Status active (`sota_for: []`). Four 2:4 mask experts, top-2, frozen FFN.
+
+### 2026-10-07 — ingest method:dart-es (active on task:passk-reasoning-coverage; does not supersede method:es-reasoning / method:cispo)
+- Added paper:dart-es (2610.06993), method:dart-es, recipe:dart-es (`code_status: released`; szs777/DART-ES-Code).
+- Status active (`sota_for: []`). GSM8K 73.53 vs ES 72.07 vs GRPO 73.26.
+
 ### 2026-10-06 — weekday SOTA sweep (ORCA, ExpertMuon-Compass, Clean, DGA-Muon, Repeated-Token Worth, Repetition-Count Selection, Looped Models Done Right, ResOPD, Flash-OPD, Prep-OPD, DiffGate, OPPD, E2-OPSD, OG-OPSD, off-policy grafting, ThunderSyncRL, LoGRA, ExPPO, MEND, OnePO)
 - Twenty active plug-ins, one new dual-active task (`task:data-constrained-pretrain`), and one claim-note paper (`paper:rethink-mopd`). No current_sota retarget of muon2 / CISPO / VISTA / OPD / Open-MOPD / SAO / Miles / ACLArena / Self-OPD / OLMo-3 / RLT / SMELT.
 - Window: 2026-10-06 Librarian weekday sweep after PR 38; watermark was 2610.03702. New arXiv 2610.06116, 2610.04140, 2610.04204, 2610.06578, 2610.05591, 2610.05126, 2610.06833, 2610.04882, 2610.06105, 2610.04950, 2610.04596, 2610.06804, 2610.05048, 2610.05070, 2610.04272, 2610.05872, 2610.05935, 2610.06647, 2610.04011, 2610.05954, 2610.05966.

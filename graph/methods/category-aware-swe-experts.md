@@ -19,6 +19,9 @@ do_not_use_for:
   - when: "production post-train stack (SGLang / Megatron / LoRA RL / OPD)"
     reason: "Miles remains the engine"
     use_instead: "method:miles"
+  - when: "failure-conditioned recovery (reuse failed patch + verifier feedback)"
+    reason: "Category experts fix the see-saw; FC-SWE reuses a failed patch as recovery context"
+    use_instead: "method:fc-swe"
 assumptions:
   - "Executable SWE instances with a verifier. Categories come from SWE Labeler (repository-domain L1 → Pro-A/B/C on Pro-618)."
   - "Same-origin experts alternate Agentic-miniRL with Refresh–Repair–Expand. Integration is label-routed MOPD with ReLU-gated reward extrapolation. No external teacher trajectories."

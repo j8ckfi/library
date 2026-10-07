@@ -26,8 +26,12 @@ do_not_use_for:
   - when: "Muon-style norm-aware update for embedding tables (1->2) and LM head (2->inf) instead of AdamW"
     reason: "Muon2 remains the hidden-layer / 7B default; MuonIO only replaces AdamW on embeddings and the LM head"
     use_instead: "method:muonio"
-last_reviewed: "2026-10-06"
+  - when: "two-band Marchenko-Pastur spectral reweighting for Muon (BulkBoost)"
+    reason: "Muon2 remains the 7B default; BulkBoost is a two-band spectral reweight"
+    use_instead: "method:bulkboost"
+last_reviewed: "2026-10-07"
 papers:
+  - paper:bulkboost
   - paper:orca
   - paper:muon2
 recipes:

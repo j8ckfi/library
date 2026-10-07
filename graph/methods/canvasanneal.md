@@ -16,6 +16,9 @@ do_not_use_for:
   - when: "dense Pass@1 math/code RLVR on an AR policy"
     reason: "CISPO remains AR Pass@1; this is DLM diffu-GRPO with a curriculum"
     use_instead: "method:cispo"
+  - when: "recycle an AR post-training weight delta onto a converted dLLM"
+    reason: "CanvasAnneal is discrete-DLM canvas RL; A2D recycles an AR delta"
+    use_instead: "method:a2d"
 assumptions:
   - "Discrete masked DLM (paper: LLaDA-7B-A1B-Instruct). Host is diffu-GRPO. Teacher traces from a stronger model (paper: Gemini 3.1 Pro) injected into the initial canvas and annealed."
   - "No official GitHub as of 2026-09-14."

@@ -55,7 +55,10 @@ do_not_use_for:
   - when: "on-policy parameter update direction SFT (OPSFT), not Pass@1 RLVR"
     reason: "CISPO remains Pass@1; OPSFT is cheaper SFT aligned with the on-policy gradient"
     use_instead: "method:opsft"
-last_reviewed: "2026-10-06"
+  - when: "adaptive ground-truth rationale scaffolding for sparse-reward RLVR"
+    reason: "CISPO remains Pass@1; RGPO scaffolds GT rationales"
+    use_instead: "method:rgpo"
+last_reviewed: "2026-10-07"
 papers:
   - paper:exppo
   - paper:logra

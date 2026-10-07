@@ -4,6 +4,9 @@ type: task
 title: "Native FP4 Hardware Training"
 domain: "compression"
 summary: "End-to-end 4-bit floating-point forward and backward pass training on modern GPU accelerators."
+redirects:
+  - when: "FP4 RL train-side vs rollout-side quantization mismatch (TRACE / TRIAGE)"
+    to: "task:fp4-rl-train-rollout-alignment"
 current_sota:
   - method: method:quartet-ii
     as_of: "2026-08-26"
@@ -23,7 +26,9 @@ methods:
   - method:kimi-k3
   - method:gradcodes
   - method:kbbq
-last_reviewed: "2026-09-09"
+  - method:trace
+  - method:triage
+last_reviewed: "2026-10-07"
 tags:
   - compression
   - quantization
@@ -37,3 +42,5 @@ tags:
 - **Primary Method**: **Quartet-II NVFP4** (`method:quartet-ii`, 2601.22813) / **MXFP4** (`method:mxfp4-mi355x`, 2605.09825) / **Kimi-K3 QAT**. Unchanged.
 - **Fully low-bit fine-tune of an already-quantized checkpoint**: `method:gradcodes` on `task:full-lowbit-finetune`. Not native FP4 hardware training.
 - **Optional W4A4 noise-law / spectrum-flattening note**: `method:kbbq` (`arXiv:2609.08135`). Active PTQ-style inference niche. Does not replace Quartet-II or MXFP4.
+- **Not this task (FP4 RL train–rollout mismatch)**: `task:fp4-rl-train-rollout-alignment` / `method:trace` (`arXiv:2610.07767`) + `method:triage` (`arXiv:2610.07043`). Dual-active. Does not replace Quartet-II.
+

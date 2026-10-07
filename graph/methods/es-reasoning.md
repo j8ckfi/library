@@ -7,9 +7,14 @@ status: sota
 sota_for:
   - task:passk-reasoning-coverage
 supersedes: []
+do_not_use_for:
+  - when: "difficulty-aware reweighting + targeted replay on an ES trainer"
+    reason: "ES-reasoning remains Pass@K; DART-ES is a reweight/replay plug-in"
+    use_instead: "method:dart-es"
 papers:
   - paper:es-reasoning
   - paper:sharpening-tax
+  - paper:dart-es
 recipes:
   - recipe:es-reasoning
 claims:

@@ -12,6 +12,8 @@ out_of_scope:
   - "Production post-train engine (Miles)"
   - "Single-turn math/code Pass@1 RLVR (CISPO)"
 redirects:
+  - when: "failure-conditioned recovery (reuse failed patch + verifier feedback)"
+    to: "method:fc-swe"
   - when: "env construction from source only"
     to: "task:coding-agent-rl-environment-construction"
   - when: "async algorithm"
@@ -35,7 +37,8 @@ methods:
   - method:miles
   - method:opd
   - method:open-mopd
-last_reviewed: "2026-09-23"
+  - method:fc-swe
+last_reviewed: "2026-10-07"
 tags:
   - post-training
   - agentic
@@ -56,4 +59,5 @@ This is **not** source-only env construction, not async stragglers, not the SWE 
 
 ## SOTA Recommendation (as of 2026-09-23)
 - **Primary Method (this task only)**: **Category-Aware SWE Experts** (`method:category-aware-swe-experts`, `paper:category-aware-swe-experts` `arXiv:2609.23377`). Status `active`. Listed here as first hop; method `sota_for` stays empty. SWE Labeler + RRE experts + label-routed MOPD. No external teacher trajectories.
+- **Optional failure-conditioned recovery**: `method:fc-swe` (`arXiv:2610.07898`) reuses failed patch + verifier feedback. SWE-bench Verified 500 Resolved@1 41.7 vs GRPO 38.9. Does not replace Category-Aware SWE Experts.
 - **Not This Task**: `method:codemidas` remains source-only env construction; `method:sao` remains async; `method:mini-swe-agent` remains issue-to-patch; `method:miles` remains the engine.

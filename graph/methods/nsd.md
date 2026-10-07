@@ -19,6 +19,9 @@ do_not_use_for:
   - when: "teacher-free entropy-adaptive self-adaptation with no negative teacher"
     reason: "OPSA stays that first hop; NSD still builds a negative condition"
     use_instead: "method:opsa"
+  - when: "negative-policy rollouts on frozen-teacher OPD (low overlap)"
+    reason: "NSD diverges from a negative condition on privileged OPSD; NP-OPD stays on frozen-teacher OPD"
+    use_instead: "method:np-opd"
 assumptions:
   - "Reasoning post-train. Paper: Qwen3-1.7B/4B/8B, 2 epochs, α=0.01. Default negative condition is generated online without gold answers."
   - "Official train/eval: Prongcan/NSD (in-repo verl; scripts/4B_NSD and scripts/eval). Collection: PassionPrc/nsd-negative-self-distillation. Checkpoints: PassionPrc/NSD-Qwen3-{1.7B,4B,8B}."

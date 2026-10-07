@@ -23,14 +23,17 @@ methods:
   - method:self-opd
   - method:canvasanneal
   - method:rewardverse
+  - method:a2d
 redirects:
+  - when: "recycle an AR post-training weight delta onto a converted dLLM (not image/flow alignment)"
+    to: "task:diffusion-lm-ar-delta-recycle"
   - when: "flow-model RL via proximal velocity matching (~100 updates vs Flow-GRPO ~4k)"
     to: "method:mend"
   - when: "lossless multi-token / diffusion-augmented AR serving, not image-policy alignment"
     to: "task:diffusion-augmented-ar"
   - when: "training a stable video reward model / rubric-guided RM PO"
     to: "method:rewardverse"
-last_reviewed: "2026-10-06"
+last_reviewed: "2026-10-07"
 tags:
   - diffusion
   - post-training
@@ -48,4 +51,5 @@ Aligning generative diffusion and flow models with downstream reward functions (
 - **Teacher-Free Flow Matching / Multi-Objective Alignment**: **Self-OPD** (`method:self-opd`, `paper:self-opd` `arXiv:2608.26872`) for stochastic SDE branching vs deterministic self-reference and reward-level multi-objective fusion without task-specific teachers.
 - **Niche discrete-diffusion-LM curriculum RL (not this first hop)**: `method:canvasanneal` (`arXiv:2609.13060`) anneals a teacher-trace canvas on LLaDA-8B. MATH500 +6.0 / +2.0 / +0.4 vs diffu-GRPO. Does not replace DiffusionOPSD, Self-OPD, or Uno.
 - **Active video-RM / RGPO plug-in (not generator alignment)**: `method:rewardverse` (`arXiv:2609.22947`) dynamic rubric + two-stage RGPO for video reward models. EvalVerse Joint mean PLCC 0.554 / SRCC 0.446. Does not replace DiffusionOPSD or Self-OPD. Does not retarget OraRL.
+- **Not This Task (AR-delta recycle onto a converted dLLM)**: `method:a2d` on `task:diffusion-lm-ar-delta-recycle` (`arXiv:2610.08108`). Does not replace DiffusionOPSD / Self-OPD / CanvasAnneal.
 - **Not This Task**: lossless AR multi-token serving is `method:uno` on `task:diffusion-augmented-ar`. Does not replace this image/flow post-train default.

@@ -9,6 +9,21 @@ sota_for:
 supersedes:
   - method:on-policy-distillation
 do_not_use_for:
+  - when: "bilevel learned token weights from post-update validation loss"
+    reason: "OPD remains matching; MetaOPD learns keep-weights from a virtual student update"
+    use_instead: "method:metaopd"
+  - when: "probability-space token keep-mask that downweights low-low tokens"
+    reason: "OPD remains matching; DIAL-OPD scores sampled tokens by log-mean probability"
+    use_instead: "method:dial-opd"
+  - when: "offline initial-student rollouts instead of live on-policy sampling"
+    reason: "Live OPD wins only at high initial overlap; Semi-OPD freezes init rollouts otherwise"
+    use_instead: "method:semi-opd"
+  - when: "OPD vanishing learning signals / larger-scale teacher plateaus"
+    reason: "Larger-scale teachers can starve OPD gradients; self-RL teachers recovered in that study"
+    use_instead: "paper:opd-vanishing-signals"
+  - when: "reverse-KL OPD to inject facts the student does not already have"
+    reason: "Reverse-KL OPD transfers compositional skill, not new knowledge"
+    use_instead: "paper:opd-skill-not-knowledge"
   - when: "cross-tokenizer OPD (strict 1:1 coverage / student-selected top-16 shared-vocab reverse-KL)"
     reason: "OPD remains same-tokenizer matching; Cross-Tokenizer OPD owns disagreeing vocabs"
     use_instead: "method:cross-tokenizer-opd"
@@ -57,8 +72,10 @@ do_not_use_for:
   - when: "rubric-privileged OPD warm start before rubric-based RL"
     reason: "OPD remains matching distillation; RP-OPD is a rubric-privileged warm start then rubric RL"
     use_instead: "method:rp-opd"
-last_reviewed: "2026-10-07"
+last_reviewed: "2026-10-09"
 papers:
+  - paper:opd-vanishing-signals
+  - paper:opd-skill-not-knowledge
   - paper:opd-safety-backdoor
   - paper:cross-tokenizer-opd
   - paper:np-opd

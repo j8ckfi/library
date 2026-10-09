@@ -11,6 +11,12 @@ supersedes:
   - method:muon
   - method:muon-scalable
 do_not_use_for:
+  - when: "4-bit AdamW optimizer-state quantization in preconditioner space"
+    reason: "Muon2 remains the 7B default; ZIP-SR is 4-bit AdamW moments"
+    use_instead: "method:zip-sr"
+  - when: "thresholded Muon orthogonalization of small vs large singular values"
+    reason: "Muon2 remains the 7B default; Spectrally Targeted Muon interpolates via a tau threshold"
+    use_instead: "method:spectrally-targeted-muon"
   - when: "NorMuon adaptivity is orthogonalization geometry; decoupled geometry-aligned scaling"
     reason: "Muon2 remains the 7B default; DGA-Muon is a NorMuon-geometry fix"
     use_instead: "method:dga-muon"
@@ -29,7 +35,7 @@ do_not_use_for:
   - when: "two-band Marchenko-Pastur spectral reweighting for Muon (BulkBoost)"
     reason: "Muon2 remains the 7B default; BulkBoost is a two-band spectral reweight"
     use_instead: "method:bulkboost"
-last_reviewed: "2026-10-07"
+last_reviewed: "2026-10-09"
 papers:
   - paper:bulkboost
   - paper:orca

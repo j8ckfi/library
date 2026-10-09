@@ -10,6 +10,8 @@ out_of_scope:
   - "Native FP4 hardware training from scratch (Quartet-II)"
   - "Quality LoRA on 24GB (vanilla LoRA + rsLoRA + LR sweep)"
 redirects:
+  - when: "4-bit AdamW optimizer-state quantization in preconditioner space (ZIP-SR)"
+    to: "method:zip-sr"
   - when: "Nyström-sketched SOAP preconditioners / linear optimizer memory (Clean / Q-Clean)"
     to: "method:clean"
   - when: "low-rank gradient sketches + predicted-KL step control for RL memory"
@@ -30,12 +32,13 @@ current_sota:
     value: "Default SOTA for memory-efficient full-parameter training"
     notes: "SCALE (2506.16659, ICML 2026) not GaLore."
 methods:
+  - method:zip-sr
   - method:clean
   - method:logra
   - method:scale
   - method:galore
   - method:taco
-last_reviewed: "2026-10-06"
+last_reviewed: "2026-10-09"
 tags:
   - efficiency
   - optimizer
@@ -48,3 +51,4 @@ tags:
 ## SOTA Recommendation (as of 2026-08-26)
 - **Primary Method**: **SCALE** (`method:scale`, 2506.16659, ICML 2026) — not GaLore.
 - **Optional FT-axis sparse optimizer (not this first hop)**: `method:taco` (`arXiv:2610.02199`). Ternary abs-max column-wise one-sparse updates; 174× optimizer-state vs AdamW8bit on OPT-13B SST-2. Does not replace SCALE or Muon2.
+- **Optional 4-bit AdamW-state quantization (not this first hop)**: `method:zip-sr` (`arXiv:2610.12444`) on `task:llm-pretraining-optimization`. Preconditioner-space SR; up to 70% TorchAO gap cut. Does not replace SCALE, Muon2, or TACO.

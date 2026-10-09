@@ -19,6 +19,16 @@ out_of_scope:
   - "Cancellation-aware off-policy sequence masking (CARM)"
   - "MCMC projection sampling then ordinary SFT (Sampling SFT)"
 redirects:
+  - when: "rollout-level drop of high-probability positive-advantage traces (GRPODropout)"
+    to: "method:grpodropout"
+  - when: "novelty-rewarded explorer policies distilled into a student without novelty (ExpDis)"
+    to: "method:expdis"
+  - when: "semifactual prompt-stability token credit on a GRPO host (SCAPO)"
+    to: "method:scapo"
+  - when: "two-branch alpha-divergence sequence kernel instead of IS clip (ReSPO)"
+    to: "method:respo"
+  - when: "hindsight-to-foresight distillation when verifier groups are silent (SRD)"
+    to: "method:srd"
   - when: "adaptive ground-truth rationale scaffolding for sparse-reward RLVR (RGPO / GA-GRPO)"
     to: "method:rgpo"
   - when: "exploration-preserving advantage shaping (surprisal + pass rate) for RLVR"
@@ -75,6 +85,11 @@ current_sota:
     value: "Default SOTA for Dense RL"
     notes: "CISPO via MiniMax-M1 (2506.13585) + ScaleRL (2510.13786)."
 methods:
+  - method:grpodropout
+  - method:expdis
+  - method:scapo
+  - method:respo
+  - method:srd
   - method:exppo
   - method:logra
   - method:cispo
@@ -125,7 +140,7 @@ methods:
   - method:mesh-learning
   - method:opsft
   - method:rgpo
-last_reviewed: "2026-10-07"
+last_reviewed: "2026-10-09"
 tags:
   - post-training
   - reasoning
@@ -183,4 +198,9 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Not this task (multi-stage agent continual learning)**: `method:aclarena` on `task:agent-continual-learning`. Sequential stage stacking, not a Pass@1 loss.
 - **L2 in-language reasoning SFT (not this Pass@1 task)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.
 - **Multimodal VL prompt scaffolding (not this Pass@1 task)**: `method:eps-prompt-scaffolding` on `task:mllm-rl-prompt-curriculum`. Online EPS from on-policy rewards plus teacher rewrites. DataFlex-RL remains the static-policy null under text GRPO; EPS is the online adaptive scaffolding path. Does not replace CISPO.
+- **Optional easy-positive rollout drop**: `method:grpodropout` (`arXiv:2610.11854`) drops high-probability positive-advantage traces inside a GRPO-family group. Code hexuandeng/GRPODropout. Does not replace CISPO or EAPO.
+- **Optional explorer/distill split**: `method:expdis` (`arXiv:2610.10536`) novelty-rewards explorer copies then distills into a student without novelty. Beats DAPO at matched wall-clock. Code SaifPunjwani/Exploration-Distillation. Does not replace CISPO or ExPPO.
+- **Optional semifactual token credit**: `method:scapo` (`arXiv:2609.40360`) rescales GRPO token credit by prompt-stability. Qwen3-4B/1.7B AIME +5.63/+4.17 vs GRPO. Code DtYXs/SCAPO. HF Daily 2026-10-08. Does not replace CISPO or Cliff.
+- **Optional off-policy sequence kernel**: `method:respo` (`arXiv:2609.35433`) two-branch alpha-divergence instead of IS clip. Code yhangchen/ReSPO-code. HF Daily 2026-10-09. Does not replace CISPO or CARM.
+- **Optional silent-group hindsight distill**: `method:srd` (`arXiv:2610.08077`) hindsight-to-foresight when group advantages vanish. Up to +24.2pp; 2B all-fail 0.0% vs 60.6%. Code SalesforceAIResearch/SRD. HF Daily 2026-10-08. Does not replace CISPO, VeriGate, or VISTA.
 

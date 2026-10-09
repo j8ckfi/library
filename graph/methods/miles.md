@@ -8,6 +8,12 @@ sota_for:
   - task:frontier-rl-posttrain-stack
 supersedes: []
 do_not_use_for:
+  - when: "scaled omni-modal RL playbook with router freeze and groupwise agentic grading"
+    reason: "Miles remains the production engine; MiMo-V2.6 is a scaled-RL report"
+    use_instead: "method:mimo-v26"
+  - when: "two-branch alpha-divergence sequence kernel instead of IS clip"
+    reason: "Miles remains the engine; ReSPO is an off-policy sequence kernel"
+    use_instead: "method:respo"
   - when: "bit-exact delta-compressed weight sync / refit for disaggregated agentic RL"
     reason: "Miles remains the production engine; NeMo-DCR is a weight-sync plug-in"
     use_instead: "method:nemo-dcr"
@@ -57,7 +63,7 @@ assumptions:
   - "Frontier MoE post-train with a split rollout/train fleet. Paper case study: GLM-5.2 744B-A40B on 64 GB300 (32/32), Megatron trainer, optimizer-state streaming to disk."
   - "SGLang rollouts; Megatron or FSDP trainer. LoRA RL is Megatron-only in v0.1."
   - "Does not replace the train-kernel defaults run inside the stack (CISPO, OPD, Muon2)."
-last_reviewed: "2026-10-06"
+last_reviewed: "2026-10-09"
 papers:
   - paper:thundersyncrl
   - paper:miles

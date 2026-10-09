@@ -10,6 +10,21 @@ sota_for:
 supersedes:
   - method:dapo
 do_not_use_for:
+  - when: "rollout-level drop of high-probability positive-advantage traces"
+    reason: "CISPO remains Pass@1; GRPODropout filters easy positives inside a GRPO-family group"
+    use_instead: "method:grpodropout"
+  - when: "novelty-rewarded explorer policies distilled into a student without novelty"
+    reason: "CISPO remains Pass@1; ExpDis decouples exploration from the deployed reward"
+    use_instead: "method:expdis"
+  - when: "semifactual prompt-stability token credit on a GRPO host"
+    reason: "CISPO remains Pass@1; SCAPO rescales token credit by semifactual drift"
+    use_instead: "method:scapo"
+  - when: "two-branch alpha-divergence sequence kernel instead of IS clip"
+    reason: "CISPO remains Pass@1; ReSPO reshapes off-policy sequence weights"
+    use_instead: "method:respo"
+  - when: "hindsight-to-foresight distillation when verifier groups are silent"
+    reason: "CISPO remains Pass@1; SRD distills hindsight into foresight on all-equal groups"
+    use_instead: "method:srd"
   - when: "exploration-preserving advantage shaping (surprisal + pass rate) for RLVR"
     reason: "CISPO remains Pass@1; ExPPO reshapes the existing group advantage"
     use_instead: "method:exppo"
@@ -58,7 +73,7 @@ do_not_use_for:
   - when: "adaptive ground-truth rationale scaffolding for sparse-reward RLVR"
     reason: "CISPO remains Pass@1; RGPO scaffolds GT rationales"
     use_instead: "method:rgpo"
-last_reviewed: "2026-10-07"
+last_reviewed: "2026-10-09"
 papers:
   - paper:exppo
   - paper:logra

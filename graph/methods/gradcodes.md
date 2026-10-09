@@ -8,6 +8,9 @@ sota_for:
   - task:full-lowbit-finetune
 supersedes: []
 do_not_use_for:
+  - when: "ultra-low-bit QAT recovery via on-policy reverse-KL against a full-precision teacher"
+    reason: "GradCodeS stays in quantized code space; OnlineQAT recovers W3/W2 via OPD"
+    use_instead: "method:onlineqat"
   - when: "4-bit PEFT with a mixed-precision adapter at inference is acceptable"
     reason: "AQLoRA-Q remains the 4-bit stack speed/recipe default"
     use_instead: "method:aqlora-q"
@@ -21,7 +24,7 @@ assumptions:
   - "Targeted linear layers stay in NF4, INT4, or MXFP4 at every accepted checkpoint; embeddings and lm_head may stay unquantized (paper setting)."
   - "One backward pass per search step plus M forward evaluations of deployable candidates."
   - "Paper scale is Qwen3-0.6B and Llama-3.2-1B/3B-Instruct, three seeds."
-last_reviewed: "2026-09-01"
+last_reviewed: "2026-10-09"
 papers:
   - paper:gradcodes
 recipes:

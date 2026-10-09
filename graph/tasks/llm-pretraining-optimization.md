@@ -12,6 +12,10 @@ current_sota:
     value: "~2x token efficiency vs AdamW"
     notes: "Muon2 (2604.09967) + KL-SOAP (2607.20548) if memory allows."
 redirects:
+  - when: "4-bit AdamW optimizer-state quantization in preconditioner space (ZIP-SR)"
+    to: "method:zip-sr"
+  - when: "thresholded Muon orthogonalization of small vs large singular values"
+    to: "method:spectrally-targeted-muon"
   - when: "pilot-run cubic rule for Adam's shared beta (β1=β2=β)"
     to: "method:adam-beta-cubic"
   - when: "two-band Marchenko-Pastur spectral reweighting for Muon (BulkBoost)"
@@ -39,6 +43,8 @@ redirects:
   - when: "Muon-style norm-aware update for embedding tables (1->2) and LM head (2->inf) instead of AdamW"
     to: "method:muonio"
 methods:
+  - method:zip-sr
+  - method:spectrally-targeted-muon
   - method:dga-muon
   - method:clean
   - method:expertmuon-compass
@@ -66,7 +72,7 @@ methods:
   - method:muonio
   - method:adam-beta-cubic
   - method:bulkboost
-last_reviewed: "2026-10-07"
+last_reviewed: "2026-10-09"
 tags:
   - pretraining
   - optimizer
@@ -91,3 +97,5 @@ Pretraining modern neural network models involves minimizing cross-entropy loss 
 - **Optional I/O-layer Muon (not this hidden-layer default)**: `method:muonio` (`arXiv:2610.02705`). \(1\to 2\) embeddings / \(2\to\infty\) LM head instead of AdamW. C4 val PPL 60M/130M/1B 28.366/23.617/14.374 vs Muon Tuned 28.502/24.238/14.527. Does not replace Muon2.
 - **Not this task (seed-grounded synthetic single-stage pretrain)**: `method:synth` (`arXiv:2609.37891`) on `task:synthetic-single-stage-pretrain`. AdamW NTP on SYNTH; not a Muon2 retarget.
 - **Not this task (zero-natural-data UTM self-play)**: `method:self-play-pretraining` (`arXiv:2609.30063`) on `task:zero-natural-data-self-play-pretrain`. Experimental <25M.
+- **Optional 4-bit AdamW-state quantization**: `method:zip-sr` (`arXiv:2610.12444`) stochastic rounding in preconditioner space. Up to 70% TorchAO gap cut vs 32-bit AdamW. No public code. Does not replace Muon2, SCALE, or TACO.
+- **Optional thresholded Muon orthogonalization**: `method:spectrally-targeted-muon` (`arXiv:2610.10965`) small singular values carry the Muon gain. CIFAR-10 / NanoGPT speedruns, not a 7B bake-off. No public code. Does not replace Muon2, BulkBoost, or Musec.

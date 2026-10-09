@@ -22,6 +22,10 @@ out_of_scope:
   - "Category-aware SWE expert RL (Category-Aware SWE Experts)"
   - "Structural tool vs summary credit under GRPO (SLCA-GRPO)"
 redirects:
+  - when: "sampler-anchored KL least-squares without IS clipping (KLPO)"
+    to: "method:klpo"
+  - when: "coupled policy-side IS and advantage-staleness TD correction (COPC)"
+    to: "method:copc"
   - when: "lossless (no-staleness) overlap of GRPO/OPD gradient computation with rollout"
     to: "method:thundersyncrl"
   - when: "build an agent rather than train a policy"
@@ -62,6 +66,8 @@ current_sota:
     value: "Default SOTA for agentic async RL"
     notes: "SAO (2607.07508) decouples environment tool execution from policy optimization with importance-corrected replay buffers."
 methods:
+  - method:klpo
+  - method:copc
   - method:thundersyncrl
   - method:sao
   - method:bpco
@@ -83,7 +89,7 @@ methods:
   - method:pact
   - method:slca-grpo
   - method:ftw
-last_reviewed: "2026-10-06"
+last_reviewed: "2026-10-09"
 tags:
   - post-training
   - agentic
@@ -112,3 +118,5 @@ This is **policy training**. Building a software-engineering agent loop is `task
 - **Not this task (structural tool/summary credit)**: `method:slca-grpo` on `task:tool-agent-segment-credit`. Does not replace SAO.
 - **Optional CEM-style critic-free RFT from replay (not this async default)**: `method:ftw` (`arXiv:2610.03361`, NeurIPS 2026) when group rollouts are impractical. Search-R1 Qwen2.5-3B-Instruct FTW-K1-C4 35.46±0.15 vs GRPO 33.6 vs PPO 32.5. Does not replace SAO.
 - **Gotcha (stale-data RL harness)**: `paper:probe-the-harness` (`arXiv:2610.02911`). TIS vs SAN ranking reversals in verl. SAN is not a library method. Does not replace SAO, CIS-RL, or CARM.
+- **Optional sampler-anchored KL least-squares (not this async default)**: `method:klpo` (`arXiv:2610.08963`) one-rollout update without IS clipping. Code yifanzhang-pro/KLPO. Abstract has no numeric bake-off. Does not replace SAO, BPO, or CISPO.
+- **Optional coupled policy/advantage staleness correction (not this async default)**: `method:copc` (`arXiv:2610.09597`) actor IS plus TD reweighting; 1.7× vs sync PPO; stable at 64-step staleness. No public code. Does not replace SAO or KLPO.

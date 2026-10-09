@@ -19,6 +19,10 @@ out_of_scope:
   - "MoE train–infer mismatch IS correction (CIS-RL)"
   - "Cancellation-aware off-policy sequence masking (CARM)"
 redirects:
+  - when: "scaled omni-modal RL playbook with router freeze and groupwise agentic grading (MiMo-V2.6)"
+    to: "method:mimo-v26"
+  - when: "two-branch alpha-divergence sequence kernel instead of IS clip (ReSPO)"
+    to: "method:respo"
   - when: "bit-exact delta-compressed weight sync / refit for disaggregated agentic RL (NeMo-DCR)"
     to: "method:nemo-dcr"
   - when: "lossless (no-staleness) overlap of GRPO/OPD gradient computation with rollout, not the production engine"
@@ -57,6 +61,8 @@ current_sota:
     value: "263s median (first 30 steps); KL mean 0.0369; reward 0.438→0.556 (single run)"
     notes: "Miles v0.1 (2609.08368). Process/system SOTA for the frontier post-train engine. Does not replace Poolside factory, SAO, CISPO, Muon2, or mini-SWE-agent. Reward rise is a single-run observation."
 methods:
+  - method:mimo-v26
+  - method:respo
   - method:thundersyncrl
   - method:miles
   - method:poolside-model-factory
@@ -73,7 +79,7 @@ methods:
   - method:lsd
   - method:carm
   - method:nemo-dcr
-last_reviewed: "2026-10-07"
+last_reviewed: "2026-10-09"
 tags:
   - systems
   - training-systems
@@ -104,3 +110,5 @@ Frontier post-training is a systems problem: multi-turn tool rollouts on trillio
 - **Optional length-scaling tax mix (not this engine default)**: `method:lsd` (`arXiv:2609.38854`) on `task:math-code-rl-dense`. Routes solved groups to EMA OPD. Does not replace Miles or CISPO.
 - **Optional cancellation-aware off-policy mask (not this engine default)**: `method:carm` (`arXiv:2610.02039`) averages absolute token log-ratios before the sequence threshold. Complements CIS-RL. No public code. Does not replace Miles, CISPO, or CIS-RL.
 - **Optional bit-exact delta-compressed weight sync**: `method:nemo-dcr` (`arXiv:2610.08430`). ~1% of BF16 weights change per step; 1T relay-tree 150s vs 87.5 min. Code NVIDIA-NeMo/RL PR #2444. Does not replace Miles.
+- **Optional scaled omni-modal RL playbook (not this engine default)**: `method:mimo-v26` (`arXiv:2610.11959`) router freeze, groupwise agentic grading, 1568 samples / 2.7–3.7B tokens per step at up to 1M context. `code_status: announced`. Does not replace Miles, Rufus-Air, or SAO.
+- **Optional off-policy sequence kernel (not this engine default)**: `method:respo` (`arXiv:2609.35433`) on `task:math-code-rl-dense`. Two-branch alpha-divergence vs IS clip. Code yhangchen/ReSPO-code. Does not replace Miles or CISPO.

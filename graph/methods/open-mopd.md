@@ -8,6 +8,9 @@ sota_for:
   - task:student-distillation
 supersedes: []
 do_not_use_for:
+  - when: "multi-teacher OPD via teacher-minus-base logit shifts rather than endpoint copy"
+    reason: "Open-MOPD remains token-share / gap-aware budget; Delta-MOPD transfers the post-training shift"
+    use_instead: "method:delta-mopd"
   - when: "MOPD vs tuned off-policy SFT/Soft-KD after matching training design (GPU-hour confound)"
     reason: "Open-MOPD remains the multi-teacher matching default; rethink-mopd is a caveat that a tuned off-policy baseline may suffice"
     use_instead: "paper:rethink-mopd"
@@ -32,8 +35,9 @@ do_not_use_for:
   - when: "representation-level (hidden-state) multi-teacher OPD"
     reason: "Open-MOPD remains token-share / gap-aware budget; Latent-MOPD matches specialist hidden states"
     use_instead: "method:latent-mopd"
-last_reviewed: "2026-10-06"
+last_reviewed: "2026-10-09"
 papers:
+  - paper:delta-mopd
   - paper:open-mopd
 recipes:
   - recipe:open-mopd

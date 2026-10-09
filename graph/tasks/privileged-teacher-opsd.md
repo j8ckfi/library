@@ -5,6 +5,10 @@ title: "Privileged-Teacher On-Policy Self-Distillation"
 domain: "post-training"
 summary: "On-policy self-distillation where a same-size teacher is privileged with a gold reference solution and a deterministic outcome verifier, rather than a larger frozen teacher model."
 redirects:
+  - when: "rollout-free step-aligned privileged distillation of a reference solution (SAPD)"
+    to: "method:sapd"
+  - when: "hindsight-to-foresight distillation when verifier groups are silent (SRD)"
+    to: "method:srd"
   - when: "privileged-context content (demo vs feedback vs rephrase) as OPSD drift, not a trainer"
     to: "method:privileged-context-drift"
   - when: "outcome-guided FKL/RKL OPSD with entropy prefix cutoff"
@@ -37,6 +41,8 @@ current_sota:
     value: "VISTA 44.0 / 64.3 / 66.9 vs OPSD 43.4 / 63.6 / 64.8 vs GRPO 37.7 / 62.7 / 64.0"
     notes: "VISTA (2608.28306) keeps the OPSD student update and adapts the privileged teacher on verified rollouts at top-k teacher-first KL positions."
 methods:
+  - method:sapd
+  - method:srd
   - method:privileged-context-drift
   - method:og-opsd
   - method:e2-opsd
@@ -58,7 +64,7 @@ methods:
   - method:sampling-sft
   - method:air-opd
   - method:rc-opd
-last_reviewed: "2026-10-07"
+last_reviewed: "2026-10-09"
 tags:
   - post-training
   - distillation
@@ -95,3 +101,5 @@ Train a problem-only student on its own rollouts using dense token-level targets
 - **Optional error-to-repair iterative OPSD (not this first hop)**: `method:air-opd` (`arXiv:2610.02700`). Qwen3-4B Math Avg External-G 66.7 / Self-G 65.8 vs OPSD 63.1 / GRPO 62.3. Does not replace VISTA or OASIS.
 - **Optional root-cause-guided OPD (not this first hop)**: `method:rc-opd` (`arXiv:2610.03515`). Qwen3-1.7B/4B/8B Avg@4 44.17/66.11/66.94 vs OPSD 40.28/62.50/63.33. Code Starrylay/RC-OPD. Does not replace VISTA or OASIS.
 - **See also (SFT data projection, not this first hop)**: `method:sampling-sft` (`arXiv:2610.02140`) on `task:math-code-rl-dense`. MCMC-projects off-policy traces then ordinary SFT. Chemistry (Qwen2.5-7B-Instruct) 0.660 vs OPSD 0.618; medical 0.458 vs OPSD 0.466 with prior avg 0.516 vs 0.501. Not a privileged-teacher update. Does not replace VISTA.
+- **Optional rollout-free step-aligned distill (not this first hop)**: `method:sapd` (`arXiv:2610.09665`) privileged reference-solution steps, no live rollouts. ~2× vs on-policy. Code Miaow-Lab/SAPD. Does not replace VISTA or OPD.
+- **Optional silent-group hindsight distill (not this first hop)**: `method:srd` (`arXiv:2610.08077`) on `task:math-code-rl-dense`. No gold teacher. Does not replace VISTA or VeriGate.

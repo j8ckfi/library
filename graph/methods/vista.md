@@ -8,6 +8,9 @@ sota_for:
   - task:privileged-teacher-opsd
 supersedes: []
 do_not_use_for:
+  - when: "rollout-free step-aligned privileged distillation of a reference solution"
+    reason: "VISTA remains privileged-teacher first hop; SAPD is offline step-aligned distill"
+    use_instead: "method:sapd"
   - when: "outcome-guided FKL/RKL OPSD with entropy prefix cutoff"
     reason: "VISTA remains privileged-teacher first hop; OG-OPSD is an outcome-gated KL schedule"
     use_instead: "method:og-opsd"
@@ -32,7 +35,7 @@ do_not_use_for:
   - when: "privileged-context content (demo vs feedback vs rephrase) as OPSD drift, not a trainer"
     reason: "VISTA remains the trainer; Privileged Context as Drift is an evidence card"
     use_instead: "method:privileged-context-drift"
-last_reviewed: "2026-10-07"
+last_reviewed: "2026-10-09"
 papers:
   - paper:privileged-context-drift
   - paper:og-opsd

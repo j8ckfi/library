@@ -118,10 +118,12 @@ task:diffusion-augmented-ar -> method:uno (2609.04010, 2026-09-08)
   when input-heavy agentic / KV-compressed CED MoE serving -> task:input-heavy-agentic-moe-serving
   when curriculum RL for a discrete diffusion LM (canvas anneal), not AR serving -> task:posttrain-diffusion
 task:full-lowbit-finetune -> method:gradcodes (2608.30908, 2026-09-01)
+  when ultra-low-bit QAT recovery via on-policy reverse-KL (OnlineQAT) -> method:onlineqat
   when memory must fit a 4-bit stack but a mixed-precision adapter at inference is acceptable -> task:4bit-peft-quantization
   when native FP4 forward/backward hardware training from scratch -> task:fp4-hardware-training
   when quality LoRA on 24GB without a fully quantized checkpoint constraint -> task:lora-quality-tuning
 task:full-param-memory-efficient-pretrain -> method:scale (2610.06647, 2026-08-26)
+  when 4-bit AdamW optimizer-state quantization in preconditioner space (ZIP-SR) -> method:zip-sr
   when Nyström-sketched SOAP preconditioners / linear optimizer memory (Clean / Q-Clean) -> method:clean
   when low-rank gradient sketches + predicted-KL step control for RL memory -> method:logra
   when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
@@ -160,6 +162,8 @@ task:agent-continual-learning -> method:aclarena (2610.05872, 2026-09-23)
   when production engine -> task:frontier-rl-posttrain-stack
   when SWE issue-to-patch loop -> task:software-engineering-agent-harness
 task:agentic-async-rl -> method:sao (2607.07508, 2026-08-26)
+  when sampler-anchored KL least-squares without IS clipping (KLPO) -> method:klpo
+  when coupled policy-side IS and advantage-staleness TD correction (COPC) -> method:copc
   when lossless (no-staleness) overlap of GRPO/OPD gradient computation with rollout -> method:thundersyncrl
   when build an agent rather than train a policy -> task:software-engineering-agent-harness
   when outcome-only long-horizon agent RL (coverage / anti-drift), not async stragglers -> task:outcome-only-long-horizon-agent-rl
@@ -189,6 +193,7 @@ task:agentic-rsi-routing-posttrain -> method:neohorse-1 (2609.08183, 2026-09-09)
   when recursive self-rewrite of a research-agent harness, not routing-guided OPD -> method:aide2
   when harness curriculum as a non-stationary bandit over failure-pattern arms -> method:activesaddler
 task:all-zero-verifier-groups -> method:verigate (2605.30451, 2026-08-26)
+  when hindsight-to-foresight distillation when verifier groups are silent (SRD) -> method:srd
 task:coding-agent-rl-environment-construction -> method:codemidas (2609.22068, 2026-09-21)
   when programmatic checker exists and sparse outcome RL is the protocol (AppWorld TGC) -> task:outcome-only-long-horizon-agent-rl
   when variable environment latency / async stragglers -> task:agentic-async-rl
@@ -221,6 +226,11 @@ task:instruct-sft-alignment -> method:olmo-3 (2512.13961, 2026-08-26) + method:n
 task:label-free-reasoner-posttrain -> method:u-opsd (2610.07842, 2026-08-28)
 task:label-free-test-time-reasoner -> method:ttpo (2608.27448, 2026-08-28)
 task:math-code-rl-dense -> method:cispo (2610.04011, 2026-08-26)
+  when rollout-level drop of high-probability positive-advantage traces (GRPODropout) -> method:grpodropout
+  when novelty-rewarded explorer policies distilled into a student without novelty (ExpDis) -> method:expdis
+  when semifactual prompt-stability token credit on a GRPO host (SCAPO) -> method:scapo
+  when two-branch alpha-divergence sequence kernel instead of IS clip (ReSPO) -> method:respo
+  when hindsight-to-foresight distillation when verifier groups are silent (SRD) -> method:srd
   when adaptive ground-truth rationale scaffolding for sparse-reward RLVR (RGPO / GA-GRPO) -> method:rgpo
   when exploration-preserving advantage shaping (surprisal + pass rate) for RLVR -> method:exppo
   when low-rank gradient sketches + predicted-KL step control for RL memory -> method:logra
@@ -304,6 +314,8 @@ task:outcome-only-long-horizon-agent-rl -> method:canopy (2609.01245, 2026-09-04
   when hierarchical MoE routing control during agentic RL (operation-type experts) -> method:hierarchical-moe-routing-control
 task:passk-reasoning-coverage -> method:es-reasoning (2608.27351, 2026-08-31)
 task:privileged-teacher-opsd -> method:vista (2610.07842, 2026-08-31)
+  when rollout-free step-aligned privileged distillation of a reference solution (SAPD) -> method:sapd
+  when hindsight-to-foresight distillation when verifier groups are silent (SRD) -> method:srd
   when privileged-context content (demo vs feedback vs rephrase) as OPSD drift, not a trainer -> method:privileged-context-drift
   when outcome-guided FKL/RKL OPSD with entropy prefix cutoff -> method:og-opsd
   when OPSD entropy overshoot (student entropy past the teacher; exemplar-guided + entropy-aware KL) -> method:e2-opsd
@@ -317,7 +329,15 @@ task:privileged-teacher-opsd -> method:vista (2610.07842, 2026-08-31)
   when adaptive iterative error-to-repair guidance for OPSD -> method:air-opd
   when root-cause diagnosis of the student's own failed reasoning then differentiated prefix/error distillation -> method:rc-opd
 task:reasoning-rl-alignment -> method:cispo (2610.04011, 2026-08-26) + method:sapo (2511.20347, 2026-08-26)
-task:student-distillation -> method:opd (2610.07654, 2026-08-26) + method:open-mopd (2608.19098, 2026-08-28)
+task:student-distillation -> method:opd (2610.11247, 2026-08-26) + method:open-mopd (2610.10460, 2026-08-28)
+  when bilevel learned token weights from post-update validation loss (MetaOPD) -> method:metaopd
+  when probability-space token keep-mask that downweights low-low tokens (DIAL-OPD) -> method:dial-opd
+  when offline initial-student rollouts instead of live on-policy sampling (Semi-OPD) -> method:semi-opd
+  when multi-teacher OPD via teacher-minus-base logit shifts (Delta-MOPD) -> method:delta-mopd
+  when ultra-low-bit QAT recovery via on-policy reverse-KL (OnlineQAT) -> method:onlineqat
+  when rollout-free step-aligned privileged distillation of a reference solution (SAPD) -> method:sapd
+  when OPD vanishing learning signals / larger-scale teacher plateaus -> paper:opd-vanishing-signals
+  when reverse-KL OPD transfers compositional skill but not new facts -> paper:opd-skill-not-knowledge
   when cross-tokenizer OPD (strict 1:1 coverage / student-selected top-16 shared-vocab reverse-KL) -> task:cross-tokenizer-opd
   when negative-policy rollouts complement teacher OPD when overlap is low -> method:np-opd
   when OPD used for safety alignment / backdoor transfer risk -> paper:opd-safety-backdoor
@@ -408,6 +428,8 @@ task:latent-space-lm-pretrain -> method:ncp-archpreview (2609.10715, 2026-09-11)
 task:linear-time-sequence-modeling -> method:mamba-2 (2405.21060, 2024-05)
   when post-train sparse attention on a dense Transformer under a fixed budget -> task:posttrain-attention-sparsification
 task:llm-pretraining-optimization -> method:muon2 (2610.07497, 2026-08-26)
+  when 4-bit AdamW optimizer-state quantization in preconditioner space (ZIP-SR) -> method:zip-sr
+  when thresholded Muon orthogonalization of small vs large singular values -> method:spectrally-targeted-muon
   when pilot-run cubic rule for Adam's shared beta (β1=β2=β) -> method:adam-beta-cubic
   when two-band Marchenko-Pastur spectral reweighting for Muon (BulkBoost) -> method:bulkboost
   when unique-token epoch / repetition geometry under a finite pretrain corpus -> task:data-constrained-pretrain
@@ -471,6 +493,8 @@ task:operator-weather -> method:fourcastnet-3 (2507.12144, 2026-08-28)
 task:snn-sequence-modeling -> method:longspike (2606.12895, 2026-08-26)
 task:spiking-neural-networks-training -> method:longspike (2606.12895, 2026-08-26) + method:a2sg (2606.11236, 2026-08-26)
 task:frontier-rl-posttrain-stack -> method:miles (2610.05935, 2026-09-09)
+  when scaled omni-modal RL playbook with router freeze and groupwise agentic grading (MiMo-V2.6) -> method:mimo-v26
+  when two-branch alpha-divergence sequence kernel instead of IS clip (ReSPO) -> method:respo
   when bit-exact delta-compressed weight sync / refit for disaggregated agentic RL (NeMo-DCR) -> method:nemo-dcr
   when lossless (no-staleness) overlap of GRPO/OPD gradient computation with rollout, not the production engine -> method:thundersyncrl
   when factory process / experiments-as-code / lineage rather than the RL engine -> task:industrial-model-building
@@ -720,6 +744,23 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 207. **A2D**: **A2D** (`method:a2d`, `arXiv:2610.08108`) on `task:diffusion-lm-ar-delta-recycle`. Active first hop (`sota_for: []`). Recycle an AR post-training delta onto a converted dLLM. Does **not** replace DiffusionOPSD / Self-OPD / CanvasAnneal.
 208. **MASKerade**: **MASKerade** (`method:maskerade`, `arXiv:2610.07809`) on `task:dense-to-moe-upcycling`. Active first hop (`sota_for: []`). Learned binary-mask experts over a frozen FFN. Code Ming-K9/MASKerade. Does **not** replace DeepSeek-V4 / Kimi-K3.
 209. **DART-ES**: **DART-ES** (`method:dart-es`, `arXiv:2610.06993`) on `task:passk-reasoning-coverage`. Active plug-in. Difficulty-aware reweight + targeted replay. Code szs777/DART-ES-Code. Does **not** replace ES-reasoning or CISPO.
+210. **MetaOPD**: **MetaOPD** (`method:metaopd`, `arXiv:2610.11989`) on `task:student-distillation`. Active plug-in. Bilevel token weights from post-update validation NLL. Avg@8/Pass@8 +1.99/+5.97 (0.6B), +2.25/+6.41 (1.7B). No public code. Does **not** replace OPD or IER-OPD.
+211. **DIAL-OPD**: **DIAL-OPD** (`method:dial-opd`, `arXiv:2610.11659`) on `task:student-distillation`. Active plug-in. Probability-space keep-mask; +5.25pp at 40% tokens; Pass@16 13.33→26.67. Code EIT-NLP/DIAL-OPD. Does **not** replace OPD.
+212. **Semi-OPD**: **Semi-OPD** (`method:semi-opd`, `arXiv:2610.11291`) on `task:student-distillation`. Active plug-in. Freeze rollouts at the initial student. 14/17 pairs; up to +13.6% / 11.4× vs live OPD when overlap is low. No public code. Does **not** replace OPD.
+213. **Delta-MOPD**: **Delta-MOPD** (`method:delta-mopd`, `arXiv:2610.10460`) on `task:student-distillation`. Active plug-in. Teacher-minus-base logit shifts. +4.11 Math / +1.95 five-benchmark. Paper Open-MOPD is not the library 83.4% bake-off. No public code. Does **not** replace Open-MOPD.
+214. **GRPODropout**: **GRPODropout** (`method:grpodropout`, `arXiv:2610.11854`) on `task:math-code-rl-dense`. Active plug-in. Drops high-probability positive-advantage traces. Code hexuandeng/GRPODropout. Does **not** replace CISPO.
+215. **ExpDis**: **ExpDis** (`method:expdis`, `arXiv:2610.10536`) on `task:math-code-rl-dense`. Active plug-in. Novelty-rewarded explorers distilled into a student without novelty. Beats DAPO at matched wall-clock. Code SaifPunjwani/Exploration-Distillation. Does **not** replace CISPO or ExPPO.
+216. **SCAPO**: **SCAPO** (`method:scapo`, `arXiv:2609.40360`) on `task:math-code-rl-dense`. Active plug-in. Semifactual token credit. Qwen3-4B/1.7B AIME +5.63/+4.17 vs GRPO. Code DtYXs/SCAPO. Does **not** replace CISPO or Cliff.
+217. **ReSPO**: **ReSPO** (`method:respo`, `arXiv:2609.35433`) on `task:math-code-rl-dense`. Active plug-in. Two-branch alpha-divergence sequence kernel instead of IS clip. Code yhangchen/ReSPO-code. Mention on `task:frontier-rl-posttrain-stack`. Does **not** replace CISPO or CARM.
+218. **SRD**: **SRD** (`method:srd`, `arXiv:2610.08077`) on `task:math-code-rl-dense`. Active plug-in. Hindsight-to-foresight when groups are silent. Up to +24.2pp; 2B all-fail 0.0% vs 60.6%. Code SalesforceAIResearch/SRD. Mentions on `task:all-zero-verifier-groups` / `task:privileged-teacher-opsd`. Does **not** replace CISPO, VeriGate, or VISTA.
+219. **KLPO**: **KLPO** (`method:klpo`, `arXiv:2610.08963`) on `task:agentic-async-rl`. Active plug-in. Sampler-anchored KL least-squares; one rollout; no IS clip. Code yifanzhang-pro/KLPO. Does **not** replace SAO.
+220. **COPC**: **COPC** (`method:copc`, `arXiv:2610.09597`) on `task:agentic-async-rl`. Active plug-in. Coupled policy-side IS and advantage-staleness TD correction. 1.7× vs sync PPO; 64-step staleness. No public code. Does **not** replace SAO.
+221. **ZIP-SR**: **ZIP-SR** (`method:zip-sr`, `arXiv:2610.12444`) on `task:llm-pretraining-optimization`. Active plug-in. 4-bit AdamW second-moment codebook with preconditioner-space SR. Up to 70% TorchAO gap cut. Mention on `task:full-param-memory-efficient-pretrain`. No public code. Does **not** replace Muon2, SCALE, or TACO.
+222. **Spectrally Targeted Muon**: **Spectrally Targeted Muon** (`method:spectrally-targeted-muon`, `arXiv:2610.10965`) on `task:llm-pretraining-optimization`. Active plug-in. Small singular values carry the Muon gain. Not a 7B bake-off. No public code. Does **not** replace Muon2, BulkBoost, or Musec.
+223. **SAPD**: **SAPD** (`method:sapd`, `arXiv:2610.09665`) on `task:privileged-teacher-opsd`. Active plug-in. Rollout-free step-aligned privileged distillation. ~2× vs on-policy. Code Miaow-Lab/SAPD. Does **not** replace VISTA or OPD.
+224. **OnlineQAT**: **OnlineQAT** (`method:onlineqat`, `arXiv:2610.09346`) on `task:full-lowbit-finetune`. Active plug-in. Block-wise QAT then on-policy reverse-KL. Qwen3-1.7B 57.28 W3A16 / 32.52 W2A16. No public code. Does **not** replace GradCodeS, OPD, or Quartet-II.
+225. **MiMo-V2.6**: **MiMo-V2.6** (`method:mimo-v26`, `arXiv:2610.11959`) on `task:frontier-rl-posttrain-stack`. Active plug-in. Router freeze, groupwise agentic grading, 1568 samples / 2.7–3.7B tokens/step. `code_status: announced`. Does **not** replace Miles, Rufus-Air, or SAO.
+226. **OPD claim notes** (no new methods): `paper:opd-vanishing-signals` (`arXiv:2610.11247`) larger-scale teachers starve OPD gradients (25.1% vs 96.2% loss reduction); `paper:opd-skill-not-knowledge` (`arXiv:2610.09639`) reverse-KL transfers skill, not facts.
 
 ---
 
@@ -931,6 +972,23 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `a2d` (2610.08108) is the active first hop for `task:diffusion-lm-ar-delta-recycle` only. It does not supersede `diffusion-opsd`, `self-opd`, or `canvasanneal`.
 - `maskerade` (2610.07809) is the active first hop for `task:dense-to-moe-upcycling` only. It does not supersede `deepseek-v4` or `kimi-k3`.
 - `dart-es` (2610.06993) is an active ES reweight/replay plug-in. It does not supersede `es-reasoning` or `cispo`.
+- `metaopd` (2610.11989) is an active bilevel OPD token-weight plug-in. It does not supersede `opd` or `ier-opd`.
+- `dial-opd` (2610.11659) is an active probability-space OPD keep-mask. It does not supersede `opd`.
+- `semi-opd` (2610.11291) is an active offline-init OPD rollout plug-in. It does not supersede `opd` or `lspd`.
+- `delta-mopd` (2610.10460) is an active teacher-minus-base MOPD plug-in. It does not supersede `open-mopd`.
+- `grpodropout` (2610.11854) is an active GRPO-family easy-positive dropout plug-in. It does not supersede `cispo`.
+- `expdis` (2610.10536) is an active explorer/distill split plug-in. It does not supersede `cispo` or `exppo`.
+- `scapo` (2609.40360) is an active semifactual token-credit plug-in. It does not supersede `cispo` or `cliff`.
+- `respo` (2609.35433) is an active off-policy sequence-kernel plug-in. It does not supersede `cispo` or `carm`.
+- `srd` (2610.08077) is an active silent-group hindsight-to-foresight plug-in. It does not supersede `cispo`, `verigate`, or `vista`.
+- `klpo` (2610.08963) is an active sampler-anchored KL least-squares plug-in. It does not supersede `sao`.
+- `copc` (2610.09597) is an active coupled policy/advantage staleness plug-in. It does not supersede `sao`.
+- `zip-sr` (2610.12444) is an active 4-bit AdamW-state quantization plug-in. It does not supersede `muon2`, `scale`, or `taco`.
+- `spectrally-targeted-muon` (2610.10965) is an active thresholded Muon orthogonalization plug-in. It does not supersede `muon2`, `bulkboost`, or `musec`.
+- `sapd` (2610.09665) is an active rollout-free privileged step-distill plug-in. It does not supersede `vista` or `opd`.
+- `onlineqat` (2610.09346) is an active ultra-low-bit QAT-recovery plug-in. It does not supersede `gradcodes`, `opd`, or `quartet-ii`.
+- `mimo-v26` (2610.11959) is an active scaled omni-modal RL playbook. It does not supersede `miles`, `rufus-air`, or `sao`.
+- `paper:opd-vanishing-signals` (2610.11247) and `paper:opd-skill-not-knowledge` (2610.09639) are OPD claim notes. They do not supersede `opd`.
 
 ---
 

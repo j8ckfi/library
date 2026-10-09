@@ -7,6 +7,9 @@ status: sota
 sota_for:
   - task:all-zero-verifier-groups
 do_not_use_for:
+  - when: "hindsight-to-foresight distillation when verifier groups are silent"
+    reason: "VeriGate gates process supervision; SRD distills hindsight into foresight"
+    use_instead: "method:srd"
   - when: "multi-model / all-fail group salvage by peer trajectory exchange"
     reason: "VeriGate gates a PRM on same-model all-zero groups; GRAFT replaces the group with a peer's rollouts"
     use_instead: "method:graft"

@@ -10,6 +10,12 @@ supersedes:
   - method:grpo
   - method:dr-grpo
 do_not_use_for:
+  - when: "sampler-anchored KL least-squares without IS clipping"
+    reason: "SAO remains async straggler replay; KLPO is a one-rollout sampler-anchored update"
+    use_instead: "method:klpo"
+  - when: "coupled policy-side IS and advantage-staleness TD correction"
+    reason: "SAO remains async straggler replay; COPC couples actor IS with advantage TD reweighting"
+    use_instead: "method:copc"
   - when: "lossless (no-staleness) overlap of GRPO/OPD gradient computation with rollout"
     reason: "SAO remains async straggler replay; ThunderSyncRL overlaps gradient with rollout without staleness"
     use_instead: "method:thundersyncrl"
@@ -43,7 +49,7 @@ do_not_use_for:
   - when: "CEM-style critic-free RFT from replay when group rollouts are impractical (stateful sandboxes)"
     reason: "SAO remains async straggler replay; FTW is CEM-style ordinal filter on replay when GRPO groups cannot be reconstructed"
     use_instead: "method:ftw"
-last_reviewed: "2026-10-06"
+last_reviewed: "2026-10-09"
 papers:
   - paper:sao
   - paper:probe-the-harness

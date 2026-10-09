@@ -6,6 +6,81 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-10-09 — weekday SOTA sweep (MetaOPD, DIAL-OPD, Semi-OPD, Delta-MOPD, GRPODropout, ExpDis, SCAPO, ReSPO, SRD, KLPO, COPC, ZIP-SR, Spectrally Targeted Muon, SAPD, OnlineQAT, MiMo-V2.6, OPD vanishing-signals, OPD skill-not-knowledge)
+- Sixteen active plug-ins and two paper-only notes. No current_sota retarget of OPD / Open-MOPD / CISPO / SAO / Muon2 / GradCodeS / VISTA / Miles / VeriGate / SCALE.
+- Window: 2026-10-09 Librarian weekday sweep covering arXiv + HF Daily 2026-10-08 and 2026-10-09 after a failed 10-08 pass; watermark was 2610.08624 (PR 40, 1134 nodes). New high id 2610.12444.
+
+### 2026-10-09 — ingest method:metaopd (active on task:student-distillation; does not supersede method:opd)
+- Added paper:metaopd (2610.11989), method:metaopd, recipe:metaopd (`code_status: none`).
+- Status active (`sota_for: []`). Bilevel token weights from post-update validation NLL. Avg@8/Pass@8 +1.99/+5.97 (0.6B), +2.25/+6.41 (1.7B) vs uniform OPD.
+
+### 2026-10-09 — ingest method:dial-opd (active on task:student-distillation; does not supersede method:opd)
+- Added paper:dial-opd (2610.11659), method:dial-opd, recipe:dial-opd (`code_status: released`; EIT-NLP/DIAL-OPD).
+- Status active (`sota_for: []`). Probability-space keep-mask. Up to +5.25pp at 40% tokens; Pass@16 13.33→26.67.
+
+### 2026-10-09 — ingest method:semi-opd (active on task:student-distillation; does not supersede method:opd)
+- Added paper:semi-opd (2610.11291), method:semi-opd, recipe:semi-opd (`code_status: none`).
+- Status active (`sota_for: []`). Freeze rollouts at the initial student. 14/17 pairs; up to +13.6% / 11.4× vs live OPD when overlap is low.
+
+### 2026-10-09 — ingest method:delta-mopd (active on task:student-distillation; does not supersede method:open-mopd)
+- Added paper:delta-mopd (2610.10460), method:delta-mopd, recipe:delta-mopd (`code_status: none`).
+- Status active (`sota_for: []`). Teacher-minus-base logit shifts. +4.11 Math / +1.95 five-benchmark. Paper Open-MOPD numbers are not the library 83.4% bake-off.
+
+### 2026-10-09 — ingest method:grpodropout (active on task:math-code-rl-dense; does not supersede method:cispo)
+- Added paper:grpodropout (2610.11854), method:grpodropout, recipe:grpodropout (`code_status: released`; hexuandeng/GRPODropout).
+- Status active (`sota_for: []`). Drops high-probability positive-advantage traces. Abstract-backed accuracy/entropy claims only.
+
+### 2026-10-09 — ingest method:expdis (active on task:math-code-rl-dense; does not supersede method:cispo)
+- Added paper:expdis (2610.10536), method:expdis, recipe:expdis (`code_status: released`; SaifPunjwani/Exploration-Distillation).
+- Status active (`sota_for: []`). Novelty-rewarded explorers distilled into a student without novelty. Beats DAPO at matched wall-clock.
+
+### 2026-10-09 — ingest method:scapo (active on task:math-code-rl-dense; does not supersede method:cispo)
+- Added paper:scapo (2609.40360), method:scapo, recipe:scapo (`code_status: released`; DtYXs/SCAPO). HF Daily 2026-10-08.
+- Status active (`sota_for: []`). Semifactual token credit. Qwen3-4B/1.7B AIME +5.63/+4.17 vs GRPO.
+
+### 2026-10-09 — ingest method:respo (active on task:math-code-rl-dense; does not supersede method:cispo)
+- Added paper:respo (2609.35433), method:respo, recipe:respo (`code_status: released`; yhangchen/ReSPO-code). HF Daily 2026-10-09. Mention on task:frontier-rl-posttrain-stack.
+- Status active (`sota_for: []`). Two-branch alpha-divergence sequence kernel instead of IS clip.
+
+### 2026-10-09 — ingest method:srd (active on task:math-code-rl-dense; does not supersede method:cispo / method:verigate / method:vista)
+- Added paper:srd (2610.08077), method:srd, recipe:srd (`code_status: released`; SalesforceAIResearch/SRD). HF Daily 2026-10-08. Mentions on task:all-zero-verifier-groups and task:privileged-teacher-opsd.
+- Status active (`sota_for: []`). Hindsight-to-foresight when groups are silent. Up to +24.2pp; 2B all-fail 0.0% vs 60.6%.
+
+### 2026-10-09 — ingest method:klpo (active on task:agentic-async-rl; does not supersede method:sao)
+- Added paper:klpo (2610.08963), method:klpo, recipe:klpo (`code_status: released`; yifanzhang-pro/KLPO).
+- Status active (`sota_for: []`). Sampler-anchored KL least-squares; one rollout; no IS clip. No numeric bake-off in the abstract.
+
+### 2026-10-09 — ingest method:copc (active on task:agentic-async-rl; does not supersede method:sao)
+- Added paper:copc (2610.09597), method:copc, recipe:copc (`code_status: none`).
+- Status active (`sota_for: []`). Coupled policy-side IS and advantage-staleness TD correction. 1.7× vs sync PPO; 64-step staleness.
+
+### 2026-10-09 — ingest method:zip-sr (active on task:llm-pretraining-optimization; does not supersede method:muon2 / method:scale)
+- Added paper:zip-sr (2610.12444), method:zip-sr, recipe:zip-sr (`code_status: none`). Mention on task:full-param-memory-efficient-pretrain.
+- Status active (`sota_for: []`). 4-bit AdamW second-moment codebook with preconditioner-space SR. Up to 70% TorchAO gap cut.
+
+### 2026-10-09 — ingest method:spectrally-targeted-muon (active on task:llm-pretraining-optimization; does not supersede method:muon2)
+- Added paper:spectrally-targeted-muon (2610.10965), method:spectrally-targeted-muon, recipe:spectrally-targeted-muon (`code_status: none`).
+- Status active (`sota_for: []`). Thresholded orthogonalization: small singular values carry the Muon gain. Not a 7B bake-off.
+
+### 2026-10-09 — ingest method:sapd (active on task:privileged-teacher-opsd; does not supersede method:vista)
+- Added paper:sapd (2610.09665), method:sapd, recipe:sapd (`code_status: released`; Miaow-Lab/SAPD). Mention on task:student-distillation.
+- Status active (`sota_for: []`). Rollout-free step-aligned privileged distillation. ~2× vs on-policy.
+
+### 2026-10-09 — ingest method:onlineqat (active on task:full-lowbit-finetune; does not supersede method:gradcodes)
+- Added paper:onlineqat (2610.09346), method:onlineqat, recipe:onlineqat (`code_status: none`). Mention on task:student-distillation.
+- Status active (`sota_for: []`). Block-wise QAT then on-policy reverse-KL. Qwen3-1.7B 57.28 W3A16 / 32.52 W2A16.
+
+### 2026-10-09 — ingest method:mimo-v26 (active on task:frontier-rl-posttrain-stack; does not supersede method:miles)
+- Added paper:mimo-v26 (2610.11959), method:mimo-v26, recipe:mimo-v26 (`code_status: announced`).
+- Status active (`sota_for: []`). Omni-modal scaled-RL playbook: router freeze, groupwise agentic grading, 1568 samples / 2.7–3.7B tokens/step.
+
+### 2026-10-09 — claim note paper:opd-vanishing-signals (no new method)
+- Added paper:opd-vanishing-signals (2610.11247) on method:opd. Larger-scale teachers 25.1% vs self-RL 96.2% loss reduction after 200 updates. Code leizhao7/opd-learning-signals. Does not retarget OPD.
+
+### 2026-10-09 — claim note paper:opd-skill-not-knowledge (no new method)
+- Added paper:opd-skill-not-knowledge (2610.09639) on method:opd. Reverse-KL OPD transfers compositional skill, not new facts. Does not retarget OPD.
+
+
 ### 2026-10-07 — weekday SOTA sweep (Cross-Tokenizer OPD, TRACE, TRIAGE, NeMo-DCR, NP-OPD, Adam shared-β cubic, BulkBoost, DRMoET, Hierarchical MoE routing, FC-SWE, RGPO, GA-GRPO, Privileged Context as Drift, OPD-safety backdoor, A2D, MASKerade, DART-ES)
 - Four new tasks (`task:cross-tokenizer-opd`, `task:fp4-rl-train-rollout-alignment` dual-active TRACE+TRIAGE, `task:diffusion-lm-ar-delta-recycle`, `task:dense-to-moe-upcycling`), fifteen active/niche methods, two paper-only notes (`paper:ga-grpo`, `paper:opd-safety-backdoor`). No current_sota retarget of CISPO / VISTA / OPD / Muon2 / AdamW / Miles / Quartet-II / ES-reasoning / Category-Aware SWE Experts / SAPO / DeepSeek-V4 / Kimi-K3 / CanvasAnneal / DiffusionOPSD.
 - Window: 2026-10-07 Librarian weekday sweep after PR 39; watermark was 2610.06833. New arXiv 2610.08448, 2610.07767, 2610.07043, 2610.08430, 2610.07874, 2610.08624, 2610.07497, 2610.07207, 2610.07332, 2610.07898, 2610.07342, 2610.06861, 2610.07842, 2610.07654, 2610.08108, 2610.07809, 2610.06993.

@@ -5,6 +5,22 @@ title: "Small Local Student Distillation from Strong Teacher"
 domain: "post-training"
 summary: "Distilling reasoning and conversational capabilities from multi-hundred-billion parameter frontier teachers into small local student models."
 redirects:
+  - when: "bilevel learned token weights from post-update validation loss (MetaOPD)"
+    to: "method:metaopd"
+  - when: "probability-space token keep-mask that downweights low-low tokens (DIAL-OPD)"
+    to: "method:dial-opd"
+  - when: "offline initial-student rollouts instead of live on-policy sampling (Semi-OPD)"
+    to: "method:semi-opd"
+  - when: "multi-teacher OPD via teacher-minus-base logit shifts (Delta-MOPD)"
+    to: "method:delta-mopd"
+  - when: "ultra-low-bit QAT recovery via on-policy reverse-KL (OnlineQAT)"
+    to: "method:onlineqat"
+  - when: "rollout-free step-aligned privileged distillation of a reference solution (SAPD)"
+    to: "method:sapd"
+  - when: "OPD vanishing learning signals / larger-scale teacher plateaus"
+    to: "paper:opd-vanishing-signals"
+  - when: "reverse-KL OPD transfers compositional skill but not new facts"
+    to: "paper:opd-skill-not-knowledge"
   - when: "cross-tokenizer OPD (strict 1:1 coverage / student-selected top-16 shared-vocab reverse-KL)"
     to: "task:cross-tokenizer-opd"
   - when: "negative-policy rollouts complement teacher OPD when overlap is low"
@@ -77,6 +93,12 @@ current_sota:
     value: "83.4% headroom recovery in a single deployable student"
     notes: "Open-MOPD (2608.19098) fixes multi-teacher imbalance with token-share balancing and gap-aware dynamic budgeting."
 methods:
+  - method:metaopd
+  - method:dial-opd
+  - method:semi-opd
+  - method:delta-mopd
+  - method:onlineqat
+  - method:sapd
   - method:cross-tokenizer-opd
   - method:np-opd
   - method:oppd
@@ -127,7 +149,7 @@ methods:
   - method:lmopd
   - method:latent-mopd
   - method:rp-opd
-last_reviewed: "2026-10-07"
+last_reviewed: "2026-10-09"
 tags:
   - post-training
   - distillation
@@ -186,5 +208,13 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Optional negative-policy OPD**: `method:np-opd` (`arXiv:2610.07874`) complements teacher supervision when overlap is low. Code naver-ai/np-opd. Related to NSD, not a replacement of OPD.
 - **Gotcha (OPD-for-safety backdoor)**: `paper:opd-safety-backdoor` (`arXiv:2610.07654`). 3% poison → up to 70% ASR; more epochs amplify. Warning on OPD used for safety alignment. Does not retarget OPD matching.
 - **Gotcha (MOPD training-design confound)**: `paper:rethink-mopd` (`arXiv:2610.04272`). Tuned SFT/Soft-KD can approach MOPD; MOPD 14.8–23.1× SFT GPU-h. Announced GitHub 404. Does not retarget Open-MOPD.
+- **Optional bilevel OPD token weights**: `method:metaopd` (`arXiv:2610.11989`) learns keep-weights from post-update validation NLL. Avg@8/Pass@8 +1.99/+5.97 (0.6B), +2.25/+6.41 (1.7B) vs uniform OPD. No public code. Does not replace OPD or IER-OPD.
+- **Optional probability-space keep-mask**: `method:dial-opd` (`arXiv:2610.11659`) downweights low-low tokens. Up to +5.25pp at 40% tokens; Pass@16 13.33→26.67. Code EIT-NLP/DIAL-OPD. Does not replace OPD, IER-OPD, or sparse-opd-supervision.
+- **Optional offline-init rollouts**: `method:semi-opd` (`arXiv:2610.11291`) freezes the rollout policy at the initial student. 14/17 pairs win; up to +13.6% / 11.4× vs live OPD when overlap is low. Live OPD stays better at high overlap. No public code. Does not replace OPD or LSPD.
+- **Optional teacher-minus-base multi-teacher OPD**: `method:delta-mopd` (`arXiv:2610.10460`) transfers logit shifts rather than endpoints. +4.11 Math / +1.95 five-benchmark vs endpoint MOPD. Paper Open-MOPD numbers are not the library 83.4% bake-off. No public code. Does not replace Open-MOPD.
+- **Gotcha (vanishing OPD signals)**: `paper:opd-vanishing-signals` (`arXiv:2610.11247`). Larger-scale teachers 25.1% vs self-RL teachers 96.2% loss reduction after 200 updates. Code leizhao7/opd-learning-signals. Does not retarget OPD.
+- **Gotcha (skill ≠ knowledge)**: `paper:opd-skill-not-knowledge` (`arXiv:2610.09639`). Reverse-KL OPD transfers compositional skill, not new facts. Does not retarget OPD.
+- **Not this task (ultra-low-bit QAT recovery)**: `method:onlineqat` (`arXiv:2610.09346`) on `task:full-lowbit-finetune`. On-policy reverse-KL after block-wise QAT. Does not replace OPD or GradCodeS.
+- **Not this task (rollout-free privileged step distill)**: `method:sapd` (`arXiv:2610.09665`) on `task:privileged-teacher-opsd`. Code Miaow-Lab/SAPD. Does not replace OPD or VISTA.
 - **Not this task**: Adaptive Retirement of a privileged self-OPD teacher in agent RL is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl`. Distilling optimized-harness behaviors into weights under a fixed target harness is `method:harness-zero` on `task:harness-distillation`. Multi-stage agent continual learning (MMOPD / SDFT / MLE) is `method:aclarena` on `task:agent-continual-learning` and does not retarget Open-MOPD. Label-routed MOPD of SWE category experts is `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`.
 

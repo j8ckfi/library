@@ -20,6 +20,8 @@ redirects:
     to: "task:outcome-only-long-horizon-agent-rl"
   - when: "data/env construction for coding-agent RL from source code"
     to: "task:coding-agent-rl-environment-construction"
+  - when: "synthesized GUI software environments for computer-use agent training (not OSWorld 2.0 ranking)"
+    to: "method:softwaregym"
 current_sota:
   - method: method:recreationworld
     as_of: "2026-09-21"
@@ -28,12 +30,13 @@ current_sota:
     value: "58.1% overall; full programmatic pass 2.8%"
     notes: "RecreationWorld (2609.22000). Active hybrid CUA train/eval. Method status active (not sota). Does not demote Claude computer-use on OSWorld 2.0."
 methods:
+  - method:softwaregym
   - method:recreationworld
   - method:claude-computer-use
   - method:ui-tars-2
   - method:mai-ui
   - method:mini-swe-agent
-last_reviewed: "2026-09-21"
+last_reviewed: "2026-10-12"
 tags:
   - agents
   - computer-use
@@ -55,3 +58,4 @@ OSWorld 2.0 paper-protocol ranking is a different shelf.
 ## SOTA Recommendation (as of 2026-09-21)
 - **Primary Method (this task only)**: **RecreationWorld** (`method:recreationworld`, `paper:recreationworld` `arXiv:2609.22000`). Status `active`. Listed here as first hop; method `sota_for` stays empty.
 - **Not This Task**: `method:claude-computer-use` remains OSWorld 2.0 paper-protocol ranking; `method:mini-swe-agent` remains issue-to-patch; `method:canopy` remains AppWorld coverage; `method:mai-ui` / `method:ui-tars-2` remain trained GUI-only policies.
+- **Optional synthesized GUI env factory (not this first hop)**: `method:softwaregym` (`arXiv:2610.12611`) 182 synthesized apps; OSWorld Pass@3 41.39%→56.97% after training (transfer, not paper-protocol ranking). No public code. Does not replace RecreationWorld or Claude computer-use.

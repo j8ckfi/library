@@ -33,6 +33,8 @@ redirects:
     to: "method:air-opd"
   - when: "root-cause diagnosis of the student's own failed reasoning then differentiated prefix/error distillation"
     to: "method:rc-opd"
+  - when: "critique-conditioned privileged OPSD (teacher critiques then scores, not scoring-only)"
+    to: "method:cc-opsd"
 current_sota:
   - method: method:vista
     as_of: "2026-08-31"
@@ -41,6 +43,7 @@ current_sota:
     value: "VISTA 44.0 / 64.3 / 66.9 vs OPSD 43.4 / 63.6 / 64.8 vs GRPO 37.7 / 62.7 / 64.0"
     notes: "VISTA (2608.28306) keeps the OPSD student update and adapts the privileged teacher on verified rollouts at top-k teacher-first KL positions."
 methods:
+  - method:cc-opsd
   - method:sapd
   - method:srd
   - method:privileged-context-drift
@@ -64,7 +67,7 @@ methods:
   - method:sampling-sft
   - method:air-opd
   - method:rc-opd
-last_reviewed: "2026-10-09"
+last_reviewed: "2026-10-12"
 tags:
   - post-training
   - distillation
@@ -103,3 +106,4 @@ Train a problem-only student on its own rollouts using dense token-level targets
 - **See also (SFT data projection, not this first hop)**: `method:sampling-sft` (`arXiv:2610.02140`) on `task:math-code-rl-dense`. MCMC-projects off-policy traces then ordinary SFT. Chemistry (Qwen2.5-7B-Instruct) 0.660 vs OPSD 0.618; medical 0.458 vs OPSD 0.466 with prior avg 0.516 vs 0.501. Not a privileged-teacher update. Does not replace VISTA.
 - **Optional rollout-free step-aligned distill (not this first hop)**: `method:sapd` (`arXiv:2610.09665`) privileged reference-solution steps, no live rollouts. ~2× vs on-policy. Code Miaow-Lab/SAPD. Does not replace VISTA or OPD.
 - **Optional silent-group hindsight distill (not this first hop)**: `method:srd` (`arXiv:2610.08077`) on `task:math-code-rl-dense`. No gold teacher. Does not replace VISTA or VeriGate.
+- **Optional critique-conditioned privileged OPSD (not this first hop)**: `method:cc-opsd` (`arXiv:2610.13744`) generates a critique then scores; scoring-only KL/log-ratio neither localizes gold error spans nor yields GRPO advantage on silent prompts. NeurIPS 2026 FLLMPT oral. No public code. Does not replace VISTA or SRD.

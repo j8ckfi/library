@@ -53,6 +53,10 @@ redirects:
     to: "method:lsd"
   - when: "cancellation-aware off-policy response mask (absolute token log-ratios)"
     to: "method:carm"
+  - when: "fast RL rollouts via self-sparse speculative decoding (same-policy sparse draft, dense verify)"
+    to: "method:s3r"
+  - when: "unified EventLog lifecycle for tool-using LLM agents (train/eval/distill/audit)"
+    to: "method:agenttune"
 current_sota:
   - method: method:miles
     as_of: "2026-09-09"
@@ -61,6 +65,8 @@ current_sota:
     value: "263s median (first 30 steps); KL mean 0.0369; reward 0.438→0.556 (single run)"
     notes: "Miles v0.1 (2609.08368). Process/system SOTA for the frontier post-train engine. Does not replace Poolside factory, SAO, CISPO, Muon2, or mini-SWE-agent. Reward rise is a single-run observation."
 methods:
+  - method:s3r
+  - method:agenttune
   - method:mimo-v26
   - method:respo
   - method:thundersyncrl
@@ -79,7 +85,7 @@ methods:
   - method:lsd
   - method:carm
   - method:nemo-dcr
-last_reviewed: "2026-10-09"
+last_reviewed: "2026-10-12"
 tags:
   - systems
   - training-systems
@@ -112,3 +118,5 @@ Frontier post-training is a systems problem: multi-turn tool rollouts on trillio
 - **Optional bit-exact delta-compressed weight sync**: `method:nemo-dcr` (`arXiv:2610.08430`). ~1% of BF16 weights change per step; 1T relay-tree 150s vs 87.5 min. Code NVIDIA-NeMo/RL PR #2444. Does not replace Miles.
 - **Optional scaled omni-modal RL playbook (not this engine default)**: `method:mimo-v26` (`arXiv:2610.11959`) router freeze, groupwise agentic grading, 1568 samples / 2.7–3.7B tokens per step at up to 1M context. `code_status: announced`. Does not replace Miles, Rufus-Air, or SAO.
 - **Optional off-policy sequence kernel (not this engine default)**: `method:respo` (`arXiv:2609.35433`) on `task:math-code-rl-dense`. Two-branch alpha-divergence vs IS clip. Code yhangchen/ReSPO-code. Does not replace Miles or CISPO.
+- **Optional self-sparse speculative RL rollouts (not this engine default)**: `method:s3r` (`arXiv:2610.13202`) 1.39×–1.35× vs dense AR rollouts on long-context Qwen3 math RLVR. Same policy; do not train on sparse-policy samples. No public code. Does not replace Miles, CISPO, or Online Draft Co-Training.
+- **Optional tool-agent lifecycle library (not this engine default)**: `method:agenttune` (`arXiv:2610.13335`) two-tier EventLog. Code Lexsi-Labs/AgentTune. Does not replace Miles or SAO.

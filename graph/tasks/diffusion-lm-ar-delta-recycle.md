@@ -11,6 +11,8 @@ out_of_scope:
   - "Lossless multi-token / diffusion-augmented AR serving (Uno)"
   - "Dense AR Pass@1 RLVR (CISPO)"
 redirects:
+  - when: "calibration-free dLLM quantization (not AR-delta recycle)"
+    to: "method:soloq"
   - when: "aligning text-to-image diffusion or flow models with rewards"
     to: "task:posttrain-diffusion"
   - when: "curriculum RL for a discrete diffusion LM (canvas anneal), not AR-delta recycle"
@@ -27,12 +29,13 @@ current_sota:
     value: "AR delta on converted dLLM approaches direct diffusion PT and composes with it; AR/diffusion deltas nearly orthogonal"
     notes: "A2D (2610.08108). Method status active. Does not replace DiffusionOPSD / Self-OPD / CanvasAnneal."
 methods:
+  - method:soloq
   - method:a2d
   - method:canvasanneal
   - method:diffusion-opsd
   - method:self-opd
   - method:uno
-last_reviewed: "2026-10-07"
+last_reviewed: "2026-10-12"
 tags:
   - diffusion
   - post-training
@@ -54,3 +57,4 @@ This is **not** image/flow reward alignment and not CanvasAnneal.
 ## SOTA Recommendation (as of 2026-10-07)
 - **Primary (this task only)**: **A2D** (`method:a2d`, `paper:a2d` `arXiv:2610.08108`). Status `active`. Listed here as first hop; method `sota_for` stays empty.
 - **Not This Task**: `method:diffusion-opsd` / `method:self-opd` remain image/flow post-train; `method:canvasanneal` remains discrete-DLM canvas RL.
+- **Related dLLM inference PTQ (not this recycle hop)**: `method:soloq` (`arXiv:2610.07121`) on `task:fp4-hardware-training`. Calibration-free 4-bit / NVFP4 for existing dLLMs. Does not replace A2D.

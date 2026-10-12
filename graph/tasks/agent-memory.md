@@ -21,7 +21,9 @@ redirects:
     to: "method:jev-mem"
   - when: "read-time curation of raw trajectories (not write-time playbook)"
     to: "method:jitmem"
-last_reviewed: "2026-09-24"
+  - when: "recurrent textual harness that backward-revises retrieved reflections (not write-time playbook)"
+    to: "method:reharness"
+last_reviewed: "2026-10-12"
 current_sota:
   - method: method:ace
     as_of: "2025-10"
@@ -30,6 +32,7 @@ current_sota:
     value: "ACE 59.4 vs ReAct 42.4 (+17); vs GEPA latency −82%"
     notes: "Incremental bullets. Without feedback ACE/DC can degrade. Dynamic Cheatsheet collapse 18282 tok @66.7 → 122 tok @57.1."
 methods:
+  - method:reharness
   - method:ace
   - method:memgpt
   - method:code2skill
@@ -57,4 +60,5 @@ Agents need memory that accumulates strategies without collapsing under rewrite.
 - **Active (repository-grounded skills)**: `method:code2skill` (`arXiv:2609.05571`) — lift code units into verified skill records before interaction experience. ACE remains the playbook/memory default.
 - **Active (System-One-controlled store)**: `method:jev-mem` (`arXiv:2609.23986`) — typed control plane for typing, routing, budget, traversal, scoring, stop; System Two only for hard reasoning. LoCoMo judge 0.777. Does not replace ACE or Code2Skill.
 - **Active (read-time curator)**: `method:jitmem` (`arXiv:2609.27334`) — keep raw trajectories; curate at read time from immediate task success. ALFWorld/WebShop/τ² +16.2/+16.3/+3.9 vs write-time baselines. Does not retarget ACE.
+- **Active (recurrent reflection harness, not this playbook default)**: `method:reharness` (`arXiv:2610.12668`) on `task:agent-continual-learning`. Edits retrieved reflections after the instance. Does not replace ACE, Code2Skill, or Jev-Mem.
 - **do_not_use**: recursive summary as the only long-context strategy.

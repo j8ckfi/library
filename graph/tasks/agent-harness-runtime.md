@@ -36,7 +36,9 @@ redirects:
     to: "method:aide2"
   - when: "harness curriculum as a non-stationary bandit over failure-pattern arms"
     to: "method:activesaddler"
-last_reviewed: "2026-10-02"
+  - when: "recurrent textual harness for agentic continual learning (not the production kernel)"
+    to: "method:reharness"
+last_reviewed: "2026-10-12"
 current_sota:
   - method: method:omp2-harness
     as_of: "2026-09-02"
@@ -45,6 +47,7 @@ current_sota:
     value: "2 correct of 78 Pi examples (60 stateless, 17 stateful); journal covering message tree only ⇒ rewind/fork/resume lie"
     notes: "Self-reported blog architecture, not a SWE-bench number. Does not replace mini-SWE-agent, CCA, OpenHands, SAO, FoldGRPO, RLM, MAGIC, CISPO, Muon2, MCP, or ACE."
 methods:
+  - method:reharness
   - method:omp2-harness
   - method:harness-onpolicy-correction
   - method:sol-pi
@@ -83,3 +86,4 @@ This is **not** the SWE-bench start/eval loop. Issue → patch / locked mini har
 - **Active recursive harness RSI (not this first hop)**: `method:aide2` (`arXiv:2609.26457`). Outer-loop research agent rewrites its own harness; accepted rewrite becomes the next incumbent. 8-day run, 7 accepted improvements; eventually beats AIDE_human on the selection benchmark. No public GitHub. Distinct from RRSI (frozen-backbone search) and NeoHorse-1 (routing-guided weight post-train). Does not replace omp2, RRSI, NeoHorse-1, SoL-Pi, or Harness-Zero.
 - **Active harness curriculum (not this first hop)**: `method:activesaddler` (`arXiv:2610.00906`). Non-stationary bandit over failure-pattern arms; +4.4 GAIA2 / +7.5 TB2.0 vs the same optimizer with a frozen scenario order. Curriculum dimension, not a new kernel. Does not replace omp2, RRSI, AIDE2, Harness-Zero, or NeoHorse-1.
 - Related workflow, not this architecture: [prewalk](https://stencil.so/blog/prewalk) is a workflow on omp, not current_sota here.
+- **Not this task (recurrent textual CL harness)**: `method:reharness` (`arXiv:2610.12668`) on `task:agent-continual-learning`. Backward-revises retrieved reflections; not rewind/sandbox/TUI. Does not replace omp2, ACE, or ACLArena.

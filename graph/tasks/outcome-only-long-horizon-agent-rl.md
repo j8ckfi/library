@@ -51,6 +51,12 @@ redirects:
     to: "method:metarubric"
   - when: "hierarchical MoE routing control during agentic RL (operation-type experts)"
     to: "method:hierarchical-moe-routing-control"
+  - when: "state-grounded on-policy distillation for multi-turn agents (matched interaction state, not student CoT)"
+    to: "method:state-opd"
+  - when: "matched-context group policy optimization (pairwise credit on sibling agent rollouts)"
+    to: "method:mcgpo"
+  - when: "hindsight-guided tree exploration and turn-level credit for multi-turn LLM agents"
+    to: "method:treehca"
 current_sota:
   - method: method:canopy
     as_of: "2026-09-04"
@@ -59,6 +65,9 @@ current_sota:
     value: "86.9 / 67.6"
     notes: "CANOPY (2609.01245). Sparse outcome reward, n=32, KL-anchored on-policy. Does not replace SAO, FoldGRPO, CISPO, mini-swe-agent, or omp2-harness. DRACO is the outcome-blind rubric sibling, not a supersession."
 methods:
+  - method:state-opd
+  - method:mcgpo
+  - method:treehca
   - method:canopy
   - method:draco
   - method:sao
@@ -80,7 +89,7 @@ methods:
   - method:scad
   - method:metarubric
   - method:hierarchical-moe-routing-control
-last_reviewed: "2026-10-07"
+last_reviewed: "2026-10-12"
 tags:
   - post-training
   - agentic
@@ -120,3 +129,6 @@ Two siblings share this task and are not substitutes:
 - **Optional structured planning/subtask credit (not this first hop)**: `method:scad` (`arXiv:2610.03372`). Qwen3-4B text Avg 46.10 vs ATOD 41.62 / FoldGRPO 39.60. Does not replace CANOPY or PivotOPD.
 - **Optional learned rubric rewards (not this first hop)**: `method:metarubric` (`arXiv:2610.02824`). Qwen3-4B PubMedQA 78.40 vs GRPO 72.40. Code metarubric/metarubric. Does not replace CANOPY or DRACO.
 - **Related branchy RLVR token-cost plug-in (not this first hop)**: `method:hdl` (`arXiv:2609.36864`) on `task:math-code-rl-dense`. Hindsight-divergence prefix reuse; ScienceWorld-style agent gains. Does not replace CANOPY.
+- **Optional state-grounded multi-turn OPD (not this first hop)**: `method:state-opd` (`arXiv:2610.13238`) matches teacher continuations on the objective interaction state. Qwen3-4B macro 31.74 vs 26.07. No public code. Does not replace CANOPY, OPD, PivotOPD, or ActFirst-OPD.
+- **Optional matched-context GPO (not this first hop)**: `method:mcgpo` (`arXiv:2610.13755`) pairwise credit on matched sibling supports. +3.96 / +5.16pp WebShop Qwen3-4B/8B vs GraphGPO. No public code. Does not replace CANOPY or SAO.
+- **Optional hindsight-guided tree credit (not this first hop)**: `method:treehca` (`arXiv:2610.12828`) branches on reference-answer likelihood jumps and backups turn advantages. GitHub TheBlackCat22/TreeHCA 404. Does not replace CANOPY or PACT.

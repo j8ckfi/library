@@ -17,6 +17,8 @@ redirects:
     to: "task:math-code-rl-moe"
   - when: "communication-efficient expert layout rather than mask-expert upcycling"
     to: "method:ce-moe"
+  - when: "static sparse upcycling via token-indexed embedding residuals (not routed mask experts)"
+    to: "method:staple"
 current_sota:
   - method: method:maskerade
     as_of: "2026-10-07"
@@ -25,12 +27,13 @@ current_sota:
     value: "learned binary-mask experts over a frozen FFN (four 2:4 experts, top-2)"
     notes: "MASKerade (2610.07809). Method status active. Does not replace DeepSeek-V4 / Kimi-K3."
 methods:
+  - method:staple
   - method:maskerade
   - method:deepseek-v4
   - method:kimi-k3
   - method:ce-moe
   - method:drmoet
-last_reviewed: "2026-10-07"
+last_reviewed: "2026-10-12"
 tags:
   - pretraining
   - moe
@@ -52,3 +55,4 @@ This is **not** the V4 / K3 architecture template.
 ## SOTA Recommendation (as of 2026-10-07)
 - **Primary (this task only)**: **MASKerade** (`method:maskerade`, `paper:maskerade` `arXiv:2610.07809`). Status `active`. Listed here as first hop; method `sota_for` stays empty. Code Ming-K9/MASKerade.
 - **Not This Task**: `method:deepseek-v4` / `method:kimi-k3` remain the frontier MoE pretrain co-default.
+- **Optional static sparse embedding upcycle (not this first hop)**: `method:staple` (`arXiv:2610.12599`) token-indexed residual memory on a frozen dense FFN. OLMo-2 1B +4.27 HumanEval / +2.80 MBPP vs continued dense; 2× faster decode than the paper's MoE-upcycle baseline. Not routed experts. No public code. Does not replace MASKerade or DeepSeek-V4 / Kimi-K3.

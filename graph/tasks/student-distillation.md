@@ -79,6 +79,16 @@ redirects:
     to: "method:latent-mopd"
   - when: "rubric-privileged OPD warm start before rubric-based RL"
     to: "method:rp-opd"
+  - when: "relative policy-difference transfer of OPD (expert-minus-reference log-ratio residuals)"
+    to: "method:rpd-opd"
+  - when: "contrastive vision OPD for VLMs (positive/negative crops, visual-token gate)"
+    to: "method:cv-opd"
+  - when: "state-grounded multi-turn agent OPD (matched interaction state, not frozen-teacher text OPD)"
+    to: "method:state-opd"
+  - when: "continual synthetic self-distillation of small / on-device models (SDFT rewrite fails)"
+    to: "method:synthself"
+  - when: "cross-tokenizer chunk credit alignment (CAST), not 1:1 coverage"
+    to: "method:cast"
 current_sota:
   - method: method:opd
     as_of: "2026-08-26"
@@ -93,6 +103,11 @@ current_sota:
     value: "83.4% headroom recovery in a single deployable student"
     notes: "Open-MOPD (2608.19098) fixes multi-teacher imbalance with token-share balancing and gap-aware dynamic budgeting."
 methods:
+  - method:rpd-opd
+  - method:cv-opd
+  - method:state-opd
+  - method:synthself
+  - method:cast
   - method:metaopd
   - method:dial-opd
   - method:semi-opd
@@ -149,7 +164,7 @@ methods:
   - method:lmopd
   - method:latent-mopd
   - method:rp-opd
-last_reviewed: "2026-10-09"
+last_reviewed: "2026-10-12"
 tags:
   - post-training
   - distillation
@@ -216,5 +231,10 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Gotcha (skill ≠ knowledge)**: `paper:opd-skill-not-knowledge` (`arXiv:2610.09639`). Reverse-KL OPD transfers compositional skill, not new facts. Does not retarget OPD.
 - **Not this task (ultra-low-bit QAT recovery)**: `method:onlineqat` (`arXiv:2610.09346`) on `task:full-lowbit-finetune`. On-policy reverse-KL after block-wise QAT. Does not replace OPD or GradCodeS.
 - **Not this task (rollout-free privileged step distill)**: `method:sapd` (`arXiv:2610.09665`) on `task:privileged-teacher-opsd`. Code Miaow-Lab/SAPD. Does not replace OPD or VISTA.
+- **Optional relative-Δπ OPD transfer**: `method:rpd-opd` (`arXiv:2610.13205`) scores student rollouts with log π_expert − log π_ref. Task-specific FT/RL residuals transfer; scale-only residuals do not. No public code. Does not replace OPD or Semi-OPD.
+- **Optional contrastive vision OPD**: `method:cv-opd` (`arXiv:2610.13264`) positive/negative crop teachers plus a visual-token discrepancy gate. Alleviates the masked-region shortcut under vanilla VLM OPD. No public code. Does not replace OPD or Where-OPD.
+- **Not this task (state-grounded multi-turn agent OPD)**: `method:state-opd` (`arXiv:2610.13238`) on `task:outcome-only-long-horizon-agent-rl`. Does not replace OPD.
+- **Not this task (small-model synthetic SDFT)**: `method:synthself` (`arXiv:2610.13113`) on `task:agent-continual-learning`. Does not replace OPD or ACLArena.
+- **Not this task (cross-tokenizer chunk credit)**: `method:cast` (`arXiv:2610.13257`) on `task:cross-tokenizer-opd`. Does not replace OPD.
 - **Not this task**: Adaptive Retirement of a privileged self-OPD teacher in agent RL is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl`. Distilling optimized-harness behaviors into weights under a fixed target harness is `method:harness-zero` on `task:harness-distillation`. Multi-stage agent continual learning (MMOPD / SDFT / MLE) is `method:aclarena` on `task:agent-continual-learning` and does not retarget Open-MOPD. Label-routed MOPD of SWE category experts is `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`.
 

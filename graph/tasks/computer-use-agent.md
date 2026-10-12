@@ -15,7 +15,9 @@ redirects:
     to: "task:software-engineering-agent-harness"
   - when: "training hybrid GUI+code agents"
     to: "task:hybrid-computer-use-agent-rl"
-last_reviewed: "2026-09-21"
+  - when: "synthesized GUI software environments for CUA training transfer (not OSWorld 2.0 ranking)"
+    to: "method:softwaregym"
+last_reviewed: "2026-10-12"
 current_sota:
   - method: method:claude-computer-use
     as_of: "2026-06"
@@ -24,6 +26,7 @@ current_sota:
     value: "Opus 4.8 max think + batched tools 20.6% binary / 54.8% partial; GPT-5.5 ~13% binary"
     notes: "Do not promote aggregator Opus 5 70.6% or Steel GPT-5.6 Sol 62.6% partial. Humans ~1.6h. Failures: lost constraints, skip verify."
 methods:
+  - method:softwaregym
   - method:claude-computer-use
   - method:ui-tars-2
   - method:mai-ui
@@ -51,3 +54,4 @@ Operate a desktop OS or mobile GUI. Different from a software-engineering agent 
 - **Active trained**: UI-TARS-2 (old protocol).
 - **Active mobile**: MAI-UI.
 - **Not this task (hybrid GUI+code train/eval)**: `method:recreationworld` on `task:hybrid-computer-use-agent-rl`. Does not demote Claude computer-use.
+- **Optional synthesized-env training transfer (not ranking)**: `method:softwaregym` (`arXiv:2610.12611`) on `task:hybrid-computer-use-agent-rl`. OSWorld Pass@3 here is transfer after SoftwareGym training, not the library OSWorld 2.0 paper protocol.

@@ -58,6 +58,8 @@ redirects:
     to: "task:tool-agent-segment-credit"
   - when: "CEM-style critic-free RFT from replay when group rollouts are impractical (stateful sandboxes)"
     to: "method:ftw"
+  - when: "unified EventLog lifecycle library for tool-using LLM agents (not the async algorithm)"
+    to: "method:agenttune"
 current_sota:
   - method: method:sao
     as_of: "2026-08-26"
@@ -66,6 +68,7 @@ current_sota:
     value: "Default SOTA for agentic async RL"
     notes: "SAO (2607.07508) decouples environment tool execution from policy optimization with importance-corrected replay buffers."
 methods:
+  - method:agenttune
   - method:klpo
   - method:copc
   - method:thundersyncrl
@@ -89,7 +92,7 @@ methods:
   - method:pact
   - method:slca-grpo
   - method:ftw
-last_reviewed: "2026-10-09"
+last_reviewed: "2026-10-12"
 tags:
   - post-training
   - agentic
@@ -120,3 +123,4 @@ This is **policy training**. Building a software-engineering agent loop is `task
 - **Gotcha (stale-data RL harness)**: `paper:probe-the-harness` (`arXiv:2610.02911`). TIS vs SAN ranking reversals in verl. SAN is not a library method. Does not replace SAO, CIS-RL, or CARM.
 - **Optional sampler-anchored KL least-squares (not this async default)**: `method:klpo` (`arXiv:2610.08963`) one-rollout update without IS clipping. Code yifanzhang-pro/KLPO. Abstract has no numeric bake-off. Does not replace SAO, BPO, or CISPO.
 - **Optional coupled policy/advantage staleness correction (not this async default)**: `method:copc` (`arXiv:2610.09597`) actor IS plus TD reweighting; 1.7× vs sync PPO; stable at 64-step staleness. No public code. Does not replace SAO or KLPO.
+- **Optional tool-agent lifecycle library (not this async default)**: `method:agenttune` (`arXiv:2610.13335`) shared EventLog for train/eval/distill/audit. Code Lexsi-Labs/AgentTune. No Pass@1 bake-off vs SAO. Does not replace SAO or Miles.

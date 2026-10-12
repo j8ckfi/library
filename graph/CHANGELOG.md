@@ -6,6 +6,102 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-10-12 — weekday SOTA sweep (DiffusionART, CAST, State-OPD, RPD-OPD, SynthSelf, S3R, MCGPO, SoftwareGym, ProgramGym, AgentTune, TAPO, GPPO, DualQuant, STAPLE, TreeHCA, CV-OPD, CC-OPSD, ReHarness, CBPO, MagicBeanStalk, PPO-FP16, SoloQ, TIPS)
+- Twenty-three active plug-ins. No current_sota retarget of DiffusionOPSD / Self-OPD / Cross-Tokenizer OPD / CANOPY / OPD / Open-MOPD / ACLArena / Miles / CISPO / RecreationWorld / Claude computer-use / CodeMidas / SAO / Quartet-II / MASKerade / VISTA / ACE / omp2 / VeriGate / EfficientTDMPC / A2D / SLCA-GRPO.
+- Window: 2026-10-12 Librarian weekday sweep covering arXiv Mon cs.LG/CL/AI + HF Daily 2026-10-12 after merged PR 41 (watermark 2610.12444, 1184 nodes, 0149ebd). New high id 2610.13767.
+
+### 2026-10-12 — ingest method:diffusionart (active on task:posttrain-diffusion; does not supersede method:diffusion-opsd / method:self-opd / method:mend)
+- Added paper:diffusionart (2610.12572), method:diffusionart, recipe:diffusionart (`code_status: released`; vanzll/DiffusionART).
+- Status active (`sota_for: []`). Aggregation-first reward tilting. HunyuanVideo-13B ~12× fewer GPU-hrs vs DiffusionNFT / Flow-GRPO-Fast.
+
+### 2026-10-12 — ingest method:cast (active on task:cross-tokenizer-opd; does not supersede method:cross-tokenizer-opd)
+- Added paper:cast (2610.13257), method:cast, recipe:cast (`code_status: none`).
+- Status active (`sota_for: []`). Chunk-credit alignment after correspondence. +2.45 Mistral-7B / +1.32 Llama-3.1-8B vs strongest evaluated baseline.
+
+### 2026-10-12 — ingest method:state-opd (active on task:outcome-only-long-horizon-agent-rl; does not supersede method:canopy / method:opd / method:pivotopd)
+- Added paper:state-opd (2610.13238), method:state-opd, recipe:state-opd (`code_status: none`). Mention on task:student-distillation.
+- Status active (`sota_for: []`). State-grounded multi-turn OPD. Qwen3-4B macro 31.74 vs 26.07.
+
+### 2026-10-12 — ingest method:rpd-opd (active on task:student-distillation; does not supersede method:opd)
+- Added paper:rpd-opd (2610.13205), method:rpd-opd, recipe:rpd-opd (`code_status: none`).
+- Status active (`sota_for: []`). Relative Δπ transfer via expert-minus-reference log-ratios. Task-specific residuals transfer; scale-only residuals do not.
+
+### 2026-10-12 — ingest method:synthself (active on task:agent-continual-learning; does not supersede method:aclarena / method:opd)
+- Added paper:synthself (2610.13113), method:synthself, recipe:synthself (`code_status: none`). Mention on task:student-distillation.
+- Status active (`sota_for: []`). Same-family aligner rewrite + rejection sampling then off-policy train of a small student.
+
+### 2026-10-12 — ingest method:s3r (active on task:frontier-rl-posttrain-stack; does not supersede method:miles / method:cispo)
+- Added paper:s3r (2610.13202), method:s3r, recipe:s3r (`code_status: none`). Mention on task:math-code-rl-dense.
+- Status active (`sota_for: []`). Same-policy sparse-draft / dense-verify RL rollouts. 1.39×–1.35× vs dense AR.
+
+### 2026-10-12 — ingest method:mcgpo (active on task:outcome-only-long-horizon-agent-rl; does not supersede method:canopy / method:sao)
+- Added paper:mcgpo (2610.13755), method:mcgpo, recipe:mcgpo (`code_status: none`).
+- Status active (`sota_for: []`). Matched-context pairwise credit. +3.96 / +5.16pp WebShop Qwen3-4B/8B vs GraphGPO.
+
+### 2026-10-12 — ingest method:softwaregym (active on task:hybrid-computer-use-agent-rl; does not supersede method:recreationworld / method:claude-computer-use)
+- Added paper:softwaregym (2610.12611), method:softwaregym, recipe:softwaregym (`code_status: none`). Mention on task:computer-use-agent.
+- Status active (`sota_for: []`). Synthesized GUI apps. OSWorld Pass@3 41.39%→56.97% is transfer, not paper-protocol ranking.
+
+### 2026-10-12 — ingest method:programgym (active on task:coding-agent-rl-environment-construction; does not supersede method:codemidas / method:mini-swe-agent)
+- Added paper:programgym (2610.13395), method:programgym, recipe:programgym (`code_status: announced`).
+- Status active (`sota_for: []`). From-scratch program reproduction. Qwen3.8-27B 34.87%→42.84% SFT / Program-Agent 55.71%.
+
+### 2026-10-12 — ingest method:agenttune (active on task:agentic-async-rl; does not supersede method:sao / method:miles)
+- Added paper:agenttune (2610.13335), method:agenttune, recipe:agenttune (`code_status: released`; Lexsi-Labs/AgentTune). Mention on task:frontier-rl-posttrain-stack.
+- Status active (`sota_for: []`). Two-tier EventLog lifecycle. No Pass@1 bake-off vs SAO.
+
+### 2026-10-12 — ingest method:tapo (active on task:math-code-rl-dense; does not supersede method:cispo)
+- Added paper:tapo (2610.13020), method:tapo, recipe:tapo (`code_status: none`).
+- Status active (`sota_for: []`). Trajectory state-distribution correction. Up to +48% math / +12% coding vs GRPO, not CISPO.
+
+### 2026-10-12 — ingest method:gppo (active on task:math-code-rl-dense; does not supersede method:cispo)
+- Added paper:gppo (2610.13015), method:gppo, recipe:gppo (`code_status: none`).
+- Status active (`sota_for: []`). f-divergence PPO geometry. Up to +50% math / +14% coding vs GRPO. Sibling of TAPO.
+
+### 2026-10-12 — ingest method:dualquant (active on task:fp4-hardware-training; does not supersede method:quartet-ii / method:kbbq)
+- Added paper:dualquant (2610.13767), method:dualquant, recipe:dualquant (`code_status: none`).
+- Status active (`sota_for: []`). Dual-scale calibration-free W+A PTQ. Packed W4A4 up to 2.61× memory cut.
+
+### 2026-10-12 — ingest method:staple (active on task:dense-to-moe-upcycling; does not supersede method:maskerade)
+- Added paper:staple (2610.12599), method:staple, recipe:staple (`code_status: none`).
+- Status active (`sota_for: []`). Token-indexed embedding residuals, not routed experts. OLMo-2 1B +4.27 HumanEval vs continued dense.
+
+### 2026-10-12 — ingest method:treehca (active on task:outcome-only-long-horizon-agent-rl; does not supersede method:canopy / method:pact)
+- Added paper:treehca (2610.12828), method:treehca, recipe:treehca (`code_status: announced`; TheBlackCat22/TreeHCA 404). Mention on task:tool-agent-segment-credit.
+- Status active (`sota_for: []`). Hindsight-guided tree exploration plus turn-level backup.
+
+### 2026-10-12 — ingest method:cv-opd (active on task:student-distillation; does not supersede method:opd / method:where-opd)
+- Added paper:cv-opd (2610.13264), method:cv-opd, recipe:cv-opd (`code_status: none`).
+- Status active (`sota_for: []`). Contrastive crop teachers plus visual-token gate against VLM shortcuts.
+
+### 2026-10-12 — ingest method:cc-opsd (active on task:privileged-teacher-opsd; does not supersede method:vista / method:srd)
+- Added paper:cc-opsd (2610.13744), method:cc-opsd, recipe:cc-opsd (`code_status: none`).
+- Status active (`sota_for: []`). Critique then score. Scoring-only KL does not sit on gold error spans.
+
+### 2026-10-12 — ingest method:reharness (active on task:agent-continual-learning; does not supersede method:aclarena / method:ace / method:omp2-harness)
+- Added paper:reharness (2610.12668), method:reharness, recipe:reharness (`code_status: none`). Mentions on task:agent-harness-runtime and task:agent-memory.
+- Status active (`sota_for: []`). Backward-revises retrieved reflections. Text harness, not weight-space CL.
+
+### 2026-10-12 — ingest method:cbpo (active on task:math-code-rl-dense; does not supersede method:cispo)
+- Added paper:cbpo (2610.12830), method:cbpo, recipe:cbpo (`code_status: none`).
+- Status active (`sota_for: []`). Unified reward-vs-reference regression across gold, negatives, live, and replay. +2.33 avg@32 / +4.44 pass@32 vs SFT then DAPO.
+
+### 2026-10-12 — ingest method:magicbeanstalk (active on task:math-code-rl-dense; does not supersede method:cispo / method:verigate / method:srd)
+- Added paper:magicbeanstalk (2610.12659), method:magicbeanstalk, recipe:magicbeanstalk (`code_status: none`). Mention on task:all-zero-verifier-groups.
+- Status active (`sota_for: []`). Recursive calibrated children from always-fail seeds. gpt-oss-120b 61.2→69.8; DeepSeek v4Flash 72.4→77.9.
+
+### 2026-10-12 — ingest method:ppo-fp16 (active on task:continuous-control-world-model; does not supersede method:efficienttdmpc)
+- Added paper:ppo-fp16 (2610.13306), method:ppo-fp16, recipe:ppo-fp16 (`code_status: none`).
+- Status active (`sota_for: []`). Residual-protected FP16 PPO for continuous control, not LLM RL. Optimizer state −71.7–74.9%.
+
+### 2026-10-12 — ingest method:soloq (active on task:fp4-hardware-training; does not supersede method:quartet-ii / method:a2d)
+- Added paper:soloq (2610.07121), method:soloq, recipe:soloq (`code_status: announced`; Intelligent-Computing-Lab-Panda/SoloQ 404). Mention on task:diffusion-lm-ar-delta-recycle. HF Daily 2026-10-12.
+- Status active (`sota_for: []`). Calibration-free dLLM PTQ. NVFP4 up to 2.61× peak-memory / 2.24× e2e.
+
+### 2026-10-12 — ingest method:tips (active on task:all-zero-verifier-groups; does not supersede method:verigate / method:srd / method:cispo)
+- Added paper:tips (2609.36641), method:tips, recipe:tips (`code_status: released`; RUCBM/TIPS). Mention on task:math-code-rl-dense. HF Daily 2026-10-12.
+- Status active (`sota_for: []`). Outcome-only RL inducing a generative PRM. ProcessBench F1 85.2.
+
 ### 2026-10-09 — weekday SOTA sweep (MetaOPD, DIAL-OPD, Semi-OPD, Delta-MOPD, GRPODropout, ExpDis, SCAPO, ReSPO, SRD, KLPO, COPC, ZIP-SR, Spectrally Targeted Muon, SAPD, OnlineQAT, MiMo-V2.6, OPD vanishing-signals, OPD skill-not-knowledge)
 - Sixteen active plug-ins and two paper-only notes. No current_sota retarget of OPD / Open-MOPD / CISPO / SAO / Muon2 / GradCodeS / VISTA / Miles / VeriGate / SCALE.
 - Window: 2026-10-09 Librarian weekday sweep covering arXiv + HF Daily 2026-10-08 and 2026-10-09 after a failed 10-08 pass; watermark was 2610.08624 (PR 40, 1134 nodes). New high id 2610.12444.

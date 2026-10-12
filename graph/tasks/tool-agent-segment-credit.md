@@ -24,6 +24,8 @@ redirects:
     to: "task:math-code-rl-dense"
   - when: "per-state shrinkage of step-level advantage for agentic RL (GiGPO-style groups)"
     to: "method:adastep"
+  - when: "hindsight-guided tree exploration and turn-level credit (not tool vs summary split)"
+    to: "method:treehca"
 current_sota:
   - method: method:slca-grpo
     as_of: "2026-09-25"
@@ -32,6 +34,7 @@ current_sota:
     value: "+2.53 pp / +1.36 pp / +9.15 pp"
     notes: "SLCA-GRPO (2609.29050). Method status active. Does not replace FoldGRPO, SAO, PACT, Critical-State RL, or CISPO."
 methods:
+  - method:treehca
   - method:slca-grpo
   - method:foldgrpo
   - method:sao
@@ -39,7 +42,7 @@ methods:
   - method:critical-state-rl
   - method:cispo
   - method:adastep
-last_reviewed: "2026-10-05"
+last_reviewed: "2026-10-12"
 tags:
   - post-training
   - agentic
@@ -61,3 +64,4 @@ Tool-calling rollouts mix structured tool invocations with a user-facing natural
 - **Primary Method (this task only)**: **SLCA-GRPO** (`method:slca-grpo`, `paper:slca-grpo` `arXiv:2609.29050`). Status `active`. Listed here as first hop; method `sota_for` stays empty.
 - **Optional per-state step-advantage shrinkage**: `method:adastep` (`arXiv:2610.03223`). Qwen3-4B vs GiGPO 93.01/86.58/88.76/80.27/48.70 vs 88.02/83.07/87.34/78.28/46.67. Mention on `task:outcome-only-long-horizon-agent-rl`. Does not replace SLCA-GRPO.
 - **Not This Task**: `method:foldgrpo` remains folding; `method:sao` remains async stragglers; `method:pact` remains Actor-then-Critic token credit; `method:critical-state-rl` remains which-turn trainability; `method:cispo` remains Pass@1.
+- **Related tree hindsight credit (not this structural split)**: `method:treehca` (`arXiv:2610.12828`) on `task:outcome-only-long-horizon-agent-rl`. Turn-level backup from reference-answer likelihood, not tool vs summary. Does not replace SLCA-GRPO.

@@ -18,6 +18,7 @@ current_sota:
     value: "SOTA Gradient Planner"
     notes: "Dream-MPC (2605.04568) ICML 2026 gradient planner."
 methods:
+  - method:ppo-fp16
   - method:efficienttdmpc
   - method:dream-mpc
   - method:td-mpc2
@@ -25,6 +26,10 @@ methods:
   - method:td-jepa
   - method:latent-geometry
   - method:diffusion-policy
+redirects:
+  - when: "structure-aware numerical stabilization for half-precision PPO (control, not LLM)"
+    to: "method:ppo-fp16"
+last_reviewed: "2026-10-12"
 tags:
   - control
   - robotics
@@ -40,3 +45,4 @@ Controlling continuous robotic and servo systems with high sample efficiency dir
 ## SOTA Recommendation (as of 2026-08-26)
 - **Primary Method**: **EfficientTDMPC** (`method:efficienttdmpc`, 2605.16692) family.
 - **Gradient Planner**: **Dream-MPC** (`method:dream-mpc`, 2605.04568) gradient planner.
+- **Optional half-precision on-policy PPO (not this world-model default)**: `method:ppo-fp16` (`arXiv:2610.13306`) residual-protected FP16 PPO on continuous-control tasks. Lowest mean return-AUC rank 1.90; optimizer state −71.7–74.9%. Control PPO, not LLM RL. No public code. Does not replace EfficientTDMPC or CISPO.

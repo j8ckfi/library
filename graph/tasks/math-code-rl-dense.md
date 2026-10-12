@@ -77,6 +77,18 @@ redirects:
     to: "method:mesh-learning"
   - when: "on-policy parameter update direction SFT (OPSFT), not Pass@1 RLVR"
     to: "method:opsft"
+  - when: "trajectory-aware policy optimization (state-distribution gap at long horizon)"
+    to: "method:tapo"
+  - when: "generalized PPO via f-divergence trust-region geometry (not CISPO default)"
+    to: "method:gppo"
+  - when: "unified regression from offline demos plus on/off-policy rollouts (CBPO)"
+    to: "method:cbpo"
+  - when: "escaping the RLVR zero-advantage trap with recursive calibrated problem synthesis"
+    to: "method:magicbeanstalk"
+  - when: "fast and faithful RL rollouts via self-sparse speculative decoding (not the Pass@1 loss)"
+    to: "method:s3r"
+  - when: "outcome-only RL inducing process supervision / generative PRMs (TIPS)"
+    to: "method:tips"
 current_sota:
   - method: method:cispo
     as_of: "2026-08-26"
@@ -85,6 +97,12 @@ current_sota:
     value: "Default SOTA for Dense RL"
     notes: "CISPO via MiniMax-M1 (2506.13585) + ScaleRL (2510.13786)."
 methods:
+  - method:tapo
+  - method:gppo
+  - method:cbpo
+  - method:magicbeanstalk
+  - method:s3r
+  - method:tips
   - method:grpodropout
   - method:expdis
   - method:scapo
@@ -140,7 +158,7 @@ methods:
   - method:mesh-learning
   - method:opsft
   - method:rgpo
-last_reviewed: "2026-10-09"
+last_reviewed: "2026-10-12"
 tags:
   - post-training
   - reasoning
@@ -203,4 +221,10 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Optional semifactual token credit**: `method:scapo` (`arXiv:2609.40360`) rescales GRPO token credit by prompt-stability. Qwen3-4B/1.7B AIME +5.63/+4.17 vs GRPO. Code DtYXs/SCAPO. HF Daily 2026-10-08. Does not replace CISPO or Cliff.
 - **Optional off-policy sequence kernel**: `method:respo` (`arXiv:2609.35433`) two-branch alpha-divergence instead of IS clip. Code yhangchen/ReSPO-code. HF Daily 2026-10-09. Does not replace CISPO or CARM.
 - **Optional silent-group hindsight distill**: `method:srd` (`arXiv:2610.08077`) hindsight-to-foresight when group advantages vanish. Up to +24.2pp; 2B all-fail 0.0% vs 60.6%. Code SalesforceAIResearch/SRD. HF Daily 2026-10-08. Does not replace CISPO, VeriGate, or VISTA.
+- **Optional trajectory-state-distribution correction (not this Pass@1 default)**: `method:tapo` (`arXiv:2610.13020`) geometric-mean state-shift reweight plus remaining-length clip. Up to +48% math / +12% coding vs GRPO, not CISPO. No public code. Does not replace CISPO or ReSPO.
+- **Optional f-divergence PPO geometry (not this Pass@1 default)**: `method:gppo` (`arXiv:2610.13015`) recovers PPO/DAPO/DPPO/RIPO as cells. Up to +50% math / +14% coding vs GRPO. Sibling of TAPO. No public code. Does not replace CISPO.
+- **Optional unified demo+rollout regression (not this Pass@1 default)**: `method:cbpo` (`arXiv:2610.12830`) one reward-vs-reference regression across gold, negatives, live, and replay. Qwen3-1.7B +2.33 avg@32 / +4.44 pass@32 vs SFT then DAPO. No public code. Does not replace CISPO or CARM.
+- **Optional recursive zero-advantage synthesis (not this Pass@1 default)**: `method:magicbeanstalk` (`arXiv:2610.12659`) grows calibrated children from always-fail seeds. gpt-oss-120b 61.2→69.8; DeepSeek v4Flash 72.4→77.9. Mention on `task:all-zero-verifier-groups`. No public code. Does not replace CISPO, VeriGate, or SRD.
+- **Related rollout-speed plug-in (not this Pass@1 default)**: `method:s3r` (`arXiv:2610.13202`) on `task:frontier-rl-posttrain-stack`. Sparse-draft / dense-verify; 1.39×–1.35×. Does not replace CISPO.
+- **Related generative-PRM recipe (not this Pass@1 default)**: `method:tips` (`arXiv:2609.36641`) on `task:all-zero-verifier-groups`. ProcessBench F1 85.2. Code RUCBM/TIPS. Does not replace CISPO or VeriGate.
 

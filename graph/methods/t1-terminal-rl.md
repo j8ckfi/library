@@ -22,6 +22,9 @@ do_not_use_for:
   - when: "single-turn math/code Pass@1"
     reason: "CISPO remains Pass@1"
     use_instead: "method:cispo"
+  - when: "long-horizon terminal-agent data engine / pre-completed work detection"
+    reason: "T1 is a 122B terminal-MoE RL recipe; TerminalHorizon is the env/data engine"
+    use_instead: "method:terminalhorizon"
 assumptions:
   - "122B-total MoE, real shell in a cloud sandbox, ≤300+ tool turns, per-task verifier reward. Host: slime v0.3.0 (commit bf14dc21), Megatron-Core, SGLang 0.5.12.post1."
   - "Project page + HF collection; no dedicated T1 trainer repo as of 2026-09-11."

@@ -12,6 +12,7 @@ out_of_scope:
   - "Recurrent CED all-token recurrence (RLT)"
   - "Input-heavy agentic CED serving (DeepSeek-V4.1-Flash)"
   - "~7B dense NTP optimizer (Muon2)"
+  - "Elastic mixed-depth looped LM training (ELR)"
 redirects:
   - when: "Huginn-style dense fixed-point looped LMs (learned depth prior / terminal KV sharing)"
     to: "method:looped-models-done-right"
@@ -27,6 +28,8 @@ redirects:
     to: "task:input-heavy-agentic-moe-serving"
   - when: "choosing the ~7B dense pretrain optimizer"
     to: "task:llm-pretraining-optimization"
+  - when: "elastic mixed-depth looped LM (gated state update / mixed loop counts)"
+    to: "task:elastic-depth-looped-lm"
 current_sota:
   - method: method:smelt
     as_of: "2026-09-01"
@@ -35,11 +38,12 @@ current_sota:
     value: "6.8–18.0% on the fitted sparse-grid frontier (10^20–10^21 FLOPs)"
     notes: "SMELT (2609.01343). Active looped-MoE recipe. Does not replace DeepSeek-V4 / Kimi-K3 / CE-MoE."
 methods:
+  - method:elr
   - method:smelt
   - method:ce-moe
   - method:deepseek-v4
   - method:kimi-k3
-last_reviewed: "2026-10-06"
+last_reviewed: "2026-10-13"
 tags:
   - pretraining
   - moe
@@ -60,3 +64,4 @@ Decide whether looping MoE layers helps when you cannot spend extra FLOPs, extra
 ## SOTA Recommendation (as of 2026-09-12)
 - **Primary Method (this task only)**: **SMELT** (`method:smelt`, `paper:smelt` `arXiv:2609.01343`). Status `active`. Loop the middle 50% of MoE layers twice; narrow width; raise experts; scale looped residuals by \(1/2\); match FLOPs / non-embedding params / KV.
 - **Not This Task**: `method:deepseek-v4` / `method:kimi-k3` remain frontier MoE co-defaults; `method:ce-moe` remains the communication-layout niche.
+- **Not this task (elastic mixed-depth looping)**: `method:elr` on `task:elastic-depth-looped-lm` (`arXiv:2610.12582`). Does not replace SMELT.

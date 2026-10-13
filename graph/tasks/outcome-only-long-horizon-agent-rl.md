@@ -57,6 +57,8 @@ redirects:
     to: "method:mcgpo"
   - when: "hindsight-guided tree exploration and turn-level credit for multi-turn LLM agents"
     to: "method:treehca"
+  - when: "branch-and-resample OPD at uncertain / teacher-disagreement tokens (protocol-boundary repair)"
+    to: "method:branchopd"
 current_sota:
   - method: method:canopy
     as_of: "2026-09-04"
@@ -65,6 +67,7 @@ current_sota:
     value: "86.9 / 67.6"
     notes: "CANOPY (2609.01245). Sparse outcome reward, n=32, KL-anchored on-policy. Does not replace SAO, FoldGRPO, CISPO, mini-swe-agent, or omp2-harness. DRACO is the outcome-blind rubric sibling, not a supersession."
 methods:
+  - method:branchopd
   - method:state-opd
   - method:mcgpo
   - method:treehca
@@ -89,7 +92,7 @@ methods:
   - method:scad
   - method:metarubric
   - method:hierarchical-moe-routing-control
-last_reviewed: "2026-10-12"
+last_reviewed: "2026-10-13"
 tags:
   - post-training
   - agentic
@@ -132,3 +135,4 @@ Two siblings share this task and are not substitutes:
 - **Optional state-grounded multi-turn OPD (not this first hop)**: `method:state-opd` (`arXiv:2610.13238`) matches teacher continuations on the objective interaction state. Qwen3-4B macro 31.74 vs 26.07. No public code. Does not replace CANOPY, OPD, PivotOPD, or ActFirst-OPD.
 - **Optional matched-context GPO (not this first hop)**: `method:mcgpo` (`arXiv:2610.13755`) pairwise credit on matched sibling supports. +3.96 / +5.16pp WebShop Qwen3-4B/8B vs GraphGPO. No public code. Does not replace CANOPY or SAO.
 - **Optional hindsight-guided tree credit (not this first hop)**: `method:treehca` (`arXiv:2610.12828`) branches on reference-answer likelihood jumps and backups turn advantages. GitHub TheBlackCat22/TreeHCA 404. Does not replace CANOPY or PACT.
+- **Optional branch-and-resample OPD (not this first hop)**: `method:branchopd` (`arXiv:2610.13481`) on `task:student-distillation`. Protocol-boundary repair on ALFWorld/WebShop. +13.8pp ALFWorld vs vanilla OPD. Does not replace CANOPY or OPD.

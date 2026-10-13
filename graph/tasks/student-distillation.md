@@ -89,6 +89,10 @@ redirects:
     to: "method:synthself"
   - when: "cross-tokenizer chunk credit alignment (CAST), not 1:1 coverage"
     to: "method:cast"
+  - when: "branch at uncertain / teacher-disagreement tokens then resample student continuations (BranchOPD)"
+    to: "method:branchopd"
+  - when: "MC reasoning-tree process uncertainty / contract corpus / online routing during CoT-SFT (UGPC)"
+    to: "method:ugpc"
 current_sota:
   - method: method:opd
     as_of: "2026-08-26"
@@ -103,6 +107,8 @@ current_sota:
     value: "83.4% headroom recovery in a single deployable student"
     notes: "Open-MOPD (2608.19098) fixes multi-teacher imbalance with token-share balancing and gap-aware dynamic budgeting."
 methods:
+  - method:branchopd
+  - method:ugpc
   - method:rpd-opd
   - method:cv-opd
   - method:state-opd
@@ -164,7 +170,7 @@ methods:
   - method:lmopd
   - method:latent-mopd
   - method:rp-opd
-last_reviewed: "2026-10-12"
+last_reviewed: "2026-10-13"
 tags:
   - post-training
   - distillation
@@ -237,4 +243,6 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Not this task (small-model synthetic SDFT)**: `method:synthself` (`arXiv:2610.13113`) on `task:agent-continual-learning`. Does not replace OPD or ACLArena.
 - **Not this task (cross-tokenizer chunk credit)**: `method:cast` (`arXiv:2610.13257`) on `task:cross-tokenizer-opd`. Does not replace OPD.
 - **Not this task**: Adaptive Retirement of a privileged self-OPD teacher in agent RL is `method:retireopd` on `task:outcome-only-long-horizon-agent-rl`. Distilling optimized-harness behaviors into weights under a fixed target harness is `method:harness-zero` on `task:harness-distillation`. Multi-stage agent continual learning (MMOPD / SDFT / MLE) is `method:aclarena` on `task:agent-continual-learning` and does not retarget Open-MOPD. Label-routed MOPD of SWE category experts is `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`.
+- **Optional branch-and-resample OPD**: `method:branchopd` (`arXiv:2610.13481`) branches at uncertain / teacher-disagreement tokens and resamples student continuations; token-level teacher KL on main + branches. +18.55pp math avg@16, +13.8pp ALFWorld vs vanilla OPD; ~19%/31% fewer student tokens vs n=7 multi-rollout. Code chendy25/BranchOPD. Does not replace OPD.
+- **Optional CoT-SFT data selection**: `method:ugpc` (`arXiv:2610.12933`) MC reasoning trees for process uncertainty, then a contract corpus with online routing during SFT. Matches/beats full-data reasoning SFT at 0.22–1.91% of the optimization budget. Code Jackbrocp/Learning-More-by-Training-Less. Does not replace OPD or OPD-hard-CoT selection.
 

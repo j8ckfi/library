@@ -10,6 +10,7 @@ out_of_scope:
   - "Discrete DLM curriculum RL with a teacher canvas (CanvasAnneal)"
   - "Lossless multi-token / diffusion-augmented AR serving (Uno)"
   - "Dense AR Pass@1 RLVR (CISPO)"
+  - "Continuous diffusion language model pretrain (SemiCat / DoubleCat)"
 redirects:
   - when: "calibration-free dLLM quantization (not AR-delta recycle)"
     to: "method:soloq"
@@ -21,6 +22,8 @@ redirects:
     to: "task:diffusion-augmented-ar"
   - when: "single-turn dense math/code Pass@1 RLVR"
     to: "task:math-code-rl-dense"
+  - when: "continuous diffusion language model pretrain (self-conditioning / SemiCat), not AR-delta recycle"
+    to: "task:continuous-diffusion-lm-pretrain"
 current_sota:
   - method: method:a2d
     as_of: "2026-10-07"
@@ -29,13 +32,14 @@ current_sota:
     value: "AR delta on converted dLLM approaches direct diffusion PT and composes with it; AR/diffusion deltas nearly orthogonal"
     notes: "A2D (2610.08108). Method status active. Does not replace DiffusionOPSD / Self-OPD / CanvasAnneal."
 methods:
+  - method:semicat
   - method:soloq
   - method:a2d
   - method:canvasanneal
   - method:diffusion-opsd
   - method:self-opd
   - method:uno
-last_reviewed: "2026-10-12"
+last_reviewed: "2026-10-13"
 tags:
   - diffusion
   - post-training
@@ -58,3 +62,4 @@ This is **not** image/flow reward alignment and not CanvasAnneal.
 - **Primary (this task only)**: **A2D** (`method:a2d`, `paper:a2d` `arXiv:2610.08108`). Status `active`. Listed here as first hop; method `sota_for` stays empty.
 - **Not This Task**: `method:diffusion-opsd` / `method:self-opd` remain image/flow post-train; `method:canvasanneal` remains discrete-DLM canvas RL.
 - **Related dLLM inference PTQ (not this recycle hop)**: `method:soloq` (`arXiv:2610.07121`) on `task:fp4-hardware-training`. Calibration-free 4-bit / NVFP4 for existing dLLMs. Does not replace A2D.
+- **Not this task (continuous diffusion LM pretrain)**: `method:semicat` on `task:continuous-diffusion-lm-pretrain` (`arXiv:2610.13834`). Discrete-dLLM questions stay here.

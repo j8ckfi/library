@@ -13,6 +13,7 @@ out_of_scope:
   - "SWE issue-to-patch harness (mini-SWE-agent)"
   - "Production harness kernel (omp2)"
   - "Compute-matched MoE looping of middle layers (SMELT)"
+  - "Elastic mixed-depth looped LM training (ELR)"
 redirects:
   - when: "Huginn-style dense fixed-point looped LMs (learned depth prior, terminal KV sharing, cheaper RL from saved states)"
     to: "method:looped-models-done-right"
@@ -30,6 +31,8 @@ redirects:
     to: "task:agent-harness-runtime"
   - when: "compute-matched looped MoE pretrain (middle layers twice)"
     to: "task:compute-matched-moe-looped-pretrain"
+  - when: "elastic mixed-depth looped LM (gated state update / mixed loop counts)"
+    to: "task:elastic-depth-looped-lm"
 current_sota:
   - method: method:recurrent-looped-transformer
     as_of: "2026-09-12"
@@ -38,12 +41,13 @@ current_sota:
     value: "none reported"
     notes: "RLT (2026-09-12). Experimental. Report develops encoder memory + all-token recurrence; does not report measured results. Conceptual sibling of DeepSeek-V4.1-Flash CED, not a replacement."
 methods:
+  - method:elr
   - method:looped-models-done-right
   - method:recurrent-looped-transformer
   - method:deepseek-v41-flash
   - method:ncp-archpreview
   - method:deepseek-v4
-last_reviewed: "2026-10-06"
+last_reviewed: "2026-10-13"
 tags:
   - pretraining
   - architecture
@@ -65,3 +69,4 @@ Train or specify a language model whose decoder carries complete state across ev
 - **Experimental first hop (this task only)**: **Recurrent Looped Transformer** (`method:recurrent-looped-transformer`, `paper:recurrent-looped-transformer`). Status `experimental`. No measured efficiency or scaling.
 - **Production CED serving (different task)**: `method:deepseek-v41-flash` on `task:input-heavy-agentic-moe-serving`.
 - **Not This Task**: `method:muon2` remains the ~7B optimizer; `method:deepseek-v4` / `method:kimi-k3` remain frontier MoE pretrain; `method:ncp-archpreview` remains latent-space LM; `method:mini-swe-agent` remains the SWE harness.
+- **Not this task (elastic mixed-depth looping)**: `method:elr` on `task:elastic-depth-looped-lm` (`arXiv:2610.12582`). Does not replace RLT.

@@ -4,6 +4,10 @@ type: method
 title: "mHC (Manifold-Constrained Hyper-Connections)"
 category: "architecture"
 status: active
+do_not_use_for:
+  - when: "multi-stream attention residuals vs vanilla / mHC / AttnRes (MSAR)"
+    reason: "mHC remains the Sinkhorn hyper-connection used in DeepSeek-V4; MSAR is a later single-paper residual bake-off, not a supersession"
+    use_instead: "method:msar"
 papers:
   - paper:mhc
 recipes:
@@ -47,6 +51,7 @@ where \(\mathcal{H}_l^{\text{pre}} \in \mathbb{R}^{1 \times n}\) down-projects t
 - **AttnRes (`paper:attnres`, `2603.15031`)**: Employs content-dependent dynamic attention mechanisms over prior layer activation histories.
 - **Gated Residual in `method:qwen38-next`**: Widens to four branches and reads through an elementwise gate. Adjacent residual design, not a replacement of mHC's Sinkhorn constraint.
 - **Single-Pass mHC in `method:deepseek-v41-flash`**: Serving-kernel revision of residual-stream mixing (Mega-mHC) inside the V4.1-Flash CED stack. Does not supersede this mHC node or retarget DeepSeek-V4.
+- **MSAR (`method:msar`, `2610.13630`)**: Later residual bake-off reporting wins vs mHC / AttnRes / vanilla at 18B and 28B MoE. Single-paper baselines; this node is not superseded.
 
 ## When to Use
 - Pretraining deep transformer and MoE architectures (such as DeepSeek-V4) where widened residual topologies provide increased expressivity without destabilizing gradient flow.

@@ -8,6 +8,10 @@ sota_for:
   - task:continuous-control-world-model
 supersedes:
   - method:td-mpc2
+do_not_use_for:
+  - when: "continual RL of a frozen robot policy via world-model imagination rehearsal"
+    reason: "EfficientTDMPC remains the control world-model default; D2R steers a frozen policy without replay"
+    use_instead: "method:d2r"
 papers:
   - paper:efficienttdmpc
 recipes:

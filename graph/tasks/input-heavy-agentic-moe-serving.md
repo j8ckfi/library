@@ -25,6 +25,8 @@ redirects:
     to: "task:recurrent-encoder-decoder-lm"
   - when: "compute-matched looped MoE pretrain"
     to: "task:compute-matched-moe-looped-pretrain"
+  - when: "checkpoint + recent-input buffer for hybrid SSM decode (ReplaySSM)"
+    to: "method:replayssm"
 current_sota:
   - method: method:deepseek-v41-flash
     as_of: "2026-09-10"
@@ -33,13 +35,14 @@ current_sota:
     value: "TB2.1 90.6; DeepSWE 74.2; global KV 890 B/token (~1/4 of V4-Flash); persistent KV ~1/8 of V4-Flash"
     notes: "DeepSeek-V4.1-Flash CED (HF tech report, 2026-09-10). Vendor-reported. Does not replace DeepSeek-V4 / Kimi-K3 as the MoE pretrain co-default."
 methods:
+  - method:replayssm
   - method:deepseek-v41-flash
   - method:deepseek-v4
   - method:kimi-k3
   - method:recurrent-looped-transformer
   - method:mhc
   - method:mini-swe-agent
-last_reviewed: "2026-09-12"
+last_reviewed: "2026-10-13"
 tags:
   - systems
   - serving
@@ -61,3 +64,4 @@ Serve a frontier multimodal MoE when prompts are long and agentic (tools, images
 ## SOTA Recommendation (as of 2026-09-12)
 - **Primary Method (this task only)**: **DeepSeek-V4.1-Flash** (`method:deepseek-v41-flash`, `paper:deepseek-v41-flash`). CED 20+20, CSA2, SWA Bounded Replay, Single-Pass mHC, Engram, DSpark. Weights: `deepseek-ai/DeepSeek-V4.1-Flash`.
 - **Not This Task**: `method:deepseek-v4` / `method:kimi-k3` remain MoE pretrain co-defaults; `method:mini-swe-agent` remains the SWE harness; `method:miles` remains the post-train engine; `method:uno` remains diffusion-augmented AR serving; `method:recurrent-looped-transformer` is the experimental all-token-recurrence sibling.
+- **Optional hybrid SSM decode buffer (not this CED serving default)**: `method:replayssm` (`arXiv:2610.13778`) on `task:linear-time-sequence-modeling`. Does not replace DeepSeek-V4.1-Flash.

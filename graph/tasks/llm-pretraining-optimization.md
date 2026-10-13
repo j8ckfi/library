@@ -42,7 +42,14 @@ redirects:
     to: "task:zero-natural-data-self-play-pretrain"
   - when: "Muon-style norm-aware update for embedding tables (1->2) and LM head (2->inf) instead of AdamW"
     to: "method:muonio"
+  - when: "multi-stream attention residuals vs vanilla / mHC / AttnRes (MSAR)"
+    to: "method:msar"
+  - when: "weight decay causally controls massive-activation magnitude / attention sinks"
+    to: "paper:massive-activation-lifecycle"
+  - when: "randomized momentum transport rates for Muon / sign updates (theory)"
+    to: "paper:randomized-momentum-transport"
 methods:
+  - method:msar
   - method:zip-sr
   - method:spectrally-targeted-muon
   - method:dga-muon
@@ -72,7 +79,7 @@ methods:
   - method:muonio
   - method:adam-beta-cubic
   - method:bulkboost
-last_reviewed: "2026-10-09"
+last_reviewed: "2026-10-13"
 tags:
   - pretraining
   - optimizer
@@ -99,3 +106,6 @@ Pretraining modern neural network models involves minimizing cross-entropy loss 
 - **Not this task (zero-natural-data UTM self-play)**: `method:self-play-pretraining` (`arXiv:2609.30063`) on `task:zero-natural-data-self-play-pretrain`. Experimental <25M.
 - **Optional 4-bit AdamW-state quantization**: `method:zip-sr` (`arXiv:2610.12444`) stochastic rounding in preconditioner space. Up to 70% TorchAO gap cut vs 32-bit AdamW. No public code. Does not replace Muon2, SCALE, or TACO.
 - **Optional thresholded Muon orthogonalization**: `method:spectrally-targeted-muon` (`arXiv:2610.10965`) small singular values carry the Muon gain. CIFAR-10 / NanoGPT speedruns, not a 7B bake-off. No public code. Does not replace Muon2, BulkBoost, or Musec.
+- **Optional residual topology (not this optimizer default)**: `method:msar` (`arXiv:2610.13630`) Multi-Stream Attention Residuals. Beats vanilla/mHC/AttnRes on 12 benches at 18B and 28B MoE; iso-loss 1.58× vs 1.35× AttnRes, 1.30× mHC. Single-paper baselines; no supersedes. Code jianke0604/MSAR. Composes with Muon2.
+- **Gotcha (massive-activation life cycle)**: `paper:massive-activation-lifecycle` (`arXiv:2610.00423`). Weight decay causally controls massive-activation magnitude (peak ~ λ^{-1/2}; timing log-linear in λ). Attention sinks / low-bit training. Code apd-smcclendon/massive_activations_2. Does not retarget Muon2.
+- **Gotcha (Randomized Momentum Transport)**: `paper:randomized-momentum-transport` (`arXiv:2610.13789`). Theory: O(T^{-1/3}) for Muon/sign updates; MNIST1D / CIFAR-10 only. Does not retarget Muon2.

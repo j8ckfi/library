@@ -29,6 +29,8 @@ redirects:
     to: "method:synthself"
   - when: "recurrent textual harness for agentic continual learning (backward-revise retrieved reflections)"
     to: "method:reharness"
+  - when: "chronological pretraining knowledge / specialists that need fewer update steps"
+    to: "method:specialists-learn-faster"
 current_sota:
   - method: method:aclarena
     as_of: "2026-09-23"
@@ -37,6 +39,7 @@ current_sota:
     value: "MLE AIME26 21.04, NQ 49.7, Retail 32.9, IF-Eval 85.0 vs Seq-Final 10.21 / 33.5 / 29.6 / 84.8"
     notes: "ACLArena (2609.23989). Active first hop. Method status active (not sota). Does not replace CISPO / SAO / CANOPY / Miles / mini-SWE-agent."
 methods:
+  - method:specialists-learn-faster
   - method:synthself
   - method:reharness
   - method:off-policy-grafting
@@ -48,7 +51,7 @@ methods:
   - method:mini-swe-agent
   - method:opd
   - method:open-mopd
-last_reviewed: "2026-10-12"
+last_reviewed: "2026-10-13"
 tags:
   - post-training
   - agentic
@@ -72,3 +75,4 @@ This is **not** Pass@1 math, not async stragglers, not AppWorld TGC, not the fro
 - **Not This Task**: `method:cispo` remains Pass@1; `method:sao` remains async; `method:canopy` remains AppWorld coverage; `method:miles` remains the engine; `method:mini-swe-agent` remains issue-to-patch; `method:opd` / `method:open-mopd` remain text distill defaults.
 - **Optional small-model synthetic SDFT (not this first hop)**: `method:synthself` (`arXiv:2610.13113`) same-family aligner rewrite + rejection sampling then off-policy train. Beats 6 compared methods at 3 small scales. No public code. Does not replace ACLArena or OPD.
 - **Optional recurrent textual harness (not this first hop)**: `method:reharness` (`arXiv:2610.12668`) backward-revises retrieved reflections after each instance. Text harness, not weight-space CL. No public code. Does not replace ACLArena, ACE, or omp2.
+- **Related data-ordering gotcha (not this first hop)**: `method:specialists-learn-faster` (`arXiv:2610.13835`) on `task:open-data-recipe`. Chronological specialists need fewer update steps. Does not replace ACLArena.

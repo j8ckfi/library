@@ -16,6 +16,9 @@ do_not_use_for:
   - when: "standard dense ~7B NTP from scratch"
     reason: "Muon2 remains the 7B optimizer; this is a looped architecture recipe"
     use_instead: "method:muon2"
+  - when: "elastic mixed-depth looped LM (gated state update / mixed loop counts)"
+    reason: "This card is Huginn-style dense fixed-point looping; ELR trains one weight set under mixed loop counts"
+    use_instead: "method:elr"
 assumptions:
   - Huginn-style fixed-point looped LM (shared recurrent block), 100M–1.6B in the paper. Not SMELT MoE layer looping and not RLT CED.
   - "Code: ifm-ai/xllm-loop (`code_status: released`)."

@@ -7,6 +7,10 @@ status: sota
 sota_for:
   - task:rl-video-mllm
 supersedes: []
+do_not_use_for:
+  - when: "dense/sparse paired-view video RL with grounding + reliability-gated reference reward"
+    reason: "OraRL remains annotation-as-rollout SOTA on this task; SAVER is a later plug-in on 1,250 Time-R1 examples"
+    use_instead: "method:saver"
 papers:
   - paper:orarl
 recipes:

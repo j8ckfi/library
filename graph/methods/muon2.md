@@ -37,6 +37,8 @@ do_not_use_for:
     use_instead: "method:bulkboost"
 last_reviewed: "2026-10-09"
 papers:
+  - paper:massive-activation-lifecycle
+  - paper:randomized-momentum-transport
   - paper:bulkboost
   - paper:orca
   - paper:muon2

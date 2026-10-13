@@ -75,6 +75,7 @@ do_not_use_for:
     use_instead: "method:rgpo"
 last_reviewed: "2026-10-09"
 papers:
+  - paper:llm-abstention
   - paper:exppo
   - paper:logra
   - paper:minimax-m1

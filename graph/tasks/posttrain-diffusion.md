@@ -18,6 +18,8 @@ current_sota:
     value: "Outperforms Flow-GRPO, Flow-OPD, and DiffusionNFT without external task-specific teachers"
     notes: "Self-OPD (2608.26872) provides teacher-free per-step pull-push distillation for flow matching multi-objective alignment."
 methods:
+  - method:representation-guidance
+  - method:semicat
   - method:diffusionart
   - method:mend
   - method:diffusion-opsd
@@ -36,7 +38,11 @@ redirects:
     to: "task:diffusion-augmented-ar"
   - when: "training a stable video reward model / rubric-guided RM PO"
     to: "method:rewardverse"
-last_reviewed: "2026-10-12"
+  - when: "pixel-space DiT / flow-matching image pretrain (Representation Guidance)"
+    to: "task:pixel-diffusion-pretrain"
+  - when: "continuous diffusion language model pretrain (not image/flow alignment)"
+    to: "task:continuous-diffusion-lm-pretrain"
+last_reviewed: "2026-10-13"
 tags:
   - diffusion
   - post-training
@@ -57,3 +63,5 @@ Aligning generative diffusion and flow models with downstream reward functions (
 - **Active video-RM / RGPO plug-in (not generator alignment)**: `method:rewardverse` (`arXiv:2609.22947`) dynamic rubric + two-stage RGPO for video reward models. EvalVerse Joint mean PLCC 0.554 / SRCC 0.446. Does not replace DiffusionOPSD or Self-OPD. Does not retarget OraRL.
 - **Not This Task (AR-delta recycle onto a converted dLLM)**: `method:a2d` on `task:diffusion-lm-ar-delta-recycle` (`arXiv:2610.08108`). Does not replace DiffusionOPSD / Self-OPD / CanvasAnneal.
 - **Not This Task**: lossless AR multi-token serving is `method:uno` on `task:diffusion-augmented-ar`. Does not replace this image/flow post-train default.
+- **Not this task (pixel-space DiT pretrain)**: `method:representation-guidance` on `task:pixel-diffusion-pretrain` (`arXiv:2610.12978`). Does not replace DiffusionOPSD / Self-OPD.
+- **Not this task (continuous diffusion LM)**: `method:semicat` on `task:continuous-diffusion-lm-pretrain` (`arXiv:2610.13834`). Does not replace DiffusionOPSD / Self-OPD.

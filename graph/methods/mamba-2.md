@@ -7,6 +7,10 @@ status: sota
 sota_for:
   - task:linear-time-sequence-modeling
 supersedes: []
+do_not_use_for:
+  - when: "checkpoint + recent-input buffer for hybrid SSM decode"
+    reason: "Mamba-2 remains the architecture default; ReplaySSM is a serving buffer on Mamba-2 / Gated DeltaNet"
+    use_instead: "method:replayssm"
 papers:
   - paper:mamba-2-paper
 recipes:

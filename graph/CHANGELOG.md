@@ -6,6 +6,67 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-10-13 — weekday SOTA sweep (ELR, MSAR, BranchOPD, SemiCat, TerminalHorizon, UGPC, SAVER, D2R, Representation Guidance, ReplaySSM, Specialists Learn Faster, LatentGRM)
+- Twelve active plug-ins, three new tasks (`elastic-depth-looped-lm`, `continuous-diffusion-lm-pretrain`, `pixel-diffusion-pretrain`), three paper-only notes. No current_sota retarget of existing tasks (Muon2 / OPD / Open-MOPD / CANOPY / CodeMidas / OraRL / EfficientTDMPC / Mamba-2 / OLMo-3 / CISPO / A2D / SMELT / Looped Models Done Right). New tasks seed first hops with method `sota_for: []`.
+- Window: 2026-10-13 Librarian weekday sweep after merged PR 42 (watermark 2610.13767, 1253 nodes, 14c9b58). New high id 2610.13948. HF Daily 2026-10-12 and partial 2026-10-13.
+
+### 2026-10-13 — ingest method:elr (first hop on task:elastic-depth-looped-lm; does not supersede method:looped-models-done-right / method:smelt)
+- Added paper:elr (2610.12582), method:elr, recipe:elr (`code_status: none`), task:elastic-depth-looped-lm. Mentions on task:recurrent-encoder-decoder-lm and task:compute-matched-moe-looped-pretrain.
+- Status active (`sota_for: []`). Mixed-depth looped LM. 4B dense 1 loop −0.52 / 4 loops +7.25; 30B-A3B +1.04 / +4.75 (10-task avg).
+
+### 2026-10-13 — ingest method:msar (active on task:llm-pretraining-optimization; does not supersede method:attnres / method:mhc / method:muon2)
+- Added paper:msar (2610.13630), method:msar, recipe:msar (`code_status: released`; jianke0604/MSAR).
+- Status active (`sota_for: []`). Beats vanilla/mHC/AttnRes on 12 benches at 18B and 28B MoE; iso-loss 1.58× vs 1.35× AttnRes, 1.30× mHC. Single-paper baselines.
+
+### 2026-10-13 — ingest method:branchopd (active on task:student-distillation; does not supersede method:opd / method:canopy)
+- Added paper:branchopd (2610.13481), method:branchopd, recipe:branchopd (`code_status: announced`; chendy25/BranchOPD empty stub). Mention on task:outcome-only-long-horizon-agent-rl.
+- Status active (`sota_for: []`). +18.55pp math avg@16, +13.8pp ALFWorld vs vanilla OPD; ~19%/31% fewer student tokens vs n=7.
+
+### 2026-10-13 — ingest method:semicat (first hop on task:continuous-diffusion-lm-pretrain; does not supersede method:a2d / method:canvasanneal)
+- Added paper:semicat (2610.13834), method:semicat, recipe:semicat (`code_status: none`), task:continuous-diffusion-lm-pretrain. Mentions on task:diffusion-lm-ar-delta-recycle and task:posttrain-diffusion.
+- Status active (`sota_for: []`). SemiCat 49.94% TinyGSM; 1.7B beats discrete diffusion on 4/6 likelihood evals. Experimental evidence.
+
+### 2026-10-13 — ingest method:terminalhorizon (active on task:coding-agent-rl-environment-construction; does not supersede method:codemidas / method:t1-terminal-rl)
+- Added paper:terminalhorizon (2610.13166), method:terminalhorizon, recipe:terminalhorizon (`code_status: none`; project zs1314.github.io/TerminalHorizon).
+- Status active (`sota_for: []`). 1,535 envs / 2,852 traj. SFT Qwen3.5-27B TB1.0 55.0 (+8.7); TB2.1 46.82→60.67.
+
+### 2026-10-13 — ingest method:ugpc (active on task:student-distillation; does not supersede method:opd)
+- Added paper:ugpc (2610.12933), method:ugpc, recipe:ugpc (`code_status: released`; Jackbrocp/Learning-More-by-Training-Less).
+- Status active (`sota_for: []`). CoT-SFT contraction. Matches/beats full-data reasoning SFT at 0.22–1.91% of the optimization budget.
+
+### 2026-10-13 — ingest method:saver (active on task:rl-video-mllm; does not supersede method:orarl)
+- Added paper:saver (2610.10893), method:saver, recipe:saver (`code_status: released`; lmsdss/SAVER).
+- Status active (`sota_for: []`). Dense/sparse paired-view video RL. Qwen3.5-2B 0.1fps mIoU 18.4→30.0; QA 45.9→50.8.
+
+### 2026-10-13 — ingest method:d2r (active on task:continuous-control-world-model; does not supersede method:efficienttdmpc)
+- Added paper:d2r (2610.13816), method:d2r, recipe:d2r (`code_status: none`).
+- Status active (`sota_for: []`). Frozen-policy continual RL via world-model imagination. CALVIN 8 tasks 63.7%→74.8% vs LoRA FT 11.7%.
+
+### 2026-10-13 — ingest method:representation-guidance (first hop on task:pixel-diffusion-pretrain; does not supersede method:diffusion-opsd / method:self-opd)
+- Added paper:representation-guidance (2610.12978), method:representation-guidance, recipe:representation-guidance (`code_status: released`; Pan-Zihao/Representation-Guidance), task:pixel-diffusion-pretrain.
+- Status active (`sota_for: []`). ImageNet-256 XL/16 FID 1.55; IN-512 FID 1.74; GenEval 0.89.
+
+### 2026-10-13 — ingest method:replayssm (active on task:linear-time-sequence-modeling; does not supersede method:mamba-2 / method:deepseek-v41-flash)
+- Added paper:replayssm (2610.13778), method:replayssm, recipe:replayssm (`code_status: released`; Johnny-Liou/ReplaySSM). Mention on task:input-heavy-agentic-moe-serving.
+- Status active (`sota_for: []`). vLLM Mamba-2 / Gated DeltaNet 1.20–1.47× decode at batch 256; ~1.8× vs vLLM spec decoding on 120B-class.
+
+### 2026-10-13 — ingest method:specialists-learn-faster (active on task:open-data-recipe; does not supersede method:olmo-3 / method:aclarena)
+- Added paper:specialists-learn-faster (2610.13835), method:specialists-learn-faster, recipe:specialists-learn-faster (`code_status: none`; project horizon-lab.org/specialist/). Mention on task:agent-continual-learning.
+- Status active (`sota_for: []`). Chronological specialists need fewer update steps. Data-ordering gotcha.
+
+### 2026-10-13 — ingest method:latentgrm (active on task:reasoning-rl-alignment; does not supersede method:cispo / method:sapo)
+- Added paper:latentgrm (2610.09788), method:latentgrm, recipe:latentgrm (`code_status: released`; EADMO/LatentGRM).
+- Status active (`sota_for: []`). Latent-space generative RM. ~9× shorter eval trajectories; 6–7× faster at vote@5.
+
+### 2026-10-13 — note paper:massive-activation-lifecycle (gotcha on task:llm-pretraining-optimization; does not retarget method:muon2)
+- Added paper:massive-activation-lifecycle (2610.00423). Code apd-smcclendon/massive_activations_2. Weight decay causally controls massive-activation magnitude.
+
+### 2026-10-13 — note paper:llm-abstention (gotcha on task:reasoning-rl-alignment; does not retarget method:cispo)
+- Added paper:llm-abstention (2610.13821). RL variants did not consistently improve abstention on Qwen3-14B; learned selector TriviaQA coverage 20.2%→30.9%, error 23.0%→14.5%.
+
+### 2026-10-13 — note paper:randomized-momentum-transport (gotcha on task:llm-pretraining-optimization; does not retarget method:muon2)
+- Added paper:randomized-momentum-transport (2610.13789). Theory O(T^{-1/3}) for Muon/sign updates; MNIST1D / CIFAR-10 only.
+
 ### 2026-10-12 — weekday SOTA sweep (DiffusionART, CAST, State-OPD, RPD-OPD, SynthSelf, S3R, MCGPO, SoftwareGym, ProgramGym, AgentTune, TAPO, GPPO, DualQuant, STAPLE, TreeHCA, CV-OPD, CC-OPSD, ReHarness, CBPO, MagicBeanStalk, PPO-FP16, SoloQ, TIPS)
 - Twenty-three active plug-ins. No current_sota retarget of DiffusionOPSD / Self-OPD / Cross-Tokenizer OPD / CANOPY / OPD / Open-MOPD / ACLArena / Miles / CISPO / RecreationWorld / Claude computer-use / CodeMidas / SAO / Quartet-II / MASKerade / VISTA / ACE / omp2 / VeriGate / EfficientTDMPC / A2D / SLCA-GRPO.
 - Window: 2026-10-12 Librarian weekday sweep covering arXiv Mon cs.LG/CL/AI + HF Daily 2026-10-12 after merged PR 41 (watermark 2610.12444, 1184 nodes, 0149ebd). New high id 2610.13767.

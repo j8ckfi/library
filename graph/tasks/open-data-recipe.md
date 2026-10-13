@@ -12,6 +12,7 @@ current_sota:
     value: "Default SOTA open data recipe"
     notes: "OLMo-3 / Dolma-3 (2512.13961)."
 methods:
+  - method:specialists-learn-faster
   - method:repetition-count-selection
   - method:repeated-token-worth
   - method:olmo-3
@@ -32,7 +33,9 @@ redirects:
     to: "task:synthetic-single-stage-pretrain"
   - when: "zero-natural-data self-play pretraining (generator proposes UTM programs)"
     to: "task:zero-natural-data-self-play-pretrain"
-last_reviewed: "2026-10-06"
+  - when: "chronological pretraining knowledge / specialists that need fewer update steps"
+    to: "method:specialists-learn-faster"
+last_reviewed: "2026-10-13"
 tags:
   - pretraining
   - open-data
@@ -53,3 +56,4 @@ Constructing transparent, reproducible, and open multi-trillion token pretrainin
 - **L2 reasoning SFT mix (not this pretrain mix)**: `method:tiny-aya-l2-thinker` on `task:multilingual-l2-reasoning-sft`.
 - **Fully synthetic single-stage pretrain (not this mix)**: `method:synth` on `task:synthetic-single-stage-pretrain`. Wikipedia/Wikibooks seeds, no Dolma-3 replacement.
 - **Zero-natural-data self-play pretrain (not this mix)**: `method:self-play-pretraining` on `task:zero-natural-data-self-play-pretrain`.
+- **Gotcha (specialists learn faster)**: `method:specialists-learn-faster` (`arXiv:2610.13835`) chronological knowledge ordering so specialists need fewer update steps. Data-ordering gotcha on Dolma-style mixes, not a replacement of OLMo-3. Project horizon-lab.org/specialist/.

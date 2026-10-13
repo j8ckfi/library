@@ -14,6 +14,8 @@ redirects:
     to: "task:mllm-rl-prompt-curriculum"
   - when: "image region-proposal RL (not video annotation-as-rollout)"
     to: "task:mllm-finegrained-perception-rl"
+  - when: "dense/sparse paired-view video RL with grounding + reliability-gated reference reward (SAVER)"
+    to: "method:saver"
 current_sota:
   - method: method:orarl
     as_of: "2026-08-27"
@@ -22,12 +24,13 @@ current_sota:
     value: "Video-ORA-9B achieves 66.0 mIoU, 78.2 AO, 73.1 VSI-Bench at 2.2x SFT step time"
     notes: "OraRL (2608.20492) decouples oracle baseline to prevent advantage inversion and applies sign-balanced pruning."
 methods:
+  - method:saver
   - method:orarl
   - method:sapo
   - method:grpo
   - method:eps-prompt-scaffolding
   - method:vision-rl2
-last_reviewed: "2026-09-21"
+last_reviewed: "2026-10-13"
 tags:
   - video-mllm
   - multimodal-rl
@@ -43,3 +46,4 @@ Post-training multimodal large language models for fine-grained video perception
 ## SOTA Recommendation (as of 2026-08-27)
 - **Primary Method**: **OraRL** (`method:orarl`, `paper:orarl` `arXiv:2608.20492`) for annotation-as-rollout with decoupled advantage estimation and sign-balanced pruning.
 - **Not This Task**: general image/multimodal reasoning RL prompt curriculum is `method:eps-prompt-scaffolding` on `task:mllm-rl-prompt-curriculum`. Region-level image perception RL is `method:vision-rl2` on `task:mllm-finegrained-perception-rl`. OraRL is unchanged.
+- **Optional dense/sparse paired-view video RL (not this first hop)**: `method:saver` (`arXiv:2610.10893`) grounding + reliability-gated reference reward on 1,250 Time-R1 examples. Qwen3.5-2B 0.1fps mIoU 18.4→30.0; QA 45.9→50.8. Code lmsdss/SAVER. Does not replace OraRL.

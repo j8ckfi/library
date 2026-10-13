@@ -28,6 +28,9 @@ do_not_use_for:
   - when: "mechanism-first stateful tool envs (not OSS source)"
     reason: "CodeMidas is source-code coding RL env construction; VHD-Play starts from solved math mechanisms"
     use_instead: "task:mechanism-grounded-agentic-rl-env"
+  - when: "long-horizon terminal-agent data engine / pre-completed work detection"
+    reason: "CodeMidas is source-code env construction; TerminalHorizon rebuilds terminal envs and stages expansion"
+    use_instead: "method:terminalhorizon"
 assumptions:
   - "Source code is the only task-specific input. Agents explore implemented functionality, write behavioral specs, build execution-grounded tests, then filter."
   - "Paper trains MiMo-V2.5 with GRPO, binary execution rewards, batch 32, 32 rollouts per task, on 5,545 tasks / 3,185 repos / 23 languages."

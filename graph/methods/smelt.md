@@ -22,6 +22,9 @@ do_not_use_for:
   - when: "recurrent CED all-token recurrence"
     reason: "SMELT is decoder-only MoE layer looping under budget matching; RLT is a different architecture"
     use_instead: "method:recurrent-looped-transformer"
+  - when: "elastic mixed-depth looped LM (gated state update / mixed loop counts)"
+    reason: "SMELT loops MoE layers at matched FLOPs; ELR varies loop count at train and decode"
+    use_instead: "method:elr"
 assumptions:
   - "Match per-token FLOPs, total non-embedding parameters, and KV cache against an unlooped MoE Baseline. Typical residual mismatch: FLOPs <4%, params <1%, KV <4%."
   - "Locked recipe: loop middle 50% of layers twice; physical depth matches the Baseline; scale looped residuals by 1/r with r=2; narrow H and raise expert count; GQA/head-size for KV."

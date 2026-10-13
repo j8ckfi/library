@@ -18,6 +18,7 @@ current_sota:
     value: "SOTA for MoE/VL RL"
     notes: "SAPO (2511.20347) for MoE and Vision-Language policies."
 methods:
+  - method:latentgrm
   - method:cispo
   - method:sapo
   - method:opdvr
@@ -35,7 +36,7 @@ methods:
   - method:eapo
   - method:cis-rl
   - method:graft
-last_reviewed: "2026-09-30"
+last_reviewed: "2026-10-13"
 tags:
   - post-training
   - reinforcement-learning
@@ -50,3 +51,5 @@ tags:
 - **Process Supervision**: **VeriGate** (`method:verigate`, 2605.30451). Unchanged.
 - **Optional plug-ins (do not steal current_sota)**: `method:cliff` (first-mistake credit, not a PRM), `method:diem` (example reweight), `method:self-routing` (sample-level GRPO/OPSD router), `method:ngu` (async sampler until ≥1 correct; not a CISPO/SAPO/GRPO loss), `method:eapo` (entropy×sign exploration credit), `method:cis-rl` (MoE train–infer mismatch IS), `method:graft` (peer all-fail salvage).
 - **Gotcha**: `paper:spurious-advantage-grpo` on group-relative magnitude. Do not revive GRPO.
+- **Optional latent generative reward model (not this first hop)**: `method:latentgrm` (`arXiv:2610.09788`) judges in latent space. ~9× shorter eval trajectories; 6–7× faster at vote@5; 4B/8B vote@5 Avg-8 67.8/69.0 vs Rubric-RM 67.0/68.1. Code EADMO/LatentGRM. Does not replace CISPO or SAPO.
+- **Gotcha (abstention)**: `paper:llm-abstention` (`arXiv:2610.13821`). RL variants did not consistently improve abstention on Qwen3-14B; a learned answer selector raised TriviaQA coverage 20.2%→30.9% and cut error 23.0%→14.5%. Does not retarget CISPO.

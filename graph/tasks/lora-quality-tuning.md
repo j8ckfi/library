@@ -12,6 +12,7 @@ current_sota:
     value: "Matches/exceeds DoRA"
     notes: "Vanilla LoRA + rsLoRA + LR sweep (2602.04998, 2601.22708) NOT DoRA."
 methods:
+  - method:dt-lora
   - method:lr-matters-lora
   - method:lora-unified-study
   - method:super-tuning
@@ -22,10 +23,12 @@ methods:
   - method:anlr-lora
   - method:iso-lora
   - method:read-lora
-last_reviewed: "2026-09-28"
+last_reviewed: '2026-10-14'
 redirects:
   - when: "stacking independently trained LoRA adapters / sequential skill add without an inference router"
     to: "task:lora-skill-composition"
+  - when: "dynamic tangent LoRA branch via residual-gradient SVD (not rsLoRA + LR sweep)"
+    to: "method:dt-lora"
 tags:
   - efficiency
   - peft
@@ -41,3 +44,4 @@ tags:
 - **Optional anisotropic per-rank LR**: `method:anlr-lora` (`arXiv:2609.05885`). Active beside NoRA. Does not replace the LR sweep.
 - **Active optimizer-shape / effective-rank note**: `method:iso-lora` (`arXiv:2609.12123`). AdamW vs SGD/Muon effective rank. Does not replace the LR-sweep quality default.
 - **Not this task (stack independently trained adapters)**: `method:read-lora` on `task:lora-skill-composition` (`arXiv:2609.31600`). Does not retarget the LR-sweep quality default.
+- **Optional dynamic-tangent LoRA (not this quality default)**: `method:dt-lora` (`arXiv:2610.17730`). VTAB-1K 76.2 vs LoRA 75.7; COCO r=16 avg 46.6 (+8.2). GitHub Snipine/DT-LoRA announced. Does **not** supersede vanilla LoRA + rsLoRA + LR sweep.

@@ -24,6 +24,8 @@ redirects:
   to: task:recurrent-encoder-decoder-lm
 - when: standard dense ~7B NTP from scratch
   to: task:pretrain-dense-7b
+- when: nested width-elastic supernet rather than mixed-depth looping
+  to: method:shell-elastic
 current_sota:
 - method: method:elr
   as_of: '2026-10-13'
@@ -33,11 +35,12 @@ current_sota:
   notes: ELR (2610.12582). Method status active. Listed here as first hop; method
     sota_for stays empty. Does not replace Looped Models Done Right or SMELT.
 methods:
+- method:shell-elastic
 - method:elr
 - method:looped-models-done-right
 - method:smelt
 - method:recurrent-looped-transformer
-last_reviewed: '2026-10-13'
+last_reviewed: '2026-10-14'
 tags:
 - pretraining
 - looped-lm
@@ -59,3 +62,4 @@ This is **not** Huginn-style fixed-point looping and not SMELT's compute-matched
 ## SOTA Recommendation (as of 2026-10-13)
 - **Primary (this task only)**: **ELR** (`method:elr`, `paper:elr` `arXiv:2610.12582`). Status `active`. Listed here as first hop; method `sota_for` stays empty. No public code.
 - **Not This Task**: `method:looped-models-done-right` remains Huginn-style dense looping; `method:smelt` remains compute-matched MoE looping; `method:recurrent-looped-transformer` remains experimental CED.
+- **Not this task (nested width, not mixed depth)**: `method:shell-elastic` (`arXiv:2610.15124`) on `task:llm-pretraining-optimization`. Does not replace ELR.

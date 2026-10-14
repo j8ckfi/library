@@ -10,6 +10,9 @@ supersedes:
   - method:grpo
   - method:dr-grpo
 do_not_use_for:
+  - when: "replace IS weight ρ by ρ^α to hit a target ESS"
+    reason: "SAO remains async straggler replay; TETPO tempers IS weights"
+    use_instead: "method:tetpo"
   - when: "sampler-anchored KL least-squares without IS clipping"
     reason: "SAO remains async straggler replay; KLPO is a one-rollout sampler-anchored update"
     use_instead: "method:klpo"

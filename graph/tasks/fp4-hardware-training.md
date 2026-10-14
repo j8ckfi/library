@@ -11,6 +11,8 @@ redirects:
     to: "method:soloq"
   - when: "FP4 RL train-side vs rollout-side quantization mismatch (TRACE / TRIAGE)"
     to: "task:fp4-rl-train-rollout-alignment"
+  - when: "mixed-precision scaling law for which forward/backward pass to keep high precision"
+    to: "method:mixed-precision-scaling"
 current_sota:
   - method: method:quartet-ii
     as_of: "2026-08-26"
@@ -25,6 +27,7 @@ current_sota:
     value: "Co-Default SOTA for microscaling FP4"
     notes: "MXFP4 (2605.09825)."
 methods:
+  - method:mixed-precision-scaling
   - method:dualquant
   - method:soloq
   - method:quartet-ii
@@ -34,7 +37,7 @@ methods:
   - method:kbbq
   - method:trace
   - method:triage
-last_reviewed: "2026-10-12"
+last_reviewed: '2026-10-14'
 tags:
   - compression
   - quantization
@@ -52,3 +55,4 @@ tags:
 - **Optional calibration-free dLLM PTQ (not this training default)**: `method:soloq` (`arXiv:2610.07121`) rotation PTQ for full-sequence and block-diffusion LMs; NVFP4 up to 2.61× peak-memory / 2.24× e2e. GitHub Intelligent-Computing-Lab-Panda/SoloQ 404. Does not replace Quartet-II or A2D.
 - **Not this task (FP4 RL train–rollout mismatch)**: `task:fp4-rl-train-rollout-alignment` / `method:trace` (`arXiv:2610.07767`) + `method:triage` (`arXiv:2610.07043`). Dual-active. Does not replace Quartet-II.
 
+- **Optional mixed-precision scaling law (not this training default)**: `method:mixed-precision-scaling` (`arXiv:2610.17637`). Separates capacity vs optimization-error of forward/backward quantization. Fwd-only NVFP4 +0.94–1.22% vs bwd-only +0.32–0.72% on 430M Qwen3 at 12.8B tokens. No public code. Does not replace Quartet-II / MXFP4.

@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "AR→discrete-dLLM on-policy distillation rather than a weight-delta recycle"
+    reason: "A2D recycles an AR post-training delta; JustOPD distills AR logits onto a dLLM"
+    use_instead: "method:justopd"
   - when: "text-to-image / flow reward alignment"
     reason: "A2D recycles an AR weight delta onto a dLLM; DiffusionOPSD / Self-OPD remain image/flow defaults"
     use_instead: "method:diffusion-opsd"
@@ -20,6 +23,8 @@ assumptions:
   - "Converted discrete diffusion LM from an AR checkpoint, plus an AR post-training delta. No official GitHub as of 2026-10-07."
 last_reviewed: "2026-10-07"
 papers:
+  - paper:dlm-ar-compute-gap
+  - paper:justopd
   - paper:a2d
 recipes:
   - recipe:a2d

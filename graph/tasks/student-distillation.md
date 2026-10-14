@@ -93,6 +93,10 @@ redirects:
     to: "method:branchopd"
   - when: "MC reasoning-tree process uncertainty / contract corpus / online routing during CoT-SFT (UGPC)"
     to: "method:ugpc"
+  - when: "AR→discrete-dLLM on-policy distillation rather than AR student matching"
+    to: "method:justopd"
+  - when: "OPD restricted to problems the student fails (accuracy drops while KL drops)"
+    to: "paper:opd-failure-problems"
 current_sota:
   - method: method:opd
     as_of: "2026-08-26"
@@ -107,6 +111,7 @@ current_sota:
     value: "83.4% headroom recovery in a single deployable student"
     notes: "Open-MOPD (2608.19098) fixes multi-teacher imbalance with token-share balancing and gap-aware dynamic budgeting."
 methods:
+  - method:justopd
   - method:branchopd
   - method:ugpc
   - method:rpd-opd
@@ -170,7 +175,7 @@ methods:
   - method:lmopd
   - method:latent-mopd
   - method:rp-opd
-last_reviewed: "2026-10-13"
+last_reviewed: '2026-10-14'
 tags:
   - post-training
   - distillation
@@ -246,3 +251,5 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Optional branch-and-resample OPD**: `method:branchopd` (`arXiv:2610.13481`) branches at uncertain / teacher-disagreement tokens and resamples student continuations; token-level teacher KL on main + branches. +18.55pp math avg@16, +13.8pp ALFWorld vs vanilla OPD; ~19%/31% fewer student tokens vs n=7 multi-rollout. Code chendy25/BranchOPD. Does not replace OPD.
 - **Optional CoT-SFT data selection**: `method:ugpc` (`arXiv:2610.12933`) MC reasoning trees for process uncertainty, then a contract corpus with online routing during SFT. Matches/beats full-data reasoning SFT at 0.22–1.91% of the optimization budget. Code Jackbrocp/Learning-More-by-Training-Less. Does not replace OPD or OPD-hard-CoT selection.
 
+- **Related AR→dLLM OPD (not this AR-student default)**: `method:justopd` (`arXiv:2610.17397`) on `task:diffusion-lm-ar-delta-recycle`. Does not replace OPD or A2D.
+- **Gotcha (fail-set OPD)**: `paper:opd-failure-problems` (`arXiv:2610.18011`). Five OPD mechanisms degrade on student-failure problems (8/8, p=0.0078) while KL keeps dropping; same pipeline +4.6pp on a non-failure mix. Do not concentrate OPD on all-fail prompts. Does not retarget OPD.

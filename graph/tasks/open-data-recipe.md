@@ -12,6 +12,7 @@ current_sota:
     value: "Default SOTA open data recipe"
     notes: "OLMo-3 / Dolma-3 (2512.13961)."
 methods:
+  - method:multimodal-data-mixtures
   - method:specialists-learn-faster
   - method:repetition-count-selection
   - method:repeated-token-worth
@@ -35,7 +36,9 @@ redirects:
     to: "task:zero-natural-data-self-play-pretrain"
   - when: "chronological pretraining knowledge / specialists that need fewer update steps"
     to: "method:specialists-learn-faster"
-last_reviewed: "2026-10-13"
+  - when: "text/vision/audio MoE mixing laws rather than the open text mix"
+    to: "method:multimodal-data-mixtures"
+last_reviewed: '2026-10-14'
 tags:
   - pretraining
   - open-data
@@ -57,3 +60,4 @@ Constructing transparent, reproducible, and open multi-trillion token pretrainin
 - **Fully synthetic single-stage pretrain (not this mix)**: `method:synth` on `task:synthetic-single-stage-pretrain`. Wikipedia/Wikibooks seeds, no Dolma-3 replacement.
 - **Zero-natural-data self-play pretrain (not this mix)**: `method:self-play-pretraining` on `task:zero-natural-data-self-play-pretrain`.
 - **Gotcha (specialists learn faster)**: `method:specialists-learn-faster` (`arXiv:2610.13835`) chronological knowledge ordering so specialists need fewer update steps. Data-ordering gotcha on Dolma-style mixes, not a replacement of OLMo-3. Project horizon-lab.org/specialist/.
+- **Optional multimodal MoE mixing laws (not this text mix)**: `method:multimodal-data-mixtures` (`arXiv:2610.14423`, NeurIPS 2026 spotlight). 268 MoE runs 457M–8.3B; vision/audio saturate ~2×. No public code. Does not replace OLMo-3.

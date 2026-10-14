@@ -48,7 +48,13 @@ redirects:
     to: "paper:massive-activation-lifecycle"
   - when: "randomized momentum transport rates for Muon / sign updates (theory)"
     to: "paper:randomized-momentum-transport"
+  - when: "structure-aware Muon on Monarch-factored weights (not dense Muon2)"
+    to: "method:monarch-muon"
+  - when: "nested width-elastic supernet at ~widest-subnet cost with μP-style HP transfer"
+    to: "method:shell-elastic"
 methods:
+  - method:monarch-muon
+  - method:shell-elastic
   - method:msar
   - method:zip-sr
   - method:spectrally-targeted-muon
@@ -79,7 +85,7 @@ methods:
   - method:muonio
   - method:adam-beta-cubic
   - method:bulkboost
-last_reviewed: "2026-10-13"
+last_reviewed: '2026-10-14'
 tags:
   - pretraining
   - optimizer
@@ -109,3 +115,5 @@ Pretraining modern neural network models involves minimizing cross-entropy loss 
 - **Optional residual topology (not this optimizer default)**: `method:msar` (`arXiv:2610.13630`) Multi-Stream Attention Residuals. Beats vanilla/mHC/AttnRes on 12 benches at 18B and 28B MoE; iso-loss 1.58× vs 1.35× AttnRes, 1.30× mHC. Single-paper baselines; no supersedes. Code jianke0604/MSAR. Composes with Muon2.
 - **Gotcha (massive-activation life cycle)**: `paper:massive-activation-lifecycle` (`arXiv:2610.00423`). Weight decay causally controls massive-activation magnitude (peak ~ λ^{-1/2}; timing log-linear in λ). Attention sinks / low-bit training. Code apd-smcclendon/massive_activations_2. Does not retarget Muon2.
 - **Gotcha (Randomized Momentum Transport)**: `paper:randomized-momentum-transport` (`arXiv:2610.13789`). Theory: O(T^{-1/3}) for Muon/sign updates; MNIST1D / CIFAR-10 only. Does not retarget Muon2.
+- **Optional Monarch-factored Muon (not this 7B default)**: `method:monarch-muon` (`arXiv:2610.17429`). 3.06 vs Monarch-AdamW 3.09 at 257M; dense Muon 2.99 is better. 6.89B H100 peak 68.87→52.94 GB. No public code. Does not replace Muon2.
+- **Optional nested-width supernet (not this optimizer default)**: `method:shell-elastic` (`arXiv:2610.15124`). Mean val loss 0.028/0.005/0.018 nats below best baseline at 119M–1.69B. Code jincan333/ShellElastic. HF Daily 2026-10-14. Does not replace Muon2, ELR, or Puro-2B.

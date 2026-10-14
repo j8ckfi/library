@@ -8,6 +8,9 @@ sota_for:
   - task:token-level-critic-rl
 supersedes: []
 do_not_use_for:
+  - when: "cumulative log-odds value parameterization (Tracking-Value PPO)"
+    reason: "BPCO remains the single-sample critic first hop; TPPO reparameterizes PPO value as log-odds"
+    use_instead: "method:tppo"
   - when: "Actor-then-Critic IS-aligned critic after axiomatic token credit"
     reason: "BPCO remains the single-sample critic first hop; PACT is the Actor-then-Critic IS plug-in"
     use_instead: "method:pact"

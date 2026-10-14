@@ -10,6 +10,9 @@ sota_for:
 supersedes:
   - method:dapo
 do_not_use_for:
+  - when: "Neyman prefix resampling μ(s)∝d(s)σ(s) via a prefix replay buffer"
+    reason: "CISPO remains Pass@1; VSR resamples prefixes inside a GRPO/GiGPO host"
+    use_instead: "method:vsr"
   - when: "rollout-level drop of high-probability positive-advantage traces"
     reason: "CISPO remains Pass@1; GRPODropout filters easy positives inside a GRPO-family group"
     use_instead: "method:grpodropout"
@@ -75,6 +78,8 @@ do_not_use_for:
     use_instead: "method:rgpo"
 last_reviewed: "2026-10-09"
 papers:
+  - paper:two-clocks-rlvr
+  - paper:thinking-leakage
   - paper:llm-abstention
   - paper:exppo
   - paper:logra

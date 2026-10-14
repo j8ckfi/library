@@ -8,6 +8,12 @@ sota_for:
   - task:privileged-teacher-opsd
 supersedes: []
 do_not_use_for:
+  - when: "system-prompt verbal regularization of a privileged teacher"
+    reason: "VISTA remains the privileged-teacher first hop; VRSD attenuates privileged cues in the teacher prompt"
+    use_instead: "method:vrsd"
+  - when: "hidden-state privileged OPSD after GRPO (invisible advantage)"
+    reason: "VISTA remains the privileged-teacher first hop; PR-OPD aligns hidden states after GRPO"
+    use_instead: "method:pr-opd"
   - when: "rollout-free step-aligned privileged distillation of a reference solution"
     reason: "VISTA remains privileged-teacher first hop; SAPD is offline step-aligned distill"
     use_instead: "method:sapd"
@@ -37,6 +43,9 @@ do_not_use_for:
     use_instead: "method:privileged-context-drift"
 last_reviewed: "2026-10-09"
 papers:
+  - paper:self-distillation-ood
+  - paper:pr-opd
+  - paper:vrsd
   - paper:privileged-context-drift
   - paper:og-opsd
   - paper:e2-opsd

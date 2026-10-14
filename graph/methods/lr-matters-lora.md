@@ -11,6 +11,9 @@ supersedes:
   - method:dora
   - method:delora
 do_not_use_for:
+  - when: "dynamic tangent LoRA branch via residual-gradient SVD"
+    reason: "Quality default remains vanilla LoRA + rsLoRA + LR sweep; DT-LoRA is a vision/detection plug-in"
+    use_instead: "method:dt-lora"
   - when: "stacking independently trained LoRA adapters / sequential skill add without an inference router"
     reason: "Quality default is a single-adapter recipe; READ owns multi-skill composition"
     use_instead: "method:read-lora"

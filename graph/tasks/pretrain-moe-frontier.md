@@ -29,6 +29,8 @@ redirects:
     to: "task:train-moe-nvl72"
   - when: "olympiad-style natural-language proofs / IMO TTC rather than architecture"
     to: "task:olympiad-math-posttrain"
+  - when: "text/vision/audio mixing laws on a multimodal MoE (not the architecture template)"
+    to: "method:multimodal-data-mixtures"
 current_sota:
   - method: method:deepseek-v4
     as_of: "2026-08-26"
@@ -43,6 +45,7 @@ current_sota:
     value: "Frontier Co-Default SOTA"
     notes: "Kimi-K3 (2607.24653) architecture co-default with DeepSeek-V4."
 methods:
+  - method:multimodal-data-mixtures
   - method:expertmuon-compass
   - method:deepseek-v4
   - method:kimi-k3
@@ -63,7 +66,7 @@ methods:
   - method:recurrent-looped-transformer
   - method:drmoet
   - method:maskerade
-last_reviewed: "2026-10-07"
+last_reviewed: '2026-10-14'
 tags:
   - pretraining
   - moe
@@ -89,3 +92,4 @@ Training sparse Mixture-of-Experts models enables scaling parameter capacity int
 - **Optional DRO load-balancing objective**: `method:drmoet` (`arXiv:2610.07207`, NeurIPS 2026). FLAME-MoE 10.3B seven-task avg 0.6767 vs FLAME 0.6625. Does not replace DeepSeek-V4 / Kimi-K3.
 - **Not this task (dense-to-MoE upcycling)**: `method:maskerade` on `task:dense-to-moe-upcycling` (`arXiv:2610.07809`). Does not replace DeepSeek-V4 / Kimi-K3.
 - **Olympiad specialist post-train on Ultra (not this architecture task)**: `method:nemotron-imo-gold` on `task:olympiad-math-posttrain`.
+- **Optional multimodal mixture laws (not this architecture default)**: `method:multimodal-data-mixtures` (`arXiv:2610.14423`). Does not replace DeepSeek-V4 / Kimi-K3.

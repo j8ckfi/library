@@ -35,6 +35,12 @@ redirects:
     to: "method:rc-opd"
   - when: "critique-conditioned privileged OPSD (teacher critiques then scores, not scoring-only)"
     to: "method:cc-opsd"
+  - when: "hidden-state privileged OPSD after GRPO (PR-OPD / invisible advantage)"
+    to: "method:pr-opd"
+  - when: "system-prompt verbal regularization of a privileged teacher (VRSD)"
+    to: "method:vrsd"
+  - when: "self-distillation OOD: SDPO/OPSD gains largely do not transfer"
+    to: "paper:self-distillation-ood"
 current_sota:
   - method: method:vista
     as_of: "2026-08-31"
@@ -43,6 +49,8 @@ current_sota:
     value: "VISTA 44.0 / 64.3 / 66.9 vs OPSD 43.4 / 63.6 / 64.8 vs GRPO 37.7 / 62.7 / 64.0"
     notes: "VISTA (2608.28306) keeps the OPSD student update and adapts the privileged teacher on verified rollouts at top-k teacher-first KL positions."
 methods:
+  - method:pr-opd
+  - method:vrsd
   - method:cc-opsd
   - method:sapd
   - method:srd
@@ -67,7 +75,7 @@ methods:
   - method:sampling-sft
   - method:air-opd
   - method:rc-opd
-last_reviewed: "2026-10-12"
+last_reviewed: '2026-10-14'
 tags:
   - post-training
   - distillation
@@ -107,3 +115,6 @@ Train a problem-only student on its own rollouts using dense token-level targets
 - **Optional rollout-free step-aligned distill (not this first hop)**: `method:sapd` (`arXiv:2610.09665`) privileged reference-solution steps, no live rollouts. ~2× vs on-policy. Code Miaow-Lab/SAPD. Does not replace VISTA or OPD.
 - **Optional silent-group hindsight distill (not this first hop)**: `method:srd` (`arXiv:2610.08077`) on `task:math-code-rl-dense`. No gold teacher. Does not replace VISTA or VeriGate.
 - **Optional critique-conditioned privileged OPSD (not this first hop)**: `method:cc-opsd` (`arXiv:2610.13744`) generates a critique then scores; scoring-only KL/log-ratio neither localizes gold error spans nor yields GRPO advantage on silent prompts. NeurIPS 2026 FLLMPT oral. No public code. Does not replace VISTA or SRD.
+- **Optional privileged representation OPSD (not this first hop)**: `method:pr-opd` (`arXiv:2609.36642`). After GRPO, +4.7 ALFWorld / +11.7 WebShop on Qwen2.5-3B-Instruct; skill changes <25% of token probs but >80% of hidden states. Code balibata/PR-OPD. Related PreSO 2610.14001 is SKIP. Does not replace VISTA or NSD.
+- **Optional verbal regularization of privileged OPSD (not this first hop)**: `method:vrsd` (`arXiv:2610.16354`). Avg +3.9pp Pass@1; 11/12 settings. Code lijiazheng99/VRSD. Does not replace VISTA or NSD.
+- **Gotcha (self-distillation OOD)**: `paper:self-distillation-ood` (`arXiv:2610.18613`). SDPO LCB test_unseen Qwen3-8B −2.5 vs GRPO +3.7; science OOD −7.1 to −16.6. Does not retarget VISTA.

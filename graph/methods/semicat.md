@@ -24,6 +24,7 @@ assumptions:
 - No public code as of 2026-10-13.
 last_reviewed: '2026-10-13'
 papers:
+- paper:dlm-ar-compute-gap
 - paper:semicat
 recipes:
 - recipe:semicat

@@ -24,6 +24,10 @@ redirects:
     to: "task:fp4-hardware-training"
   - when: "quality LoRA on 24GB without a fully quantized checkpoint constraint"
     to: "task:lora-quality-tuning"
+  - when: "mixed-precision scaling law for which pass to keep high precision (not optimizer-state memory)"
+    to: "method:mixed-precision-scaling"
+  - when: "structure-aware Muon on Monarch-factored weights (not SCALE subspace)"
+    to: "method:monarch-muon"
 current_sota:
   - method: method:scale
     as_of: "2026-08-26"
@@ -32,13 +36,15 @@ current_sota:
     value: "Default SOTA for memory-efficient full-parameter training"
     notes: "SCALE (2506.16659, ICML 2026) not GaLore."
 methods:
+  - method:mixed-precision-scaling
+  - method:monarch-muon
   - method:zip-sr
   - method:clean
   - method:logra
   - method:scale
   - method:galore
   - method:taco
-last_reviewed: "2026-10-09"
+last_reviewed: '2026-10-14'
 tags:
   - efficiency
   - optimizer
@@ -52,3 +58,5 @@ tags:
 - **Primary Method**: **SCALE** (`method:scale`, 2506.16659, ICML 2026) — not GaLore.
 - **Optional FT-axis sparse optimizer (not this first hop)**: `method:taco` (`arXiv:2610.02199`). Ternary abs-max column-wise one-sparse updates; 174× optimizer-state vs AdamW8bit on OPT-13B SST-2. Does not replace SCALE or Muon2.
 - **Optional 4-bit AdamW-state quantization (not this first hop)**: `method:zip-sr` (`arXiv:2610.12444`) on `task:llm-pretraining-optimization`. Preconditioner-space SR; up to 70% TorchAO gap cut. Does not replace SCALE, Muon2, or TACO.
+- **Optional mixed-precision pass allocation (not this first hop)**: `method:mixed-precision-scaling` (`arXiv:2610.17637`) on `task:fp4-hardware-training`. Does not replace SCALE.
+- **Optional Monarch-factored Muon (not this first hop)**: `method:monarch-muon` (`arXiv:2610.17429`). 6.89B H100 peak 68.87→52.94 GB. Loses to dense Muon at 257M. Does not replace SCALE or Muon2.

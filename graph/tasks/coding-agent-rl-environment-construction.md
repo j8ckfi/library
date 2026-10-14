@@ -33,6 +33,8 @@ redirects:
     to: "method:programgym"
   - when: "long-horizon terminal-agent data engine / pre-completed work detection (TerminalHorizon)"
     to: "method:terminalhorizon"
+  - when: "fork RL rollouts from the agent's own failure states (ReTerm / recovery training)"
+    to: "method:reterm"
 current_sota:
   - method: method:codemidas
     as_of: "2026-09-21"
@@ -41,6 +43,7 @@ current_sota:
     value: "DeepSWE 10.0→21.7; ProgramBench AS 4.5→21.5; TB v2.1 +8.5pp (63.7→72.2)"
     notes: "CodeMidas (2609.22068). Active env factory. Method status active (not sota). Does not replace CANOPY / SAO / Miles / mini-SWE-agent."
 methods:
+  - method:reterm
   - method:terminalhorizon
   - method:t1-terminal-rl
   - method:programgym
@@ -51,7 +54,7 @@ methods:
   - method:miles
   - method:category-aware-swe-experts
   - method:vhd-play
-last_reviewed: "2026-10-13"
+last_reviewed: '2026-10-14'
 tags:
   - post-training
   - agentic
@@ -78,3 +81,4 @@ This is **not** the SWE loop, not AppWorld coverage, and not an async trainer.
 - **Not this task (mechanism-first tool envs)**: `method:vhd-play` on `task:mechanism-grounded-agentic-rl-env`. Solved math mechanism → stateful tools. Does not replace CodeMidas.
 - **Optional from-scratch program-reproduction gym (not this first hop)**: `method:programgym` (`arXiv:2610.13395`) 1,648 C/C++/Go/Rust envs; Qwen3.8-27B 34.87%→42.84% SFT / Program-Agent 55.71%. `code_status: announced`. Does not replace CodeMidas or mini-SWE-agent.
 - **Optional long-horizon terminal data engine (not this first hop)**: `method:terminalhorizon` (`arXiv:2610.13166`) 1,535 envs / 2,852 traj / avg 52.8 turns; detects pre-completed work and rebuilds. SFT Qwen3.5-27B: TB1.0 55.0 (+8.7); TB2.0 55.8 (+14.2); TB2.1 46.82→60.67; AutomationBench Pass 5.5→17.2. Project zs1314.github.io/TerminalHorizon. Does not replace CodeMidas. Related 122B recipe is `method:t1-terminal-rl`.
+- **Optional recovery-fork terminal RL (not this env-factory first hop)**: `method:reterm` (`arXiv:2610.18484`). ReTerm-9B TB2.0 Pass@1 34.8 (+14.6); SWE-Verified 58.4%. Code twothsnd/ReTerm. Does not replace CodeMidas, T1, or TerminalHorizon.

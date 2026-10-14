@@ -15,6 +15,10 @@ out_of_scope:
 - Text-to-image / flow reward alignment (DiffusionOPSD / Self-OPD)
 - Lossless multi-token / diffusion-augmented AR serving (Uno)
 redirects:
+- when: 16x DLM-vs-AR pretrain compute gap under ELBO vs exact likelihood (discrete MDM/BD3LM/E2D2)
+  to: paper:dlm-ar-compute-gap
+- when: AR→discrete-dLLM on-policy distillation (JustOPD), not continuous pretrain
+  to: method:justopd
 - when: discrete-dLLM AR-delta recycle / converted absorbing or masked dLLM, not continuous
     pretrain
   to: task:diffusion-lm-ar-delta-recycle
@@ -35,13 +39,14 @@ current_sota:
     (design-space, not a 7B bake-off). Method sota_for stays empty. Does not replace
     A2D or CanvasAnneal.
 methods:
+- method:justopd
 - method:semicat
 - method:a2d
 - method:canvasanneal
 - method:diffusion-opsd
 - method:self-opd
 - method:uno
-last_reviewed: '2026-10-13'
+last_reviewed: '2026-10-14'
 tags:
 - diffusion
 - pretraining
@@ -63,3 +68,5 @@ This is **not** discrete dLLM recycle (A2D) and not image/flow alignment.
 ## SOTA Recommendation (as of 2026-10-13)
 - **Experimental first hop (this task only)**: **SemiCat / DoubleCat** (`method:semicat`, `paper:semicat` `arXiv:2610.13834`). Status `active`. Method `sota_for` stays empty. No public code.
 - **Not This Task**: `method:a2d` remains discrete-dLLM AR-delta recycle; `method:canvasanneal` remains discrete canvas RL; `method:diffusion-opsd` / `method:self-opd` remain image/flow post-train.
+- **Gotcha (16× compute protocol)**: `paper:dlm-ar-compute-gap` (`arXiv:2610.17590`). Under exact likelihood the gap shrinks (ELBO MDM 17.8× → DUEL 12.8×; E2D2 b=4 3.0×). Discrete vs AR, not SemiCat continuous. Project guanghanwang.com/dlm-scaling. Does not retarget SemiCat.
+- **Not this task (AR→discrete dLLM OPD)**: `method:justopd` (`arXiv:2610.17397`) on `task:diffusion-lm-ar-delta-recycle`. Does not replace SemiCat.

@@ -6,6 +6,86 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-10-14 — weekday SOTA sweep (KV4-RL, TPPO, ProRubric, Monarch-Muon, PR-OPD, Mixed Precision Scaling, Multimodal Mixtures, Scaling Repeated-Data, ShellElastic, TETPO, VSR, ReTerm, JustOPD, VRSD, DT-LoRA)
+- Fifteen active plug-ins and five paper-only notes. No current_sota retarget (Muon2 / CISPO / OPD / Open-MOPD / VISTA / SAO / CANOPY / OLMo-3 / Quartet-II / vanilla LoRA+rsLoRA+LR sweep / A2D / SemiCat / TRACE/TRIAGE / CodeMidas / TerminalHorizon / Repeated-Token Worth).
+- Window: 2026-10-14 Librarian weekday sweep after merged PR 43 (watermark 2610.13948, 1295 nodes, a58446e). arXiv had no Tue 2026-10-13 listing; Wed 2026-10-14 listing (cs.LG/cs.CL/cs.AI new+cross) covers both days. New high id 2610.18874. HF Daily 2026-10-13 and 2026-10-14.
+- SKIP (considered, not ingested): Echo 2610.14277 (TP comm systems; revisit), ObsSpec 2610.15246, RAD 2610.14572, LEAD 2610.18256, VH-GPO 2610.14000, PreSO 2610.14001 (mentioned under PR-OPD related work only), PEARL 2610.14636, PTGPO 2610.14737, ProAS 2610.18683, DeltaTTG 2610.17666, RELAY 2610.17623, CoCA 2610.17733, Ares spectral-rank RLVR optimizer 2610.16533 (repo stub), Tev 2610.18868, Long-CoT behavioral distillation 2610.17607, Taming Softmax/Muon 2610.17588, LatentMoE shape 2610.14644, VHA 2610.17959, RPO root-token 2610.17767, dLLM RL (RePara 2610.18200, PACT-dLLM 2610.17266; `method:pact` already exists), Apertus 1.5 2610.15542.
+
+### 2026-10-14 — ingest method:mixed-precision-scaling (active on task:fp4-hardware-training; does not supersede method:quartet-ii)
+- Added paper:mixed-precision-scaling (2610.17637), method:mixed-precision-scaling, recipe:mixed-precision-scaling (`code_status: none`). Mention on task:full-param-memory-efficient-pretrain.
+- Status active (`sota_for: []`). 430M Qwen3 @ 12.8B: bwd-only +0.32–0.72%, fwd-only +0.94–1.22%; law up to 11× lower MSE. Single-paper baselines.
+
+### 2026-10-14 — ingest method:multimodal-data-mixtures (active on task:open-data-recipe; does not supersede method:olmo-3)
+- Added paper:multimodal-data-mixtures (2610.14423, NeurIPS 2026 spotlight, `evidence_level: peer-reviewed`), method:multimodal-data-mixtures, recipe:multimodal-data-mixtures (`code_status: none`). Mention on task:pretrain-moe-frontier.
+- Status active (`sota_for: []`). 268 MoE runs 457M–8.3B; vision α=0.50 β=0.51, text α=β=0.34, audio α=0.32; saturate ~2×.
+
+### 2026-10-14 — ingest method:scaling-repeated-data (active on task:data-constrained-pretrain; does not supersede method:repeated-token-worth / method:repetition-count-selection)
+- Added paper:scaling-repeated-data (2610.15965), method:scaling-repeated-data, recipe:scaling-repeated-data (`code_status: none`).
+- Status active (`sota_for: []`). U-shaped loss vs batch size; B=64 vs 512 1.5B CE 3.124→2.977; tying+emb WD 2.971→2.946.
+
+### 2026-10-14 — ingest method:monarch-muon (active on task:llm-pretraining-optimization; does not supersede method:muon2)
+- Added paper:monarch-muon (2610.17429), method:monarch-muon, recipe:monarch-muon (`code_status: none`). Mention on task:full-param-memory-efficient-pretrain.
+- Status active (`sota_for: []`). 3.06 vs 3.09 (257M vs Monarch-AdamW; dense Muon 2.99 is better); 1B MoE 2.68 vs 2.77; 6.89B peak mem −23% / opt step 1288.3→304.4 ms.
+
+### 2026-10-14 — ingest method:shell-elastic (active on task:llm-pretraining-optimization; does not supersede method:muon2 / method:elr)
+- Added paper:shell-elastic (2610.15124), method:shell-elastic, recipe:shell-elastic (`code_status: released`; jincan333/ShellElastic). Mention on task:elastic-depth-looped-lm.
+- Status active (`sota_for: []`). Mean val loss 0.028/0.005/0.018 nats below best baseline; best/tied 12/15 val-loss, 14/15 5-shot. HF Daily 2026-10-14.
+
+### 2026-10-14 — ingest method:kv4-rl (active on task:fp4-rl-train-rollout-alignment; does not supersede method:trace / method:triage)
+- Added paper:kv4-rl (2610.14448), method:kv4-rl, recipe:kv4-rl (`code_status: none`). Mention on task:agentic-async-rl.
+- Status active (`sota_for: []`). Qwen3-8B-Base GRPO 1.80× rollout / MATH-500 87.68 vs BF16 88.16; plain INT4 −5.24pp even with TIS.
+
+### 2026-10-14 — ingest method:tetpo (active on task:agentic-async-rl; does not supersede method:sao / method:cispo)
+- Added paper:tetpo (2610.14440), method:tetpo, recipe:tetpo (`code_status: none`). Mention on task:math-code-rl-dense.
+- Status active (`sota_for: []`). Qwen3-Base-1.7B k=32 avg@16 44.4 vs M2PO 42.3 / GSPO 39.0; Llama-3.2-3B-Instruct 18.5 vs GEPO 16.2.
+
+### 2026-10-14 — ingest method:tppo (active on task:token-level-critic-rl; does not supersede method:bpco / method:pact)
+- Added paper:tppo (2610.16794), method:tppo, recipe:tppo (`code_status: released`; LINs-lab/TPPO).
+- Status active (`sota_for: []`). Qwen3-4B/8B-Base math 41.6 vs PPO 34.6 / 45.9 vs 37.5. HF Daily 2026-10-14.
+
+### 2026-10-14 — ingest method:vsr (active on task:math-code-rl-dense; does not supersede method:cispo)
+- Added paper:vsr (2610.15888), method:vsr, recipe:vsr (`code_status: none`). Mention on task:outcome-only-long-horizon-agent-rl.
+- Status active (`sota_for: []`). Qwen2.5-7B 37.6 vs GRPO 36.1; Llama-3.2-3B 19.1 vs 15.4; GiGPO+VSR BabyAI 47.6 vs 30.4. Distinct from NGU / ThinkPrior.
+
+### 2026-10-14 — ingest method:prorubric (active on task:outcome-only-long-horizon-agent-rl; does not supersede method:canopy / method:draco / method:metarubric)
+- Added paper:prorubric (2609.38847), method:prorubric, recipe:prorubric (`code_status: released`; Estrellajer/ProRubric). Mention on task:multi-reward-rlvr.
+- Status active (`sota_for: []`). HealthBench 4B appropriateness 36.8 vs Rubric-RL 26.0 (untrained 54.1 is not a win). HF Daily 2026-10-14.
+
+### 2026-10-14 — ingest method:reterm (active on task:coding-agent-rl-environment-construction; does not supersede method:codemidas / method:t1-terminal-rl / method:terminalhorizon)
+- Added paper:reterm (2610.18484), method:reterm, recipe:reterm (`code_status: released`; twothsnd/ReTerm). Mention on task:outcome-only-long-horizon-agent-rl.
+- Status active (`sota_for: []`). ReTerm-9B Qwen3.5-9B TB2.0 Pass@1 34.8 (+14.6); SWE-Verified 58.4%.
+
+### 2026-10-14 — ingest method:justopd (active on task:diffusion-lm-ar-delta-recycle; does not supersede method:a2d / method:opd)
+- Added paper:justopd (2610.17397), method:justopd, recipe:justopd (`code_status: none`). Mentions on task:student-distillation / task:continuous-diffusion-lm-pretrain.
+- Status active (`sota_for: []`). Dream-7B + Qwen3-14B L=256 GSM8K 77.03→81.80 / MATH500 31.80→39.60.
+
+### 2026-10-14 — ingest method:pr-opd (active on task:privileged-teacher-opsd; does not supersede method:vista)
+- Added paper:pr-opd (2609.36642), method:pr-opd, recipe:pr-opd (`code_status: released`; balibata/PR-OPD). Mention on task:outcome-only-long-horizon-agent-rl.
+- Status active (`sota_for: []`). WebShop skill 42.2→56.2; after GRPO Qwen2.5-3B-Instruct +4.7 ALFWorld / +11.7 WebShop. PreSO 2610.14001 related work only.
+
+### 2026-10-14 — ingest method:vrsd (active on task:privileged-teacher-opsd; does not supersede method:vista / method:nsd)
+- Added paper:vrsd (2610.16354), method:vrsd, recipe:vrsd (`code_status: released`; lijiazheng99/VRSD).
+- Status active (`sota_for: []`). 11/12 settings; avg +3.9pp Pass@1; SQL OPSD 69.8 vs VRSD 81.0.
+
+### 2026-10-14 — ingest method:dt-lora (active on task:lora-quality-tuning; does not supersede method:lr-matters-lora)
+- Added paper:dt-lora (2610.17730), method:dt-lora, recipe:dt-lora (`code_status: announced`; Snipine/DT-LoRA README-only).
+- Status active (`sota_for: []`). VTAB-1K 76.2 vs LoRA 75.7; COCO r=16 avg 46.6 (+8.2).
+
+### 2026-10-14 — note paper:dlm-ar-compute-gap (gotcha on task:continuous-diffusion-lm-pretrain / task:diffusion-lm-ar-delta-recycle; does not retarget method:semicat / method:a2d)
+- Added paper:dlm-ar-compute-gap (2610.17590). Project guanghanwang.com/dlm-scaling. ELBO MDM 17.8×; DUEL 12.8×; E2D2 b=32/8/4 = 7.8/4.6/3.0×; BD3LM 32/16/8/4 = 9.6/7.8/5.9/4.1 DUEL. Older 16× claims used ELBO/full-sequence protocol.
+
+### 2026-10-14 — note paper:two-clocks-rlvr (gotcha on task:math-code-rl-dense; does not retarget method:cispo)
+- Added paper:two-clocks-rlvr (2610.18853). WinstonLiyt/two-clocks-rlvr 404 (`code_status` announced/none). Qwen2.5-Math-1.5B 4096 fails 56–80 steps / 512 after 648, both 30–50k samples.
+
+### 2026-10-14 — note paper:self-distillation-ood (gotcha on task:privileged-teacher-opsd; does not retarget method:vista)
+- Added paper:self-distillation-ood (2610.18613). Code sleepypandu/does-sd-improve-reasoning. SDPO LCB test_unseen Qwen3-8B −2.5 vs GRPO +3.7; science OOD −7.1 to −16.6.
+
+### 2026-10-14 — note paper:opd-failure-problems (gotcha on task:student-distillation; does not retarget method:opd)
+- Added paper:opd-failure-problems (2610.18011). 8/8 fail-set configs degrade (p=0.0078) while KL drops; same pipeline +4.6pp on non-failure mix (Qwen2.5-0.5B GSM8K 43.6→48.2).
+
+### 2026-10-14 — note paper:thinking-leakage (gotcha on task:reasoning-rl-alignment; does not retarget method:cispo)
+- Added paper:thinking-leakage (2610.14270). Mention on task:math-code-rl-dense. Qwen3-8B AIME no-think 0.17→0.43 vs think-mode 0.74; 8D subspace G=0.222 removes 75%.
+
 ### 2026-10-13 — weekday SOTA sweep (ELR, MSAR, BranchOPD, SemiCat, TerminalHorizon, UGPC, SAVER, D2R, Representation Guidance, ReplaySSM, Specialists Learn Faster, LatentGRM)
 - Twelve active plug-ins, three new tasks (`elastic-depth-looped-lm`, `continuous-diffusion-lm-pretrain`, `pixel-diffusion-pretrain`), three paper-only notes. No current_sota retarget of existing tasks (Muon2 / OPD / Open-MOPD / CANOPY / CodeMidas / OraRL / EfficientTDMPC / Mamba-2 / OLMo-3 / CISPO / A2D / SMELT / Looped Models Done Right). New tasks seed first hops with method `sota_for: []`.
 - Window: 2026-10-13 Librarian weekday sweep after merged PR 42 (watermark 2610.13767, 1253 nodes, 14c9b58). New high id 2610.13948. HF Daily 2026-10-12 and partial 2026-10-13.

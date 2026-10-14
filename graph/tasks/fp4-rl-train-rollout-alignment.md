@@ -20,6 +20,8 @@ redirects:
     to: "task:math-code-rl-moe"
   - when: "production post-train stack rather than FP4 RL numerics"
     to: "task:frontier-rl-posttrain-stack"
+  - when: "INT4 KV-cache async RLVR rollouts with INT8 sink/recent protection (not NVFP4 train–rollout mismatch)"
+    to: "method:kv4-rl"
 current_sota:
   - method: method:trace
     as_of: "2026-10-07"
@@ -34,13 +36,14 @@ current_sota:
     value: "up to 2.3×"
     notes: "TRIAGE (2610.07043). Dual-active with TRACE. Method status active. No head-to-head vs TRACE."
 methods:
+  - method:kv4-rl
   - method:trace
   - method:triage
   - method:quartet-ii
   - method:mxfp4-mi355x
   - method:sapo
   - method:cispo
-last_reviewed: "2026-10-07"
+last_reviewed: '2026-10-14'
 tags:
   - post-training
   - quantization
@@ -65,3 +68,4 @@ This is **not** native FP4 hardware training from scratch.
 - **Primary (rollout-guided QAT, this task only)**: **TRACE** (`method:trace`, `paper:trace` `arXiv:2610.07767`). Status `active`. Dual-active with TRIAGE.
 - **Primary (direction-aware NVFP4 mismatch, this task only)**: **TRIAGE** (`method:triage`, `paper:triage` `arXiv:2610.07043`). Status `active`. Dual-active with TRACE.
 - **Not This Task**: `method:quartet-ii` remains native FP4 hardware training; `method:cispo` / `method:sapo` remain the RL losses.
+- **Optional INT4 KV rollout cache (not this first hop)**: `method:kv4-rl` (`arXiv:2610.14448`). 1.80× rollout vs BF16 KV on Qwen3-8B-Base GRPO; naive INT4 −5.24pp MATH-500 even with TIS. No public code. Does not replace TRACE / TRIAGE.

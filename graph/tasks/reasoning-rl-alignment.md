@@ -4,6 +4,9 @@ type: task
 title: "Reinforcement Learning & Reasoning Post-Training"
 domain: "post-training"
 summary: "Aligning foundation language models with rule-based verifiers and group-relative policy optimization for long-horizon mathematical and code reasoning."
+redirects:
+  - when: "NO-THINK-mode GRPO gains that reactivate THINK-mode behavior"
+    to: "paper:thinking-leakage"
 current_sota:
   - method: method:cispo
     as_of: "2026-08-26"
@@ -36,7 +39,7 @@ methods:
   - method:eapo
   - method:cis-rl
   - method:graft
-last_reviewed: "2026-10-13"
+last_reviewed: '2026-10-14'
 tags:
   - post-training
   - reinforcement-learning
@@ -53,3 +56,4 @@ tags:
 - **Gotcha**: `paper:spurious-advantage-grpo` on group-relative magnitude. Do not revive GRPO.
 - **Optional latent generative reward model (not this first hop)**: `method:latentgrm` (`arXiv:2610.09788`) judges in latent space. ~9× shorter eval trajectories; 6–7× faster at vote@5; 4B/8B vote@5 Avg-8 67.8/69.0 vs Rubric-RM 67.0/68.1. Code EADMO/LatentGRM. Does not replace CISPO or SAPO.
 - **Gotcha (abstention)**: `paper:llm-abstention` (`arXiv:2610.13821`). RL variants did not consistently improve abstention on Qwen3-14B; a learned answer selector raised TriviaQA coverage 20.2%→30.9% and cut error 23.0%→14.5%. Does not retarget CISPO.
+- **Gotcha (thinking leakage)**: `paper:thinking-leakage` (`arXiv:2610.14270`). Qwen3-8B AIME 0.17→0.43 no-think GRPO vs think-mode 0.74; 8D subspace removes 75%. Evaluate NO-THINK RL against a THINK baseline. Does not retarget CISPO.

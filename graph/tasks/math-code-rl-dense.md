@@ -89,6 +89,14 @@ redirects:
     to: "method:s3r"
   - when: "outcome-only RL inducing process supervision / generative PRMs (TIPS)"
     to: "method:tips"
+  - when: "Neyman prefix resampling μ(s)∝d(s)σ(s) via a prefix replay buffer (VSR)"
+    to: "method:vsr"
+  - when: "target-ESS tempered IS (TETPO) rather than Pass@1 CISPO"
+    to: "method:tetpo"
+  - when: "rollout batch size vs sqrt-LR rule; two clocks of progress vs failure"
+    to: "paper:two-clocks-rlvr"
+  - when: "NO-THINK-mode GRPO gains that reactivate THINK-mode behavior"
+    to: "paper:thinking-leakage"
 current_sota:
   - method: method:cispo
     as_of: "2026-08-26"
@@ -97,6 +105,8 @@ current_sota:
     value: "Default SOTA for Dense RL"
     notes: "CISPO via MiniMax-M1 (2506.13585) + ScaleRL (2510.13786)."
 methods:
+  - method:vsr
+  - method:tetpo
   - method:tapo
   - method:gppo
   - method:cbpo
@@ -158,7 +168,7 @@ methods:
   - method:mesh-learning
   - method:opsft
   - method:rgpo
-last_reviewed: "2026-10-12"
+last_reviewed: '2026-10-14'
 tags:
   - post-training
   - reasoning
@@ -228,3 +238,7 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Related rollout-speed plug-in (not this Pass@1 default)**: `method:s3r` (`arXiv:2610.13202`) on `task:frontier-rl-posttrain-stack`. Sparse-draft / dense-verify; 1.39×–1.35×. Does not replace CISPO.
 - **Related generative-PRM recipe (not this Pass@1 default)**: `method:tips` (`arXiv:2609.36641`) on `task:all-zero-verifier-groups`. ProcessBench F1 85.2. Code RUCBM/TIPS. Does not replace CISPO or VeriGate.
 
+- **Optional variance-driven prefix resampling (not this Pass@1 default)**: `method:vsr` (`arXiv:2610.15888`). Qwen2.5-7B 37.6 vs GRPO 36.1; GiGPO+VSR BabyAI 47.6 vs 30.4. Distinct from NGU / ThinkPrior. No public code. Does not replace CISPO.
+- **Related target-ESS IS temper (not this Pass@1 default)**: `method:tetpo` (`arXiv:2610.14440`) on `task:agentic-async-rl`. Does not replace CISPO or SAO.
+- **Gotcha (two clocks)**: `paper:two-clocks-rlvr` (`arXiv:2610.18853`). Sqrt-LR preserves drift per sample but not progress; LR-dependent critical rollout batch. Repo WinstonLiyt/two-clocks-rlvr 404. Does not retarget CISPO.
+- **Gotcha (thinking leakage)**: `paper:thinking-leakage` (`arXiv:2610.14270`) on `task:reasoning-rl-alignment`. NO-THINK GRPO on Qwen3 largely reactivates THINK-mode. Does not retarget CISPO.

@@ -102,23 +102,28 @@ task:fp4-hardware-training -> method:quartet-ii (2601.22813, 2026-08-26) + metho
   when dual-scale calibration-free W+A PTQ for AR LLMs (not native FP4 training) -> method:dualquant
   when calibration-free dLLM quantization (SoloQ; mask/step activation shift) -> method:soloq
   when FP4 RL train-side vs rollout-side quantization mismatch (TRACE / TRIAGE) -> task:fp4-rl-train-rollout-alignment
+  when mixed-precision scaling law for which forward/backward pass to keep high precision -> method:mixed-precision-scaling
 task:post-training-ternary-quantization -> method:scaleq-158 (2608.01078, 2026-08-26)
 task:continuous-control-world-model -> method:efficienttdmpc (2605.16692, 2026-08-26) + method:dream-mpc (2605.04568, 2026-08-26)
   when structure-aware numerical stabilization for half-precision PPO (control, not LLM) -> method:ppo-fp16
   when continual RL of a frozen robot policy via world-model imagination rehearsal (D2R) -> method:d2r
 task:visuomotor-servo-control -> method:td-mpc2 (2310.16828, 2026-08-26)
-task:continuous-diffusion-lm-pretrain -> method:semicat (2610.13834, 2026-10-13)
+task:continuous-diffusion-lm-pretrain -> method:semicat (2610.17590, 2026-10-13)
+  when 16x DLM-vs-AR pretrain compute gap under ELBO vs exact likelihood (discrete MDM/BD3LM/E2D2) -> paper:dlm-ar-compute-gap
+  when AR→discrete-dLLM on-policy distillation (JustOPD), not continuous pretrain -> method:justopd
   when discrete-dLLM AR-delta recycle / converted absorbing or masked dLLM, not continuous pretrain -> task:diffusion-lm-ar-delta-recycle
   when curriculum RL for a discrete diffusion LM (canvas anneal) -> method:canvasanneal
   when aligning text-to-image diffusion or flow models with rewards -> task:posttrain-diffusion
   when lossless multi-token / diffusion-augmented AR serving -> task:diffusion-augmented-ar
-task:diffusion-lm-ar-delta-recycle -> method:a2d (2610.08108, 2026-10-07)
+task:diffusion-lm-ar-delta-recycle -> method:a2d (2610.17590, 2026-10-07)
   when calibration-free dLLM quantization (not AR-delta recycle) -> method:soloq
   when aligning text-to-image diffusion or flow models with rewards -> task:posttrain-diffusion
   when curriculum RL for a discrete diffusion LM (canvas anneal), not AR-delta recycle -> method:canvasanneal
   when lossless multi-token / diffusion-augmented AR serving -> task:diffusion-augmented-ar
   when single-turn dense math/code Pass@1 RLVR -> task:math-code-rl-dense
   when continuous diffusion language model pretrain (self-conditioning / SemiCat), not AR-delta recycle -> task:continuous-diffusion-lm-pretrain
+  when AR→discrete-dLLM on-policy distillation (JustOPD), not a weight-delta recycle -> method:justopd
+  when 16x DLM-vs-AR pretrain compute gap under ELBO vs exact likelihood -> paper:dlm-ar-compute-gap
 task:pixel-diffusion-pretrain -> method:representation-guidance (2610.12978, 2026-10-13)
   when aligning text-to-image diffusion or flow models with rewards -> task:posttrain-diffusion
   when continuous diffusion language model pretrain (not pixel DiT) -> task:continuous-diffusion-lm-pretrain
@@ -152,8 +157,11 @@ task:full-param-memory-efficient-pretrain -> method:scale (2610.06647, 2026-08-2
   when ternary abs-max column-wise one-sparse optimizer for full-param LLM FT -> method:taco
   when native FP4 forward/backward hardware training from scratch -> task:fp4-hardware-training
   when quality LoRA on 24GB without a fully quantized checkpoint constraint -> task:lora-quality-tuning
+  when mixed-precision scaling law for which pass to keep high precision (not optimizer-state memory) -> method:mixed-precision-scaling
+  when structure-aware Muon on Monarch-factored weights (not SCALE subspace) -> method:monarch-muon
 task:lora-quality-tuning -> method:lr-matters-lora (2602.04998, 2026-08-26)
   when stacking independently trained LoRA adapters / sequential skill add without an inference router -> task:lora-skill-composition
+  when dynamic tangent LoRA branch via residual-gradient SVD (not rsLoRA + LR sweep) -> method:dt-lora
 task:lora-skill-composition -> method:read-lora (2609.31600, 2026-09-28)
   when single-adapter quality LoRA / rsLoRA + LR sweep rather than stacking adapters -> task:lora-quality-tuning
   when memory must fit a 4-bit PEFT stack -> task:4bit-peft-quantization
@@ -206,6 +214,8 @@ task:agentic-async-rl -> method:sao (2607.07508, 2026-08-26)
   when structural credit split for tool-call vs natural-language-summary tokens, not async stragglers -> task:tool-agent-segment-credit
   when CEM-style critic-free RFT from replay when group rollouts are impractical (stateful sandboxes) -> method:ftw
   when unified EventLog lifecycle library for tool-using LLM agents (not the async algorithm) -> method:agenttune
+  when replace IS weight ρ by ρ^α to hit a target ESS (TETPO) -> method:tetpo
+  when INT4 KV-cache async RLVR rollouts with INT8 sink/recent protection -> method:kv4-rl
 task:agentic-rsi-routing-posttrain -> method:neohorse-1 (2609.08183, 2026-09-09)
   when build a SWE / issue-to-patch harness rather than post-train from routing traces -> task:software-engineering-agent-harness
   when variable environment latency / async stragglers, not RSI routing post-train -> task:agentic-async-rl
@@ -232,6 +242,7 @@ task:coding-agent-rl-environment-construction -> method:codemidas (2609.22068, 2
   when mechanism-first stateful tool envs (not OSS source) -> task:mechanism-grounded-agentic-rl-env
   when from-scratch program reproduction envs / Program-Agent (not issue-to-patch, not OSS source factory) -> method:programgym
   when long-horizon terminal-agent data engine / pre-completed work detection (TerminalHorizon) -> method:terminalhorizon
+  when fork RL rollouts from the agent's own failure states (ReTerm / recovery training) -> method:reterm
 task:cross-tokenizer-opd -> method:cross-tokenizer-opd (2610.08448, 2026-10-07)
   when credit alignment after chunk correspondence for cross-tokenizer OPD (CAST) -> method:cast
   when same-tokenizer single-teacher matching distillation -> task:student-distillation
@@ -249,6 +260,7 @@ task:fp4-rl-train-rollout-alignment -> method:trace (2610.07767, 2026-10-07) + m
   when single-turn dense math/code Pass@1 RLVR -> task:math-code-rl-dense
   when MoE/VL RLVR loss rather than FP4 train–rollout alignment -> task:math-code-rl-moe
   when production post-train stack rather than FP4 RL numerics -> task:frontier-rl-posttrain-stack
+  when INT4 KV-cache async RLVR rollouts with INT8 sink/recent protection (not NVFP4 train–rollout mismatch) -> method:kv4-rl
 task:instruct-sft-alignment -> method:olmo-3 (2512.13961, 2026-08-26) + method:nemotron-cascade-2 (2603.19220, 2026-08-26)
   when SFT-free RL-only domain adaptation from a base model (OnePO / HuatuoGPT-3) -> method:onepo
   when in-language (L2) reasoning SFT rather than general instruct -> task:multilingual-l2-reasoning-sft
@@ -256,7 +268,7 @@ task:instruct-sft-alignment -> method:olmo-3 (2512.13961, 2026-08-26) + method:n
   when on-policy parameter update direction SFT (OPSFT) -> method:opsft
 task:label-free-reasoner-posttrain -> method:u-opsd (2610.07842, 2026-08-28)
 task:label-free-test-time-reasoner -> method:ttpo (2608.27448, 2026-08-28)
-task:math-code-rl-dense -> method:cispo (2610.13821, 2026-08-26)
+task:math-code-rl-dense -> method:cispo (2610.18853, 2026-08-26)
   when rollout-level drop of high-probability positive-advantage traces (GRPODropout) -> method:grpodropout
   when novelty-rewarded explorer policies distilled into a student without novelty (ExpDis) -> method:expdis
   when semifactual prompt-stability token credit on a GRPO host (SCAPO) -> method:scapo
@@ -292,6 +304,10 @@ task:math-code-rl-dense -> method:cispo (2610.13821, 2026-08-26)
   when escaping the RLVR zero-advantage trap with recursive calibrated problem synthesis -> method:magicbeanstalk
   when fast and faithful RL rollouts via self-sparse speculative decoding (not the Pass@1 loss) -> method:s3r
   when outcome-only RL inducing process supervision / generative PRMs (TIPS) -> method:tips
+  when Neyman prefix resampling μ(s)∝d(s)σ(s) via a prefix replay buffer (VSR) -> method:vsr
+  when target-ESS tempered IS (TETPO) rather than Pass@1 CISPO -> method:tetpo
+  when rollout batch size vs sqrt-LR rule; two clocks of progress vs failure -> paper:two-clocks-rlvr
+  when NO-THINK-mode GRPO gains that reactivate THINK-mode behavior -> paper:thinking-leakage
 task:math-code-rl-moe -> method:sapo (2511.20347, 2026-08-26)
   when hierarchical routing control for agentic RL on MoE (operation-type experts) -> method:hierarchical-moe-routing-control
   when single-turn dense math/code Pass@1 RLVR -> task:math-code-rl-dense
@@ -321,6 +337,7 @@ task:multi-reward-rlvr -> method:corrgrpo (2609.36820, 2026-10-02) + method:dara
   when cancellation-aware off-policy response mask (absolute token log-ratios) -> method:carm
   when outcome-only long-horizon interactive agent RL -> task:outcome-only-long-horizon-agent-rl
   when lexicographic priority multi-objective OPD from reward-specialist teachers (not scalarized multi-reward RL) -> method:lmopd
+  when protocol-level rubric grouping so criteria cannot compensate (not Pearson/density aggregation) -> method:prorubric
 task:multilingual-l2-reasoning-sft -> method:tiny-aya-l2-thinker (2609.10445, 2026-09-14)
   when open pretrain mix / Dolma-3 recipe -> task:open-data-recipe
   when general chat / instruct SFT without L2 language fidelity -> task:instruct-sft-alignment
@@ -353,8 +370,12 @@ task:outcome-only-long-horizon-agent-rl -> method:canopy (2609.01245, 2026-09-04
   when matched-context group policy optimization (pairwise credit on sibling agent rollouts) -> method:mcgpo
   when hindsight-guided tree exploration and turn-level credit for multi-turn LLM agents -> method:treehca
   when branch-and-resample OPD at uncertain / teacher-disagreement tokens (protocol-boundary repair) -> method:branchopd
+  when protocol-level rubrics so criteria cannot compensate (ProRubric) -> method:prorubric
+  when Neyman prefix resampling on GiGPO-style agent groups (VSR) -> method:vsr
+  when fork RL rollouts from the agent's own failure states (ReTerm) -> method:reterm
+  when privileged representation OPSD after GRPO (PR-OPD / invisible advantage) -> method:pr-opd
 task:passk-reasoning-coverage -> method:es-reasoning (2608.27351, 2026-08-31)
-task:privileged-teacher-opsd -> method:vista (2610.07842, 2026-08-31)
+task:privileged-teacher-opsd -> method:vista (2610.18613, 2026-08-31)
   when rollout-free step-aligned privileged distillation of a reference solution (SAPD) -> method:sapd
   when hindsight-to-foresight distillation when verifier groups are silent (SRD) -> method:srd
   when privileged-context content (demo vs feedback vs rephrase) as OPSD drift, not a trainer -> method:privileged-context-drift
@@ -370,8 +391,12 @@ task:privileged-teacher-opsd -> method:vista (2610.07842, 2026-08-31)
   when adaptive iterative error-to-repair guidance for OPSD -> method:air-opd
   when root-cause diagnosis of the student's own failed reasoning then differentiated prefix/error distillation -> method:rc-opd
   when critique-conditioned privileged OPSD (teacher critiques then scores, not scoring-only) -> method:cc-opsd
-task:reasoning-rl-alignment -> method:cispo (2610.13821, 2026-08-26) + method:sapo (2511.20347, 2026-08-26)
-task:student-distillation -> method:opd (2610.11247, 2026-08-26) + method:open-mopd (2610.10460, 2026-08-28)
+  when hidden-state privileged OPSD after GRPO (PR-OPD / invisible advantage) -> method:pr-opd
+  when system-prompt verbal regularization of a privileged teacher (VRSD) -> method:vrsd
+  when self-distillation OOD: SDPO/OPSD gains largely do not transfer -> paper:self-distillation-ood
+task:reasoning-rl-alignment -> method:cispo (2610.18853, 2026-08-26) + method:sapo (2511.20347, 2026-08-26)
+  when NO-THINK-mode GRPO gains that reactivate THINK-mode behavior -> paper:thinking-leakage
+task:student-distillation -> method:opd (2610.18011, 2026-08-26) + method:open-mopd (2610.10460, 2026-08-28)
   when bilevel learned token weights from post-update validation loss (MetaOPD) -> method:metaopd
   when probability-space token keep-mask that downweights low-low tokens (DIAL-OPD) -> method:dial-opd
   when offline initial-student rollouts instead of live on-policy sampling (Semi-OPD) -> method:semi-opd
@@ -416,6 +441,8 @@ task:student-distillation -> method:opd (2610.11247, 2026-08-26) + method:open-m
   when cross-tokenizer chunk credit alignment (CAST), not 1:1 coverage -> method:cast
   when branch at uncertain / teacher-disagreement tokens then resample student continuations (BranchOPD) -> method:branchopd
   when MC reasoning-tree process uncertainty / contract corpus / online routing during CoT-SFT (UGPC) -> method:ugpc
+  when AR→discrete-dLLM on-policy distillation rather than AR student matching -> method:justopd
+  when OPD restricted to problems the student fails (accuracy drops while KL drops) -> paper:opd-failure-problems
 task:swe-agent-category-expert-rl -> method:category-aware-swe-experts (2609.23377, 2026-09-23)
   when failure-conditioned recovery (reuse failed patch + verifier feedback) -> method:fc-swe
   when env construction from source only -> task:coding-agent-rl-environment-construction
@@ -434,6 +461,7 @@ task:teacher-free-on-policy-self-adaptation -> method:opsa (2608.31046, 2026-09-
 task:token-level-critic-rl -> method:bpco (2608.23566, 2026-08-27)
   when Actor-then-Critic IS-aligned critic after axiomatic token credit -> method:pact
   when structural credit split for tool-call vs natural-language-summary tokens (not Actor-then-Critic) -> task:tool-agent-segment-credit
+  when cumulative log-odds value parameterization (TPPO / Tracking-Value PPO) -> method:tppo
 task:tool-agent-segment-credit -> method:slca-grpo (2609.29050, 2026-09-25)
   when context folding of a long tool trajectory -> task:long-horizon-tool-agent
   when variable environment latency / async stragglers -> task:agentic-async-rl
@@ -465,6 +493,7 @@ task:data-constrained-pretrain -> method:repeated-token-worth (2610.05591, 2026-
   when MoE sparsity × data-repetition overfit (not dense epoch pricing) -> method:moe-data-repetition
   when fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds -> task:synthetic-single-stage-pretrain
   when zero-natural-data self-play pretraining (generator proposes UTM programs) -> task:zero-natural-data-self-play-pretrain
+  when batch size / packing / tying / embedding WD under multi-epoch (not unique-token epoch pricing) -> method:scaling-repeated-data
 task:dense-to-moe-upcycling -> method:maskerade (2610.07809, 2026-10-07)
   when choosing the frontier MoE architecture template rather than upcycling a dense FFN -> task:pretrain-moe-frontier
   when MoE/VL RLVR loss rather than dense-to-MoE conversion -> task:math-code-rl-moe
@@ -475,6 +504,7 @@ task:elastic-depth-looped-lm -> method:elr (2610.12582, 2026-10-13)
   when compute-matched MoE looping of middle layers (FLOPs/params/KV matched) -> task:compute-matched-moe-looped-pretrain
   when experimental CED all-token recurrence, not mixed-depth looping -> task:recurrent-encoder-decoder-lm
   when standard dense ~7B NTP from scratch -> task:pretrain-dense-7b
+  when nested width-elastic supernet rather than mixed-depth looping -> method:shell-elastic
 task:latent-space-lm-pretrain -> method:ncp-archpreview (2609.10715, 2026-09-11)
   when choosing the ~7B dense pretrain optimizer -> task:llm-pretraining-optimization
   when open pretrain mix / Dolma-3 recipe -> task:open-data-recipe
@@ -504,12 +534,15 @@ task:llm-pretraining-optimization -> method:muon2 (2610.00423, 2026-08-26)
   when multi-stream attention residuals vs vanilla / mHC / AttnRes (MSAR) -> method:msar
   when weight decay causally controls massive-activation magnitude / attention sinks -> paper:massive-activation-lifecycle
   when randomized momentum transport rates for Muon / sign updates (theory) -> paper:randomized-momentum-transport
+  when structure-aware Muon on Monarch-factored weights (not dense Muon2) -> method:monarch-muon
+  when nested width-elastic supernet at ~widest-subnet cost with μP-style HP transfer -> method:shell-elastic
 task:open-data-recipe -> method:olmo-3 (2512.13961, 2026-08-26)
   when unique-token epoch / repetition geometry under a finite pretrain corpus (not the open mix) -> task:data-constrained-pretrain
   when in-language (L2) reasoning SFT rather than a pretrain mix -> task:multilingual-l2-reasoning-sft
   when fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds (no web mix) -> task:synthetic-single-stage-pretrain
   when zero-natural-data self-play pretraining (generator proposes UTM programs) -> task:zero-natural-data-self-play-pretrain
   when chronological pretraining knowledge / specialists that need fewer update steps -> method:specialists-learn-faster
+  when text/vision/audio MoE mixing laws rather than the open text mix -> method:multimodal-data-mixtures
 task:pretrain-dense-7b -> method:muon2 (2610.00423, 2026-08-26)
   when unique-token epoch / repetition geometry under a finite pretrain corpus -> task:data-constrained-pretrain
   when latent-space / next-concept LM architecture rather than dense NTP 7B -> task:latent-space-lm-pretrain
@@ -525,6 +558,7 @@ task:pretrain-moe-frontier -> method:deepseek-v4 (2606.19348, 2026-08-26) + meth
   when recurrent CED-style architecture (all-token recurrence / encoder memory / SWA decoder), not NTP MoE V4 -> task:recurrent-encoder-decoder-lm
   when NVL72 fused dispatch+SwiGLU+combine megakernel -> task:train-moe-nvl72
   when olympiad-style natural-language proofs / IMO TTC rather than architecture -> task:olympiad-math-posttrain
+  when text/vision/audio mixing laws on a multimodal MoE (not the architecture template) -> method:multimodal-data-mixtures
 task:recurrent-encoder-decoder-lm -> method:recurrent-looped-transformer (2610.06833, 2026-09-12)
   when Huginn-style dense fixed-point looped LMs (learned depth prior, terminal KV sharing, cheaper RL from saved states) -> method:looped-models-done-right
   when standard dense ~7B NTP from scratch -> task:pretrain-dense-7b
@@ -866,6 +900,26 @@ task:rl-video-mllm -> method:orarl (2608.20492, 2026-08-27)
 262. **Massive-activation life cycle** (claim note, no new method): `paper:massive-activation-lifecycle` (`arXiv:2610.00423`) on `task:llm-pretraining-optimization`. Weight decay causally controls massive-activation magnitude. Code apd-smcclendon/massive_activations_2.
 263. **Abstention study** (claim note, no new method): `paper:llm-abstention` (`arXiv:2610.13821`) on `task:reasoning-rl-alignment`. RL variants did not consistently improve abstention on Qwen3-14B; learned selector TriviaQA coverage 20.2%→30.9%, error 23.0%→14.5%.
 264. **Randomized Momentum Transport** (claim note, no new method): `paper:randomized-momentum-transport` (`arXiv:2610.13789`) on `task:llm-pretraining-optimization`. Theory O(T^{-1/3}) for Muon/sign updates; small-scale experiments only.
+265. **Mixed Precision Scaling Laws**: **Mixed Precision Scaling** (`method:mixed-precision-scaling`, `arXiv:2610.17637`) on `task:fp4-hardware-training`. Active plug-in. Separates capacity vs optimization-error of forward/backward quantization; 430M Qwen3 @ 12.8B bwd-only +0.32–0.72% / fwd-only +0.94–1.22%. Mention on `task:full-param-memory-efficient-pretrain`. Does **not** replace Quartet-II.
+266. **Multimodal Data Mixtures**: **Multimodal Data-Mixture Scaling Laws** (`method:multimodal-data-mixtures`, `arXiv:2610.14423`, NeurIPS 2026 spotlight) on `task:open-data-recipe`. Active plug-in. 268 MoE runs 457M–8.3B; vision α=0.50 β=0.51, text α=β=0.34, audio α=0.32; saturate ~2×. Mention on `task:pretrain-moe-frontier`. Does **not** replace OLMo-3.
+267. **Scaling Repeated-Data Pretraining**: **Scaling Repeated-Data** (`method:scaling-repeated-data`, `arXiv:2610.15965`) on `task:data-constrained-pretrain`. Active plug-in. U-shaped loss vs batch size; B=64 vs 512 1.5B CE 3.124→2.977; tying+emb WD 2.971→2.946. Does **not** replace Repeated-Token Worth / Repetition-Count Selection or OLMo-3.
+268. **Monarch-Muon**: **Monarch-Muon** (`method:monarch-muon`, `arXiv:2610.17429`) on `task:llm-pretraining-optimization`. Active plug-in. 3.06 vs 3.09 (257M vs Monarch-AdamW; dense Muon 2.99 is better); 1B MoE 2.68 vs 2.77; 6.89B peak mem −23%. Mention on `task:full-param-memory-efficient-pretrain`. Does **not** replace Muon2.
+269. **ShellElastic**: **ShellElastic (+ μE)** (`method:shell-elastic`, `arXiv:2610.15124`) on `task:llm-pretraining-optimization`. Active plug-in. Nested width-elastic supernet; mean val loss 0.028/0.005/0.018 nats below best baseline; best/tied 12/15 val-loss, 14/15 5-shot. Code jincan333/ShellElastic. Mention on `task:elastic-depth-looped-lm`. Does **not** replace Muon2 or ELR.
+270. **KV4-RL**: **KV4-RL** (`method:kv4-rl`, `arXiv:2610.14448`) on `task:fp4-rl-train-rollout-alignment`. Active plug-in. INT4 KV + INT8 sink/recent protection; Qwen3-8B-Base GRPO 1.80× rollout / MATH-500 87.68 vs BF16 88.16; plain INT4 −5.24pp even with TIS. Mention on `task:agentic-async-rl`. Does **not** replace TRACE / TRIAGE.
+271. **TETPO**: **TETPO** (`method:tetpo`, `arXiv:2610.14440`) on `task:agentic-async-rl`. Active plug-in. Replaces IS weight ρ by ρ^α to a target ESS. Qwen3-Base-1.7B k=32 avg@16 44.4 vs M2PO 42.3 / GSPO 39.0. Mention on `task:math-code-rl-dense`. Does **not** replace SAO or CISPO.
+272. **TPPO**: **TPPO** (`method:tppo`, `arXiv:2610.16794`) on `task:token-level-critic-rl`. Active plug-in. Cumulative log-odds value parameterization. Qwen3-4B/8B-Base math 41.6 vs PPO 34.6 / 45.9 vs 37.5. Code LINs-lab/TPPO. Does **not** replace BPCO or PACT.
+273. **VSR**: **VSR** (`method:vsr`, `arXiv:2610.15888`) on `task:math-code-rl-dense`. Active plug-in. Neyman allocation μ(s)∝d(s)σ(s) via prefix replay. Qwen2.5-7B 37.6 vs GRPO 36.1; GiGPO+VSR BabyAI 47.6 vs 30.4. Mention on `task:outcome-only-long-horizon-agent-rl`. Distinct from NGU / ThinkPrior. Does **not** replace CISPO.
+274. **ProRubric**: **ProRubric** (`method:prorubric`, `arXiv:2609.38847`) on `task:outcome-only-long-horizon-agent-rl`. Active plug-in. Groups rubric criteria so they must hold together. HealthBench 4B appropriateness 36.8 vs Rubric-RL 26.0 (untrained 54.1 is not a win). Code Estrellajer/ProRubric. Mention on `task:multi-reward-rlvr`. Does **not** replace CANOPY, DRACO, or MetaRubric.
+275. **ReTerm**: **ReTerm** (`method:reterm`, `arXiv:2610.18484`) on `task:coding-agent-rl-environment-construction`. Active plug-in. Forks RL rollouts from the agent's own failure states. ReTerm-9B TB2.0 Pass@1 34.8 (+14.6); SWE-Verified 58.4%. Code twothsnd/ReTerm. Mention on `task:outcome-only-long-horizon-agent-rl`. Does **not** replace CodeMidas / T1 / TerminalHorizon.
+276. **JustOPD**: **JustOPD** (`method:justopd`, `arXiv:2610.17397`) on `task:diffusion-lm-ar-delta-recycle`. Active plug-in. AR→discrete-dLLM on-policy distillation. Dream-7B + Qwen3-14B L=256 GSM8K 77.03→81.80 / MATH500 31.80→39.60. Mentions on `task:student-distillation` / `task:continuous-diffusion-lm-pretrain`. Does **not** replace A2D or OPD.
+277. **PR-OPD**: **PR-OPD** (`method:pr-opd`, `arXiv:2609.36642`) on `task:privileged-teacher-opsd`. Active plug-in. Hidden-state OPSD after GRPO; skill changes <25% of token probs but >80% of hidden states; WebShop 42.2→56.2 / +11.7 after GRPO. Code balibata/PR-OPD. Mention on `task:outcome-only-long-horizon-agent-rl`. PreSO (`arXiv:2610.14001`) is related work only. Does **not** replace VISTA.
+278. **VRSD**: **VRSD** (`method:vrsd`, `arXiv:2610.16354`) on `task:privileged-teacher-opsd`. Active plug-in. System prompts attenuate privileged-info influence. 11/12 settings; avg +3.9pp Pass@1; SQL OPSD 69.8 vs VRSD 81.0. Code lijiazheng99/VRSD. Does **not** replace VISTA or NSD.
+279. **DT-LoRA**: **DT-LoRA** (`method:dt-lora`, `arXiv:2610.17730`) on `task:lora-quality-tuning`. Active plug-in. Stable + dynamic tangent branch via matrix-free randomized SVD. VTAB-1K 76.2 vs LoRA 75.7; COCO r=16 avg 46.6 (+8.2). Code Snipine/DT-LoRA announced. Does **not** supersede vanilla LoRA + rsLoRA + LR sweep.
+280. **DLM vs AR compute gap** (claim note, no new method): `paper:dlm-ar-compute-gap` (`arXiv:2610.17590`) on `task:continuous-diffusion-lm-pretrain` / `task:diffusion-lm-ar-delta-recycle`. ELBO MDM 17.8×; DUEL 12.8×; E2D2 b=32/8/4 = 7.8/4.6/3.0×; BD3LM 32/16/8/4 = 9.6/7.8/5.9/4.1 DUEL. Older 16× claims used ELBO/full-sequence protocol.
+281. **Two Clocks** (claim note, no new method): `paper:two-clocks-rlvr` (`arXiv:2610.18853`) on `task:math-code-rl-dense`. Sqrt-LR preserves drift per sample but not progress; Qwen2.5-Math-1.5B 4096 fails 56–80 steps / 512 after 648, both 30–50k samples. WinstonLiyt/two-clocks-rlvr 404. Does **not** retarget CISPO.
+282. **Does self-distillation improve reasoning?** (claim note, no new method): `paper:self-distillation-ood` (`arXiv:2610.18613`) on `task:privileged-teacher-opsd`. SDPO LCB test_unseen Qwen3-8B −2.5 vs GRPO +3.7; science OOD −7.1 to −16.6. Does **not** retarget VISTA.
+283. **OPD on student-failure problems** (claim note, no new method): `paper:opd-failure-problems` (`arXiv:2610.18011`) on `task:student-distillation`. 8/8 fail-set configs degrade (p=0.0078) while KL drops; same pipeline +4.6pp on non-failure mix (Qwen2.5-0.5B GSM8K 43.6→48.2). Gotcha: do not concentrate OPD on all-fail prompts.
+284. **Thinking Leakage** (claim note, no new method): `paper:thinking-leakage` (`arXiv:2610.14270`) on `task:reasoning-rl-alignment`. Qwen3-8B AIME no-think 0.17→0.43 vs think-mode 0.74; 8D subspace G=0.222 removes 75%. Evaluate NO-THINK RL against a THINK baseline. Mention on `task:math-code-rl-dense`.
 
 ---
 
@@ -1132,6 +1186,26 @@ The knowledge graph encodes the following explicit supersession relationships:
 - `paper:massive-activation-lifecycle` (2610.00423) is a pretrain massive-activation gotcha. It does not supersede `muon2`.
 - `paper:llm-abstention` (2610.13821) is an RL-abstention claim note. It does not supersede `cispo`.
 - `paper:randomized-momentum-transport` (2610.13789) is a low-priority Muon-rate theory note. It does not supersede `muon2`.
+- `mixed-precision-scaling` (2610.17637) is an active quantized-pretrain mixed-precision law. It does not supersede `quartet-ii`.
+- `multimodal-data-mixtures` (2610.14423, NeurIPS 2026 spotlight) is an active multimodal mix-ratio law. It does not supersede `olmo-3`.
+- `scaling-repeated-data` (2610.15965) is an active multi-epoch batch/regularization plug-in. It does not supersede `repeated-token-worth`, `repetition-count-selection`, or `olmo-3`.
+- `monarch-muon` (2610.17429) is an active structure-aware Muon plug-in on Monarch-factored weights. It does not supersede `muon2`.
+- `shell-elastic` (2610.15124) is an active nested width-elastic supernet plug-in. It does not supersede `muon2` or `elr`.
+- `kv4-rl` (2610.14448) is an active INT4-KV async RLVR rollout plug-in. It does not supersede `trace` or `triage`.
+- `tetpo` (2610.14440) is an active target-ESS tempered IS plug-in. It does not supersede `sao` or `cispo`.
+- `tppo` (2610.16794) is an active cumulative log-odds critic plug-in. It does not supersede `bpco` or `pact`.
+- `vsr` (2610.15888) is an active Neyman prefix-resampling plug-in. Distinct from `ngu` / `thinkprior`. It does not supersede `cispo`.
+- `prorubric` (2609.38847) is an active protocol-level rubric grouping plug-in. It does not supersede `canopy`, `draco`, or `metarubric`.
+- `reterm` (2610.18484) is an active failure-state recovery-fork plug-in. It does not supersede `codemidas`, `t1-terminal-rl`, or `terminalhorizon`.
+- `justopd` (2610.17397) is an active AR→dLLM on-policy distillation plug-in. It does not supersede `a2d` or `opd`.
+- `pr-opd` (2609.36642) is an active hidden-state privileged OPSD plug-in. PreSO (`arXiv:2610.14001`) is related work only. It does not supersede `vista`.
+- `vrsd` (2610.16354) is an active verbal-regularization privileged OPSD plug-in. It does not supersede `vista` or `nsd`.
+- `dt-lora` (2610.17730) is an active dynamic-tangent LoRA plug-in. It does not supersede `lr-matters-lora`.
+- `paper:dlm-ar-compute-gap` (2610.17590) revisits the 16× DLM-vs-AR compute gap under exact likelihood. It does not retarget `semicat` or `a2d`.
+- `paper:two-clocks-rlvr` (2610.18853) is an RLVR rollout-batch vs sqrt-LR gotcha. It does not supersede `cispo`.
+- `paper:self-distillation-ood` (2610.18613) is a negative-result OOD caveat on SDPO/OPSD. It does not retarget `vista`.
+- `paper:opd-failure-problems` (2610.18011) is an OPD all-fail-prompt gotcha. It does not supersede `opd`.
+- `paper:thinking-leakage` (2610.14270) is a NO-THINK RL vs THINK-baseline gotcha. It does not supersede `cispo`.
 
 ---
 

@@ -59,6 +59,14 @@ redirects:
     to: "method:treehca"
   - when: "branch-and-resample OPD at uncertain / teacher-disagreement tokens (protocol-boundary repair)"
     to: "method:branchopd"
+  - when: "protocol-level rubrics so criteria cannot compensate (ProRubric)"
+    to: "method:prorubric"
+  - when: "Neyman prefix resampling on GiGPO-style agent groups (VSR)"
+    to: "method:vsr"
+  - when: "fork RL rollouts from the agent's own failure states (ReTerm)"
+    to: "method:reterm"
+  - when: "privileged representation OPSD after GRPO (PR-OPD / invisible advantage)"
+    to: "method:pr-opd"
 current_sota:
   - method: method:canopy
     as_of: "2026-09-04"
@@ -67,6 +75,10 @@ current_sota:
     value: "86.9 / 67.6"
     notes: "CANOPY (2609.01245). Sparse outcome reward, n=32, KL-anchored on-policy. Does not replace SAO, FoldGRPO, CISPO, mini-swe-agent, or omp2-harness. DRACO is the outcome-blind rubric sibling, not a supersession."
 methods:
+  - method:prorubric
+  - method:vsr
+  - method:reterm
+  - method:pr-opd
   - method:branchopd
   - method:state-opd
   - method:mcgpo
@@ -92,7 +104,7 @@ methods:
   - method:scad
   - method:metarubric
   - method:hierarchical-moe-routing-control
-last_reviewed: "2026-10-13"
+last_reviewed: '2026-10-14'
 tags:
   - post-training
   - agentic
@@ -136,3 +148,7 @@ Two siblings share this task and are not substitutes:
 - **Optional matched-context GPO (not this first hop)**: `method:mcgpo` (`arXiv:2610.13755`) pairwise credit on matched sibling supports. +3.96 / +5.16pp WebShop Qwen3-4B/8B vs GraphGPO. No public code. Does not replace CANOPY or SAO.
 - **Optional hindsight-guided tree credit (not this first hop)**: `method:treehca` (`arXiv:2610.12828`) branches on reference-answer likelihood jumps and backups turn advantages. GitHub TheBlackCat22/TreeHCA 404. Does not replace CANOPY or PACT.
 - **Optional branch-and-resample OPD (not this first hop)**: `method:branchopd` (`arXiv:2610.13481`) on `task:student-distillation`. Protocol-boundary repair on ALFWorld/WebShop. +13.8pp ALFWorld vs vanilla OPD. Does not replace CANOPY or OPD.
+- **Optional protocol-level rubrics (not this first hop)**: `method:prorubric` (`arXiv:2609.38847`). HealthBench 4B appropriateness 36.8 vs Rubric-RL 26.0. Code Estrellajer/ProRubric. HF Daily 2026-10-14. Does not replace CANOPY, DRACO, or MetaRubric.
+- **Related Neyman prefix resampling (not this first hop)**: `method:vsr` (`arXiv:2610.15888`) on `task:math-code-rl-dense`. GiGPO+VSR BabyAI 47.6 vs 30.4. Does not replace CANOPY.
+- **Related recovery-fork terminal RL (not this first hop)**: `method:reterm` (`arXiv:2610.18484`) on `task:coding-agent-rl-environment-construction`. Does not replace CANOPY or CodeMidas.
+- **Related privileged representation OPSD (not this first hop)**: `method:pr-opd` (`arXiv:2609.36642`) on `task:privileged-teacher-opsd`. +4.7 ALFWorld / +11.7 WebShop after GRPO. Does not replace CANOPY or VISTA.

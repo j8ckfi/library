@@ -24,6 +24,8 @@ redirects:
     to: "task:outcome-only-long-horizon-agent-rl"
   - when: "lexicographic priority multi-objective OPD from reward-specialist teachers (not scalarized multi-reward RL)"
     to: "method:lmopd"
+  - when: "protocol-level rubric grouping so criteria cannot compensate (not Pearson/density aggregation)"
+    to: "method:prorubric"
 current_sota:
   - method: method:corrgrpo
     as_of: "2026-10-02"
@@ -38,6 +40,7 @@ current_sota:
     value: "up to 26% fewer steps (tool format) / 65% fewer steps (math length); competitive final score"
     notes: "DARA (2610.00574). Inverse-sqrt density on advantage energy. Dual-active with CorrGRPO. GDPO is prior art, not a library node. Does not replace CISPO."
 methods:
+  - method:prorubric
   - method:corrgrpo
   - method:dara
   - method:cispo
@@ -45,7 +48,7 @@ methods:
   - method:dr-grpo
   - method:carm
   - method:lmopd
-last_reviewed: "2026-10-05"
+last_reviewed: '2026-10-14'
 tags:
   - post-training
   - rl-alignment
@@ -71,3 +74,4 @@ This is **not** single-reward CISPO, not SAPO, and not CARM's off-policy sequenc
 - **Primary (density / sparse rewards, this task only)**: **DARA** (`method:dara`, `paper:dara` `arXiv:2610.00574`). Inverse-sqrt active-group density on GDPO-style reward-wise advantages. Status `active`. Dual-active with CorrGRPO.
 - **Not This Task**: `method:cispo` remains dense Pass@1; `method:sapo` remains MoE/VL; `method:cis-rl` remains train–infer IS; `method:carm` remains off-policy sequence masking.
 - **Optional priority-ordered multi-teacher OPD (not this scalarized RL task)**: `method:lmopd` (`arXiv:2610.02359`) on `task:student-distillation`. Lexicographic specialist OPD, not Pearson/density GRPO aggregation. Does not replace CorrGRPO or DARA.
+- **Not this task (protocol-level rubric structure)**: `method:prorubric` (`arXiv:2609.38847`) on `task:outcome-only-long-horizon-agent-rl`. Additive sums let criteria compensate. Does not replace CorrGRPO / DARA.

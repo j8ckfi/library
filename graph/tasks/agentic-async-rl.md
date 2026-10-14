@@ -60,6 +60,10 @@ redirects:
     to: "method:ftw"
   - when: "unified EventLog lifecycle library for tool-using LLM agents (not the async algorithm)"
     to: "method:agenttune"
+  - when: "replace IS weight ρ by ρ^α to hit a target ESS (TETPO)"
+    to: "method:tetpo"
+  - when: "INT4 KV-cache async RLVR rollouts with INT8 sink/recent protection"
+    to: "method:kv4-rl"
 current_sota:
   - method: method:sao
     as_of: "2026-08-26"
@@ -68,6 +72,8 @@ current_sota:
     value: "Default SOTA for agentic async RL"
     notes: "SAO (2607.07508) decouples environment tool execution from policy optimization with importance-corrected replay buffers."
 methods:
+  - method:tetpo
+  - method:kv4-rl
   - method:agenttune
   - method:klpo
   - method:copc
@@ -92,7 +98,7 @@ methods:
   - method:pact
   - method:slca-grpo
   - method:ftw
-last_reviewed: "2026-10-12"
+last_reviewed: '2026-10-14'
 tags:
   - post-training
   - agentic
@@ -124,3 +130,5 @@ This is **policy training**. Building a software-engineering agent loop is `task
 - **Optional sampler-anchored KL least-squares (not this async default)**: `method:klpo` (`arXiv:2610.08963`) one-rollout update without IS clipping. Code yifanzhang-pro/KLPO. Abstract has no numeric bake-off. Does not replace SAO, BPO, or CISPO.
 - **Optional coupled policy/advantage staleness correction (not this async default)**: `method:copc` (`arXiv:2610.09597`) actor IS plus TD reweighting; 1.7× vs sync PPO; stable at 64-step staleness. No public code. Does not replace SAO or KLPO.
 - **Optional tool-agent lifecycle library (not this async default)**: `method:agenttune` (`arXiv:2610.13335`) shared EventLog for train/eval/distill/audit. Code Lexsi-Labs/AgentTune. No Pass@1 bake-off vs SAO. Does not replace SAO or Miles.
+- **Optional target-ESS IS temper (not this async default)**: `method:tetpo` (`arXiv:2610.14440`). Qwen3-Base-1.7B avg@16 44.4 vs M2PO 42.3 / GSPO 39.0. No public code. Does not replace SAO or CISPO.
+- **Related INT4 KV rollouts (not this async default)**: `method:kv4-rl` (`arXiv:2610.14448`) on `task:fp4-rl-train-rollout-alignment`. Does not replace SAO or TRACE / TRIAGE.

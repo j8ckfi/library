@@ -24,6 +24,10 @@ redirects:
     to: "task:math-code-rl-dense"
   - when: "continuous diffusion language model pretrain (self-conditioning / SemiCat), not AR-delta recycle"
     to: "task:continuous-diffusion-lm-pretrain"
+  - when: "AR→discrete-dLLM on-policy distillation (JustOPD), not a weight-delta recycle"
+    to: "method:justopd"
+  - when: "16x DLM-vs-AR pretrain compute gap under ELBO vs exact likelihood"
+    to: "paper:dlm-ar-compute-gap"
 current_sota:
   - method: method:a2d
     as_of: "2026-10-07"
@@ -32,6 +36,7 @@ current_sota:
     value: "AR delta on converted dLLM approaches direct diffusion PT and composes with it; AR/diffusion deltas nearly orthogonal"
     notes: "A2D (2610.08108). Method status active. Does not replace DiffusionOPSD / Self-OPD / CanvasAnneal."
 methods:
+  - method:justopd
   - method:semicat
   - method:soloq
   - method:a2d
@@ -39,7 +44,7 @@ methods:
   - method:diffusion-opsd
   - method:self-opd
   - method:uno
-last_reviewed: "2026-10-13"
+last_reviewed: '2026-10-14'
 tags:
   - diffusion
   - post-training
@@ -63,3 +68,5 @@ This is **not** image/flow reward alignment and not CanvasAnneal.
 - **Not This Task**: `method:diffusion-opsd` / `method:self-opd` remain image/flow post-train; `method:canvasanneal` remains discrete-DLM canvas RL.
 - **Related dLLM inference PTQ (not this recycle hop)**: `method:soloq` (`arXiv:2610.07121`) on `task:fp4-hardware-training`. Calibration-free 4-bit / NVFP4 for existing dLLMs. Does not replace A2D.
 - **Not this task (continuous diffusion LM pretrain)**: `method:semicat` on `task:continuous-diffusion-lm-pretrain` (`arXiv:2610.13834`). Discrete-dLLM questions stay here.
+- **Optional AR→dLLM on-policy distillation (not this recycle hop)**: `method:justopd` (`arXiv:2610.17397`). Dream-7B / Qwen3-14B; L=256 GSM8K 77.03→81.80. No public code. Does not replace A2D or OPD.
+- **Gotcha (16× compute protocol)**: `paper:dlm-ar-compute-gap` (`arXiv:2610.17590`). ELBO MDM 17.8× vs DUEL 12.8×; E2D2 b=4 3.0×. Older 16× claims used ELBO/full-sequence. Does not retarget A2D or SemiCat.

@@ -9,6 +9,9 @@ sota_for:
 supersedes:
   - method:on-policy-distillation
 do_not_use_for:
+  - when: "OPD restricted to problems the student fails"
+    reason: "Fail-set OPD degrades accuracy while KL drops; keep a non-failure mix"
+    use_instead: "paper:opd-failure-problems"
   - when: "bilevel learned token weights from post-update validation loss"
     reason: "OPD remains matching; MetaOPD learns keep-weights from a virtual student update"
     use_instead: "method:metaopd"
@@ -74,6 +77,7 @@ do_not_use_for:
     use_instead: "method:rp-opd"
 last_reviewed: "2026-10-09"
 papers:
+  - paper:opd-failure-problems
   - paper:opd-vanishing-signals
   - paper:opd-skill-not-knowledge
   - paper:opd-safety-backdoor

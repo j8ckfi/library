@@ -22,6 +22,8 @@ redirects:
     to: "task:synthetic-single-stage-pretrain"
   - when: "zero-natural-data self-play pretraining (generator proposes UTM programs)"
     to: "task:zero-natural-data-self-play-pretrain"
+  - when: "batch size / packing / tying / embedding WD under multi-epoch (not unique-token epoch pricing)"
+    to: "method:scaling-repeated-data"
 current_sota:
   - method: method:repeated-token-worth
     as_of: "2026-10-06"
@@ -36,12 +38,13 @@ current_sota:
     value: "r=8 beats r=16 with fewer training tokens"
     notes: "Repetition-Count Selection (2610.05126). Rankings reverse with scale. Dual-active with repeated-token-worth. Method status active. Does not replace OLMo-3."
 methods:
+  - method:scaling-repeated-data
   - method:repeated-token-worth
   - method:repetition-count-selection
   - method:olmo-3
   - method:moe-data-repetition
   - method:muon2
-last_reviewed: "2026-10-06"
+last_reviewed: '2026-10-14'
 tags:
   - pretraining
   - data-curriculum
@@ -64,3 +67,4 @@ This is **not** OLMo-3 / Dolma-3, not Muon2, and not the MoE sparsity × repetit
 - **Primary (token value / critical epoch, this task only)**: **Repeated-Token Worth** (`method:repeated-token-worth`, `paper:repeated-token-worth` `arXiv:2610.05591`). Status `active`. Dual-active with Repetition-Count Selection.
 - **Primary (r shortlist across scales, this task only)**: **Repetition-Count Selection** (`method:repetition-count-selection`, `paper:repetition-count-selection` `arXiv:2610.05126`). Status `active`. Dual-active with Repeated-Token Worth.
 - **Not This Task**: `method:olmo-3` remains the open mix; `method:muon2` remains the 7B optimizer; `method:moe-data-repetition` remains the MoE sparsity gotcha.
+- **Optional multi-epoch batch/regularization (not this first hop)**: `method:scaling-repeated-data` (`arXiv:2610.15965`). U-shaped CE vs batch size; 1.5B B=64 vs 512 CE 3.124→2.977. No public code. Does not replace Repeated-Token Worth or Repetition-Count Selection.

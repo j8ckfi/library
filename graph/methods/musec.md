@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "history-adaptive spectral clipping of AdamW gradients (CAST-SSC)"
+    reason: "Musec clips Muon momentum singular values; CAST-SSC is pre-AdamW SSC"
+    use_instead: "method:cast-ssc"
   - when: "choosing the ~7B dense pretrain optimizer"
     reason: "Musec is a Muon update-rule stability plug-in; Muon2 remains the 7B default"
     use_instead: "method:muon2"

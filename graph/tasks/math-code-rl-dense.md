@@ -97,6 +97,10 @@ redirects:
     to: "paper:two-clocks-rlvr"
   - when: "NO-THINK-mode GRPO gains that reactivate THINK-mode behavior"
     to: "paper:thinking-leakage"
+  - when: "single-rollout token credit via causal vs hindsight JSD (HP-RLVR)"
+    to: "method:hp-rlvr"
+  - when: "scale RLVR EMA beta with eta so eta/(1-beta) stays in a safe regime"
+    to: "method:rlvr-momentum"
 current_sota:
   - method: method:cispo
     as_of: "2026-08-26"
@@ -105,6 +109,8 @@ current_sota:
     value: "Default SOTA for Dense RL"
     notes: "CISPO via MiniMax-M1 (2506.13585) + ScaleRL (2510.13786)."
 methods:
+  - method:hp-rlvr
+  - method:rlvr-momentum
   - method:vsr
   - method:tetpo
   - method:tapo
@@ -168,7 +174,7 @@ methods:
   - method:mesh-learning
   - method:opsft
   - method:rgpo
-last_reviewed: '2026-10-14'
+last_reviewed: '2026-10-15'
 tags:
   - post-training
   - reasoning
@@ -242,3 +248,5 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Related target-ESS IS temper (not this Pass@1 default)**: `method:tetpo` (`arXiv:2610.14440`) on `task:agentic-async-rl`. Does not replace CISPO or SAO.
 - **Gotcha (two clocks)**: `paper:two-clocks-rlvr` (`arXiv:2610.18853`). Sqrt-LR preserves drift per sample but not progress; LR-dependent critical rollout batch. Repo WinstonLiyt/two-clocks-rlvr 404. Does not retarget CISPO.
 - **Gotcha (thinking leakage)**: `paper:thinking-leakage` (`arXiv:2610.14270`) on `task:reasoning-rl-alignment`. NO-THINK GRPO on Qwen3 largely reactivates THINK-mode. Does not retarget CISPO.
+- **Optional G=1 hindsight JSD credit (not this Pass@1 default)**: `method:hp-rlvr` (`arXiv:2610.20497`). Qwen3-8B 1.21×/1.46×/2.30× vs G=8 GRPO; math 65.73 vs 63.07. Distinct from HDL. No public code. Does not replace CISPO.
+- **Optional RLVR momentum-coefficient rule (not this Pass@1 default)**: `method:rlvr-momentum` (`arXiv:2610.20413`). Scale β with η; Qwen2.5-32B AdamW +~2pp. Distinct from adam-beta-cubic. No public code. Does not replace CISPO.

@@ -35,8 +35,16 @@ do_not_use_for:
   - when: "two-band Marchenko-Pastur spectral reweighting for Muon (BulkBoost)"
     reason: "Muon2 remains the 7B default; BulkBoost is a two-band spectral reweight"
     use_instead: "method:bulkboost"
-last_reviewed: "2026-10-09"
+  - when: "history-adaptive spectral clipping of AdamW gradients (CAST-SSC)"
+    reason: "Muon2 remains the 7B default; CAST-SSC is pre-AdamW SSC, not a Muon replacement"
+    use_instead: "method:cast-ssc"
+  - when: "finite Newton-Schulz plus epsilon loses spectral max-margin"
+    reason: "Gotcha on practical Muon NS; does not retarget the 7B default"
+    use_instead: "paper:muon-ns-bias"
+last_reviewed: "2026-10-15"
 papers:
+  - paper:muon-ns-bias
+  - paper:cast-ssc
   - paper:massive-activation-lifecycle
   - paper:randomized-momentum-transport
   - paper:bulkboost

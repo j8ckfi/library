@@ -52,7 +52,12 @@ redirects:
     to: "method:monarch-muon"
   - when: "nested width-elastic supernet at ~widest-subnet cost with μP-style HP transfer"
     to: "method:shell-elastic"
+  - when: "history-adaptive spectral clipping of AdamW gradients (CAST-SSC; not CAST OPD)"
+    to: "method:cast-ssc"
+  - when: "finite Newton-Schulz plus epsilon loses Muon spectral max-margin"
+    to: "paper:muon-ns-bias"
 methods:
+  - method:cast-ssc
   - method:monarch-muon
   - method:shell-elastic
   - method:msar
@@ -85,7 +90,7 @@ methods:
   - method:muonio
   - method:adam-beta-cubic
   - method:bulkboost
-last_reviewed: '2026-10-14'
+last_reviewed: '2026-10-15'
 tags:
   - pretraining
   - optimizer
@@ -117,3 +122,5 @@ Pretraining modern neural network models involves minimizing cross-entropy loss 
 - **Gotcha (Randomized Momentum Transport)**: `paper:randomized-momentum-transport` (`arXiv:2610.13789`). Theory: O(T^{-1/3}) for Muon/sign updates; MNIST1D / CIFAR-10 only. Does not retarget Muon2.
 - **Optional Monarch-factored Muon (not this 7B default)**: `method:monarch-muon` (`arXiv:2610.17429`). 3.06 vs Monarch-AdamW 3.09 at 257M; dense Muon 2.99 is better. 6.89B H100 peak 68.87→52.94 GB. No public code. Does not replace Muon2.
 - **Optional nested-width supernet (not this optimizer default)**: `method:shell-elastic` (`arXiv:2610.15124`). Mean val loss 0.028/0.005/0.018 nats below best baseline at 119M–1.69B. Code jincan333/ShellElastic. HF Daily 2026-10-14. Does not replace Muon2, ELR, or Puro-2B.
+- **Optional history-adaptive spectral clipping (not this 7B default)**: `method:cast-ssc` (`arXiv:2610.19761`). Distinct from `method:cast` (cross-tokenizer OPD). 19.08B MoE mean val 1.26e-2 below SSC-constant. No public code. Does not replace Muon2 or Musec.
+- **Gotcha (finite Newton-Schulz)**: `paper:muon-ns-bias` (`arXiv:2610.20112`). Practical Muon with finite NS + epsilon selects Frobenius max-margin; log-growing NS recovers spectral. Does not retarget Muon2.

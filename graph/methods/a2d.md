@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "dLLM RL that forks from high-entropy intermediate states (ForkGRPO)"
+    reason: "A2D recycles an AR weight delta; ForkGRPO is GRPO-family RL on the dLLM"
+    use_instead: "method:forkgrpo"
   - when: "AR→discrete-dLLM on-policy distillation rather than a weight-delta recycle"
     reason: "A2D recycles an AR post-training delta; JustOPD distills AR logits onto a dLLM"
     use_instead: "method:justopd"
@@ -23,6 +26,7 @@ assumptions:
   - "Converted discrete diffusion LM from an AR checkpoint, plus an AR post-training delta. No official GitHub as of 2026-10-07."
 last_reviewed: "2026-10-07"
 papers:
+  - paper:forkgrpo
   - paper:dlm-ar-compute-gap
   - paper:justopd
   - paper:a2d

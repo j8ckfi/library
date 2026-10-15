@@ -64,6 +64,8 @@ redirects:
     to: "method:tetpo"
   - when: "INT4 KV-cache async RLVR rollouts with INT8 sink/recent protection"
     to: "method:kv4-rl"
+  - when: "async single-rollout SWE recipe (Muon + token-avg loss + truncated IS)"
+    to: "method:muon-lh-rl"
 current_sota:
   - method: method:sao
     as_of: "2026-08-26"
@@ -72,6 +74,7 @@ current_sota:
     value: "Default SOTA for agentic async RL"
     notes: "SAO (2607.07508) decouples environment tool execution from policy optimization with importance-corrected replay buffers."
 methods:
+  - method:muon-lh-rl
   - method:tetpo
   - method:kv4-rl
   - method:agenttune
@@ -98,7 +101,7 @@ methods:
   - method:pact
   - method:slca-grpo
   - method:ftw
-last_reviewed: '2026-10-14'
+last_reviewed: '2026-10-15'
 tags:
   - post-training
   - agentic
@@ -132,3 +135,4 @@ This is **policy training**. Building a software-engineering agent loop is `task
 - **Optional tool-agent lifecycle library (not this async default)**: `method:agenttune` (`arXiv:2610.13335`) shared EventLog for train/eval/distill/audit. Code Lexsi-Labs/AgentTune. No Pass@1 bake-off vs SAO. Does not replace SAO or Miles.
 - **Optional target-ESS IS temper (not this async default)**: `method:tetpo` (`arXiv:2610.14440`). Qwen3-Base-1.7B avg@16 44.4 vs M2PO 42.3 / GSPO 39.0. No public code. Does not replace SAO or CISPO.
 - **Related INT4 KV rollouts (not this async default)**: `method:kv4-rl` (`arXiv:2610.14448`) on `task:fp4-rl-train-rollout-alignment`. Does not replace SAO or TRACE / TRIAGE.
+- **Optional long-horizon SWE Muon recipe (not this async default)**: `method:muon-lh-rl` (`arXiv:2610.20256`). Muon + token-avg loss + truncated IS (C=2) + length/tool-error penalties on SPO/SPO++. MiniCPM5-2B / Qwen3.5-4B R2E-Gym. No public code. Does not replace SAO or mini-SWE-agent.

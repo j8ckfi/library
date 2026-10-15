@@ -22,7 +22,10 @@ redirects:
     to: "task:zero-natural-data-self-play-pretrain"
   - when: "Muon-style norm-aware update for embedding tables (1->2) and LM head (2->inf) instead of AdamW"
     to: "method:muonio"
+  - when: "one-step prefix-augmented OPD for continued pretrain (PA1-OPD)"
+    to: "method:pa1-opd"
 methods:
+  - method:pa1-opd
   - method:clean
   - method:dga-muon
   - method:orca
@@ -45,7 +48,7 @@ methods:
   - method:synth
   - method:self-play-pretraining
   - method:muonio
-last_reviewed: "2026-10-06"
+last_reviewed: "2026-10-15"
 tags:
   - pretraining
   - dense-lm

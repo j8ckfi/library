@@ -62,6 +62,9 @@ assumptions:
   - "SWE transfer retunes n=16, KL 1e-2, 80 turns / 36k, and -0.2 for no-patch terminals. Not a literal hyperparameter copy."
 last_reviewed: "2026-10-05"
 papers:
+  - paper:agentic-self-distill-reality
+  - paper:actionopd
+  - paper:hp-rlvr
   - paper:canopy
 recipes:
   - recipe:canopy

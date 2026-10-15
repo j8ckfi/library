@@ -97,6 +97,16 @@ redirects:
     to: "method:justopd"
   - when: "OPD restricted to problems the student fails (accuracy drops while KL drops)"
     to: "paper:opd-failure-problems"
+  - when: "one-step prefix-augmented OPD for continued pretrain (PA1-OPD)"
+    to: "method:pa1-opd"
+  - when: "cross-teacher guarding of domain-routed MOPD (Road MOPD)"
+    to: "method:road-mopd"
+  - when: "critique-guided rewrite of incorrect rollouts then privileged scoring (CriticOPD)"
+    to: "method:criticopd"
+  - when: "action-level OPD without teacher token probabilities"
+    to: "method:actionopd"
+  - when: "where the teacher's advantage lives along student trajectories (token-flip diagnostic)"
+    to: "paper:opd-teacher-advantage"
 current_sota:
   - method: method:opd
     as_of: "2026-08-26"
@@ -111,6 +121,10 @@ current_sota:
     value: "83.4% headroom recovery in a single deployable student"
     notes: "Open-MOPD (2608.19098) fixes multi-teacher imbalance with token-share balancing and gap-aware dynamic budgeting."
 methods:
+  - method:criticopd
+  - method:actionopd
+  - method:road-mopd
+  - method:pa1-opd
   - method:justopd
   - method:branchopd
   - method:ugpc
@@ -175,7 +189,7 @@ methods:
   - method:lmopd
   - method:latent-mopd
   - method:rp-opd
-last_reviewed: '2026-10-14'
+last_reviewed: '2026-10-15'
 tags:
   - post-training
   - distillation
@@ -253,3 +267,8 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 
 - **Related AR→dLLM OPD (not this AR-student default)**: `method:justopd` (`arXiv:2610.17397`) on `task:diffusion-lm-ar-delta-recycle`. Does not replace OPD or A2D.
 - **Gotcha (fail-set OPD)**: `paper:opd-failure-problems` (`arXiv:2610.18011`). Five OPD mechanisms degrade on student-failure problems (8/8, p=0.0078) while KL keeps dropping; same pipeline +4.6pp on a non-failure mix. Do not concentrate OPD on all-fail prompts. Does not retarget OPD.
+- **Optional prefix-augmented pretrain OPD**: `method:pa1-opd` (`arXiv:2610.19601`). Stage2 Top10 surprisal adds 48.85% to KD Macro CE gain vs NTP. No public code. Does not replace OPD or Muon2.
+- **Optional cross-teacher guarding MOPD**: `method:road-mopd` (`arXiv:2610.13521`). HF Daily 2026-10-15. High-conflict Medical +5.6–8.8pp vs Vanilla MOPD; Qwen3-4B All 47.92 vs ExOPD 45.53. No public code. Does not replace Open-MOPD.
+- **Optional critique-guided OPD**: `method:criticopd` (`arXiv:2610.20572`). Teacher recoverability fails on incorrect prefixes. Qwen3-1.7B 50.08→54.65. Code kzhao5/CriticOPD. Distinct from CC-OPSD. Does not replace OPD or VISTA.
+- **Optional action-level OPD**: `method:actionopd` (`arXiv:2610.19820`). No teacher token probs / tokenizer match. Qwen3-4B/8B +3.3–6.9pp OOD. Code thu-nics/ActionOPD. Does not replace OPD or CANOPY.
+- **Gotcha (where teacher advantage lives)**: `paper:opd-teacher-advantage` (`arXiv:2610.19145`). Repeated flips 28.4%→74.5% vs teacher 76.9%; single flips modest. Does not retarget OPD.

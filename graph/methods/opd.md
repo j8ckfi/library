@@ -9,6 +9,18 @@ sota_for:
 supersedes:
   - method:on-policy-distillation
 do_not_use_for:
+  - when: "one-step prefix-augmented OPD for continued pretrain (PA1-OPD)"
+    reason: "OPD remains post-train student matching; PA1-OPD adds one student token at corpus prefixes"
+    use_instead: "method:pa1-opd"
+  - when: "critique-guided rewrite of incorrect rollouts then privileged scoring (CriticOPD)"
+    reason: "OPD assumes teacher recoverability; CriticOPD restores it on incorrect prefixes"
+    use_instead: "method:criticopd"
+  - when: "action-level OPD without teacher token probabilities"
+    reason: "OPD remains token matching; ActionOPD aligns semantic actions"
+    use_instead: "method:actionopd"
+  - when: "where the teacher's advantage lives along student trajectories (token-flip diagnostic)"
+    reason: "Gotcha on OPD corrections; does not retarget matching"
+    use_instead: "paper:opd-teacher-advantage"
   - when: "OPD restricted to problems the student fails"
     reason: "Fail-set OPD degrades accuracy while KL drops; keep a non-failure mix"
     use_instead: "paper:opd-failure-problems"
@@ -77,6 +89,10 @@ do_not_use_for:
     use_instead: "method:rp-opd"
 last_reviewed: "2026-10-09"
 papers:
+  - paper:opd-teacher-advantage
+  - paper:pa1-opd
+  - paper:criticopd
+  - paper:actionopd
   - paper:opd-failure-problems
   - paper:opd-vanishing-signals
   - paper:opd-skill-not-knowledge

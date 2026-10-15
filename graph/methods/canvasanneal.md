@@ -19,6 +19,9 @@ do_not_use_for:
   - when: "recycle an AR post-training weight delta onto a converted dLLM"
     reason: "CanvasAnneal is discrete-DLM canvas RL; A2D recycles an AR delta"
     use_instead: "method:a2d"
+  - when: "dLLM RL by forking high-entropy states (ForkGRPO)"
+    reason: "CanvasAnneal anneals a teacher canvas; ForkGRPO forks GRPO rollouts"
+    use_instead: "method:forkgrpo"
 assumptions:
   - "Discrete masked DLM (paper: LLaDA-7B-A1B-Instruct). Host is diffu-GRPO. Teacher traces from a stronger model (paper: Gemini 3.1 Pro) injected into the initial canvas and annealed."
   - "No official GitHub as of 2026-09-14."

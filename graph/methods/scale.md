@@ -9,6 +9,9 @@ sota_for:
 supersedes:
   - method:galore
 do_not_use_for:
+  - when: "subspace Muon with residual correction (PMRC / SMRC)"
+    reason: "SCALE remains the memory-efficient first hop; PMRC is residual-correction Muon, no SCALE bake-off"
+    use_instead: "method:pmrc"
   - when: "low-rank gradient sketches + predicted-KL step control for RL memory"
     reason: "SCALE remains full-param pretrain memory; LoGRA is an RL-step memory sketch"
     use_instead: "method:logra"
@@ -19,6 +22,7 @@ do_not_use_for:
     reason: "Muon2 remains the 7B pretrain default"
     use_instead: "method:muon2"
 papers:
+  - paper:pmrc
   - paper:logra
   - paper:scale
 recipes:

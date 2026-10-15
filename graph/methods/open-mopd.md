@@ -8,6 +8,9 @@ sota_for:
   - task:student-distillation
 supersedes: []
 do_not_use_for:
+  - when: "cross-teacher guarding of domain-routed MOPD (Road MOPD)"
+    reason: "Open-MOPD remains token-share / gap-aware budget; Road MOPD uses non-routed teachers as critics"
+    use_instead: "method:road-mopd"
   - when: "multi-teacher OPD via teacher-minus-base logit shifts rather than endpoint copy"
     reason: "Open-MOPD remains token-share / gap-aware budget; Delta-MOPD transfers the post-training shift"
     use_instead: "method:delta-mopd"
@@ -37,6 +40,7 @@ do_not_use_for:
     use_instead: "method:latent-mopd"
 last_reviewed: "2026-10-09"
 papers:
+  - paper:road-mopd
   - paper:delta-mopd
   - paper:open-mopd
 recipes:

@@ -10,6 +10,9 @@ supersedes:
   - method:grpo
   - method:dr-grpo
 do_not_use_for:
+  - when: "async single-rollout SWE recipe (Muon + token-avg loss + truncated IS)"
+    reason: "SAO remains async straggler replay; muon-lh-rl is an optimizer/loss recipe on SPO"
+    use_instead: "method:muon-lh-rl"
   - when: "replace IS weight ρ by ρ^α to hit a target ESS"
     reason: "SAO remains async straggler replay; TETPO tempers IS weights"
     use_instead: "method:tetpo"
@@ -54,6 +57,7 @@ do_not_use_for:
     use_instead: "method:ftw"
 last_reviewed: "2026-10-09"
 papers:
+  - paper:muon-lh-rl
   - paper:sao
   - paper:probe-the-harness
 recipes:

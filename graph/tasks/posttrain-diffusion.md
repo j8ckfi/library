@@ -18,6 +18,7 @@ current_sota:
     value: "Outperforms Flow-GRPO, Flow-OPD, and DiffusionNFT without external task-specific teachers"
     notes: "Self-OPD (2608.26872) provides teacher-free per-step pull-push distillation for flow matching multi-objective alignment."
 methods:
+  - method:forkgrpo
   - method:representation-guidance
   - method:semicat
   - method:diffusionart
@@ -42,7 +43,9 @@ redirects:
     to: "task:pixel-diffusion-pretrain"
   - when: "continuous diffusion language model pretrain (not image/flow alignment)"
     to: "task:continuous-diffusion-lm-pretrain"
-last_reviewed: "2026-10-13"
+  - when: "dLLM RL that forks from high-entropy intermediate states (ForkGRPO)"
+    to: "method:forkgrpo"
+last_reviewed: "2026-10-15"
 tags:
   - diffusion
   - post-training

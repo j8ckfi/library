@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+- when: critique-guided rewrite of incorrect student rollouts (CriticOPD)
+  reason: CC-OPSD critiques then scores a gold-privileged teacher; CriticOPD rewrites then scores
+  use_instead: method:criticopd
 - when: privileged same-size gold teacher OPSD (scoring teacher)
   reason: VISTA remains scoring-teacher OPSD; CC-OPSD first generates a critique then scores
   use_instead: method:vista

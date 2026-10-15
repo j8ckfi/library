@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "asymmetric compute across looped MoE visits (compress first, full-res second)"
+    reason: "SMELT remains matched middle-layer looping; LatentLoop reallocates FLOPs to width"
+    use_instead: "method:latentloop"
   - when: "Huginn-style dense fixed-point looped LMs (learned depth prior / terminal KV sharing)"
     reason: "SMELT loops MoE layers at matched FLOPs; Looped Models Done Right is dense Huginn-style"
     use_instead: "method:looped-models-done-right"
@@ -31,6 +34,7 @@ assumptions:
   - "Paper ladder: 100M/200M/600M/1.6B active, up to 54B non-embedding, S≈85/95/97%. Internal corpus, AdamW WSD. No public code as of 2026-09-12."
 last_reviewed: "2026-10-06"
 papers:
+  - paper:latentloop
   - paper:smelt
 recipes:
   - recipe:smelt

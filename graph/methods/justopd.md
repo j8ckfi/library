@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+- when: dLLM RL that forks from high-entropy intermediate states (ForkGRPO)
+  reason: JustOPD distills AR logits; ForkGRPO is GRPO-family RL on the dLLM
+  use_instead: method:forkgrpo
 - when: recycle an AR post-training weight delta onto a converted dLLM
   reason: A2D recycles a weight delta; JustOPD distills AR logits on-policy onto a dLLM
   use_instead: method:a2d

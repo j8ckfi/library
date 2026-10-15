@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+- when: history-adaptive spectral clipping of AdamW gradients (CAST-SSC)
+  reason: method:cast is cross-tokenizer OPD credit; CAST-SSC is pretrain spectral clipping (2610.19761)
+  use_instead: method:cast-ssc
 - when: same-tokenizer single-teacher matching distillation
   reason: CAST is credit alignment after chunk correspondence; OPD remains same-tokenizer matching
   use_instead: method:opd

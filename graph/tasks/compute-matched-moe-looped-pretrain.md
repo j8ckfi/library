@@ -30,6 +30,8 @@ redirects:
     to: "task:llm-pretraining-optimization"
   - when: "elastic mixed-depth looped LM (gated state update / mixed loop counts)"
     to: "task:elastic-depth-looped-lm"
+  - when: "asymmetric compute across looped MoE visits (compress first, full-res second)"
+    to: "method:latentloop"
 current_sota:
   - method: method:smelt
     as_of: "2026-09-01"
@@ -38,12 +40,13 @@ current_sota:
     value: "6.8–18.0% on the fitted sparse-grid frontier (10^20–10^21 FLOPs)"
     notes: "SMELT (2609.01343). Active looped-MoE recipe. Does not replace DeepSeek-V4 / Kimi-K3 / CE-MoE."
 methods:
+  - method:latentloop
   - method:elr
   - method:smelt
   - method:ce-moe
   - method:deepseek-v4
   - method:kimi-k3
-last_reviewed: "2026-10-13"
+last_reviewed: "2026-10-15"
 tags:
   - pretraining
   - moe
@@ -65,3 +68,4 @@ Decide whether looping MoE layers helps when you cannot spend extra FLOPs, extra
 - **Primary Method (this task only)**: **SMELT** (`method:smelt`, `paper:smelt` `arXiv:2609.01343`). Status `active`. Loop the middle 50% of MoE layers twice; narrow width; raise experts; scale looped residuals by \(1/2\); match FLOPs / non-embedding params / KV.
 - **Not This Task**: `method:deepseek-v4` / `method:kimi-k3` remain frontier MoE co-defaults; `method:ce-moe` remains the communication-layout niche.
 - **Not this task (elastic mixed-depth looping)**: `method:elr` on `task:elastic-depth-looped-lm` (`arXiv:2610.12582`). Does not replace SMELT.
+- **Optional asymmetric-visit looped MoE (not this first hop)**: `method:latentloop` (`arXiv:2610.19975`). NLL 1.988: 19.0% vs MoE Base, 7.9% vs MoE Loop. No public code. Does not replace SMELT.

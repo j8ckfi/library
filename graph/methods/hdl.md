@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "single-rollout token credit via causal vs hindsight JSD"
+    reason: "HDL reuses prefixes inside a group; HP-RLVR scores one completed rollout"
+    use_instead: "method:hp-rlvr"
   - when: "choosing the dense math/code Pass@1 RLVR default"
     reason: "HDL reuses prefixes inside a GRPO group; CISPO remains Pass@1"
     use_instead: "method:cispo"

@@ -10,6 +10,9 @@ do_not_use_for:
 - when: single-adapter quality LoRA / rsLoRA + LR sweep rather than tangent-space branches
   reason: Vanilla LoRA + rsLoRA + LR sweep remains the 24GB quality default
   use_instead: method:lr-matters-lora
+- when: two-stage residual-gradient complementary LoRA (ReGRA)
+  reason: DT-LoRA is a live tangent branch; ReGRA initializes a second adapter after stage 1
+  use_instead: method:regra
 - when: stacking independently trained LoRA adapters
   reason: READ owns skill composition
   use_instead: method:read-lora

@@ -6,6 +6,72 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-10-15 — weekday SOTA sweep (CAST-SSC, Muon LH-RL, RLVR Momentum, PMRC, PA1-OPD, Road MOPD, CriticOPD, ActionOPD, LatentLoop, HP-RLVR, Spectral-MoE, ReGRA, ForkGRPO)
+- Thirteen active plug-ins and three paper-only notes. No current_sota retarget (Muon2 / CISPO / OPD / Open-MOPD / VISTA / SAO / CANOPY / OLMo-3 / Quartet-II / vanilla LoRA+rsLoRA+LR sweep / SCALE / MASKerade / SMELT / A2D).
+- Window: 2026-10-15 Librarian weekday sweep after merged PR 44 (watermark 2610.18874, 1345 nodes, 352f2f9). arXiv cs.LG/cs.CL/cs.AI new listing Thu 2026-10-15 (2610.18877–2610.20607) plus HF Daily 2026-10-14 and 2026-10-15. New high id 2610.20607.
+- SKIP (considered, not ingested): Tev 2610.18868 and DeltaTTG 2610.17666 (already skipped 2026-10-14); UltraBERT 2610.15028 (encoder recipe, not LLM train default); LLM-jp-4 2610.19331 (sovereign report, no reusable kernel); AFCS 2610.20086 (synthesis pipeline, not SYNTH); Vision-as-anchors 2610.19443 (ablation); multilingual MoE repetition law 2610.20247 (not OLMo-3 / moe-data-repetition overturn); data-density image SD 2610.19013 (vision, not LLM); COUNT 2610.20456 (n-gram host-memory niche); DTDD 2610.19302 (BranchOPD-adjacent takeover); token-utility 2610.18883 (another OPD keep-mask vs IER/IDA); RM-OPD 2610.20174 (GRM Mix-RL); VASPO 2610.20516 (PPO privileged-value); FSPO 2610.19687 (privileged temporal); SMD/Pivot 2610.18472 (few-step diffusion matching, not Self-OPD); MIPS 2610.19457 (large-outcome IPS); CCPO 2610.19103 (MCGPO/AdaStep-adjacent); Guide Assisted GRPO 2610.19349 (prefix replay vs VSR/RetireOPD); Explorer-Zero 2610.19868 (self-play env vs J-Zero); Agent-Reflex 2610.17953; WorkRover 2610.18067; reward hacking IF 2610.19525; fail gracefully 2610.20401; Advantage Guidance 2610.19783; Inverse Reasoning 2610.18878; textual critiques 2610.19367; cross-interface 2610.20576; policy-verified 2610.19372; Many Right Answers 2610.17771 (recommenders); Outcome-routed dLLM 2610.19271; verifier-reward flow 2610.19080; SALD 2610.01496; rank-one LoRA 2610.19033; Selective margin SFT 2610.19685; LayerTrim 2610.19121; Elastic Transformer 2610.20588 (vs ELR/ShellElastic); SpectrumQuant 2610.20303; NatScale 2610.20353; Titan-Llama 2610.19210; Cortex 2610.20399.
+
+### 2026-10-15 — ingest method:cast-ssc (active on task:llm-pretraining-optimization; does not supersede method:muon2 / method:musec)
+- Added paper:cast-ssc (2610.19761), method:cast-ssc, recipe:cast-ssc (`code_status: none`). Distinct from method:cast (cross-tokenizer OPD 2610.13257).
+- Status active (`sota_for: []`). 19.08B MoE, 83.89B tokens, 5000 steps: mean val 1.26e-2 below SSC-constant, 2.10e-2 below SSC-cosine; AdaGC loss at step 4639 (7.2% fewer); 5.5% less time vs 5000 ClipByValue.
+
+### 2026-10-15 — ingest method:muon-lh-rl (active on task:agentic-async-rl; does not supersede method:sao)
+- Added paper:muon-lh-rl (2610.20256), method:muon-lh-rl, recipe:muon-lh-rl (`code_status: none`).
+- Status active (`sota_for: []`). Async single-rollout: Muon + token-avg loss + truncated IS (C=2). MiniCPM5-2B / Qwen3.5-4B, R2E-Gym, Claude Code harness 2.1.118.
+
+### 2026-10-15 — ingest method:rlvr-momentum (active on task:math-code-rl-dense; does not supersede method:cispo)
+- Added paper:rlvr-momentum (2610.20413), method:rlvr-momentum, recipe:rlvr-momentum (`code_status: none`).
+- Status active (`sota_for: []`). Scale β with η so η/(1-β) stays in the safe regime; Qwen2.5-32B AdamW +~2pp val by increasing β1. Beside adam-beta-cubic.
+
+### 2026-10-15 — ingest method:pmrc (active on task:full-param-memory-efficient-pretrain; does not supersede method:scale)
+- Added paper:pmrc (2610.19844), method:pmrc, recipe:pmrc (`code_status: none`; host gist OptimAI-Lab/Minimalist_LLM_Pretraining).
+- Status active (`sota_for: []`). LLaMA C4 1.3B train 2.500 vs Fira 2.657 vs GaLore 2.842; val 2.570 vs 2.730 vs 2.875. No SCALE bake-off.
+
+### 2026-10-15 — ingest method:pa1-opd (active on task:student-distillation; does not supersede method:opd)
+- Added paper:pa1-opd (2610.19601), method:pa1-opd, recipe:pa1-opd (`code_status: none`). Mention on task:pretrain-dense-7b.
+- Status active (`sota_for: []`). One-step prefix-augmented OPD for continued pretrain. Stage2 Top10 surprisal adds 48.85% to KD Macro CE gain vs NTP.
+
+### 2026-10-15 — ingest method:road-mopd (active on task:student-distillation; does not supersede method:open-mopd)
+- Added paper:road-mopd (2610.13521), method:road-mopd, recipe:road-mopd (`code_status: none`). HF Daily 2026-10-15 top paper.
+- Status active (`sota_for: []`). Cross-Teacher Guarding. High-conflict Medical +5.6–8.8pp vs Vanilla MOPD. Qwen3-4B 11-task 47.92 vs ExOPD 45.53.
+
+### 2026-10-15 — ingest method:criticopd (active on task:student-distillation; does not supersede method:opd / method:cc-opsd)
+- Added paper:criticopd (2610.20572), method:criticopd, recipe:criticopd (`code_status: released`; kzhao5/CriticOPD).
+- Status active (`sota_for: []`). Critique, rewrite, then score. Qwen3-1.7B 50.08→54.65 (+4.57); 0.6B 34.80→38.86; AIME24/25/AMC +6.01/+7.36/+6.94. Distinct from CC-OPSD.
+
+### 2026-10-15 — ingest method:actionopd (active on task:student-distillation; does not supersede method:opd / method:canopy)
+- Added paper:actionopd (2610.19820), method:actionopd, recipe:actionopd (`code_status: released`; thu-nics/ActionOPD). Mention on task:outcome-only-long-horizon-agent-rl.
+- Status active (`sota_for: []`). Action-level OPD without teacher token probs / tokenizer match. Qwen3-4B/8B +3.3–6.9pp OOD.
+
+### 2026-10-15 — ingest method:latentloop (active on task:compute-matched-moe-looped-pretrain; does not supersede method:smelt)
+- Added paper:latentloop (2610.19975), method:latentloop, recipe:latentloop (`code_status: none`).
+- Status active (`sota_for: []`). Compress first visit, full-res second, reallocate to width. NLL 1.988: 19.0% vs MoE Base, 7.9% vs MoE Loop. Downstream +0.73–1.18 5-shot vs Loop.
+
+### 2026-10-15 — ingest method:hp-rlvr (active on task:math-code-rl-dense; does not supersede method:cispo / method:hdl)
+- Added paper:hp-rlvr (2610.20497), method:hp-rlvr, recipe:hp-rlvr (`code_status: none`). Mention on task:outcome-only-long-horizon-agent-rl.
+- Status active (`sota_for: []`). G=1 token credit via causal vs hindsight JSD. Qwen3-8B 1.21×/1.46×/2.30× vs G=8 GRPO math/code/ALFWorld; math 65.73 vs 63.07. Distinct from HDL.
+
+### 2026-10-15 — ingest method:spectral-moe (active on task:dense-to-moe-upcycling; does not supersede method:maskerade)
+- Added paper:spectral-moe (2610.19232), method:spectral-moe, recipe:spectral-moe (`code_status: announced`; ZacharyBroveak/Spectral-MoE README-only).
+- Status active (`sota_for: []`). Dynamic 25% FFN: WikiText-2 PPL −1.04/−2.96/−2.71 on Llama-2-7B/Llama-3-8B/Qwen2.5-7B. Six-task +1.5/+4.2/+3.6 at 12.5/25/50%.
+
+### 2026-10-15 — ingest method:regra (active on task:lora-quality-tuning; does not supersede method:lr-matters-lora / method:dt-lora)
+- Added paper:regra (2610.19700), method:regra, recipe:regra (`code_status: released`; Fanyao-Li/ReGRA).
+- Status active (`sota_for: []`). Two-stage residual-gradient LoRA. RoBERTa-base GLUE 84.74 vs LoRA r=8 83.21 / r=16 83.97; Llama-3-8B math 72.14 vs 70.83.
+
+### 2026-10-15 — ingest method:forkgrpo (active on task:diffusion-lm-ar-delta-recycle; does not supersede method:a2d / method:justopd / method:canvasanneal)
+- Added paper:forkgrpo (2610.19408), method:forkgrpo, recipe:forkgrpo (`code_status: none`). Mention on task:posttrain-diffusion.
+- Status active (`sota_for: []`). dLLM RL fork from high-entropy states. GSM8K/MATH-500/HumanEval/MBPP 90.4/46.6/51.8/49.0 vs JustGRPO +0.8/+0.6/+1.2/+0.4; ForkGRPO-fast 2.49×.
+
+### 2026-10-15 — note paper:muon-ns-bias (gotcha on task:llm-pretraining-optimization; does not retarget method:muon2)
+- Added paper:muon-ns-bias (2610.20112). Finite Newton-Schulz + ε sends practical Muon onto Frobenius max-margin; log-growing NS recovers spectral. Theory on linear classification, not a 7B bake-off.
+
+### 2026-10-15 — note paper:agentic-self-distill-reality (gotcha on task:outcome-only-long-horizon-agent-rl; does not retarget method:canopy)
+- Added paper:agentic-self-distill-reality (2610.19789). 10 self-distill methods vs GRPO, 132 runs, 12124.4 H800-h; no method consistently beats GRPO.
+
+### 2026-10-15 — note paper:opd-teacher-advantage (gotcha on task:student-distillation; does not retarget method:opd)
+- Added paper:opd-teacher-advantage (2610.19145). Teacher advantage lives in repeated token-level corrections, not a single flip. Repeated 28.4%→74.5% vs teacher 76.9%.
+
 ### 2026-10-14 — weekday SOTA sweep (KV4-RL, TPPO, ProRubric, Monarch-Muon, PR-OPD, Mixed Precision Scaling, Multimodal Mixtures, Scaling Repeated-Data, ShellElastic, TETPO, VSR, ReTerm, JustOPD, VRSD, DT-LoRA)
 - Fifteen active plug-ins and five paper-only notes. No current_sota retarget (Muon2 / CISPO / OPD / Open-MOPD / VISTA / SAO / CANOPY / OLMo-3 / Quartet-II / vanilla LoRA+rsLoRA+LR sweep / A2D / SemiCat / TRACE/TRIAGE / CodeMidas / TerminalHorizon / Repeated-Token Worth).
 - Window: 2026-10-14 Librarian weekday sweep after merged PR 43 (watermark 2610.13948, 1295 nodes, a58446e). arXiv had no Tue 2026-10-13 listing; Wed 2026-10-14 listing (cs.LG/cs.CL/cs.AI new+cross) covers both days. New high id 2610.18874. HF Daily 2026-10-13 and 2026-10-14.

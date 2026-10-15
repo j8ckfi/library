@@ -11,6 +11,9 @@ supersedes:
   - method:dora
   - method:delora
 do_not_use_for:
+  - when: "two-stage residual-gradient complementary LoRA (ReGRA)"
+    reason: "Quality default remains vanilla LoRA + rsLoRA + LR sweep; ReGRA is a staged adapter"
+    use_instead: "method:regra"
   - when: "dynamic tangent LoRA branch via residual-gradient SVD"
     reason: "Quality default remains vanilla LoRA + rsLoRA + LR sweep; DT-LoRA is a vision/detection plug-in"
     use_instead: "method:dt-lora"

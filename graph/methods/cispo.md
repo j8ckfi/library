@@ -10,6 +10,12 @@ sota_for:
 supersedes:
   - method:dapo
 do_not_use_for:
+  - when: "single-rollout token credit via causal vs hindsight JSD (HP-RLVR)"
+    reason: "CISPO remains Pass@1; HP-RLVR is G=1 hindsight credit"
+    use_instead: "method:hp-rlvr"
+  - when: "scale RLVR EMA beta with eta so eta/(1-beta) stays in a safe regime"
+    reason: "CISPO remains Pass@1; this is a momentum-coefficient rule on GRPO/AdamW"
+    use_instead: "method:rlvr-momentum"
   - when: "Neyman prefix resampling μ(s)∝d(s)σ(s) via a prefix replay buffer"
     reason: "CISPO remains Pass@1; VSR resamples prefixes inside a GRPO/GiGPO host"
     use_instead: "method:vsr"
@@ -78,6 +84,8 @@ do_not_use_for:
     use_instead: "method:rgpo"
 last_reviewed: "2026-10-09"
 papers:
+  - paper:hp-rlvr
+  - paper:rlvr-momentum
   - paper:two-clocks-rlvr
   - paper:thinking-leakage
   - paper:llm-abstention

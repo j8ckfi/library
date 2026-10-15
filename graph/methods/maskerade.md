@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "heterogeneous per-layer expert utilization on a converted dense FFN"
+    reason: "MASKerade remains mask-expert upcycling; Spectral-MoE allocates a utilization budget"
+    use_instead: "method:spectral-moe"
   - when: "choosing the frontier MoE architecture template"
     reason: "MASKerade upcycles a dense FFN; DeepSeek-V4 / Kimi-K3 remain the sparse-from-scratch template"
     use_instead: "method:deepseek-v4"
@@ -18,6 +21,7 @@ assumptions:
   - "Code: Ming-K9/MASKerade (`code_status: released`)."
 last_reviewed: "2026-10-07"
 papers:
+  - paper:spectral-moe
   - paper:maskerade
 recipes:
   - recipe:maskerade

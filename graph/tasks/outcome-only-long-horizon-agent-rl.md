@@ -67,6 +67,12 @@ redirects:
     to: "method:reterm"
   - when: "privileged representation OPSD after GRPO (PR-OPD / invisible advantage)"
     to: "method:pr-opd"
+  - when: "action-level OPD without teacher token probabilities"
+    to: "method:actionopd"
+  - when: "single-rollout token credit via causal vs hindsight JSD (HP-RLVR)"
+    to: "method:hp-rlvr"
+  - when: "self-distillation methods vs GRPO on agent benches (no consistent win)"
+    to: "paper:agentic-self-distill-reality"
 current_sota:
   - method: method:canopy
     as_of: "2026-09-04"
@@ -75,6 +81,8 @@ current_sota:
     value: "86.9 / 67.6"
     notes: "CANOPY (2609.01245). Sparse outcome reward, n=32, KL-anchored on-policy. Does not replace SAO, FoldGRPO, CISPO, mini-swe-agent, or omp2-harness. DRACO is the outcome-blind rubric sibling, not a supersession."
 methods:
+  - method:actionopd
+  - method:hp-rlvr
   - method:prorubric
   - method:vsr
   - method:reterm
@@ -104,7 +112,7 @@ methods:
   - method:scad
   - method:metarubric
   - method:hierarchical-moe-routing-control
-last_reviewed: '2026-10-14'
+last_reviewed: '2026-10-15'
 tags:
   - post-training
   - agentic
@@ -152,3 +160,6 @@ Two siblings share this task and are not substitutes:
 - **Related Neyman prefix resampling (not this first hop)**: `method:vsr` (`arXiv:2610.15888`) on `task:math-code-rl-dense`. GiGPO+VSR BabyAI 47.6 vs 30.4. Does not replace CANOPY.
 - **Related recovery-fork terminal RL (not this first hop)**: `method:reterm` (`arXiv:2610.18484`) on `task:coding-agent-rl-environment-construction`. Does not replace CANOPY or CodeMidas.
 - **Related privileged representation OPSD (not this first hop)**: `method:pr-opd` (`arXiv:2609.36642`) on `task:privileged-teacher-opsd`. +4.7 ALFWorld / +11.7 WebShop after GRPO. Does not replace CANOPY or VISTA.
+- **Optional action-level OPD (not this first hop)**: `method:actionopd` (`arXiv:2610.19820`) on `task:student-distillation`. Black-box teacher, no token logp. Qwen3-4B/8B +3.3–6.9pp OOD. Code thu-nics/ActionOPD. Does not replace CANOPY or OPD.
+- **Related single-rollout hindsight token credit (not this first hop)**: `method:hp-rlvr` (`arXiv:2610.20497`) on `task:math-code-rl-dense`. G=1 causal vs hindsight JSD. ALFWorld GRPO zero-grad 43.2%/49.0% vs none. Distinct from HDL. Does not replace CANOPY or CISPO.
+- **Gotcha (self-distillation vs GRPO on agent benches)**: `paper:agentic-self-distill-reality` (`arXiv:2610.19789`). 10 methods, 132 runs, 12124.4 H800-h; no method consistently beats GRPO. Does not retarget CANOPY.

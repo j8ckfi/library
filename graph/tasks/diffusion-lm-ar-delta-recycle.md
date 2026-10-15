@@ -28,6 +28,8 @@ redirects:
     to: "method:justopd"
   - when: "16x DLM-vs-AR pretrain compute gap under ELBO vs exact likelihood"
     to: "paper:dlm-ar-compute-gap"
+  - when: "dLLM RL that forks from high-entropy intermediate states (ForkGRPO)"
+    to: "method:forkgrpo"
 current_sota:
   - method: method:a2d
     as_of: "2026-10-07"
@@ -36,6 +38,7 @@ current_sota:
     value: "AR delta on converted dLLM approaches direct diffusion PT and composes with it; AR/diffusion deltas nearly orthogonal"
     notes: "A2D (2610.08108). Method status active. Does not replace DiffusionOPSD / Self-OPD / CanvasAnneal."
 methods:
+  - method:forkgrpo
   - method:justopd
   - method:semicat
   - method:soloq
@@ -44,7 +47,7 @@ methods:
   - method:diffusion-opsd
   - method:self-opd
   - method:uno
-last_reviewed: '2026-10-14'
+last_reviewed: '2026-10-15'
 tags:
   - diffusion
   - post-training
@@ -70,3 +73,4 @@ This is **not** image/flow reward alignment and not CanvasAnneal.
 - **Not this task (continuous diffusion LM pretrain)**: `method:semicat` on `task:continuous-diffusion-lm-pretrain` (`arXiv:2610.13834`). Discrete-dLLM questions stay here.
 - **Optional AR→dLLM on-policy distillation (not this recycle hop)**: `method:justopd` (`arXiv:2610.17397`). Dream-7B / Qwen3-14B; L=256 GSM8K 77.03→81.80. No public code. Does not replace A2D or OPD.
 - **Gotcha (16× compute protocol)**: `paper:dlm-ar-compute-gap` (`arXiv:2610.17590`). ELBO MDM 17.8× vs DUEL 12.8×; E2D2 b=4 3.0×. Older 16× claims used ELBO/full-sequence. Does not retarget A2D or SemiCat.
+- **Optional dLLM fork RL (not this recycle hop)**: `method:forkgrpo` (`arXiv:2610.19408`). GSM8K/MATH-500/HumanEval/MBPP 90.4/46.6/51.8/49.0 vs JustGRPO; ForkGRPO-fast 2.49×. No dedicated repo. Does not replace A2D, JustOPD, or CanvasAnneal.

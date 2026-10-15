@@ -256,7 +256,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:diffusion-lm-ar-delta-recycle — Diffusion-LM Recycle of Autoregressive Post-Training Deltas
 - **Scope**: Adding an AR post-training delta onto a converted dLLM base, and composing that recycle with direct diffusion post-training. First hop is A2D. Not image/flow reward alignment, not discrete-DLM canvas RL, not AR multi-token serving.
-- **SOTA**: `method:a2d` `2610.17590` (as_of 2026-10-07) — AR post-training delta added to a converted dLLM base: AR delta on converted dLLM approaches direct diffusion PT and composes with it; AR/diffusion deltas nearly orthogonal
+- **SOTA**: `method:a2d` `2610.19408` (as_of 2026-10-07) — AR post-training delta added to a converted dLLM base: AR delta on converted dLLM approaches direct diffusion PT and composes with it; AR/diffusion deltas nearly orthogonal
+  - do not use when dLLM RL that forks from high-entropy intermediate states (ForkGRPO) → `method:forkgrpo`
   - do not use when AR→discrete-dLLM on-policy distillation rather than a weight-delta recycle → `method:justopd`
   - do not use when text-to-image / flow reward alignment → `method:diffusion-opsd`
   - do not use when discrete DLM curriculum RL with a teacher canvas → `method:canvasanneal`
@@ -270,6 +271,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when continuous diffusion language model pretrain (self-conditioning / SemiCat), not AR-delta recycle → `task:continuous-diffusion-lm-pretrain`
   - when AR→discrete-dLLM on-policy distillation (JustOPD), not a weight-delta recycle → `method:justopd`
   - when 16x DLM-vs-AR pretrain compute gap under ELBO vs exact likelihood → `paper:dlm-ar-compute-gap`
+  - when dLLM RL that forks from high-entropy intermediate states (ForkGRPO) → `method:forkgrpo`
 - **Out of scope**: Text-to-image / flow reward alignment (DiffusionOPSD / Self-OPD); Discrete DLM curriculum RL with a teacher canvas (CanvasAnneal); Lossless multi-token / diffusion-augmented AR serving (Uno); Dense AR Pass@1 RLVR (CISPO); Continuous diffusion language model pretrain (SemiCat / DoubleCat)
 
 ### task:pixel-diffusion-pretrain — Pixel-Space Diffusion Transformer Pretraining
@@ -296,6 +298,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when training a stable video reward model / rubric-guided RM PO → `method:rewardverse`
   - when pixel-space DiT / flow-matching image pretrain (Representation Guidance) → `task:pixel-diffusion-pretrain`
   - when continuous diffusion language model pretrain (not image/flow alignment) → `task:continuous-diffusion-lm-pretrain`
+  - when dLLM RL that forks from high-entropy intermediate states (ForkGRPO) → `method:forkgrpo`
 
 ## efficiency
 
@@ -335,7 +338,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:full-param-memory-efficient-pretrain — Full-Parameter Memory-Efficient Pretraining & Fine-Tuning
 - **Scope**: Full-parameter pretraining and fine-tuning when optimizer state or peak memory is the constraint. First hop is SCALE (subspace projections). TACO is the FT-axis ternary column-wise one-sparse plug-in. Not the ~7B pretrain optimizer.
-- **SOTA**: `method:scale` `2610.06647` (as_of 2026-08-26) — Full-Parameter 24GB Pretraining / Fine-Tuning: Default SOTA for memory-efficient full-parameter training
+- **SOTA**: `method:scale` `2610.19844` (as_of 2026-08-26) — Full-Parameter 24GB Pretraining / Fine-Tuning: Default SOTA for memory-efficient full-parameter training
+  - do not use when subspace Muon with residual correction (PMRC / SMRC) → `method:pmrc`
   - do not use when low-rank gradient sketches + predicted-KL step control for RL memory → `method:logra`
   - do not use when ternary abs-max column-wise one-sparse optimizer for full-param LLM FT → `method:taco`
   - do not use when choosing the ~7B dense pretrain optimizer → `method:muon2`
@@ -349,15 +353,18 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when quality LoRA on 24GB without a fully quantized checkpoint constraint → `task:lora-quality-tuning`
   - when mixed-precision scaling law for which pass to keep high precision (not optimizer-state memory) → `method:mixed-precision-scaling`
   - when structure-aware Muon on Monarch-factored weights (not SCALE subspace) → `method:monarch-muon`
+  - when subspace Muon with residual correction (PMRC / SMRC) → `method:pmrc`
 - **Out of scope**: ~7B dense pretrain optimizer (Muon2); Native FP4 hardware training from scratch (Quartet-II); Quality LoRA on 24GB (vanilla LoRA + rsLoRA + LR sweep)
 
 ### task:lora-quality-tuning — LoRA Quality Tuning on Single GPU
 - **SOTA**: `method:lr-matters-lora` `2602.04998` (as_of 2026-08-26) — Single GPU PEFT / MMLU / GSM8k: Matches/exceeds DoRA
+  - do not use when two-stage residual-gradient complementary LoRA (ReGRA) → `method:regra`
   - do not use when dynamic tangent LoRA branch via residual-gradient SVD → `method:dt-lora`
   - do not use when stacking independently trained LoRA adapters / sequential skill add without an inference router → `method:read-lora`
 - **Redirects**:
   - when stacking independently trained LoRA adapters / sequential skill add without an inference router → `task:lora-skill-composition`
   - when dynamic tangent LoRA branch via residual-gradient SVD (not rsLoRA + LR sweep) → `method:dt-lora`
+  - when two-stage residual-gradient complementary LoRA (ReGRA) → `method:regra`
 
 ### task:lora-skill-composition — LoRA Skill Composition
 - **Scope**: Composing / stacking independently trained LoRA skills without inference routers. First hop is READ. Not single-adapter quality, not 4-bit PEFT, not drift-budget instruct freeze.
@@ -375,6 +382,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:parameter-efficient-fine-tuning — Parameter-Efficient Fine-Tuning (PEFT) & Low-Rank Adaptation
 - **SOTA**: `method:lr-matters-lora` `2602.04998` (as_of 2026-08-26) — Single GPU PEFT / MMLU / GSM8k: Vanilla LoRA + rsLoRA + LR sweep SOTA (NOT DoRA)
+  - do not use when two-stage residual-gradient complementary LoRA (ReGRA) → `method:regra`
   - do not use when dynamic tangent LoRA branch via residual-gradient SVD → `method:dt-lora`
   - do not use when stacking independently trained LoRA adapters / sequential skill add without an inference router → `method:read-lora`
 - **SOTA**: `method:aqlora-q` `2608.23816` (as_of 2026-08-26) — 4-Bit Single GPU PEFT: 4-Bit SOTA Speed/Recipe Default
@@ -449,7 +457,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:agentic-async-rl — Agentic Asynchronous Reinforcement Learning
 - **Scope**: Training a tool-use / sandbox policy with asynchronous RL. Not choosing a software-engineering harness.
-- **SOTA**: `method:sao` `2607.07508` (as_of 2026-08-26) — Agentic Tool-Use & Multi-Turn Sandbox Benchmarks: Default SOTA for agentic async RL
+- **SOTA**: `method:sao` `2610.20256` (as_of 2026-08-26) — Agentic Tool-Use & Multi-Turn Sandbox Benchmarks: Default SOTA for agentic async RL
+  - do not use when async single-rollout SWE recipe (Muon + token-avg loss + truncated IS) → `method:muon-lh-rl`
   - do not use when replace IS weight ρ by ρ^α to hit a target ESS → `method:tetpo`
   - do not use when sampler-anchored KL least-squares without IS clipping → `method:klpo`
   - do not use when coupled policy-side IS and advantage-staleness TD correction → `method:copc`
@@ -486,6 +495,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when unified EventLog lifecycle library for tool-using LLM agents (not the async algorithm) → `method:agenttune`
   - when replace IS weight ρ by ρ^α to hit a target ESS (TETPO) → `method:tetpo`
   - when INT4 KV-cache async RLVR rollouts with INT8 sink/recent protection → `method:kv4-rl`
+  - when async single-rollout SWE recipe (Muon + token-avg loss + truncated IS) → `method:muon-lh-rl`
 - **Out of scope**: Building or choosing a software-engineering agent loop (mini-SWE-agent / CCA / OpenHands); Dumped long-prompt offload (RLM); GUI computer-use without policy training; Outcome-only long-horizon agent RL where the failure is signal starvation / policy drift, not async latency; Live-web multi-hop search-agent training (Iris SFT-RL climbing); Production post-train engine rather than the async algorithm (Miles); Routing-harness RSI post-train (NeoHorse-1); Adaptive math/code sampling until ≥1 correct (NGU); that is a CISPO-host sampler, not SAO straggler replay; Privileged self-OPD then Adaptive Retirement into pure agent RL (RetireOPD / ALFWorld/WebShop); Data/env construction for coding-agent RL from source code (CodeMidas); Diagnosing which multi-turn tool calls are trainable (Critical-State RL); Harness distillation into weights under a fixed target harness (Harness-Zero); Multi-stage agent continual learning (ACLArena); Category-aware SWE expert RL (Category-Aware SWE Experts); Structural tool vs summary credit under GRPO (SLCA-GRPO)
 
 ### task:agentic-rsi-routing-posttrain — Agentic RSI Routing-Harness Post-Training
@@ -619,7 +629,9 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:math-code-rl-dense — Mathematical and Code RL Reasoning (Dense Policies)
 - **Scope**: Single-turn (or short-CoT) dense math/code RLVR with a programmatic verifier. Pass@1 default is CISPO.
-- **SOTA**: `method:cispo` `2610.18853` (as_of 2026-08-26) — MATH-500 / AIME 2024 / LiveCodeBench: Default SOTA for Dense RL
+- **SOTA**: `method:cispo` `2610.20497` (as_of 2026-08-26) — MATH-500 / AIME 2024 / LiveCodeBench: Default SOTA for Dense RL
+  - do not use when single-rollout token credit via causal vs hindsight JSD (HP-RLVR) → `method:hp-rlvr`
+  - do not use when scale RLVR EMA beta with eta so eta/(1-beta) stays in a safe regime → `method:rlvr-momentum`
   - do not use when Neyman prefix resampling μ(s)∝d(s)σ(s) via a prefix replay buffer → `method:vsr`
   - do not use when rollout-level drop of high-probability positive-advantage traces → `method:grpodropout`
   - do not use when novelty-rewarded explorer policies distilled into a student without novelty → `method:expdis`
@@ -682,6 +694,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when target-ESS tempered IS (TETPO) rather than Pass@1 CISPO → `method:tetpo`
   - when rollout batch size vs sqrt-LR rule; two clocks of progress vs failure → `paper:two-clocks-rlvr`
   - when NO-THINK-mode GRPO gains that reactivate THINK-mode behavior → `paper:thinking-leakage`
+  - when single-rollout token credit via causal vs hindsight JSD (HP-RLVR) → `method:hp-rlvr`
+  - when scale RLVR EMA beta with eta so eta/(1-beta) stays in a safe regime → `method:rlvr-momentum`
 - **Out of scope**: Long-horizon interactive agents judged only at episode end (CANOPY / DRACO); Async tool-latency RL (SAO); Live-web multi-hop search-agent training (Iris); Pass@K / coverage / no-backward (ES-reasoning / DATPO); Olympiad NL proofs / IMO TTC (Nemotron IMO Gold); Multimodal VL prompt scaffolding / online EPS curriculum (not dense text Pass@1); Multi-stage agent capability stacking / continual learning (ACLArena); Structural tool vs summary credit under GRPO (SLCA-GRPO); MoE train–infer engine mismatch IS (CIS-RL); Multi-reward GRPO aggregation (CorrGRPO / DARA); Cancellation-aware off-policy sequence masking (CARM); MCMC projection sampling then ordinary SFT (Sampling SFT)
 
 ### task:math-code-rl-moe — Mathematical and Code RL Reasoning (MoE Policies)
@@ -792,7 +806,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:outcome-only-long-horizon-agent-rl — Outcome-Only Long-Horizon Agent RL
 - **Scope**: Policy training for multi-turn agents judged only at episode end, where the failure modes are signal starvation (all-success / all-fail groups) and policy drift on a small revisited task pool. Includes the outcome-blind rubric variant when no programmatic checker exists.
-- **SOTA**: `method:canopy` `2609.01245` (as_of 2026-09-04) — AppWorld Test-Normal / Test-Challenge TGC, Qwen3-14B (Feb 2026 leaderboard): 86.9 / 67.6
+- **SOTA**: `method:canopy` `2610.19789` (as_of 2026-09-04) — AppWorld Test-Normal / Test-Challenge TGC, Qwen3-14B (Feb 2026 leaderboard): 86.9 / 67.6
   - do not use when variable tool latency / async stragglers is the bottleneck → `method:sao`
   - do not use when the problem is folding a long tool trajectory into a small active context → `method:foldgrpo`
   - do not use when single-turn math/code Pass@1 RLVR → `method:cispo`
@@ -836,6 +850,9 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when Neyman prefix resampling on GiGPO-style agent groups (VSR) → `method:vsr`
   - when fork RL rollouts from the agent's own failure states (ReTerm) → `method:reterm`
   - when privileged representation OPSD after GRPO (PR-OPD / invisible advantage) → `method:pr-opd`
+  - when action-level OPD without teacher token probabilities → `method:actionopd`
+  - when single-rollout token credit via causal vs hindsight JSD (HP-RLVR) → `method:hp-rlvr`
+  - when self-distillation methods vs GRPO on agent benches (no consistent win) → `paper:agentic-self-distill-reality`
 - **Out of scope**: Async straggler / tool-latency RL (SAO); Folding a long tool/web/SWE trajectory into a small active context (FoldGRPO); Single-turn dense math/code RLVR (CISPO); Building or choosing a SWE harness rather than training a policy (mini-SWE-agent); Production harness kernel (omp2); Live-web multi-hop search-agent training (Iris); Data/env construction for coding-agent RL from source code (CodeMidas); Multi-stage agent continual learning (ACLArena)
 
 ### task:passk-reasoning-coverage — Math/Code RLVR for Pass@K Coverage without Backward Pass
@@ -876,7 +893,9 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when self-distillation OOD: SDPO/OPSD gains largely do not transfer → `paper:self-distillation-ood`
 
 ### task:reasoning-rl-alignment — Reinforcement Learning & Reasoning Post-Training
-- **SOTA**: `method:cispo` `2610.18853` (as_of 2026-08-26) — AIME 2024 / MATH-500: SOTA for Dense Long-CoT
+- **SOTA**: `method:cispo` `2610.20497` (as_of 2026-08-26) — AIME 2024 / MATH-500: SOTA for Dense Long-CoT
+  - do not use when single-rollout token credit via causal vs hindsight JSD (HP-RLVR) → `method:hp-rlvr`
+  - do not use when scale RLVR EMA beta with eta so eta/(1-beta) stays in a safe regime → `method:rlvr-momentum`
   - do not use when Neyman prefix resampling μ(s)∝d(s)σ(s) via a prefix replay buffer → `method:vsr`
   - do not use when rollout-level drop of high-probability positive-advantage traces → `method:grpodropout`
   - do not use when novelty-rewarded explorer policies distilled into a student without novelty → `method:expdis`
@@ -905,7 +924,11 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when NO-THINK-mode GRPO gains that reactivate THINK-mode behavior → `paper:thinking-leakage`
 
 ### task:student-distillation — Small Local Student Distillation from Strong Teacher
-- **SOTA**: `method:opd` `2610.18011` (as_of 2026-08-26) — GSM8k / HumanEval / MT-Bench Student Evaluation: Default SOTA for single-teacher student distillation
+- **SOTA**: `method:opd` `2610.19145` (as_of 2026-08-26) — GSM8k / HumanEval / MT-Bench Student Evaluation: Default SOTA for single-teacher student distillation
+  - do not use when one-step prefix-augmented OPD for continued pretrain (PA1-OPD) → `method:pa1-opd`
+  - do not use when critique-guided rewrite of incorrect rollouts then privileged scoring (CriticOPD) → `method:criticopd`
+  - do not use when action-level OPD without teacher token probabilities → `method:actionopd`
+  - do not use when where the teacher's advantage lives along student trajectories (token-flip diagnostic) → `paper:opd-teacher-advantage`
   - do not use when OPD restricted to problems the student fails → `paper:opd-failure-problems`
   - do not use when bilevel learned token weights from post-update validation loss → `method:metaopd`
   - do not use when probability-space token keep-mask that downweights low-low tokens → `method:dial-opd`
@@ -928,7 +951,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when multi-turn agent OPD at pivotal early mistakes (prevent reverse-KL + recover forward-KL) → `method:pivotopd`
   - do not use when act-first / reason-later multi-turn OPD (inverse dynamics + async full-response distill) → `method:actfirst-opd`
   - do not use when rubric-privileged OPD warm start before rubric-based RL → `method:rp-opd`
-- **SOTA**: `method:open-mopd` `2610.10460` (as_of 2026-08-28) — Multi-Teacher Capability Integration (SmolLM3-3B Benchmark): 83.4% headroom recovery in a single deployable student
+- **SOTA**: `method:open-mopd` `2610.13521` (as_of 2026-08-28) — Multi-Teacher Capability Integration (SmolLM3-3B Benchmark): 83.4% headroom recovery in a single deployable student
+  - do not use when cross-teacher guarding of domain-routed MOPD (Road MOPD) → `method:road-mopd`
   - do not use when multi-teacher OPD via teacher-minus-base logit shifts rather than endpoint copy → `method:delta-mopd`
   - do not use when MOPD vs tuned off-policy SFT/Soft-KD after matching training design (GPU-hour confound) → `paper:rethink-mopd`
   - do not use when token-level ExpertAlign routing over unlabeled multi-teacher pools (no domain labels, no separate router train) → `method:mopd-router`
@@ -985,6 +1009,11 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when MC reasoning-tree process uncertainty / contract corpus / online routing during CoT-SFT (UGPC) → `method:ugpc`
   - when AR→discrete-dLLM on-policy distillation rather than AR student matching → `method:justopd`
   - when OPD restricted to problems the student fails (accuracy drops while KL drops) → `paper:opd-failure-problems`
+  - when one-step prefix-augmented OPD for continued pretrain (PA1-OPD) → `method:pa1-opd`
+  - when cross-teacher guarding of domain-routed MOPD (Road MOPD) → `method:road-mopd`
+  - when critique-guided rewrite of incorrect rollouts then privileged scoring (CriticOPD) → `method:criticopd`
+  - when action-level OPD without teacher token probabilities → `method:actionopd`
+  - when where the teacher's advantage lives along student trajectories (token-flip diagnostic) → `paper:opd-teacher-advantage`
 
 ### task:swe-agent-category-expert-rl — SWE Agent Category-Expert RL
 - **Scope**: Category-aware expert RL plus label-routed integration inside repository-level SWE. First hop is Category-Aware SWE Experts. Not source-only env construction, not async stragglers, not the issue-to-patch harness loop, not the production engine.
@@ -1076,7 +1105,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:compute-matched-moe-looped-pretrain — Compute-Matched MoE Looped Pretraining
 - **Scope**: Compute-matched looped MoE pretrain recipes (which layers to loop, how many visits, width/expert/KV matching). First hop is SMELT. Does not choose the frontier MoE architecture template.
-- **SOTA**: `method:smelt` `2609.01343` (as_of 2026-09-01) — Chinchilla-style MoE scaling ladder, compute-optimal CE Gain vs unlooped Baseline: 6.8–18.0% on the fitted sparse-grid frontier (10^20–10^21 FLOPs)
+- **SOTA**: `method:smelt` `2610.19975` (as_of 2026-09-01) — Chinchilla-style MoE scaling ladder, compute-optimal CE Gain vs unlooped Baseline: 6.8–18.0% on the fitted sparse-grid frontier (10^20–10^21 FLOPs)
+  - do not use when asymmetric compute across looped MoE visits (compress first, full-res second) → `method:latentloop`
   - do not use when Huginn-style dense fixed-point looped LMs (learned depth prior / terminal KV sharing) → `method:looped-models-done-right`
   - do not use when choosing the frontier MoE architecture template → `method:deepseek-v4`
   - do not use when expert-parallel all-to-all layout / concentrating experts in fewer routed layers → `method:ce-moe`
@@ -1092,6 +1122,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when input-heavy agentic / KV-compressed CED serving → `task:input-heavy-agentic-moe-serving`
   - when choosing the ~7B dense pretrain optimizer → `task:llm-pretraining-optimization`
   - when elastic mixed-depth looped LM (gated state update / mixed loop counts) → `task:elastic-depth-looped-lm`
+  - when asymmetric compute across looped MoE visits (compress first, full-res second) → `method:latentloop`
 - **Out of scope**: Frontier MoE architecture template (DeepSeek-V4 / Kimi-K3); Communication-efficient expert-layer layout (CE-MoE); NVL72 fused dispatch megakernel (Mixture-of-Kittens); Recurrent CED all-token recurrence (RLT); Input-heavy agentic CED serving (DeepSeek-V4.1-Flash); ~7B dense NTP optimizer (Muon2); Elastic mixed-depth looped LM training (ELR)
 
 ### task:data-constrained-pretrain — Data-Constrained Pretraining (Epoch / Repetition Geometry)
@@ -1115,7 +1146,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 
 ### task:dense-to-moe-upcycling — Dense-to-MoE Upcycling
 - **Scope**: Dense-to-MoE upcycling of an existing dense checkpoint. First hop is MASKerade: learned binary-mask experts over a frozen FFN. Not the frontier MoE pretrain template, not MoE RLVR, not communication-efficient expert layout.
-- **SOTA**: `method:maskerade` `2610.07809` (as_of 2026-10-07) — dense FFN upcycled to four 2:4 mask experts, top-2 routing: learned binary-mask experts over a frozen FFN (four 2:4 experts, top-2)
+- **SOTA**: `method:maskerade` `2610.19232` (as_of 2026-10-07) — dense FFN upcycled to four 2:4 mask experts, top-2 routing: learned binary-mask experts over a frozen FFN (four 2:4 experts, top-2)
+  - do not use when heterogeneous per-layer expert utilization on a converted dense FFN → `method:spectral-moe`
   - do not use when choosing the frontier MoE architecture template → `method:deepseek-v4`
   - do not use when distributionally robust MoE load-balancing on an already-sparse model → `method:drmoet`
 - **Redirects**:
@@ -1123,6 +1155,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when MoE/VL RLVR loss rather than dense-to-MoE conversion → `task:math-code-rl-moe`
   - when communication-efficient expert layout rather than mask-expert upcycling → `method:ce-moe`
   - when static sparse upcycling via token-indexed embedding residuals (not routed mask experts) → `method:staple`
+  - when heterogeneous per-layer expert utilization on a converted dense FFN → `method:spectral-moe`
 - **Out of scope**: Frontier MoE architecture from scratch (DeepSeek-V4 / Kimi-K3); MoE/VL RLVR loss (SAPO); Communication-efficient expert layout (CE-MoE); Compute-matched looped MoE (SMELT)
 
 ### task:elastic-depth-looped-lm — Elastic-Depth Looped Language Models
@@ -1163,7 +1196,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when checkpoint + recent-input buffer for hybrid SSM decode (ReplaySSM) → `method:replayssm`
 
 ### task:llm-pretraining-optimization — Large Language Model Pretraining Optimization
-- **SOTA**: `method:muon2` `2610.00423` (as_of 2026-08-26) — Moonlight 7B Pretraining / FineWeb: ~2x token efficiency vs AdamW
+- **SOTA**: `method:muon2` `2610.20112` (as_of 2026-08-26) — Moonlight 7B Pretraining / FineWeb: ~2x token efficiency vs AdamW
   - do not use when 4-bit AdamW optimizer-state quantization in preconditioner space → `method:zip-sr`
   - do not use when thresholded Muon orthogonalization of small vs large singular values → `method:spectrally-targeted-muon`
   - do not use when NorMuon adaptivity is orthogonalization geometry; decoupled geometry-aligned scaling → `method:dga-muon`
@@ -1172,6 +1205,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when full-param FT optimizer-state memory (ternary column-wise one-sparse) → `method:taco`
   - do not use when Muon-style norm-aware update for embedding tables (1->2) and LM head (2->inf) instead of AdamW → `method:muonio`
   - do not use when two-band Marchenko-Pastur spectral reweighting for Muon (BulkBoost) → `method:bulkboost`
+  - do not use when history-adaptive spectral clipping of AdamW gradients (CAST-SSC) → `method:cast-ssc`
+  - do not use when finite Newton-Schulz plus epsilon loses spectral max-margin → `paper:muon-ns-bias`
 - **Redirects**:
   - when 4-bit AdamW optimizer-state quantization in preconditioner space (ZIP-SR) → `method:zip-sr`
   - when thresholded Muon orthogonalization of small vs large singular values → `method:spectrally-targeted-muon`
@@ -1193,6 +1228,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when randomized momentum transport rates for Muon / sign updates (theory) → `paper:randomized-momentum-transport`
   - when structure-aware Muon on Monarch-factored weights (not dense Muon2) → `method:monarch-muon`
   - when nested width-elastic supernet at ~widest-subnet cost with μP-style HP transfer → `method:shell-elastic`
+  - when history-adaptive spectral clipping of AdamW gradients (CAST-SSC; not CAST OPD) → `method:cast-ssc`
+  - when finite Newton-Schulz plus epsilon loses Muon spectral max-margin → `paper:muon-ns-bias`
 
 ### task:open-data-recipe — Open Foundation Data Recipe & Pretraining Mix
 - **SOTA**: `method:olmo-3` `2512.13961` (as_of 2026-08-26) — Dolma-3 Open Token Mix: Default SOTA open data recipe
@@ -1207,7 +1244,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - when text/vision/audio MoE mixing laws rather than the open text mix → `method:multimodal-data-mixtures`
 
 ### task:pretrain-dense-7b — Pretrain Dense ~7B Language Model from Scratch
-- **SOTA**: `method:muon2` `2610.00423` (as_of 2026-08-26) — Moonlight Scaling Laws / FineWeb Token Mix: ~2x token efficiency vs AdamW
+- **SOTA**: `method:muon2` `2610.20112` (as_of 2026-08-26) — Moonlight Scaling Laws / FineWeb Token Mix: ~2x token efficiency vs AdamW
   - do not use when 4-bit AdamW optimizer-state quantization in preconditioner space → `method:zip-sr`
   - do not use when thresholded Muon orthogonalization of small vs large singular values → `method:spectrally-targeted-muon`
   - do not use when NorMuon adaptivity is orthogonalization geometry; decoupled geometry-aligned scaling → `method:dga-muon`
@@ -1216,12 +1253,15 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when full-param FT optimizer-state memory (ternary column-wise one-sparse) → `method:taco`
   - do not use when Muon-style norm-aware update for embedding tables (1->2) and LM head (2->inf) instead of AdamW → `method:muonio`
   - do not use when two-band Marchenko-Pastur spectral reweighting for Muon (BulkBoost) → `method:bulkboost`
+  - do not use when history-adaptive spectral clipping of AdamW gradients (CAST-SSC) → `method:cast-ssc`
+  - do not use when finite Newton-Schulz plus epsilon loses spectral max-margin → `paper:muon-ns-bias`
 - **Redirects**:
   - when unique-token epoch / repetition geometry under a finite pretrain corpus → `task:data-constrained-pretrain`
   - when latent-space / next-concept LM architecture rather than dense NTP 7B → `task:latent-space-lm-pretrain`
   - when fully synthetic single-stage LLM pretraining from Wikipedia/Wikibooks seeds → `task:synthetic-single-stage-pretrain`
   - when zero-natural-data self-play pretraining (UTM programs, no natural text) → `task:zero-natural-data-self-play-pretrain`
   - when Muon-style norm-aware update for embedding tables (1->2) and LM head (2->inf) instead of AdamW → `method:muonio`
+  - when one-step prefix-augmented OPD for continued pretrain (PA1-OPD) → `method:pa1-opd`
 
 ### task:pretrain-moe-frontier — Pretrain Mixture-of-Experts (MoE) Architecture at Scale
 - **Scope**: Frontier MoE pretrain architecture template. Co-default is DeepSeek-V4 + Kimi-K3.

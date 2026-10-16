@@ -10,6 +10,8 @@ out_of_scope:
   - "Native FP4 hardware training from scratch (Quartet-II)"
   - "Quality LoRA on 24GB (vanilla LoRA + rsLoRA + LR sweep)"
 redirects:
+  - when: "losslessly compressed GPU train tensors (LCT Huffman)"
+    to: "method:lct"
   - when: "4-bit AdamW optimizer-state quantization in preconditioner space (ZIP-SR)"
     to: "method:zip-sr"
   - when: "Nyström-sketched SOAP preconditioners / linear optimizer memory (Clean / Q-Clean)"
@@ -38,6 +40,7 @@ current_sota:
     value: "Default SOTA for memory-efficient full-parameter training"
     notes: "SCALE (2506.16659, ICML 2026) not GaLore."
 methods:
+  - method:lct
   - method:pmrc
   - method:mixed-precision-scaling
   - method:monarch-muon
@@ -47,7 +50,7 @@ methods:
   - method:scale
   - method:galore
   - method:taco
-last_reviewed: '2026-10-15'
+last_reviewed: '2026-10-16'
 tags:
   - efficiency
   - optimizer
@@ -64,3 +67,5 @@ tags:
 - **Optional mixed-precision pass allocation (not this first hop)**: `method:mixed-precision-scaling` (`arXiv:2610.17637`) on `task:fp4-hardware-training`. Does not replace SCALE.
 - **Optional Monarch-factored Muon (not this first hop)**: `method:monarch-muon` (`arXiv:2610.17429`). 6.89B H100 peak 68.87→52.94 GB. Loses to dense Muon at 257M. Does not replace SCALE or Muon2.
 - **Optional residual-correction subspace Muon (not this first hop)**: `method:pmrc` (`arXiv:2610.19844`). LLaMA 1.3B C4 train 2.500 vs Fira 2.657 vs GaLore 2.842. No SCALE bake-off. No dedicated repo. Does not replace SCALE.
+
+- **Optional lossless GPU train tensors**: `method:lct` (`arXiv:2610.22179`). NanoGPT −24.6% mem / +7.2% step-time; Qwen3-4B −23.8% peak. No public code. Does not replace SCALE.

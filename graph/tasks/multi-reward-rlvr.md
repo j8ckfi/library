@@ -12,6 +12,8 @@ out_of_scope:
   - "Cancellation-aware off-policy sequence masking (CARM)"
   - "Outcome-only long-horizon agent RL (CANOPY)"
 redirects:
+  - when: "reward-specific token-level credit (leave-one-out verifier replay; MRTPO)"
+    to: "method:mrtpo"
   - when: "single-turn dense math/code Pass@1 RLVR (one verifier reward, not multi-reward aggregation)"
     to: "task:math-code-rl-dense"
   - when: "MoE/VL RLVR loss rather than multi-reward aggregation"
@@ -40,6 +42,7 @@ current_sota:
     value: "up to 26% fewer steps (tool format) / 65% fewer steps (math length); competitive final score"
     notes: "DARA (2610.00574). Inverse-sqrt density on advantage energy. Dual-active with CorrGRPO. GDPO is prior art, not a library node. Does not replace CISPO."
 methods:
+  - method:mrtpo
   - method:prorubric
   - method:corrgrpo
   - method:dara
@@ -48,7 +51,7 @@ methods:
   - method:dr-grpo
   - method:carm
   - method:lmopd
-last_reviewed: '2026-10-14'
+last_reviewed: '2026-10-16'
 tags:
   - post-training
   - rl-alignment
@@ -75,3 +78,5 @@ This is **not** single-reward CISPO, not SAPO, and not CARM's off-policy sequenc
 - **Not This Task**: `method:cispo` remains dense Pass@1; `method:sapo` remains MoE/VL; `method:cis-rl` remains train–infer IS; `method:carm` remains off-policy sequence masking.
 - **Optional priority-ordered multi-teacher OPD (not this scalarized RL task)**: `method:lmopd` (`arXiv:2610.02359`) on `task:student-distillation`. Lexicographic specialist OPD, not Pearson/density GRPO aggregation. Does not replace CorrGRPO or DARA.
 - **Not this task (protocol-level rubric structure)**: `method:prorubric` (`arXiv:2609.38847`) on `task:outcome-only-long-horizon-agent-rl`. Additive sums let criteria compensate. Does not replace CorrGRPO / DARA.
+
+- **Optional reward-specific token credit**: `method:mrtpo` (`arXiv:2610.21439`). Leave-one-out verifier replay. Qwen2.5-Coder-7B SQL avg 73.15 vs GDPO 71.55. Code zhaihaotian/MRTPO. Does not replace CorrGRPO / DARA.

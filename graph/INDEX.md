@@ -32,6 +32,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when recursive self-rewrite of a research-agent harness (accepted rewrite is the next incumbent) → `method:aide2`
   - do not use when harness curriculum as a non-stationary bandit over failure-pattern arms → `method:activesaddler`
 - **Redirects**:
+  - when terminal-agent RSR + RPR recursive self-improve (TB-GAE / FDR / SPR) → `method:terminal-rsi`
+  - when formal Harness RSI framework + PAC admission bounds (frozen weights) → `method:harness-rsi`
   - when issue-to-patch / locked eval → `task:software-engineering-agent-harness`
   - when train agent RL → `task:agentic-async-rl`
   - when outcome-only long-horizon agent RL (coverage / anti-drift or rubric credit) → `task:outcome-only-long-horizon-agent-rl`
@@ -71,6 +73,9 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when trained mobile GUI policy → `method:mai-ui`
   - do not use when training hybrid GUI+code recreation agents → `method:recreationworld`
 - **Redirects**:
+  - when open generalist CUA stack / harness-to-model decision transfer (OpenGCUA) → `method:opengcua`
+  - when mocked-app GUI eval+RL platform with real-phone transfer (MAI-Gym; not OSWorld 2.0 ranking) → `method:mai-gym`
+  - when native GUI+code CUA trained with step-balanced GSPO (OS-Helix; not OSWorld 2.0 ranking) → `method:os-helix`
   - when GitHub issue to patch → `task:software-engineering-agent-harness`
   - when training hybrid GUI+code agents → `task:hybrid-computer-use-agent-rl`
   - when synthesized GUI software environments for CUA training transfer (not OSWorld 2.0 ranking) → `method:softwaregym`
@@ -105,6 +110,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when programmatic checker AppWorld coverage / anti-drift → `method:canopy`
   - do not use when trained mobile-only GUI policy on AndroidWorld → `method:mai-ui`
 - **Redirects**:
+  - when mocked-app GUI eval+RL platform with real-phone transfer (MAI-Gym) → `method:mai-gym`
+  - when native GUI+code CUA trained with step-balanced GSPO (OS-Helix) → `method:os-helix`
   - when desktop/OS GUI ranking on OSWorld 2.0 paper protocol → `task:computer-use-agent`
   - when GitHub issue to patch / SWE harness → `task:software-engineering-agent-harness`
   - when programmatic checker AppWorld coverage / anti-drift → `task:outcome-only-long-horizon-agent-rl`
@@ -179,6 +186,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when multi-stage agent capability stacking / continual learning → `task:agent-continual-learning`
   - do not use when category see-saw on heterogeneous SWE RL → `task:swe-agent-category-expert-rl`
 - **Redirects**:
+  - when scalable SWE issue synthesis from historical bug fixes (not the issue-to-patch loop) → `method:swe-at-scale`
   - when train asynchronous RL for a tool-use policy → `task:agentic-async-rl`
   - when math-code RLVR with verifiable rewards → `task:math-code-rl-dense`
   - when GUI / OS desktop computer-use → `task:computer-use-agent`
@@ -291,6 +299,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
 - **SOTA**: `method:self-opd` `2610.05954` (as_of 2026-08-28) — Flow Matching Visual Alignment (Single & Mixed Reward Benchmarks): Outperforms Flow-GRPO, Flow-OPD, and DiffusionNFT without external task-specific teachers
   - do not use when flow-model RL via proximal velocity matching (~100 updates vs Flow-GRPO ~4k) → `method:mend`
 - **Redirects**:
+  - when semantic-span-bounded GRPO prompt rewriting for T2I (SCOPE) → `method:scope-t2i`
+  - when online diffusion RL via attention routing (RPO; not score-function noise) → `method:rpo`
   - when aggregation-first reward tilting for diffusion RL (~12× fewer GPU-hrs vs DiffusionNFT / Flow-GRPO-Fast) → `method:diffusionart`
   - when recycle an AR post-training weight delta onto a converted dLLM (not image/flow alignment) → `task:diffusion-lm-ar-delta-recycle`
   - when flow-model RL via proximal velocity matching (~100 updates vs Flow-GRPO ~4k) → `method:mend`
@@ -344,6 +354,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when ternary abs-max column-wise one-sparse optimizer for full-param LLM FT → `method:taco`
   - do not use when choosing the ~7B dense pretrain optimizer → `method:muon2`
 - **Redirects**:
+  - when losslessly compressed GPU train tensors (LCT Huffman) → `method:lct`
   - when 4-bit AdamW optimizer-state quantization in preconditioner space (ZIP-SR) → `method:zip-sr`
   - when Nyström-sketched SOAP preconditioners / linear optimizer memory (Clean / Q-Clean) → `method:clean`
   - when low-rank gradient sketches + predicted-KL step control for RL memory → `method:logra`
@@ -474,6 +485,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when structural credit split for tool-call vs natural-language-summary tokens, not async stragglers → `task:tool-agent-segment-credit`
   - do not use when CEM-style critic-free RFT from replay when group rollouts are impractical (stateful sandboxes) → `method:ftw`
 - **Redirects**:
+  - when multi-session agentic RL (compaction / subagent forking; session-aware advantages) → `method:mosaic`
   - when sampler-anchored KL least-squares without IS clipping (KLPO) → `method:klpo`
   - when coupled policy-side IS and advantage-staleness TD correction (COPC) → `method:copc`
   - when lossless (no-staleness) overlap of GRPO/OPD gradient computation with rollout → `method:thundersyncrl`
@@ -546,6 +558,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when mechanism-first stateful tool envs (not OSS source) → `task:mechanism-grounded-agentic-rl-env`
   - do not use when long-horizon terminal-agent data engine / pre-completed work detection → `method:terminalhorizon`
 - **Redirects**:
+  - when scalable SWE issue synthesis from historical bug fixes (SWE-at-Scale) → `method:swe-at-scale`
   - when programmatic checker exists and sparse outcome RL is the protocol (AppWorld TGC) → `task:outcome-only-long-horizon-agent-rl`
   - when variable environment latency / async stragglers → `task:agentic-async-rl`
   - when GitHub issue to patch / SWE harness → `task:software-engineering-agent-harness`
@@ -613,6 +626,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when SFT-free RL-only domain adaptation from a base model → `method:onepo`
 - **SOTA**: `method:nemotron-cascade-2` `2603.19220` (as_of 2026-08-26) — Arena-Hard / Multi-Stage SFT: Industrial SOTA Alt
 - **Redirects**:
+  - when agentic automated SFT data research (proportion / prune / repair / replace / synthesize) → `method:autosft`
   - when SFT-free RL-only domain adaptation from a base model (OnePO / HuatuoGPT-3) → `method:onepo`
   - when in-language (L2) reasoning SFT rather than general instruct → `task:multilingual-l2-reasoning-sft`
   - when 24GB quality LoRA rather than drift-budget instruct FT → `task:parameter-efficient-fine-tuning`
@@ -655,6 +669,8 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when on-policy parameter update direction SFT (OPSFT), not Pass@1 RLVR → `method:opsft`
   - do not use when adaptive ground-truth rationale scaffolding for sparse-reward RLVR → `method:rgpo`
 - **Redirects**:
+  - when embedding-space directional exploration / anchored noise (EDEN) → `method:eden`
+  - when baselines and score centering under regularized importance sampling → `paper:score-centering-pg`
   - when rollout-level drop of high-probability positive-advantage traces (GRPODropout) → `method:grpodropout`
   - when novelty-rewarded explorer policies distilled into a student without novelty (ExpDis) → `method:expdis`
   - when semifactual prompt-stability token credit on a GRPO host (SCAPO) → `method:scapo`
@@ -770,6 +786,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when cancellation-aware off-policy response mask → `method:carm`
   - do not use when lexicographic priority multi-objective OPD from reward-specialist teachers (not scalarized multi-reward RL) → `method:lmopd`
 - **Redirects**:
+  - when reward-specific token-level credit (leave-one-out verifier replay; MRTPO) → `method:mrtpo`
   - when single-turn dense math/code Pass@1 RLVR (one verifier reward, not multi-reward aggregation) → `task:math-code-rl-dense`
   - when MoE/VL RLVR loss rather than multi-reward aggregation → `task:math-code-rl-moe`
   - when MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement) → `method:cis-rl`
@@ -824,6 +841,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when learning rubric rewards for rubric-based RL (vacuous credit) → `method:metarubric`
   - do not use when per-state shrinkage of step-level advantage for agentic RL (GiGPO-style groups) → `method:adastep`
 - **Redirects**:
+  - when executable oracle continuations from policy-reached states (SERO) → `method:sero`
   - when variable environment latency / async stragglers, not sparse-outcome coverage → `task:agentic-async-rl`
   - when the problem is context folding of a long tool trajectory, not the RL signal → `task:long-horizon-tool-agent`
   - when single-turn math/code Pass@1 RLVR → `task:math-code-rl-dense`
@@ -873,6 +891,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when root-cause diagnosis of the student's own failed reasoning then differentiated prefix/error distillation → `method:rc-opd`
   - do not use when privileged-context content (demo vs feedback vs rephrase) as OPSD drift, not a trainer → `method:privileged-context-drift`
 - **Redirects**:
+  - when gated RL policy-shift OPD using an intermediate teacher checkpoint (not gold-solution OPSD) → `method:waypoint-opd`
   - when rollout-free step-aligned privileged distillation of a reference solution (SAPD) → `method:sapd`
   - when hindsight-to-foresight distillation when verifier groups are silent (SRD) → `method:srd`
   - when privileged-context content (demo vs feedback vs rephrase) as OPSD drift, not a trainer → `method:privileged-context-drift`
@@ -963,6 +982,10 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when lexicographic priority multi-objective OPD from reward-specialist teachers → `method:lmopd`
   - do not use when representation-level (hidden-state) multi-teacher OPD → `method:latent-mopd`
 - **Redirects**:
+  - when gated policy-shift OPD using an intermediate teacher checkpoint (Waypoint-OPD) → `method:waypoint-opd`
+  - when OPD curriculum for long-horizon multimodal search (easy↔hard Refine) → `method:mmsearch-opd`
+  - when training-free / forward-only fusion of same-base specialists → `method:training-free-opd`
+  - when skill-decoupled OPD for unified VLMs (SCOPED) → `method:scoped`
   - when bilevel learned token weights from post-update validation loss (MetaOPD) → `method:metaopd`
   - when probability-space token keep-mask that downweights low-low tokens (DIAL-OPD) → `method:dial-opd`
   - when offline initial-student rollouts instead of live on-policy sampling (Semi-OPD) → `method:semi-opd`
@@ -1090,6 +1113,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when the problem is folding a long tool trajectory into a small active context → `method:foldgrpo`
   - do not use when single-turn math/code Pass@1 RLVR → `method:cispo`
 - **Redirects**:
+  - when OPD curriculum for long-horizon multimodal search (easy↔hard Refine) → `method:mmsearch-opd`
   - when outcome-only long-horizon agent RL (AppWorld coverage / anti-drift or rubric credit) → `task:outcome-only-long-horizon-agent-rl`
   - when variable environment latency / async stragglers, not search-agent climbing → `task:agentic-async-rl`
   - when build a SWE / issue-to-patch harness rather than train a search policy → `task:software-engineering-agent-harness`
@@ -1208,6 +1232,7 @@ Regenerate with `python -m library index`. Never hand-edit this file.
   - do not use when history-adaptive spectral clipping of AdamW gradients (CAST-SSC) → `method:cast-ssc`
   - do not use when finite Newton-Schulz plus epsilon loses spectral max-margin → `paper:muon-ns-bias`
 - **Redirects**:
+  - when mask-aware distributed attention kernel (FlashMask-3) → `method:flashmask-3`
   - when 4-bit AdamW optimizer-state quantization in preconditioner space (ZIP-SR) → `method:zip-sr`
   - when thresholded Muon orthogonalization of small vs large singular values → `method:spectrally-targeted-muon`
   - when pilot-run cubic rule for Adam's shared beta (β1=β2=β) → `method:adam-beta-cubic`

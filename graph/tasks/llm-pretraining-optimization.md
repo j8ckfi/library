@@ -12,6 +12,8 @@ current_sota:
     value: "~2x token efficiency vs AdamW"
     notes: "Muon2 (2604.09967) + KL-SOAP (2607.20548) if memory allows."
 redirects:
+  - when: "mask-aware distributed attention kernel (FlashMask-3)"
+    to: "method:flashmask-3"
   - when: "4-bit AdamW optimizer-state quantization in preconditioner space (ZIP-SR)"
     to: "method:zip-sr"
   - when: "thresholded Muon orthogonalization of small vs large singular values"
@@ -57,6 +59,7 @@ redirects:
   - when: "finite Newton-Schulz plus epsilon loses Muon spectral max-margin"
     to: "paper:muon-ns-bias"
 methods:
+  - method:flashmask-3
   - method:cast-ssc
   - method:monarch-muon
   - method:shell-elastic
@@ -90,7 +93,7 @@ methods:
   - method:muonio
   - method:adam-beta-cubic
   - method:bulkboost
-last_reviewed: '2026-10-15'
+last_reviewed: '2026-10-16'
 tags:
   - pretraining
   - optimizer
@@ -124,3 +127,5 @@ Pretraining modern neural network models involves minimizing cross-entropy loss 
 - **Optional nested-width supernet (not this optimizer default)**: `method:shell-elastic` (`arXiv:2610.15124`). Mean val loss 0.028/0.005/0.018 nats below best baseline at 119M–1.69B. Code jincan333/ShellElastic. HF Daily 2026-10-14. Does not replace Muon2, ELR, or Puro-2B.
 - **Optional history-adaptive spectral clipping (not this 7B default)**: `method:cast-ssc` (`arXiv:2610.19761`). Distinct from `method:cast` (cross-tokenizer OPD). 19.08B MoE mean val 1.26e-2 below SSC-constant. No public code. Does not replace Muon2 or Musec.
 - **Gotcha (finite Newton-Schulz)**: `paper:muon-ns-bias` (`arXiv:2610.20112`). Practical Muon with finite NS + epsilon selects Frobenius max-margin; log-growing NS recovers spectral. Does not retarget Muon2.
+
+- **Optional mask-aware attention kernel**: `method:flashmask-3` (`arXiv:2610.17901`, NeurIPS 2026). +45–141% TFLOPs vs FlashMask; 118B-A14B e2e +7.3–11.0%. Code PaddlePaddle/FlashMask. Does not replace Muon2.

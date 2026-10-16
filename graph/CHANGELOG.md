@@ -6,6 +6,90 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-10-16 — weekday SOTA sweep (Waypoint-OPD, Mosaic, MRTPO, MMSearch-OPD, SCOPE-T2I, Terminal-RSI, RPO, Training-Free OPD, SCOPED, AutoSFT, SERO, EDEN; secondaries MAI-Gym, OpenGCUA, Harness-RSI, FlashMask-3, LCT, score-centering, SWE-at-Scale, OS-Helix)
+- Nineteen active plug-ins and one paper-only note. No current_sota retarget (OPD / Open-MOPD / CISPO / SAO / CANOPY / CorrGRPO+DARA / Iris / omp2 / RRSI / Claude computer-use / RecreationWorld / SCALE / Muon2 / DiffusionOPSD+Self-OPD / JustOPD).
+- Window: 2026-10-16 Librarian weekday sweep after merged PR 45 (watermark 2610.20607, 1387 nodes, dcaf314). New high id 2610.22282.
+- SKIP (considered, not ingested): benchmarks-only (OmniCompass, RoTA-Bench, FDE-Gym, WorldMemBench, MFVSR); pure 3D/video gen without train recipe change; robot personalization CarryOn; CoDA robot sim; Minecraft / driving-only.
+
+### 2026-10-16 — ingest method:waypoint-opd (active on task:student-distillation; does not supersede method:opd / method:open-mopd / method:justopd / method:rpd-opd)
+- Added paper:waypoint-opd (2610.21601), method:waypoint-opd, recipe:waypoint-opd (`code_status: released`; hhhbxloveai/WaypointOPD). Mention on task:privileged-teacher-opsd.
+- Status active (`sota_for: []`). Math +2.18/+1.59/+1.89 vs Direct-OPD; code +2.66/+1.52/+1.19; 8B math Avg 56.14 vs no-gate 53.50.
+
+### 2026-10-16 — ingest method:mosaic (active on task:agentic-async-rl; does not supersede method:sao)
+- Added paper:mosaic (2610.22174), method:mosaic, recipe:mosaic (`code_status: released`; LARK-AI-Lab/Mosaic).
+- Status active (`sota_for: []`). BrowseComp Qwen3.5-4B compaction 38.86 vs 35.31 (sessions 3.17→2.35); subagent 32.46 vs 31.44.
+
+### 2026-10-16 — ingest method:mrtpo (active on task:multi-reward-rlvr; does not supersede method:corrgrpo / method:dara)
+- Added paper:mrtpo (2610.21439), method:mrtpo, recipe:mrtpo (`code_status: released`; zhaihaotian/MRTPO).
+- Status active (`sota_for: []`). Qwen2.5-Coder-7B SQL avg 73.15 vs GDPO 71.55 / GRPO 70.93; MRTPO+SAW 73.41.
+
+### 2026-10-16 — ingest method:mmsearch-opd (active on task:web-search-agent-rl; does not supersede method:iris / method:opd)
+- Added paper:mmsearch-opd (2610.22240), method:mmsearch-opd, recipe:mmsearch-opd (`code_status: none`). Mention on task:student-distillation.
+- Status active (`sota_for: []`). 9B avg 60.2 vs Qwen3.5-9B workflow 44.9 (+15.3); vs DeepVoyager-VL-8B +9.6.
+
+### 2026-10-16 — ingest method:scope-t2i (active on task:posttrain-diffusion; does not supersede method:diffusion-opsd / method:self-opd / method:scope-opsd)
+- Added paper:scope-t2i (2610.22264), method:scope-t2i, recipe:scope-t2i (`code_status: released`; MAC-AutoML/SCOPE). Distinct from method:scope-opsd.
+- Status active (`sota_for: []`). +9.48% GeneVal / +7.62% T2I-CompBench vs vanilla GRPO.
+
+### 2026-10-16 — ingest method:terminal-rsi (active on task:agent-harness-runtime; does not supersede method:omp2-harness / method:rrsi)
+- Added paper:terminal-rsi (2610.22192), method:terminal-rsi, recipe:terminal-rsi (`code_status: none`).
+- Status active (`sota_for: []`). TB4.0 19.84%; TB2.1 86.52%; TB3.0 16.95%; TB Hard 79.00%; LHTB 0.21→0.37.
+
+### 2026-10-16 — ingest method:rpo (active on task:posttrain-diffusion; does not supersede method:diffusionart / method:mend)
+- Added paper:rpo (2610.22282), method:rpo, recipe:rpo (`code_status: none`). Distinct from skipped root-token RPO 2610.17767.
+- Status active (`sota_for: []`). Nearly 4× vs Flow-GRPO-style; dense attention restored at inference.
+
+### 2026-10-16 — ingest method:training-free-opd (active on task:student-distillation; does not supersede method:opd)
+- Added paper:training-free-opd (2610.22236), method:training-free-opd, recipe:training-free-opd (`code_status: none`).
+- Status active (`sota_for: []`). Forward-only same-base specialist fusion; AIME25 rises from task-arithmetic to specialist after dropping looped answers.
+
+### 2026-10-16 — ingest method:scoped (active on task:student-distillation; does not supersede method:opd / method:open-mopd)
+- Added paper:scoped (2610.22217), method:scoped, recipe:scoped (`code_status: released`; NEUIR/SCOPED).
+- Status active (`sota_for: []`). Qwen3-VL-8B +5.83 vs backbone / +3.82 vs Mix-RL.
+
+### 2026-10-16 — ingest method:autosft (active on task:instruct-sft-alignment; does not supersede method:olmo-3)
+- Added paper:autosft (2610.22194), method:autosft, recipe:autosft (`code_status: released`; Thinking-Space/AutoSFT).
+- Status active (`sota_for: []`). Analysis +6.5 IFEval; synthesis +3.4 IFEval / +2.9 IFBench; code +3.7 MBPP+.
+
+### 2026-10-16 — ingest method:sero (active on task:outcome-only-long-horizon-agent-rl; does not supersede method:canopy)
+- Added paper:sero (2610.19397), method:sero, recipe:sero (`code_status: none`).
+- Status active (`sota_for: []`). 1.5B GraphGPO ALFWorld 90.63/88.02→95.83/91.67; 7B unseen +11.20.
+
+### 2026-10-16 — ingest method:eden (active on task:math-code-rl-dense; does not supersede method:cispo)
+- Added paper:eden (2610.16105), method:eden, recipe:eden (`code_status: none`).
+- Status active (`sota_for: []`). Pass@256 avg +6.67 vs GRPO; 7B AIME25 Pass@256 +13.33.
+
+### 2026-10-16 — ingest method:mai-gym (active on task:hybrid-computer-use-agent-rl; does not supersede method:recreationworld / method:claude-computer-use)
+- Added paper:mai-gym (2610.20939), method:mai-gym, recipe:mai-gym (`code_status: released`; Tongyi-MAI/MAI-Gym). Mention on task:computer-use-agent.
+- Status active (`sota_for: []`). MobileWorld 78.4%; OSWorld-Verified 76.2% is not OSWorld 2.0; real phone 28.8→48.1.
+
+### 2026-10-16 — ingest method:opengcua (active on task:computer-use-agent; does not supersede method:claude-computer-use)
+- Added paper:opengcua (2610.22200), method:opengcua, recipe:opengcua (`code_status: released`; Tongyi-MAI/OpenGCUA).
+- Status active (`sota_for: []`). OSWorld-v2 +19.6 partial / −53% steps vs batched GUI-only.
+
+### 2026-10-16 — ingest method:harness-rsi (active on task:agent-harness-runtime; does not supersede method:omp2-harness / method:rrsi / method:aide2)
+- Added paper:harness-rsi (2610.18813), method:harness-rsi, recipe:harness-rsi (`code_status: released`; zgcagi/Harness-RSI).
+- Status active (`sota_for: []`). Formal Harness RSI + PAC admission bounds.
+
+### 2026-10-16 — ingest method:flashmask-3 (active on task:llm-pretraining-optimization; does not supersede method:muon2)
+- Added paper:flashmask-3 (2610.17901), method:flashmask-3, recipe:flashmask-3 (`code_status: released`; PaddlePaddle/FlashMask).
+- Status active (`sota_for: []`). +45–141% TFLOPs vs FlashMask; 118B-A14B e2e +7.3–11.0%.
+
+### 2026-10-16 — ingest method:lct (active on task:full-param-memory-efficient-pretrain; does not supersede method:scale)
+- Added paper:lct (2610.22179), method:lct, recipe:lct (`code_status: none`).
+- Status active (`sota_for: []`). NanoGPT −24.6% mem / +7.2% step-time; Qwen3-4B −23.8% peak.
+
+### 2026-10-16 — note paper:score-centering-pg (gotcha on task:math-code-rl-dense; does not retarget method:cispo)
+- Added paper:score-centering-pg (2610.22263). Token-level regularized IS plus group-mean baseline is biased without score centering.
+
+### 2026-10-16 — ingest method:swe-at-scale (active on task:coding-agent-rl-environment-construction; does not supersede method:codemidas / method:mini-swe-agent)
+- Added paper:swe-at-scale (2610.21359), method:swe-at-scale, recipe:swe-at-scale (`code_status: released`; cslsolow/SWE-at-scale). Mention on task:software-engineering-agent-harness.
+- Status active (`sota_for: []`). Invert historical fixes into executable SWE issues.
+
+### 2026-10-16 — ingest method:os-helix (active on task:hybrid-computer-use-agent-rl; does not supersede method:recreationworld / method:claude-computer-use / method:opengcua)
+- Added paper:os-helix (2610.22234), method:os-helix, recipe:os-helix (`code_status: released`; os-copilot/OS-Helix). Mention on task:computer-use-agent.
+- Status active (`sota_for: []`). 27B-RL OSWorld-Verified 66.44% is not OSWorld 2.0; Step-balanced GSPO.
+
 ### 2026-10-15 — weekday SOTA sweep (CAST-SSC, Muon LH-RL, RLVR Momentum, PMRC, PA1-OPD, Road MOPD, CriticOPD, ActionOPD, LatentLoop, HP-RLVR, Spectral-MoE, ReGRA, ForkGRPO)
 - Thirteen active plug-ins and three paper-only notes. No current_sota retarget (Muon2 / CISPO / OPD / Open-MOPD / VISTA / SAO / CANOPY / OLMo-3 / Quartet-II / vanilla LoRA+rsLoRA+LR sweep / SCALE / MASKerade / SMELT / A2D).
 - Window: 2026-10-15 Librarian weekday sweep after merged PR 44 (watermark 2610.18874, 1345 nodes, 352f2f9). arXiv cs.LG/cs.CL/cs.AI new listing Thu 2026-10-15 (2610.18877–2610.20607) plus HF Daily 2026-10-14 and 2026-10-15. New high id 2610.20607.

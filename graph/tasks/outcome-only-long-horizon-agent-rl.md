@@ -15,6 +15,8 @@ out_of_scope:
   - "Data/env construction for coding-agent RL from source code (CodeMidas)"
   - "Multi-stage agent continual learning (ACLArena)"
 redirects:
+  - when: "executable oracle continuations from policy-reached states (SERO)"
+    to: "method:sero"
   - when: "variable environment latency / async stragglers, not sparse-outcome coverage"
     to: "task:agentic-async-rl"
   - when: "the problem is context folding of a long tool trajectory, not the RL signal"
@@ -81,6 +83,7 @@ current_sota:
     value: "86.9 / 67.6"
     notes: "CANOPY (2609.01245). Sparse outcome reward, n=32, KL-anchored on-policy. Does not replace SAO, FoldGRPO, CISPO, mini-swe-agent, or omp2-harness. DRACO is the outcome-blind rubric sibling, not a supersession."
 methods:
+  - method:sero
   - method:actionopd
   - method:hp-rlvr
   - method:prorubric
@@ -112,7 +115,7 @@ methods:
   - method:scad
   - method:metarubric
   - method:hierarchical-moe-routing-control
-last_reviewed: '2026-10-15'
+last_reviewed: '2026-10-16'
 tags:
   - post-training
   - agentic
@@ -163,3 +166,5 @@ Two siblings share this task and are not substitutes:
 - **Optional action-level OPD (not this first hop)**: `method:actionopd` (`arXiv:2610.19820`) on `task:student-distillation`. Black-box teacher, no token logp. Qwen3-4B/8B +3.3–6.9pp OOD. Code thu-nics/ActionOPD. Does not replace CANOPY or OPD.
 - **Related single-rollout hindsight token credit (not this first hop)**: `method:hp-rlvr` (`arXiv:2610.20497`) on `task:math-code-rl-dense`. G=1 causal vs hindsight JSD. ALFWorld GRPO zero-grad 43.2%/49.0% vs none. Distinct from HDL. Does not replace CANOPY or CISPO.
 - **Gotcha (self-distillation vs GRPO on agent benches)**: `paper:agentic-self-distill-reality` (`arXiv:2610.19789`). 10 methods, 132 runs, 12124.4 H800-h; no method consistently beats GRPO. Does not retarget CANOPY.
+
+- **Optional executable oracle continuations**: `method:sero` (`arXiv:2610.19397`). 1.5B GraphGPO ALFWorld 90.63/88.02→95.83/91.67. No public code. Does not replace CANOPY.

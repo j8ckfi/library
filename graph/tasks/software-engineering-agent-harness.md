@@ -26,6 +26,8 @@ out_of_scope:
   - "Multi-stage agent continual learning (ACLArena)"
   - "Category-aware SWE expert RL (Category-Aware SWE Experts)"
 redirects:
+  - when: "scalable SWE issue synthesis from historical bug fixes (not the issue-to-patch loop)"
+    to: "method:swe-at-scale"
   - when: "train asynchronous RL for a tool-use policy"
     to: "task:agentic-async-rl"
   - when: "math-code RLVR with verifiable rewards"
@@ -74,6 +76,7 @@ current_sota:
     value: "Pro Muse Spark 1.1 61.50±3.10 (ranking now); official JSON mini+Claude 4.5 Opus high 76.8% (2026-02-17); vals.ai Claude Opus 5 97.00% / DeepSeek V4 Pro 0813 96.40% (2026-09, different snapshot)"
     notes: "Winning design is the ~100 LOC bash ReAct loop. Do not mix vals.ai 97% with official JSON 79.2%. Do not retarget SAO/CISPO/RLM."
 methods:
+  - method:swe-at-scale
   - method:mini-swe-agent
   - method:cca
   - method:openhands-codeact
@@ -88,7 +91,7 @@ methods:
   - method:category-aware-swe-experts
   - method:pact
   - method:pivotopd
-last_reviewed: "2026-10-01"
+last_reviewed: '2026-10-16'
 tags:
   - agents
   - agent
@@ -122,3 +125,5 @@ Choose the loop, ACI, and tools for repository-level software engineering (issue
 - **Not this task (category-aware SWE expert RL)**: `method:category-aware-swe-experts` on `task:swe-agent-category-expert-rl`. SWE Labeler + RRE experts + label-routed MOPD. Does not replace mini-SWE-agent.
 - **Not this task (token-level critic / Actor-then-Critic)**: `method:pact` on `task:token-level-critic-rl`. SWE-Verified numbers are critic-path evidence, not a harness ranking retarget.
 - **Not this task (multi-turn agent OPD / pivotal-mistake recovery)**: `method:pivotopd` on `task:outcome-only-long-horizon-agent-rl`. +3.2 SWE-Bench Verified is distill transfer, not a loop ranking.
+
+- **Not this task (SWE issue synthesis)**: `method:swe-at-scale` on `task:coding-agent-rl-environment-construction`. Does not replace mini-SWE-agent.

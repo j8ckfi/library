@@ -18,6 +18,7 @@ current_sota:
     value: "Industrial SOTA Alt"
     notes: "Nemotron-Cascade-2 (2603.19220) for industrial multi-stage SFT."
 methods:
+  - method:autosft
   - method:onepo
   - method:olmo-3
   - method:nemotron-cascade-2
@@ -32,6 +33,8 @@ methods:
   - method:dco
   - method:opsft
 redirects:
+  - when: "agentic automated SFT data research (proportion / prune / repair / replace / synthesize)"
+    to: "method:autosft"
   - when: "SFT-free RL-only domain adaptation from a base model (OnePO / HuatuoGPT-3)"
     to: "method:onepo"
   - when: "in-language (L2) reasoning SFT rather than general instruct"
@@ -40,7 +43,7 @@ redirects:
     to: "task:parameter-efficient-fine-tuning"
   - when: "on-policy parameter update direction SFT (OPSFT)"
     to: "method:opsft"
-last_reviewed: "2026-10-06"
+last_reviewed: '2026-10-16'
 tags:
   - post-training
   - instruct
@@ -62,3 +65,5 @@ Transforming base pre-trained models into safe, capable, instruction-following c
 - **Noisy preference labels**: `method:plc-dpo` on `task:direct-preference-alignment`. Does not replace Dolci.
 - **Optional drift-budget instruct FT**: `method:dco` (`arXiv:2609.13680`) chooses update direction (layer-selective probe) under an anchored-KL budget. Reverses QA-only FT failure while keeping reasoning. Does not replace OLMo-3 / Cascade / Delta Learning / Open-MOPD / LoRA quality.
 - **Optional on-policy-direction SFT**: `method:opsft` (`arXiv:2609.36659`). Qwen3-4B DeepMath mean 40.11 vs GRPO 38.96 vs SFT 34.22 (6.4h vs 16.5h). Mention on `task:math-code-rl-dense`. Code ssfgunner/OPSFT. Does not replace OLMo-3 or CISPO.
+
+- **Optional agentic SFT data research**: `method:autosft` (`arXiv:2610.22194`). Analysis +6.5 IFEval; synthesis +3.4. Code Thinking-Space/AutoSFT. Does not replace OLMo-3.

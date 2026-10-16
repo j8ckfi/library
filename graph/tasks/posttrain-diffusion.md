@@ -18,6 +18,8 @@ current_sota:
     value: "Outperforms Flow-GRPO, Flow-OPD, and DiffusionNFT without external task-specific teachers"
     notes: "Self-OPD (2608.26872) provides teacher-free per-step pull-push distillation for flow matching multi-objective alignment."
 methods:
+  - method:scope-t2i
+  - method:rpo
   - method:forkgrpo
   - method:representation-guidance
   - method:semicat
@@ -29,6 +31,10 @@ methods:
   - method:rewardverse
   - method:a2d
 redirects:
+  - when: "semantic-span-bounded GRPO prompt rewriting for T2I (SCOPE)"
+    to: "method:scope-t2i"
+  - when: "online diffusion RL via attention routing (RPO; not score-function noise)"
+    to: "method:rpo"
   - when: "aggregation-first reward tilting for diffusion RL (~12× fewer GPU-hrs vs DiffusionNFT / Flow-GRPO-Fast)"
     to: "method:diffusionart"
   - when: "recycle an AR post-training weight delta onto a converted dLLM (not image/flow alignment)"
@@ -45,7 +51,7 @@ redirects:
     to: "task:continuous-diffusion-lm-pretrain"
   - when: "dLLM RL that forks from high-entropy intermediate states (ForkGRPO)"
     to: "method:forkgrpo"
-last_reviewed: "2026-10-15"
+last_reviewed: '2026-10-16'
 tags:
   - diffusion
   - post-training
@@ -68,3 +74,6 @@ Aligning generative diffusion and flow models with downstream reward functions (
 - **Not This Task**: lossless AR multi-token serving is `method:uno` on `task:diffusion-augmented-ar`. Does not replace this image/flow post-train default.
 - **Not this task (pixel-space DiT pretrain)**: `method:representation-guidance` on `task:pixel-diffusion-pretrain` (`arXiv:2610.12978`). Does not replace DiffusionOPSD / Self-OPD.
 - **Not this task (continuous diffusion LM)**: `method:semicat` on `task:continuous-diffusion-lm-pretrain` (`arXiv:2610.13834`). Does not replace DiffusionOPSD / Self-OPD.
+
+- **Optional T2I span-pooled GRPO**: `method:scope-t2i` (`arXiv:2610.22264`). +9.48% GeneVal / +7.62% T2I-CompBench vs GRPO. Code MAC-AutoML/SCOPE. Distinct from `method:scope-opsd`. Does not replace DiffusionOPSD / Self-OPD.
+- **Optional attention-routing diffusion RL**: `method:rpo` (`arXiv:2610.22282`). Nearly 4x vs Flow-GRPO-style. Distinct from skipped 2610.17767. Does not replace DiffusionART / MEND.

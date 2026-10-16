@@ -5,6 +5,8 @@ title: "Privileged-Teacher On-Policy Self-Distillation"
 domain: "post-training"
 summary: "On-policy self-distillation where a same-size teacher is privileged with a gold reference solution and a deterministic outcome verifier, rather than a larger frozen teacher model."
 redirects:
+  - when: "gated RL policy-shift OPD using an intermediate teacher checkpoint (not gold-solution OPSD)"
+    to: "method:waypoint-opd"
   - when: "rollout-free step-aligned privileged distillation of a reference solution (SAPD)"
     to: "method:sapd"
   - when: "hindsight-to-foresight distillation when verifier groups are silent (SRD)"
@@ -49,6 +51,7 @@ current_sota:
     value: "VISTA 44.0 / 64.3 / 66.9 vs OPSD 43.4 / 63.6 / 64.8 vs GRPO 37.7 / 62.7 / 64.0"
     notes: "VISTA (2608.28306) keeps the OPSD student update and adapts the privileged teacher on verified rollouts at top-k teacher-first KL positions."
 methods:
+  - method:waypoint-opd
   - method:pr-opd
   - method:vrsd
   - method:cc-opsd
@@ -75,7 +78,7 @@ methods:
   - method:sampling-sft
   - method:air-opd
   - method:rc-opd
-last_reviewed: '2026-10-14'
+last_reviewed: '2026-10-16'
 tags:
   - post-training
   - distillation
@@ -118,3 +121,5 @@ Train a problem-only student on its own rollouts using dense token-level targets
 - **Optional privileged representation OPSD (not this first hop)**: `method:pr-opd` (`arXiv:2609.36642`). After GRPO, +4.7 ALFWorld / +11.7 WebShop on Qwen2.5-3B-Instruct; skill changes <25% of token probs but >80% of hidden states. Code balibata/PR-OPD. Related PreSO 2610.14001 is SKIP. Does not replace VISTA or NSD.
 - **Optional verbal regularization of privileged OPSD (not this first hop)**: `method:vrsd` (`arXiv:2610.16354`). Avg +3.9pp Pass@1; 11/12 settings. Code lijiazheng99/VRSD. Does not replace VISTA or NSD.
 - **Gotcha (self-distillation OOD)**: `paper:self-distillation-ood` (`arXiv:2610.18613`). SDPO LCB test_unseen Qwen3-8B −2.5 vs GRPO +3.7; science OOD −7.1 to −16.6. Does not retarget VISTA.
+
+- **Related gated RL policy-shift OPD (not this gold-teacher default)**: `method:waypoint-opd` (`arXiv:2610.21601`) on `task:student-distillation`. Does not replace VISTA.

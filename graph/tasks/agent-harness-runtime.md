@@ -16,6 +16,10 @@ out_of_scope:
   - "Recursive self-rewrite of a research-agent harness (AIDE2)"
   - "Harness curriculum as a non-stationary bandit over failure-pattern arms (ActiveSaddler)"
 redirects:
+  - when: "terminal-agent RSR + RPR recursive self-improve (TB-GAE / FDR / SPR)"
+    to: "method:terminal-rsi"
+  - when: "formal Harness RSI framework + PAC admission bounds (frozen weights)"
+    to: "method:harness-rsi"
   - when: "issue-to-patch / locked eval"
     to: "task:software-engineering-agent-harness"
   - when: "train agent RL"
@@ -38,7 +42,7 @@ redirects:
     to: "method:activesaddler"
   - when: "recurrent textual harness for agentic continual learning (not the production kernel)"
     to: "method:reharness"
-last_reviewed: "2026-10-12"
+last_reviewed: '2026-10-16'
 current_sota:
   - method: method:omp2-harness
     as_of: "2026-09-02"
@@ -47,6 +51,8 @@ current_sota:
     value: "2 correct of 78 Pi examples (60 stateless, 17 stateful); journal covering message tree only ⇒ rewind/fork/resume lie"
     notes: "Self-reported blog architecture, not a SWE-bench number. Does not replace mini-SWE-agent, CCA, OpenHands, SAO, FoldGRPO, RLM, MAGIC, CISPO, Muon2, MCP, or ACE."
 methods:
+  - method:terminal-rsi
+  - method:harness-rsi
   - method:reharness
   - method:omp2-harness
   - method:harness-onpolicy-correction
@@ -87,3 +93,6 @@ This is **not** the SWE-bench start/eval loop. Issue → patch / locked mini har
 - **Active harness curriculum (not this first hop)**: `method:activesaddler` (`arXiv:2610.00906`). Non-stationary bandit over failure-pattern arms; +4.4 GAIA2 / +7.5 TB2.0 vs the same optimizer with a frozen scenario order. Curriculum dimension, not a new kernel. Does not replace omp2, RRSI, AIDE2, Harness-Zero, or NeoHorse-1.
 - Related workflow, not this architecture: [prewalk](https://stencil.so/blog/prewalk) is a workflow on omp, not current_sota here.
 - **Not this task (recurrent textual CL harness)**: `method:reharness` (`arXiv:2610.12668`) on `task:agent-continual-learning`. Backward-revises retrieved reflections; not rewind/sandbox/TUI. Does not replace omp2, ACE, or ACLArena.
+
+- **Optional terminal-agent RSI**: `method:terminal-rsi` (`arXiv:2610.22192`). RSR + RPR; TB4.0 19.84% / TB2.1 86.52%. No public code. Does not replace omp2 or RRSI.
+- **Optional formal Harness RSI**: `method:harness-rsi` (`arXiv:2610.18813`). PAC admission bounds. Code zgcagi/Harness-RSI. Does not replace omp2 or RRSI.

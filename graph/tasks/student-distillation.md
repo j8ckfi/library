@@ -5,6 +5,14 @@ title: "Small Local Student Distillation from Strong Teacher"
 domain: "post-training"
 summary: "Distilling reasoning and conversational capabilities from multi-hundred-billion parameter frontier teachers into small local student models."
 redirects:
+  - when: "gated policy-shift OPD using an intermediate teacher checkpoint (Waypoint-OPD)"
+    to: "method:waypoint-opd"
+  - when: "OPD curriculum for long-horizon multimodal search (easy↔hard Refine)"
+    to: "method:mmsearch-opd"
+  - when: "training-free / forward-only fusion of same-base specialists"
+    to: "method:training-free-opd"
+  - when: "skill-decoupled OPD for unified VLMs (SCOPED)"
+    to: "method:scoped"
   - when: "bilevel learned token weights from post-update validation loss (MetaOPD)"
     to: "method:metaopd"
   - when: "probability-space token keep-mask that downweights low-low tokens (DIAL-OPD)"
@@ -121,6 +129,10 @@ current_sota:
     value: "83.4% headroom recovery in a single deployable student"
     notes: "Open-MOPD (2608.19098) fixes multi-teacher imbalance with token-share balancing and gap-aware dynamic budgeting."
 methods:
+  - method:waypoint-opd
+  - method:mmsearch-opd
+  - method:training-free-opd
+  - method:scoped
   - method:criticopd
   - method:actionopd
   - method:road-mopd
@@ -189,7 +201,7 @@ methods:
   - method:lmopd
   - method:latent-mopd
   - method:rp-opd
-last_reviewed: '2026-10-15'
+last_reviewed: '2026-10-16'
 tags:
   - post-training
   - distillation
@@ -272,3 +284,7 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Optional critique-guided OPD**: `method:criticopd` (`arXiv:2610.20572`). Teacher recoverability fails on incorrect prefixes. Qwen3-1.7B 50.08→54.65. Code kzhao5/CriticOPD. Distinct from CC-OPSD. Does not replace OPD or VISTA.
 - **Optional action-level OPD**: `method:actionopd` (`arXiv:2610.19820`). No teacher token probs / tokenizer match. Qwen3-4B/8B +3.3–6.9pp OOD. Code thu-nics/ActionOPD. Does not replace OPD or CANOPY.
 - **Gotcha (where teacher advantage lives)**: `paper:opd-teacher-advantage` (`arXiv:2610.19145`). Repeated flips 28.4%→74.5% vs teacher 76.9%; single flips modest. Does not retarget OPD.
+- **Optional gated RL policy-shift OPD**: `method:waypoint-opd` (`arXiv:2610.21601`). Intermediate-checkpoint directional gate. Math +2.18/+1.59/+1.89 vs Direct-OPD; code +2.66/+1.52/+1.19. Code hhhbxloveai/WaypointOPD. Distinct from RPD-OPD. Does not replace OPD, Open-MOPD, or JustOPD.
+- **Related multimodal search OPD (not this text default)**: `method:mmsearch-opd` (`arXiv:2610.22240`) on `task:web-search-agent-rl`. 9B avg 60.2 vs workflow 44.9. No public code.
+- **Optional training-free same-base fusion**: `method:training-free-opd` (`arXiv:2610.22236`). Forward-only least squares. Olmo 3 7B. No public code. Does not replace OPD.
+- **Optional skill-decoupled VLM expert OPD**: `method:scoped` (`arXiv:2610.22217`). Qwen3-VL-8B +5.83 vs backbone / +3.82 vs Mix-RL. Code NEUIR/SCOPED. Does not replace OPD or Open-MOPD.

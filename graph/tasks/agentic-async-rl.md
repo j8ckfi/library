@@ -22,6 +22,8 @@ out_of_scope:
   - "Category-aware SWE expert RL (Category-Aware SWE Experts)"
   - "Structural tool vs summary credit under GRPO (SLCA-GRPO)"
 redirects:
+  - when: "multi-session agentic RL (compaction / subagent forking; session-aware advantages)"
+    to: "method:mosaic"
   - when: "sampler-anchored KL least-squares without IS clipping (KLPO)"
     to: "method:klpo"
   - when: "coupled policy-side IS and advantage-staleness TD correction (COPC)"
@@ -74,6 +76,7 @@ current_sota:
     value: "Default SOTA for agentic async RL"
     notes: "SAO (2607.07508) decouples environment tool execution from policy optimization with importance-corrected replay buffers."
 methods:
+  - method:mosaic
   - method:muon-lh-rl
   - method:tetpo
   - method:kv4-rl
@@ -101,7 +104,7 @@ methods:
   - method:pact
   - method:slca-grpo
   - method:ftw
-last_reviewed: '2026-10-15'
+last_reviewed: '2026-10-16'
 tags:
   - post-training
   - agentic
@@ -136,3 +139,4 @@ This is **policy training**. Building a software-engineering agent loop is `task
 - **Optional target-ESS IS temper (not this async default)**: `method:tetpo` (`arXiv:2610.14440`). Qwen3-Base-1.7B avg@16 44.4 vs M2PO 42.3 / GSPO 39.0. No public code. Does not replace SAO or CISPO.
 - **Related INT4 KV rollouts (not this async default)**: `method:kv4-rl` (`arXiv:2610.14448`) on `task:fp4-rl-train-rollout-alignment`. Does not replace SAO or TRACE / TRIAGE.
 - **Optional long-horizon SWE Muon recipe (not this async default)**: `method:muon-lh-rl` (`arXiv:2610.20256`). Muon + token-avg loss + truncated IS (C=2) + length/tool-error penalties on SPO/SPO++. MiniCPM5-2B / Qwen3.5-4B R2E-Gym. No public code. Does not replace SAO or mini-SWE-agent.
+- **Optional multi-session credit (not this async default)**: `method:mosaic` (`arXiv:2610.22174`). Session-aware trajectory advantage plus marginal-contribution shaping. BrowseComp Qwen3.5-4B compaction 38.86 vs 35.31 (sessions 3.17→2.35). Code LARK-AI-Lab/Mosaic. Does not replace SAO.

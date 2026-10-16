@@ -13,6 +13,8 @@ out_of_scope:
   - "Single-turn dense math/code RLVR (CISPO)"
   - "Routing-harness RSI post-train (NeoHorse-1)"
 redirects:
+  - when: "OPD curriculum for long-horizon multimodal search (easy↔hard Refine)"
+    to: "method:mmsearch-opd"
   - when: "outcome-only long-horizon agent RL (AppWorld coverage / anti-drift or rubric credit)"
     to: "task:outcome-only-long-horizon-agent-rl"
   - when: "variable environment latency / async stragglers, not search-agent climbing"
@@ -33,6 +35,7 @@ current_sota:
     value: "Iris-mini 82.2/84.8/86.9/52.3; Iris-pro 88.6/85.1/92.9/56.4"
     notes: "Iris (2609.04304). Strongest overall among reported open-source search agents in the 30-35B and ~400B ranges with CM. Does not replace CANOPY, SAO, mini-SWE-agent, FoldGRPO, or CISPO. DeepSearchQA mini loses to Aquila-mini 89.5. Frontier (Kimi-K3 91.2 BrowseComp) still ahead."
 methods:
+  - method:mmsearch-opd
   - method:iris
   - method:sao
   - method:canopy
@@ -40,7 +43,7 @@ methods:
   - method:mini-swe-agent
   - method:cispo
   - method:neohorse-1
-last_reviewed: "2026-09-09"
+last_reviewed: '2026-10-16'
 tags:
   - post-training
   - agentic
@@ -61,3 +64,5 @@ Train a single ReAct search agent that must decide what to search, how to read r
 ## SOTA Recommendation (as of 2026-09-08)
 - **Primary Method**: **Iris** (`method:iris`, `paper:iris` `arXiv:2609.04304`) reverse-constructed tasks → traj/turn filter → SFT → live-search RL → SFT-RL climbing. Code/weights: AllSpark-Research/Iris.
 - **Not This Task**: `method:canopy` remains AppWorld outcome-only; `method:sao` remains async stragglers; `method:mini-swe-agent` remains the SWE harness; `method:foldgrpo` remains folding; `method:cispo` remains dense Pass@1 RLVR; `method:neohorse-1` remains routing-harness RSI post-train.
+
+- **Optional multimodal search OPD curriculum**: `method:mmsearch-opd` (`arXiv:2610.22240`). 9B avg 60.2 vs Qwen3.5-9B workflow 44.9. No public code. Does not replace Iris.

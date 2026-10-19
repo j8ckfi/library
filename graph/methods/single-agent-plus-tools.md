@@ -8,6 +8,12 @@ sota_for:
   - task:multi-agent-orchestration
 supersedes: []
 do_not_use_for:
+  - when: "market-based post-training of decentralized agent swarms (MPT)"
+    reason: "single-agent-plus-tools remains the orchestration default; MPT jointly learns action and bidding"
+    use_instead: "method:market-posttrain"
+  - when: "Leader-Searcher-Answerer hierarchical OPD (MultiAgent-OPD)"
+    reason: "MAS remains the exception; MultiAgent-OPD is a team-training recipe on student-distillation"
+    use_instead: "method:multiagent-opd"
   - when: "internal high-value parallel breadth research"
     reason: "Anthropic Jun 2025 orchestrator-worker +90.2% vs single Opus 4 (~15× tokens) is the MAS exception for that setting"
     use_instead: "method:anthropic-orchestrator-worker"
@@ -25,12 +31,14 @@ do_not_use_for:
     use_instead: "method:sao"
 assumptions:
   - "Default: do not use multi-agent. Point at mini-SWE-agent / CCA. AIME is the MAS exception."
-last_reviewed: "2026-09-01"
+last_reviewed: '2026-10-19'
 papers:
   - paper:mac-meta-agent
   - paper:illusion-mas
   - paper:mas-hybrid-gao
   - paper:meta-agent-inefficiencies
+  - paper:market-posttrain
+  - paper:multiagent-opd
 recipes:
   - recipe:mini-swe-agent
 claims:

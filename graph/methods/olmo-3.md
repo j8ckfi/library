@@ -12,6 +12,12 @@ supersedes:
   - method:olmo-2-curriculum
   - method:tulu3-rlvr
 do_not_use_for:
+  - when: "evolving SWE trajectory filters (MetaCurate)"
+    reason: "OLMo-3 remains the open instruct stack; MetaCurate evolves SWE trajectory filters"
+    use_instead: "method:metacurate"
+  - when: "post-training tunes a pretrained cue-routing circuit"
+    reason: "Gotcha on instruct SFT; does not retarget Dolci"
+    use_instead: "paper:posttrain-cue-routing"
   - when: "unique-token epoch / repetition geometry under a finite pretrain corpus"
     reason: "OLMo-3 remains the open mix; data-constrained pretrain owns epoch/r schedules"
     use_instead: "task:data-constrained-pretrain"
@@ -20,6 +26,8 @@ do_not_use_for:
     use_instead: "method:onepo"
 papers:
   - paper:olmo-3
+  - paper:metacurate
+  - paper:posttrain-cue-routing
 recipes:
   - recipe:olmo-3
 claims:
@@ -30,7 +38,7 @@ claims:
     date: "2026-08-26"
     verified: true
     notes: "Dolma-3 multi-trillion token open mix + Dolci curated SFT and verifiable reward alignment."
-last_reviewed: "2026-10-06"
+last_reviewed: '2026-10-19'
 tags:
   - pretraining
   - open-data

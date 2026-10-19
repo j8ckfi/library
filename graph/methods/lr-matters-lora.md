@@ -11,6 +11,12 @@ supersedes:
   - method:dora
   - method:delora
 do_not_use_for:
+  - when: "block-wise Toeplitz adaptation (ToPA)"
+    reason: "Quality default remains vanilla LoRA + rsLoRA + LR sweep; ToPA is block-wise Toeplitz PEFT"
+    use_instead: "method:topa"
+  - when: "rank measures of fine-tuning updates need a noise baseline"
+    reason: "Gotcha on ΔW rank summaries; does not retarget the LR sweep"
+    use_instead: "paper:rank-noise-baseline"
   - when: "two-stage residual-gradient complementary LoRA (ReGRA)"
     reason: "Quality default remains vanilla LoRA + rsLoRA + LR sweep; ReGRA is a staged adapter"
     use_instead: "method:regra"
@@ -23,6 +29,8 @@ do_not_use_for:
 papers:
   - paper:lr-matters-lora
   - paper:lora-unified-study
+  - paper:topa
+  - paper:rank-noise-baseline
 recipes:
   - recipe:lr-matters-lora
 claims:

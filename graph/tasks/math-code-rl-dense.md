@@ -19,6 +19,8 @@ out_of_scope:
   - "Cancellation-aware off-policy sequence masking (CARM)"
   - "MCMC projection sampling then ordinary SFT (Sampling SFT)"
 redirects:
+  - when: "short-window RLVR via concurrent verifiable problems (CCR)"
+    to: "method:ccr"
   - when: "embedding-space directional exploration / anchored noise (EDEN)"
     to: "method:eden"
   - when: "baselines and score centering under regularized importance sampling"
@@ -113,6 +115,7 @@ current_sota:
     value: "Default SOTA for Dense RL"
     notes: "CISPO via MiniMax-M1 (2506.13585) + ScaleRL (2510.13786)."
 methods:
+  - method:ccr
   - method:eden
   - method:hp-rlvr
   - method:rlvr-momentum
@@ -179,7 +182,7 @@ methods:
   - method:mesh-learning
   - method:opsft
   - method:rgpo
-last_reviewed: '2026-10-16'
+last_reviewed: '2026-10-19'
 tags:
   - post-training
   - reasoning
@@ -255,6 +258,7 @@ Training dense language models to generate long chains of thought (CoT) and veri
 - **Gotcha (thinking leakage)**: `paper:thinking-leakage` (`arXiv:2610.14270`) on `task:reasoning-rl-alignment`. NO-THINK GRPO on Qwen3 largely reactivates THINK-mode. Does not retarget CISPO.
 - **Optional G=1 hindsight JSD credit (not this Pass@1 default)**: `method:hp-rlvr` (`arXiv:2610.20497`). Qwen3-8B 1.21×/1.46×/2.30× vs G=8 GRPO; math 65.73 vs 63.07. Distinct from HDL. No public code. Does not replace CISPO.
 - **Optional RLVR momentum-coefficient rule (not this Pass@1 default)**: `method:rlvr-momentum` (`arXiv:2610.20413`). Scale β with η; Qwen2.5-32B AdamW +~2pp. Distinct from adam-beta-cubic. No public code. Does not replace CISPO.
+- **Optional short-window concurrent RLVR**: `method:ccr` (`arXiv:2610.22887`). Three problems in one capped completion; 8k vs GRPO 32k saves ~80% tokens/step on 4B/8B. Does not replace CISPO.
 
 - **Optional embedding-space exploration**: `method:eden` (`arXiv:2610.16105`). Pass@256 avg +6.67 vs GRPO; 7B AIME25 +13.33. No public code. Does not replace CISPO.
 - **Gotcha (score centering under regularized IS)**: `paper:score-centering-pg` (`arXiv:2610.22263`). Token-level IS plus group-mean baseline is biased without score centering when the ratio is clipped/masked. Does not retarget CISPO.

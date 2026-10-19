@@ -12,6 +12,8 @@ out_of_scope:
   - "Trained mobile-only GUI policy on AndroidWorld (MAI-UI / UI-TARS-2)"
   - "Coding-agent RL env construction from source code (CodeMidas)"
 redirects:
+  - when: "scalable mobile-agent envs / hybrid GUI+app-native tools (OpenMobile-2)"
+    to: "method:openmobile-2"
   - when: "mocked-app GUI eval+RL platform with real-phone transfer (MAI-Gym)"
     to: "method:mai-gym"
   - when: "native GUI+code CUA trained with step-balanced GSPO (OS-Helix)"
@@ -34,6 +36,7 @@ current_sota:
     value: "58.1% overall; full programmatic pass 2.8%"
     notes: "RecreationWorld (2609.22000). Active hybrid CUA train/eval. Method status active (not sota). Does not demote Claude computer-use on OSWorld 2.0."
 methods:
+  - method:openmobile-2
   - method:mai-gym
   - method:os-helix
   - method:softwaregym
@@ -42,7 +45,7 @@ methods:
   - method:ui-tars-2
   - method:mai-ui
   - method:mini-swe-agent
-last_reviewed: '2026-10-16'
+last_reviewed: '2026-10-19'
 tags:
   - agents
   - computer-use
@@ -68,3 +71,5 @@ OSWorld 2.0 paper-protocol ranking is a different shelf.
 
 - **Optional mocked-app GUI RL platform**: `method:mai-gym` (`arXiv:2610.20939`). MobileWorld 78.4%; real-phone 28.8→48.1. Code Tongyi-MAI/MAI-Gym. OSWorld-Verified is not OSWorld 2.0. Does not replace RecreationWorld.
 - **Optional native GUI+code CUA**: `method:os-helix` (`arXiv:2610.22234`). 27B-RL OSWorld-Verified 66.44% (not OSWorld 2.0). Code os-copilot/OS-Helix. Distinct from OpenGCUA. Does not demote Claude computer-use.
+- **Optional scalable mobile gym**: `method:openmobile-2` (`arXiv:2610.14157`). AndroidWorld 79.9 / MobileWorld 50.4 / SPA-Bench 31.9→59.6. Does not replace RecreationWorld or Claude computer-use.
+

@@ -6,6 +6,115 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-10-19 — weekday SOTA sweep (GR-OPD, TreeOPSD, MoEvolve, Self-HPO; secondaries BMuon, CCR, SimOPD, OPMD, MultiAgent-OPD, GCA, DiscoveryRSI, Ori, LED, MetaCurate, OpenMobile-2, MLExpert, Sigma-Delta, Lean4AgenticRL, Schedule-Free Diffusion, ToPA, MPT)
+- Twenty-one active plug-ins, five paper-only notes, and a Part I paper on Looped Models Done Right. No current_sota retarget (Muon2 / CISPO / OPD / Open-MOPD / SAPO / SAO / CANOPY / SCALE / Iris / omp2 / RecreationWorld / Claude computer-use / Sparse-BitNet / Representation Guidance / vanilla LoRA+rsLoRA+LR sweep / VISTA / OLMo-3 / A2D / single-agent-plus-tools).
+- Window: 2026-10-19 Librarian weekday sweep after merged PR 46 (watermark 2610.22282, ~1445 nodes, 187c774). arXiv cs.LG/cs.CL new listing Mon 2026-10-19 plus HF Daily 2026-10-16 tail and 2026-10-19. New high id 2610.23839.
+- SKIP (duplicates, already skipped 2026-10-16): FDE-Gym 2610.22350; CoDA 2610.22362.
+- SKIP (considered, not ingested): ReDiST 2610.23831 (student-conditioned traces, not a new distill kernel); BayesianPRM 2610.23223; MTEdit 2610.23751; Causal Latent Workspaces 2610.22796; LEV 2610.20951; Local proxies 2610.23145; Embeddings Are Overpriced 2610.22428; Region-Inhomogeneous 2610.22380; CADENCE 2610.22788; FrankenMerging 2610.22999; DP-μP 2610.22976; Speculative Forcing 2610.22347; SAGA 2610.22439; Finite-rank LoRA 2610.23343; Deep lifts 2610.23009; LeMA 2610.22925; inference-only DLite 2610.23787, SPOT 2610.22543, ReaDy 2610.20503, length inflation 2610.23818, Prism 2610.22985.
+
+### 2026-10-19 — ingest method:gr-opd (active on task:student-distillation; does not supersede method:opd / method:ier-opd)
+- Added paper:gr-opd (2610.23042), method:gr-opd, recipe:gr-opd (`code_status: none`).
+- Status active (`sota_for: []`). Wins every setting; +10.9 / +11.5 pp with matched thinking; vanilla OPD collapses on mismatched thinking.
+
+### 2026-10-19 — ingest method:treeopsd (active on task:outcome-only-long-horizon-agent-rl; does not supersede method:canopy / method:treehca)
+- Added paper:treeopsd (2610.23181), method:treeopsd, recipe:treeopsd (`code_status: none`).
+- Status active (`sota_for: []`). Average accuracy +4.97 vs GRPO.
+
+### 2026-10-19 — ingest method:moevolve (active on task:math-code-rl-moe; does not supersede method:sapo / method:opd)
+- Added paper:moevolve (2610.23185), method:moevolve, recipe:moevolve (`code_status: none`). Mention on task:student-distillation.
+- Status active (`sota_for: []`). Up to +22.2 vs initial / +6.5 vs same-budget RLVR; final low-k often beats the expanded teacher.
+
+### 2026-10-19 — ingest method:self-hpo (active on task:agent-harness-runtime; does not supersede method:omp2-harness / method:harness-rsi / method:aide2)
+- Added paper:self-hpo (2610.22791), method:self-hpo, recipe:self-hpo (`code_status: none`). Mention on task:agentic-rsi-routing-posttrain.
+- Status active (`sota_for: []`). Average resolve 57.8%→64.8%; joint gain exceeds harness-only plus policy-only.
+
+### 2026-10-19 — ingest method:bmuon (active on task:llm-pretraining-optimization; does not supersede method:muon2 / method:scale)
+- Added paper:bmuon (2610.23571), method:bmuon, recipe:bmuon (`code_status: none`).
+- Status active (`sota_for: []`). Beats Muon under post-training MLP channel pruning (1B) and gradual structured MLP prune (ViT-S/16).
+
+### 2026-10-19 — ingest method:ccr (active on task:math-code-rl-dense; does not supersede method:cispo / method:es-reasoning)
+- Added paper:ccr (2610.22887), method:ccr, recipe:ccr (`code_status: none`).
+- Status active (`sota_for: []`). 8k CCR vs GRPO 32k: 4B 975464→174957 (−82.1%); 8B 793832→165788 (−79.1%) tokens/step.
+
+### 2026-10-19 — ingest method:simopd (active on task:student-distillation; does not supersede method:opd / method:ride)
+- Added paper:simopd (2610.23306), method:simopd, recipe:simopd (`code_status: none`).
+- Status active (`sota_for: []`). +2.6 same-arch / +3.1 cross-arch vs strongest paper OPD/hidden-state baselines.
+
+### 2026-10-19 — ingest method:opmd (active on task:student-distillation; does not supersede method:opd / method:ride / method:latent-mopd)
+- Added paper:opmd (2610.14022), method:opmd, recipe:opmd (`code_status: none`). HF Daily 2026-10-16 tail.
+- Status active (`sota_for: []`). Highest average in all three teacher-student settings; generalizes to multi-teacher and cross-family SFT.
+
+### 2026-10-19 — ingest method:multiagent-opd (active on task:student-distillation; does not supersede method:opd / method:single-agent-plus-tools)
+- Added paper:multiagent-opd (2610.23234), method:multiagent-opd, recipe:multiagent-opd (`code_status: none`). Mention on task:multi-agent-orchestration.
+- Status active (`sota_for: []`). Macro avg@4 38.68%; +4.06 vs Prompted Critic; +2.61 vs C-MAS + RL.
+
+### 2026-10-19 — ingest method:gca (active on task:web-search-agent-rl; does not supersede method:iris / method:canopy)
+- Added paper:gca (2610.23148), method:gca, recipe:gca (`code_status: none`).
+- Status active (`sota_for: []`). +5.7 EM Qwen2.5-3B / +6.3 EM Qwen3-30B-A3B vs Search-R1; evidence-supported share 76.9%→93.4%.
+
+### 2026-10-19 — ingest method:discoveryrsi (active on task:agent-harness-runtime; does not supersede method:omp2-harness / method:terminal-rsi / method:harness-rsi)
+- Added paper:discoveryrsi (2610.23839), method:discoveryrsi, recipe:discoveryrsi (`code_status: released`; Gen-Verse/DiscoveryRSI).
+- Status active (`sota_for: []`). Hypothesis quality 4.86→5.39 after two rounds; DiscoveryRSI-27B 6.3% vs GPT-6 2.5% / Opus 5 2.3%.
+
+### 2026-10-19 — ingest method:ori (active on task:full-param-memory-efficient-pretrain; does not supersede method:scale / method:pmrc)
+- Added paper:ori (2610.22794), method:ori, recipe:ori (`code_status: none`).
+- Status active (`sota_for: []`). Up to 69.3% gap cut vs prior GaLore-family on 1B; best on 10/16 RoBERTa-Base scenarios. No SCALE bake-off.
+
+### 2026-10-19 — ingest method:led (active on task:diffusion-lm-ar-delta-recycle; does not supersede method:a2d / method:justopd / method:canvasanneal)
+- Added paper:led (2610.23122), method:led, recipe:led (`code_status: none`).
+- Status active (`sota_for: []`). +11.4 (7B) / +7.7 (8B) vs MDM SFT; LED-8B SFT-only beats LLaDA2.1-16B Q-mode (CPT+SFT+RL).
+
+### 2026-10-19 — ingest method:metacurate (active on task:coding-agent-rl-environment-construction; does not supersede method:olmo-3 / method:autosft / method:swe-at-scale)
+- Added paper:metacurate (2610.23134), method:metacurate, recipe:metacurate (`code_status: none`). Mention on task:instruct-sft-alignment.
+- Status active (`sota_for: []`). Highest mean SWE-Verified among compared SFT filters, including hand-authored and a 3.5x-cost training-loop baseline.
+
+### 2026-10-19 — ingest method:openmobile-2 (active on task:hybrid-computer-use-agent-rl; does not supersede method:recreationworld / method:claude-computer-use / method:mai-gym)
+- Added paper:openmobile-2 (2610.14157), method:openmobile-2, recipe:openmobile-2 (`code_status: none`). HF Daily 2026-10-16 tail.
+- Status active (`sota_for: []`). AndroidWorld 79.9; MobileWorld 50.4; SPA-Bench 31.9→59.6. OSWorld ranking is not this card.
+
+### 2026-10-19 — ingest method:mlexpert (active on task:agentic-async-rl; does not supersede method:sao / method:canopy)
+- Added paper:mlexpert (2610.22344), method:mlexpert, recipe:mlexpert (`code_status: released`; InternScience/MLExpert).
+- Status active (`sota_for: []`). MLE-Bench Lite average medal rate 37.9%→72.7%.
+
+### 2026-10-19 — ingest method:sigma-delta-sampler (active on task:1bit-extreme-quantization; does not supersede method:sparse-bitnet / method:scaleq-158)
+- Added paper:sigma-delta-sampler (2610.22621), method:sigma-delta-sampler, recipe:sigma-delta-sampler (`code_status: none`).
+- Status active (`sota_for: []`). MatMul-free discrete-weight training to 2.7B.
+
+### 2026-10-19 — ingest method:lean4-agentic-rl (active on task:outcome-only-long-horizon-agent-rl; does not supersede method:canopy / method:terminal-rsi)
+- Added paper:lean4-agentic-rl (2610.22448), method:lean4-agentic-rl, recipe:lean4-agentic-rl (`code_status: none`).
+- Status active (`sota_for: []`). TB2.1 77.3%; +9.89 vs base; +5.07 vs second-best same-size.
+
+### 2026-10-19 — ingest method:schedule-free-diffusion (active on task:pixel-diffusion-pretrain; does not supersede method:representation-guidance / method:diffusion-opsd)
+- Added paper:schedule-free-diffusion (2610.22945), method:schedule-free-diffusion, recipe:schedule-free-diffusion (`code_status: none`). Mention on task:posttrain-diffusion.
+- Status active (`sota_for: []`). Schedule-Free beats constant-LR EMA across stages; LR decay+EMA is complementary.
+
+### 2026-10-19 — ingest method:topa (active on task:lora-quality-tuning; does not supersede method:lr-matters-lora / method:dt-lora)
+- Added paper:topa (2610.22883), method:topa, recipe:topa (`code_status: released`; scongl/ToPA).
+- Status active (`sota_for: []`). Block-wise Toeplitz products vs low-rank and sparse PEFT.
+
+### 2026-10-19 — ingest method:market-posttrain (active on task:multi-agent-orchestration; does not supersede method:single-agent-plus-tools / method:sao)
+- Added paper:market-posttrain (2610.22322), method:market-posttrain, recipe:market-posttrain (`code_status: released`; Embodied-Minds-Lab/MPT).
+- Status active (`sota_for: []`). Joint action+bidding co-adapts capabilities and participation vs fixed orchestration.
+
+### 2026-10-19 — update method:looped-models-done-right (Part I paper:looped-models-done-right-i; does not retarget method:recurrent-looped-transformer / method:smelt)
+- Added paper:looped-models-done-right-i (2610.23036) onto the existing Huginn-style card. Same code ifm-ai/xllm-loop.
+- 730M/336B Huginn beats Ouro on all ten benches; 8BA0.8B/500B Huginn beats Ouro on nearly all; 75% fewer resident params than 112-layer FF MoE at matched FLOPs.
+
+### 2026-10-19 — note paper:optimizer-switch-cost (gotcha on task:llm-pretraining-optimization; does not retarget method:muon2)
+- Added paper:optimizer-switch-cost (2610.22650). 1.2B AdamW↔Muon interpolations: mismatch cost is small vs each stage's optimizer choice.
+
+### 2026-10-19 — note paper:rank-noise-baseline (gotcha on task:lora-quality-tuning; does not retarget method:lr-matters-lora)
+- Added paper:rank-noise-baseline (2610.22438). Direction-counting ranks sit near noise; stable rank sits far below; instruct vs non-instruct updates look the same.
+
+### 2026-10-19 — note paper:progressive-misalignment (gotcha on task:privileged-teacher-opsd; does not retarget method:vista / method:opd / method:rrsi)
+- Added paper:progressive-misalignment (2610.22467). Recursive self-distillation can progressively misalign even when every generation is safe.
+
+### 2026-10-19 — note paper:posttrain-cue-routing (gotcha on task:instruct-sft-alignment; does not retarget method:olmo-3)
+- Added paper:posttrain-cue-routing (2610.22937). Post-training tunes a pretrained cue-routing mechanism rather than installing a new bias circuit.
+
+### 2026-10-19 — note paper:privileged-pi-effectiveness (gotcha on task:privileged-teacher-opsd; does not retarget method:vista / method:privileged-context-drift)
+- Added paper:privileged-pi-effectiveness (2610.22512). Predict privileged-information effectiveness before OPSD rather than assuming gold context always helps.
+
 ### 2026-10-16 — weekday SOTA sweep (Waypoint-OPD, Mosaic, MRTPO, MMSearch-OPD, SCOPE-T2I, Terminal-RSI, RPO, Training-Free OPD, SCOPED, AutoSFT, SERO, EDEN; secondaries MAI-Gym, OpenGCUA, Harness-RSI, FlashMask-3, LCT, score-centering, SWE-at-Scale, OS-Helix)
 - Nineteen active plug-ins and one paper-only note. No current_sota retarget (OPD / Open-MOPD / CISPO / SAO / CANOPY / CorrGRPO+DARA / Iris / omp2 / RRSI / Claude computer-use / RecreationWorld / SCALE / Muon2 / DiffusionOPSD+Self-OPD / JustOPD).
 - Window: 2026-10-16 Librarian weekday sweep after merged PR 45 (watermark 2610.20607, 1387 nodes, dcaf314). New high id 2610.22282.

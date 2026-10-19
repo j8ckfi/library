@@ -8,6 +8,12 @@ sota_for:
   - task:agent-harness-runtime
 supersedes: []
 do_not_use_for:
+  - when: "alternating harness+policy optimization (Self-HPO)"
+    reason: "omp2 remains the kernel; Self-HPO alternates harness proposals with policy RL"
+    use_instead: "method:self-hpo"
+  - when: "hypothesis-tree recursive scientific RSI (DiscoveryRSI)"
+    reason: "omp2 remains the kernel; DiscoveryRSI is scientific hypothesis RSI"
+    use_instead: "method:discoveryrsi"
   - when: "SWE-bench start/eval loop or GitHub issue → patch"
     reason: "mini-SWE-agent is the locked ranking scaffold and first hop for starting a loop"
     use_instead: "method:mini-swe-agent"
@@ -38,7 +44,7 @@ do_not_use_for:
 assumptions:
   - "You are implementing a harness kernel, not wrapping a 100-line ReAct loop."
   - "The four envelope tests must hold: multiplexed workspace, remote driver, spectator, untrusted factory."
-last_reviewed: "2026-09-02"
+last_reviewed: '2026-10-19'
 papers:
   - paper:harness-playbook
 recipes:

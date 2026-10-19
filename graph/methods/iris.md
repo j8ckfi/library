@@ -8,6 +8,9 @@ sota_for:
   - task:web-search-agent-rl
 supersedes: []
 do_not_use_for:
+  - when: "grounded credit assignment for search vs answer tokens (GCA)"
+    reason: "Iris remains SFT-RL climbing; GCA is a Search-R1-style credit split"
+    use_instead: "method:gca"
   - when: "outcome-only long-horizon agent RL (AppWorld coverage / anti-drift)"
     reason: "Iris is a live-web search train recipe, not sparse-outcome AppWorld coverage"
     use_instead: "method:canopy"
@@ -27,9 +30,10 @@ assumptions:
   - "Live search/scrape tools, a unique verifiable answer, and an in-cluster judge. Paper init: Qwen3.6-35B-A3B (mini) / Qwen3.5-397B-A17B (pro), 256K context."
   - "SFT: 2 epochs, global batch 64, max seq 262144. RL: Relax engine; GenRM + summarizer are in-cluster Qwen3.5-397B-A17B FP8. ~2× over-sampling headroom for partial rollout."
   - "Default reported decode uses discard-all CM (DeepSeek-V3.2). Publish no-CM numbers too. Single ReAct, no sub-agents, no test-time verification."
-last_reviewed: "2026-09-08"
+last_reviewed: '2026-10-19'
 papers:
   - paper:iris
+  - paper:gca
 recipes:
   - recipe:iris
 claims:

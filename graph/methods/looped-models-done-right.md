@@ -22,12 +22,22 @@ do_not_use_for:
 assumptions:
   - Huginn-style fixed-point looped LM (shared recurrent block), 100M–1.6B in the paper. Not SMELT MoE layer looping and not RLT CED.
   - "Code: ifm-ai/xllm-loop (`code_status: released`)."
-last_reviewed: "2026-10-06"
+last_reviewed: '2026-10-19'
 papers:
+  - paper:looped-models-done-right-i
   - paper:looped-models-done-right
 recipes:
   - recipe:looped-models-done-right
 claims:
+  - benchmark: "730M Huginn vs Ouro; 8BA0.8B MoE / 500B tokens (Part I)"
+    metric: "ten-bench win; MoE knowledge/reasoning/coding"
+    value: "730M/336B tokens Huginn beats Ouro on all ten benches; 8BA0.8B/500B Huginn beats Ouro on nearly all benches; 75% fewer resident params than 112-layer FF MoE at matched FLOPs"
+    baseline: "Ouro / 112-layer feedforward MoE (single-paper)"
+    date: "2026-10-19"
+    verified: true
+    evidence_level: preprint
+    source_url: "https://arxiv.org/abs/2610.23036"
+    notes: "Part I of the same Huginn-style card. Does not retarget RLT or SMELT."
   - benchmark: "1.6B looped LM downstream average, 3x smaller KV vs fixed-depth full cache"
     metric: "downstream average at matched quality"
     value: "3x smaller KV matches fixed-depth full-cache average"
@@ -60,5 +70,5 @@ Trains Huginn-style looped LMs toward fixed points: a learned depth prior plus o
 
 ## Gotchas & Failure Modes
 - **code: released** `https://github.com/ifm-ai/xllm-loop` as of 2026-10-06.
-- Title is Part II; this is still Huginn-style dense looping, not SMELT.
+- Part I (`paper:looped-models-done-right-i`, 2610.23036) isolates topology/injection/state and transfers Huginn-style to 8BA0.8B MoE. Part II remains the fixed-point cheap-path card. Same code ifm-ai/xllm-loop.
 - Do not cite RLT's empty measurement card as this paper's 1.6B numbers.

@@ -47,7 +47,7 @@ methods:
   - method:deepseek-v41-flash
   - method:ncp-archpreview
   - method:deepseek-v4
-last_reviewed: "2026-10-13"
+last_reviewed: '2026-10-19'
 tags:
   - pretraining
   - architecture
@@ -70,3 +70,5 @@ Train or specify a language model whose decoder carries complete state across ev
 - **Production CED serving (different task)**: `method:deepseek-v41-flash` on `task:input-heavy-agentic-moe-serving`.
 - **Not This Task**: `method:muon2` remains the ~7B optimizer; `method:deepseek-v4` / `method:kimi-k3` remain frontier MoE pretrain; `method:ncp-archpreview` remains latent-space LM; `method:mini-swe-agent` remains the SWE harness.
 - **Not this task (elastic mixed-depth looping)**: `method:elr` on `task:elastic-depth-looped-lm` (`arXiv:2610.12582`). Does not replace RLT.
+- **Looped Models Done Right Part I**: `paper:looped-models-done-right-i` (`arXiv:2610.23036`) on `method:looped-models-done-right`. 730M Huginn vs Ouro; 8BA0.8B / 500B tokens. Same code ifm-ai/xllm-loop. Does not retarget RLT or SMELT.
+

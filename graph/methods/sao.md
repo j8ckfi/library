@@ -10,6 +10,9 @@ supersedes:
   - method:grpo
   - method:dr-grpo
 do_not_use_for:
+  - when: "windowed interaction RL for autonomous MLE agents (MLExpert / WIRL)"
+    reason: "SAO remains async stragglers; MLExpert is WIRL on MLE trajectories"
+    use_instead: "method:mlexpert"
   - when: "async single-rollout SWE recipe (Muon + token-avg loss + truncated IS)"
     reason: "SAO remains async straggler replay; muon-lh-rl is an optimizer/loss recipe on SPO"
     use_instead: "method:muon-lh-rl"
@@ -55,11 +58,12 @@ do_not_use_for:
   - when: "CEM-style critic-free RFT from replay when group rollouts are impractical (stateful sandboxes)"
     reason: "SAO remains async straggler replay; FTW is CEM-style ordinal filter on replay when GRPO groups cannot be reconstructed"
     use_instead: "method:ftw"
-last_reviewed: "2026-10-09"
+last_reviewed: '2026-10-19'
 papers:
   - paper:muon-lh-rl
   - paper:sao
   - paper:probe-the-harness
+  - paper:mlexpert
 recipes:
   - recipe:sao
 claims:

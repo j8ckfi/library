@@ -12,6 +12,10 @@ current_sota:
     value: "~2x token efficiency vs AdamW"
     notes: "Muon2 (2604.09967) + KL-SOAP (2607.20548) if memory allows."
 redirects:
+  - when: "Muon spectral budget for structured MLP prune (BMuon)"
+    to: "method:bmuon"
+  - when: "optimizer-stage mismatch cost when switching AdamW and Muon"
+    to: "paper:optimizer-switch-cost"
   - when: "mask-aware distributed attention kernel (FlashMask-3)"
     to: "method:flashmask-3"
   - when: "4-bit AdamW optimizer-state quantization in preconditioner space (ZIP-SR)"
@@ -59,6 +63,7 @@ redirects:
   - when: "finite Newton-Schulz plus epsilon loses Muon spectral max-margin"
     to: "paper:muon-ns-bias"
 methods:
+  - method:bmuon
   - method:flashmask-3
   - method:cast-ssc
   - method:monarch-muon
@@ -93,7 +98,7 @@ methods:
   - method:muonio
   - method:adam-beta-cubic
   - method:bulkboost
-last_reviewed: '2026-10-16'
+last_reviewed: '2026-10-19'
 tags:
   - pretraining
   - optimizer
@@ -129,3 +134,6 @@ Pretraining modern neural network models involves minimizing cross-entropy loss 
 - **Gotcha (finite Newton-Schulz)**: `paper:muon-ns-bias` (`arXiv:2610.20112`). Practical Muon with finite NS + epsilon selects Frobenius max-margin; log-growing NS recovers spectral. Does not retarget Muon2.
 
 - **Optional mask-aware attention kernel**: `method:flashmask-3` (`arXiv:2610.17901`, NeurIPS 2026). +45–141% TFLOPs vs FlashMask; 118B-A14B e2e +7.3–11.0%. Code PaddlePaddle/FlashMask. Does not replace Muon2.
+
+- **Optional structured-prune Muon geometry**: `method:bmuon` (`arXiv:2610.23571`). Inter-block channel budget; 1B FineWeb MLP prune beats Muon. No public code. Does not replace Muon2.
+- **Gotcha (optimizer switch cost)**: `paper:optimizer-switch-cost` (`arXiv:2610.22650`). 1.2B Llama-3 AdamW↔Muon interpolations; little mismatch penalty. Does not retarget Muon2.

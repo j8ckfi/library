@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "masked dLLM lookahead-edit SFT (LED; not AR-delta recycle)"
+    reason: "A2D remains AR-delta recycle; LED is MDM lookahead-edit SFT"
+    use_instead: "method:led"
   - when: "dLLM RL that forks from high-entropy intermediate states (ForkGRPO)"
     reason: "A2D recycles an AR weight delta; ForkGRPO is GRPO-family RL on the dLLM"
     use_instead: "method:forkgrpo"
@@ -24,12 +27,13 @@ do_not_use_for:
     use_instead: "method:uno"
 assumptions:
   - "Converted discrete diffusion LM from an AR checkpoint, plus an AR post-training delta. No official GitHub as of 2026-10-07."
-last_reviewed: "2026-10-07"
+last_reviewed: '2026-10-19'
 papers:
   - paper:forkgrpo
   - paper:dlm-ar-compute-gap
   - paper:justopd
   - paper:a2d
+  - paper:led
 recipes:
   - recipe:a2d
 claims:

@@ -9,11 +9,15 @@ sota_for:
 supersedes:
   - method:gspo
 do_not_use_for:
+  - when: "MoE bidirectional high-k then distill-back OPD (MoEvolve)"
+    reason: "SAPO remains MoE RLVR; MoEvolve is high-k then distill-back OPD"
+    use_instead: "method:moevolve"
   - when: "MoE/VL RLVR train–infer engine mismatch (calibrated IS on log-odds displacement, not SAPO default)"
     reason: "SAPO remains the MoE/VL optimizer; CIS-RL caps the train–infer mismatch ratio"
     use_instead: "method:cis-rl"
 papers:
   - paper:sapo
+  - paper:moevolve
 recipes:
   - recipe:sapo
 claims:

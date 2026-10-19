@@ -16,6 +16,10 @@ out_of_scope:
   - "Recursive self-rewrite of a research-agent harness (AIDE2)"
   - "Harness curriculum as a non-stationary bandit over failure-pattern arms (ActiveSaddler)"
 redirects:
+  - when: "alternating harness+policy optimization (Self-HPO)"
+    to: "method:self-hpo"
+  - when: "hypothesis-tree recursive scientific RSI (DiscoveryRSI)"
+    to: "method:discoveryrsi"
   - when: "terminal-agent RSR + RPR recursive self-improve (TB-GAE / FDR / SPR)"
     to: "method:terminal-rsi"
   - when: "formal Harness RSI framework + PAC admission bounds (frozen weights)"
@@ -42,7 +46,7 @@ redirects:
     to: "method:activesaddler"
   - when: "recurrent textual harness for agentic continual learning (not the production kernel)"
     to: "method:reharness"
-last_reviewed: '2026-10-16'
+last_reviewed: '2026-10-19'
 current_sota:
   - method: method:omp2-harness
     as_of: "2026-09-02"
@@ -51,6 +55,8 @@ current_sota:
     value: "2 correct of 78 Pi examples (60 stateless, 17 stateful); journal covering message tree only ⇒ rewind/fork/resume lie"
     notes: "Self-reported blog architecture, not a SWE-bench number. Does not replace mini-SWE-agent, CCA, OpenHands, SAO, FoldGRPO, RLM, MAGIC, CISPO, Muon2, MCP, or ACE."
 methods:
+  - method:self-hpo
+  - method:discoveryrsi
   - method:terminal-rsi
   - method:harness-rsi
   - method:reharness
@@ -96,3 +102,6 @@ This is **not** the SWE-bench start/eval loop. Issue → patch / locked mini har
 
 - **Optional terminal-agent RSI**: `method:terminal-rsi` (`arXiv:2610.22192`). RSR + RPR; TB4.0 19.84% / TB2.1 86.52%. No public code. Does not replace omp2 or RRSI.
 - **Optional formal Harness RSI**: `method:harness-rsi` (`arXiv:2610.18813`). PAC admission bounds. Code zgcagi/Harness-RSI. Does not replace omp2 or RRSI.
+- **Optional alternating harness-policy RSI**: `method:self-hpo` (`arXiv:2610.22791`). Qwen3.5-35B-A3B 57.8→64.8. Does not replace omp2 or Harness-RSI.
+- **Optional scientific hypothesis RSI**: `method:discoveryrsi` (`arXiv:2610.23839`). DFM-Bench 4.86→5.39; code Gen-Verse/DiscoveryRSI. Does not replace omp2 or Terminal-RSI.
+

@@ -18,9 +18,10 @@ do_not_use_for:
     use_instead: "method:opsd-collapse-review"
 assumptions:
   - "Controlled OPSD study. Content (demo vs feedback vs rephrase) vs source. No trainer. No official GitHub as of 2026-10-07."
-last_reviewed: "2026-10-07"
+last_reviewed: '2026-10-19'
 papers:
   - paper:privileged-context-drift
+  - paper:privileged-pi-effectiveness
 recipes:
   - recipe:privileged-context-drift
 claims:

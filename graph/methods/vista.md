@@ -8,6 +8,12 @@ sota_for:
   - task:privileged-teacher-opsd
 supersedes: []
 do_not_use_for:
+  - when: "predicting privileged-information effectiveness for OPSD"
+    reason: "VISTA remains the privileged-teacher first hop; this is a PI selection protocol"
+    use_instead: "paper:privileged-pi-effectiveness"
+  - when: "progressive misalignment from benign recursive self-distillation"
+    reason: "Gotcha on recursive OPSD; does not retarget VISTA"
+    use_instead: "paper:progressive-misalignment"
   - when: "system-prompt verbal regularization of a privileged teacher"
     reason: "VISTA remains the privileged-teacher first hop; VRSD attenuates privileged cues in the teacher prompt"
     use_instead: "method:vrsd"
@@ -41,7 +47,7 @@ do_not_use_for:
   - when: "privileged-context content (demo vs feedback vs rephrase) as OPSD drift, not a trainer"
     reason: "VISTA remains the trainer; Privileged Context as Drift is an evidence card"
     use_instead: "method:privileged-context-drift"
-last_reviewed: "2026-10-09"
+last_reviewed: '2026-10-19'
 papers:
   - paper:self-distillation-ood
   - paper:pr-opd
@@ -50,6 +56,8 @@ papers:
   - paper:og-opsd
   - paper:e2-opsd
   - paper:vista
+  - paper:privileged-pi-effectiveness
+  - paper:progressive-misalignment
 recipes:
   - recipe:vista
 claims:

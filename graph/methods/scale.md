@@ -9,6 +9,9 @@ sota_for:
 supersedes:
   - method:galore
 do_not_use_for:
+  - when: "drift-aware streaming k-PCA GaLore-family low-rank LLM training (Ori)"
+    reason: "SCALE remains the first hop; Ori is a GaLore-family streaming k-PCA tracker"
+    use_instead: "method:ori"
   - when: "subspace Muon with residual correction (PMRC / SMRC)"
     reason: "SCALE remains the memory-efficient first hop; PMRC is residual-correction Muon, no SCALE bake-off"
     use_instead: "method:pmrc"
@@ -25,6 +28,7 @@ papers:
   - paper:pmrc
   - paper:logra
   - paper:scale
+  - paper:ori
 recipes:
   - recipe:scale
 claims:
@@ -35,7 +39,7 @@ claims:
     date: "2026-08-26"
     verified: true
     notes: "Scaled subspace gradient projections for smooth trajectory updates without SVD latency stalls."
-last_reviewed: "2026-10-06"
+last_reviewed: '2026-10-19'
 tags:
   - optimizer
   - pretraining

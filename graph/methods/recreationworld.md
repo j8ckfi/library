@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "scalable mobile-agent envs / hybrid GUI+app-native tools (OpenMobile-2)"
+    reason: "RecreationWorld remains hybrid CUA first hop; OpenMobile-2 is mobile env+RL"
+    use_instead: "method:openmobile-2"
   - when: "desktop/OS GUI ranking on OSWorld 2.0 paper protocol"
     reason: "Claude computer-use remains that ranking SOTA; RecreationWorld is hybrid GUI+code train/eval"
     use_instead: "method:claude-computer-use"
@@ -23,9 +26,10 @@ assumptions:
   - "Hybrid CUA: the agent interleaves GUI exploration, implementation, and visual verification of its own artifacts. Five platforms: Ubuntu, macOS, Windows, Android, Web."
   - "Reward is reference-as-oracle: hidden programmatic and visual assertions derived from a running reference, frozen after human review."
   - "Code and RecreationBench released. RecreationBench is 250 tasks, 50 per platform."
-last_reviewed: "2026-09-21"
+last_reviewed: '2026-10-19'
 papers:
   - paper:recreationworld
+  - paper:openmobile-2
 recipes:
   - recipe:recreationworld
 claims:

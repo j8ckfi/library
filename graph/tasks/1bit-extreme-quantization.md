@@ -4,6 +4,9 @@ type: task
 title: "1-Bit / Ternary Extreme Weight Quantization"
 domain: "compression"
 summary: "Training ultra-low-bitwidth (-1, 0, 1) foundation models from scratch with native integer-addition matrix kernels."
+redirects:
+  - when: "Ising / Sigma-Delta sampling for binary-ternary on-edge training"
+    to: "method:sigma-delta-sampler"
 current_sota:
   - method: method:sparse-bitnet
     as_of: "2026-08-26"
@@ -12,6 +15,7 @@ current_sota:
     value: "2026 BitNet SOTA line; parity with dense 2B4T baseline"
     notes: "Sparse-BitNet (2603.05168); keep 2B4T as dense cite."
 methods:
+  - method:sigma-delta-sampler
   - method:sparse-bitnet
   - method:scaleq-158
   - method:quartet-ii
@@ -20,7 +24,7 @@ methods:
   - method:bitembed
   - method:bitnet-b158
   - method:af1
-last_reviewed: "2026-09-09"
+last_reviewed: '2026-10-19'
 tags:
   - compression
   - quantization
@@ -38,3 +42,4 @@ Training foundation models natively using ternary weights \(\{-1, 0, +1\}\), rep
 - **Ternary Existing SOTA LLM**: **ScaleQ-1.58** (`method:scaleq-158`, 2608.01078).
 - **FP4 Hardware Train**: **Quartet-II NVFP4** (`method:quartet-ii`, 2601.22813) / **MXFP4** (`method:mxfp4-mi355x`, 2605.09825).
 - **Optional genuine 1-bit PTQ**: `method:af1` (`arXiv:2609.06161`, EMNLP 2026 Main). Existing-checkpoint binarization, not a Sparse-BitNet pretrain replacement.
+- **Optional Ising / ΣΔ discrete-weight trainer**: `method:sigma-delta-sampler` (`arXiv:2610.22621`). MatMul-free to 2.7B. Does not replace Sparse-BitNet.

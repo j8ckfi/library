@@ -5,6 +5,8 @@ title: "Mathematical and Code RL Reasoning (MoE Policies)"
 domain: "post-training"
 summary: "Reinforcement learning for large-scale sparse Mixture-of-Experts (MoE) reasoning models."
 redirects:
+  - when: "MoE bidirectional high-k then distill-back OPD (MoEvolve)"
+    to: "method:moevolve"
   - when: "hierarchical routing control for agentic RL on MoE (operation-type experts)"
     to: "method:hierarchical-moe-routing-control"
   - when: "single-turn dense math/code Pass@1 RLVR"
@@ -23,6 +25,7 @@ current_sota:
     value: "Default SOTA for MoE/VL RL"
     notes: "SAPO (2511.20347); GSPO only if Qwen3.5-Omni Talker."
 methods:
+  - method:moevolve
   - method:sapo
   - method:gspo
   - method:qwen35-omni
@@ -34,7 +37,7 @@ methods:
   - method:cis-rl
   - method:carm
   - method:hierarchical-moe-routing-control
-last_reviewed: "2026-10-07"
+last_reviewed: '2026-10-19'
 tags:
   - post-training
   - reasoning
@@ -56,3 +59,5 @@ Training sparse Mixture-of-Experts policies with reinforcement learning where dy
 - **Optional cancellation-aware off-policy mask**: `method:carm` (`arXiv:2610.02039`) averages absolute token log-ratios before the sequence threshold. No public code. Does not replace SAPO, CISPO, CIS-RL, or Miles.
 - **Optional hierarchical routing control for agentic MoE RL**: `method:hierarchical-moe-routing-control` (`arXiv:2610.07332`) aligns experts with operation types; >10-point AppWorld / AutomationBench. Beside ESRL / RPB. Does not replace SAPO.
 - **Not this task (critic-free PMD on dense math)**: `method:bpo` (`arXiv:2609.15987`) on `task:math-code-rl-dense`. Bake-off used Qwen3-30B-A3B-Base under a CISPO/GSPO/DPPO host; SAPO remains the MoE/VL default.
+- **Optional MoE bidirectional OPD**: `method:moevolve` (`arXiv:2610.23185`). Up to +22.2 vs initial / +6.5 vs same-budget RLVR. Does not replace SAPO.
+

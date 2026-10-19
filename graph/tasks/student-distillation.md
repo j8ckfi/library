@@ -5,6 +5,16 @@ title: "Small Local Student Distillation from Strong Teacher"
 domain: "post-training"
 summary: "Distilling reasoning and conversational capabilities from multi-hundred-billion parameter frontier teachers into small local student models."
 redirects:
+  - when: "group-relative sequence credit for OPD (GR-OPD)"
+    to: "method:gr-opd"
+  - when: "relational / similarity OPD (SimOPD)"
+    to: "method:simopd"
+  - when: "on-policy mechanism distillation beyond output supervision (OPMD)"
+    to: "method:opmd"
+  - when: "Leader-Searcher-Answerer hierarchical OPD (MultiAgent-OPD)"
+    to: "method:multiagent-opd"
+  - when: "MoE bidirectional high-k then distill-back OPD (MoEvolve)"
+    to: "method:moevolve"
   - when: "gated policy-shift OPD using an intermediate teacher checkpoint (Waypoint-OPD)"
     to: "method:waypoint-opd"
   - when: "OPD curriculum for long-horizon multimodal search (easy↔hard Refine)"
@@ -129,6 +139,11 @@ current_sota:
     value: "83.4% headroom recovery in a single deployable student"
     notes: "Open-MOPD (2608.19098) fixes multi-teacher imbalance with token-share balancing and gap-aware dynamic budgeting."
 methods:
+  - method:gr-opd
+  - method:simopd
+  - method:opmd
+  - method:multiagent-opd
+  - method:moevolve
   - method:waypoint-opd
   - method:mmsearch-opd
   - method:training-free-opd
@@ -201,7 +216,7 @@ methods:
   - method:lmopd
   - method:latent-mopd
   - method:rp-opd
-last_reviewed: '2026-10-16'
+last_reviewed: '2026-10-19'
 tags:
   - post-training
   - distillation
@@ -288,3 +303,9 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Related multimodal search OPD (not this text default)**: `method:mmsearch-opd` (`arXiv:2610.22240`) on `task:web-search-agent-rl`. 9B avg 60.2 vs workflow 44.9. No public code.
 - **Optional training-free same-base fusion**: `method:training-free-opd` (`arXiv:2610.22236`). Forward-only least squares. Olmo 3 7B. No public code. Does not replace OPD.
 - **Optional skill-decoupled VLM expert OPD**: `method:scoped` (`arXiv:2610.22217`). Qwen3-VL-8B +5.83 vs backbone / +3.82 vs Mix-RL. Code NEUIR/SCOPED. Does not replace OPD or Open-MOPD.
+
+- **Optional group-relative sequence OPD**: `method:gr-opd` (`arXiv:2610.23042`). +10.9 / +11.5 vs vanilla OPD on matched thinking; stabilizes mismatched thinking. No public code. Does not replace OPD.
+- **Optional relational similarity OPD**: `method:simopd` (`arXiv:2610.23306`). +2.6 same-arch / +3.1 cross-arch vs strongest paper baselines. No public code. Does not replace OPD or RIDE.
+- **Optional mechanism-level OPD**: `method:opmd` (`arXiv:2610.14022`). Student-compatible intermediate computation; highest average in three teacher-student settings. HF 10-16 tail. Does not replace OPD, RIDE, or Latent-MOPD.
+- **Optional hierarchical team OPD**: `method:multiagent-opd` (`arXiv:2610.23234`). Leader-Searcher-Answerer 38.68% macro avg@4. Does not replace OPD or single-agent-plus-tools.
+- **Related MoE bidirectional OPD (not this dense default)**: `method:moevolve` (`arXiv:2610.23185`) on `task:math-code-rl-moe`.

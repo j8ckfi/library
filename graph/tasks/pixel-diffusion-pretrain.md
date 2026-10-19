@@ -15,12 +15,14 @@ out_of_scope:
 - Discrete dLLM AR-delta recycle (A2D)
 - Video reward models / RGPO (RewardVerse)
 redirects:
-- when: aligning text-to-image diffusion or flow models with rewards
-  to: task:posttrain-diffusion
-- when: continuous diffusion language model pretrain (not pixel DiT)
-  to: task:continuous-diffusion-lm-pretrain
-- when: recycle an AR post-training weight delta onto a converted dLLM
-  to: task:diffusion-lm-ar-delta-recycle
+  - when: "Schedule-Free / LR decay instead of constant-LR EMA for large diffusion"
+    to: "method:schedule-free-diffusion"
+  - when: aligning text-to-image diffusion or flow models with rewards
+    to: task:posttrain-diffusion
+  - when: continuous diffusion language model pretrain (not pixel DiT)
+    to: task:continuous-diffusion-lm-pretrain
+  - when: recycle an AR post-training weight delta onto a converted dLLM
+    to: task:diffusion-lm-ar-delta-recycle
 current_sota:
 - method: method:representation-guidance
   as_of: '2026-10-13'
@@ -30,11 +32,12 @@ current_sota:
   notes: Representation Guidance (2610.12978). Method status active. Listed here as
     first hop; method sota_for stays empty. Does not replace DiffusionOPSD / Self-OPD.
 methods:
-- method:representation-guidance
-- method:diffusion-opsd
-- method:self-opd
-- method:semicat
-last_reviewed: '2026-10-13'
+  - method:schedule-free-diffusion
+  - method:representation-guidance
+  - method:diffusion-opsd
+  - method:self-opd
+  - method:semicat
+last_reviewed: '2026-10-19'
 tags:
 - diffusion
 - pretraining
@@ -54,3 +57,5 @@ Train a pixel-space diffusion or flow-matching transformer for images. This task
 ## SOTA Recommendation (as of 2026-10-13)
 - **Primary (this task only)**: **Representation Guidance** (`method:representation-guidance`, `paper:representation-guidance` `arXiv:2610.12978`). Status `active`. Method `sota_for` stays empty. Code Pan-Zihao/Representation-Guidance.
 - **Not This Task**: `method:diffusion-opsd` / `method:self-opd` remain image/flow post-train; `method:semicat` remains continuous text diffusion LM.
+- **Optional Schedule-Free diffusion optimizer**: `method:schedule-free-diffusion` (`arXiv:2610.22945`). Beats constant-LR EMA; transfers to ReFL/DMD. Does not replace Representation Guidance.
+

@@ -8,6 +8,12 @@ sota_for:
   - task:outcome-only-long-horizon-agent-rl
 supersedes: []
 do_not_use_for:
+  - when: "tree-aware posterior self-distillation for long-horizon agent RL (TreeOPSD)"
+    reason: "CANOPY remains coverage/anti-drift; TreeOPSD is critic-free tree posterior self-distill"
+    use_instead: "method:treeopsd"
+  - when: "Lean4 multi-level process rewards for SWE/terminal agent RL"
+    reason: "CANOPY remains checker coverage; Lean4AgenticRL adds Lean4-formalized process rewards"
+    use_instead: "method:lean4-agentic-rl"
   - when: "variable tool latency / async stragglers is the bottleneck"
     reason: "CANOPY is coverage+anti-drift for sparse outcome groups, not an async replay engine"
     use_instead: "method:sao"
@@ -60,12 +66,14 @@ assumptions:
   - "A held-out unit-test / patch verifier exists. Sparse fully-correct reward, not pass-fraction."
   - "Paper: Qwen3-14B on AppWorld train split (90 tasks), veRL, n=32, 50 turns / 32k train, 100 turns / 61k test, KL β=1e-4, lr 3e-6, 90 steps, hardest tier kept."
   - "SWE transfer retunes n=16, KL 1e-2, 80 turns / 36k, and -0.2 for no-patch terminals. Not a literal hyperparameter copy."
-last_reviewed: "2026-10-05"
+last_reviewed: '2026-10-19'
 papers:
   - paper:agentic-self-distill-reality
   - paper:actionopd
   - paper:hp-rlvr
   - paper:canopy
+  - paper:treeopsd
+  - paper:lean4-agentic-rl
 recipes:
   - recipe:canopy
 claims:

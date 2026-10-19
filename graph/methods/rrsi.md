@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "progressive misalignment from benign recursive self-distillation"
+    reason: "Gotcha on recursive self-distill; RRSI remains regularized harness RSI"
+    use_instead: "paper:progressive-misalignment"
   - when: "production harness kernel (rewind, sandbox, remote, TUI / journal → session DOM)"
     reason: "omp² remains the architecture spec; RRSI regularizes harness search around a frozen backbone"
     use_instead: "method:omp2-harness"
@@ -32,9 +35,10 @@ assumptions:
   - "Frozen backbone. Search edits prompts, control flow, tools, skills, memory, context, sub-agents. Paper: Claude Opus 4.8 / Gemini 3.5 Flash as search policy; Vertex AI."
   - "One evolve suite per domain; transfer is measured on held-out and OOD benches with the harness frozen."
   - "Code: google-research/rrsi. Candidates live in git worktrees off evolve/<domain>."
-last_reviewed: "2026-09-23"
+last_reviewed: '2026-10-19'
 papers:
   - paper:rrsi
+  - paper:progressive-misalignment
 recipes:
   - recipe:rrsi
 claims:

@@ -18,6 +18,7 @@ current_sota:
     value: "Industrial SOTA Alt"
     notes: "Nemotron-Cascade-2 (2603.19220) for industrial multi-stage SFT."
 methods:
+  - method:metacurate
   - method:autosft
   - method:onepo
   - method:olmo-3
@@ -33,6 +34,10 @@ methods:
   - method:dco
   - method:opsft
 redirects:
+  - when: "evolving SWE trajectory filters (MetaCurate)"
+    to: "method:metacurate"
+  - when: "post-training tunes a pretrained cue-routing circuit (sycophancy heads)"
+    to: "paper:posttrain-cue-routing"
   - when: "agentic automated SFT data research (proportion / prune / repair / replace / synthesize)"
     to: "method:autosft"
   - when: "SFT-free RL-only domain adaptation from a base model (OnePO / HuatuoGPT-3)"
@@ -43,7 +48,7 @@ redirects:
     to: "task:parameter-efficient-fine-tuning"
   - when: "on-policy parameter update direction SFT (OPSFT)"
     to: "method:opsft"
-last_reviewed: '2026-10-16'
+last_reviewed: '2026-10-19'
 tags:
   - post-training
   - instruct
@@ -67,3 +72,6 @@ Transforming base pre-trained models into safe, capable, instruction-following c
 - **Optional on-policy-direction SFT**: `method:opsft` (`arXiv:2609.36659`). Qwen3-4B DeepMath mean 40.11 vs GRPO 38.96 vs SFT 34.22 (6.4h vs 16.5h). Mention on `task:math-code-rl-dense`. Code ssfgunner/OPSFT. Does not replace OLMo-3 or CISPO.
 
 - **Optional agentic SFT data research**: `method:autosft` (`arXiv:2610.22194`). Analysis +6.5 IFEval; synthesis +3.4. Code Thinking-Space/AutoSFT. Does not replace OLMo-3.
+- **Optional evolving SWE trajectory filter**: `method:metacurate` (`arXiv:2610.23134`). Highest mean SWE-Verified among compared SFT filters. Does not replace OLMo-3 or AutoSFT.
+- **Gotcha (cue-routing circuit)**: `paper:posttrain-cue-routing` (`arXiv:2610.22937`). Chat SFT can activate pretrained sycophancy heads. Does not retarget OLMo-3.
+

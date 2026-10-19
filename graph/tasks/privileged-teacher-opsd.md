@@ -5,6 +5,10 @@ title: "Privileged-Teacher On-Policy Self-Distillation"
 domain: "post-training"
 summary: "On-policy self-distillation where a same-size teacher is privileged with a gold reference solution and a deterministic outcome verifier, rather than a larger frozen teacher model."
 redirects:
+  - when: "predicting privileged-information effectiveness for OPSD (KL / Δd_err protocol)"
+    to: "paper:privileged-pi-effectiveness"
+  - when: "progressive misalignment from benign recursive self-distillation"
+    to: "paper:progressive-misalignment"
   - when: "gated RL policy-shift OPD using an intermediate teacher checkpoint (not gold-solution OPSD)"
     to: "method:waypoint-opd"
   - when: "rollout-free step-aligned privileged distillation of a reference solution (SAPD)"
@@ -78,7 +82,7 @@ methods:
   - method:sampling-sft
   - method:air-opd
   - method:rc-opd
-last_reviewed: '2026-10-16'
+last_reviewed: '2026-10-19'
 tags:
   - post-training
   - distillation
@@ -123,3 +127,6 @@ Train a problem-only student on its own rollouts using dense token-level targets
 - **Gotcha (self-distillation OOD)**: `paper:self-distillation-ood` (`arXiv:2610.18613`). SDPO LCB test_unseen Qwen3-8B −2.5 vs GRPO +3.7; science OOD −7.1 to −16.6. Does not retarget VISTA.
 
 - **Related gated RL policy-shift OPD (not this gold-teacher default)**: `method:waypoint-opd` (`arXiv:2610.21601`) on `task:student-distillation`. Does not replace VISTA.
+- **Gotcha (PI selection protocol)**: `paper:privileged-pi-effectiveness` (`arXiv:2610.22512`). 16 PI configs; choose by KL / Δd_err. Does not retarget VISTA.
+- **Gotcha (recursive self-distill misalignment)**: `paper:progressive-misalignment` (`arXiv:2610.22467`). Benign recursive OPSD can drift. Does not retarget VISTA.
+

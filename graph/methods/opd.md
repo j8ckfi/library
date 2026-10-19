@@ -9,6 +9,18 @@ sota_for:
 supersedes:
   - method:on-policy-distillation
 do_not_use_for:
+  - when: "group-relative sequence credit for OPD (GR-OPD)"
+    reason: "OPD remains matching; GR-OPD aggregates token feedback into sequence credit"
+    use_instead: "method:gr-opd"
+  - when: "relational / similarity OPD (SimOPD)"
+    reason: "OPD remains token matching; SimOPD matches teacher similarity distributions"
+    use_instead: "method:simopd"
+  - when: "on-policy mechanism distillation beyond output supervision (OPMD)"
+    reason: "OPD remains output matching; OPMD transfers student-compatible intermediate computation"
+    use_instead: "method:opmd"
+  - when: "Leader-Searcher-Answerer hierarchical OPD (MultiAgent-OPD)"
+    reason: "OPD remains single-agent matching; MultiAgent-OPD jointly trains a search team"
+    use_instead: "method:multiagent-opd"
   - when: "one-step prefix-augmented OPD for continued pretrain (PA1-OPD)"
     reason: "OPD remains post-train student matching; PA1-OPD adds one student token at corpus prefixes"
     use_instead: "method:pa1-opd"
@@ -87,7 +99,7 @@ do_not_use_for:
   - when: "rubric-privileged OPD warm start before rubric-based RL"
     reason: "OPD remains matching distillation; RP-OPD is a rubric-privileged warm start then rubric RL"
     use_instead: "method:rp-opd"
-last_reviewed: "2026-10-09"
+last_reviewed: '2026-10-19'
 papers:
   - paper:opd-teacher-advantage
   - paper:pa1-opd
@@ -111,6 +123,11 @@ papers:
   - paper:opd-gains-collapse
   - paper:on-policy-or-off-policy
   - paper:divergence-entropy-distillation
+  - paper:gr-opd
+  - paper:simopd
+  - paper:opmd
+  - paper:multiagent-opd
+  - paper:progressive-misalignment
 recipes:
   - recipe:opd
 claims:

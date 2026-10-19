@@ -13,6 +13,8 @@ out_of_scope:
   - "Single-turn dense math/code RLVR (CISPO)"
   - "Routing-harness RSI post-train (NeoHorse-1)"
 redirects:
+  - when: "grounded credit assignment for search vs answer tokens (GCA)"
+    to: "method:gca"
   - when: "OPD curriculum for long-horizon multimodal search (easy↔hard Refine)"
     to: "method:mmsearch-opd"
   - when: "outcome-only long-horizon agent RL (AppWorld coverage / anti-drift or rubric credit)"
@@ -35,6 +37,7 @@ current_sota:
     value: "Iris-mini 82.2/84.8/86.9/52.3; Iris-pro 88.6/85.1/92.9/56.4"
     notes: "Iris (2609.04304). Strongest overall among reported open-source search agents in the 30-35B and ~400B ranges with CM. Does not replace CANOPY, SAO, mini-SWE-agent, FoldGRPO, or CISPO. DeepSearchQA mini loses to Aquila-mini 89.5. Frontier (Kimi-K3 91.2 BrowseComp) still ahead."
 methods:
+  - method:gca
   - method:mmsearch-opd
   - method:iris
   - method:sao
@@ -43,7 +46,7 @@ methods:
   - method:mini-swe-agent
   - method:cispo
   - method:neohorse-1
-last_reviewed: '2026-10-16'
+last_reviewed: '2026-10-19'
 tags:
   - post-training
   - agentic
@@ -66,3 +69,5 @@ Train a single ReAct search agent that must decide what to search, how to read r
 - **Not This Task**: `method:canopy` remains AppWorld outcome-only; `method:sao` remains async stragglers; `method:mini-swe-agent` remains the SWE harness; `method:foldgrpo` remains folding; `method:cispo` remains dense Pass@1 RLVR; `method:neohorse-1` remains routing-harness RSI post-train.
 
 - **Optional multimodal search OPD curriculum**: `method:mmsearch-opd` (`arXiv:2610.22240`). 9B avg 60.2 vs Qwen3.5-9B workflow 44.9. No public code. Does not replace Iris.
+- **Optional grounded search credit**: `method:gca` (`arXiv:2610.23148`). +5.7 / +6.3 EM vs Search-R1; evidence-supported share 76.9%→93.4%. Does not replace Iris.
+

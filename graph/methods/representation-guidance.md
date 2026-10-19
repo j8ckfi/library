@@ -7,21 +7,25 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
-- when: aligning text-to-image diffusion or flow models with rewards
-  reason: RG is pixel-DiT pretrain; DiffusionOPSD / Self-OPD remain reward alignment
-  use_instead: method:diffusion-opsd
-- when: continuous diffusion language model pretrain
-  reason: SemiCat is text diffusion LM; RG is pixel-space image DiT
-  use_instead: method:semicat
+  - when: "Schedule-Free / LR decay instead of constant-LR EMA for large diffusion"
+    reason: "RG remains pixel DiT first hop; Schedule-Free is the optimizer/EMA schedule"
+    use_instead: "method:schedule-free-diffusion"
+  - when: aligning text-to-image diffusion or flow models with rewards
+    reason: RG is pixel-DiT pretrain; DiffusionOPSD / Self-OPD remain reward alignment
+    use_instead: method:diffusion-opsd
+  - when: continuous diffusion language model pretrain
+    reason: SemiCat is text diffusion LM; RG is pixel-space image DiT
+    use_instead: method:semicat
 assumptions:
 - 'Pixel-space DiT / flow matching. Paper: ImageNet-256/512 class-conditional; GenEval
   / DPG-Bench.'
 - 'Code: Pan-Zihao/Representation-Guidance (code_status: released).'
-last_reviewed: '2026-10-13'
+last_reviewed: '2026-10-19'
 papers:
-- paper:representation-guidance
+  - paper:representation-guidance
+  - paper:schedule-free-diffusion
 recipes:
-- recipe:representation-guidance
+  - recipe:representation-guidance
 claims:
 - benchmark: ImageNet-256 XL/16 FID; ImageNet-512 FID; GenEval
   metric: FID / GenEval

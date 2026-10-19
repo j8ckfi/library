@@ -15,6 +15,8 @@ out_of_scope:
   - "Category-aware SWE expert RL on already-executable tasks (Category-Aware SWE Experts)"
   - "Mechanism-first stateful tool envs from solved math dynamics (VHD-Play)"
 redirects:
+  - when: "evolving SWE trajectory filters (MetaCurate), not env construction from source"
+    to: "method:metacurate"
   - when: "scalable SWE issue synthesis from historical bug fixes (SWE-at-Scale)"
     to: "method:swe-at-scale"
   - when: "programmatic checker exists and sparse outcome RL is the protocol (AppWorld TGC)"
@@ -45,6 +47,7 @@ current_sota:
     value: "DeepSWE 10.0→21.7; ProgramBench AS 4.5→21.5; TB v2.1 +8.5pp (63.7→72.2)"
     notes: "CodeMidas (2609.22068). Active env factory. Method status active (not sota). Does not replace CANOPY / SAO / Miles / mini-SWE-agent."
 methods:
+  - method:metacurate
   - method:swe-at-scale
   - method:reterm
   - method:terminalhorizon
@@ -57,7 +60,7 @@ methods:
   - method:miles
   - method:category-aware-swe-experts
   - method:vhd-play
-last_reviewed: '2026-10-16'
+last_reviewed: '2026-10-19'
 tags:
   - post-training
   - agentic

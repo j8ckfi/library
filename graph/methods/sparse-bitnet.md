@@ -8,8 +8,13 @@ sota_for:
   - task:1bit-extreme-quantization
 supersedes:
   - method:bitnet-b158
+do_not_use_for:
+  - when: "Ising / Sigma-Delta sampling for binary-ternary on-edge training"
+    reason: "Sparse-BitNet remains the 2026 BitNet line; Sigma-Delta Sampler is an Ising/ΣΔ trainer"
+    use_instead: "method:sigma-delta-sampler"
 papers:
   - paper:sparse-bitnet
+  - paper:sigma-delta-sampler
 recipes:
   - recipe:sparse-bitnet
 claims:

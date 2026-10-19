@@ -11,6 +11,12 @@ supersedes:
   - method:muon
   - method:muon-scalable
 do_not_use_for:
+  - when: "Muon spectral budget for structured MLP prune (BMuon)"
+    reason: "Muon2 remains the 7B default; BMuon budgets spectral geometry for compressibility"
+    use_instead: "method:bmuon"
+  - when: "optimizer-stage mismatch cost when switching AdamW and Muon"
+    reason: "Gotcha: 1.2B interpolations show little mismatch penalty; does not retarget Muon2"
+    use_instead: "paper:optimizer-switch-cost"
   - when: "4-bit AdamW optimizer-state quantization in preconditioner space"
     reason: "Muon2 remains the 7B default; ZIP-SR is 4-bit AdamW moments"
     use_instead: "method:zip-sr"
@@ -41,7 +47,7 @@ do_not_use_for:
   - when: "finite Newton-Schulz plus epsilon loses spectral max-margin"
     reason: "Gotcha on practical Muon NS; does not retarget the 7B default"
     use_instead: "paper:muon-ns-bias"
-last_reviewed: "2026-10-15"
+last_reviewed: '2026-10-19'
 papers:
   - paper:muon-ns-bias
   - paper:cast-ssc
@@ -50,6 +56,8 @@ papers:
   - paper:bulkboost
   - paper:orca
   - paper:muon2
+  - paper:optimizer-switch-cost
+  - paper:bmuon
 recipes:
   - recipe:muon2-pretraining
 claims:

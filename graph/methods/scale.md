@@ -9,6 +9,9 @@ sota_for:
 supersedes:
   - method:galore
 do_not_use_for:
+  - when: "Adam second-moment pooling (AdamPM)"
+    reason: "SCALE remains the subspace first hop; AdamPM pools Adam second-moment entries"
+    use_instead: "method:adampm"
   - when: "drift-aware streaming k-PCA GaLore-family low-rank LLM training (Ori)"
     reason: "SCALE remains the first hop; Ori is a GaLore-family streaming k-PCA tracker"
     use_instead: "method:ori"

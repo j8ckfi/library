@@ -10,6 +10,9 @@ supersedes:
   - method:grpo
   - method:dr-grpo
 do_not_use_for:
+  - when: "async SWE RL co-design baseline / overfit-on-small-pool (Arctic-SWE)"
+    reason: "SAO remains the async algorithm; Arctic-SWE is a Prime-RL SWE co-design recipe"
+    use_instead: "method:arctic-swe"
   - when: "windowed interaction RL for autonomous MLE agents (MLExpert / WIRL)"
     reason: "SAO remains async stragglers; MLExpert is WIRL on MLE trajectories"
     use_instead: "method:mlexpert"

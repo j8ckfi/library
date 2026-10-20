@@ -8,6 +8,9 @@ sota_for:
   - task:agent-harness-runtime
 supersedes: []
 do_not_use_for:
+  - when: "just-in-time rubric training harness co-evolving with the policy (HarnessRL)"
+    reason: "omp2 remains the production kernel; HarnessRL co-evolves rubric prompt/guidance/criteria"
+    use_instead: "method:harnessrl"
   - when: "alternating harness+policy optimization (Self-HPO)"
     reason: "omp2 remains the kernel; Self-HPO alternates harness proposals with policy RL"
     use_instead: "method:self-hpo"

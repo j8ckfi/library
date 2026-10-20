@@ -8,6 +8,9 @@ sota_for:
   - task:diffusion-augmented-ar
 supersedes: []
 do_not_use_for:
+  - when: "causal self-recursion MTP without auxiliary heads (ECHO)"
+    reason: "Uno remains diffusion-augmented AR serving; ECHO is backbone MTP self-recursion"
+    use_instead: "method:echo-mtp"
   - when: "aligning text-to-image diffusion / flow models with rewards"
     reason: "Uno is AR+diffusion serving/train, not image-policy post-train"
     use_instead: "method:diffusion-opsd"

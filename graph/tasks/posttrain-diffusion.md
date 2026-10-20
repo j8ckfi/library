@@ -18,6 +18,7 @@ current_sota:
     value: "Outperforms Flow-GRPO, Flow-OPD, and DiffusionNFT without external task-specific teachers"
     notes: "Self-OPD (2608.26872) provides teacher-free per-step pull-push distillation for flow matching multi-objective alignment."
 methods:
+  - method:dfr
   - method:schedule-free-diffusion
   - method:scope-t2i
   - method:rpo
@@ -32,6 +33,8 @@ methods:
   - method:rewardverse
   - method:a2d
 redirects:
+  - when: "distributional regularization for diffusion/flow reward FT (DFR)"
+    to: "method:dfr"
   - when: "Schedule-Free / LR decay vs EMA (not reward alignment)"
     to: "method:schedule-free-diffusion"
   - when: "semantic-span-bounded GRPO prompt rewriting for T2I (SCOPE)"
@@ -54,7 +57,7 @@ redirects:
     to: "task:continuous-diffusion-lm-pretrain"
   - when: "dLLM RL that forks from high-entropy intermediate states (ForkGRPO)"
     to: "method:forkgrpo"
-last_reviewed: '2026-10-19'
+last_reviewed: '2026-10-20'
 tags:
   - diffusion
   - post-training
@@ -80,3 +83,4 @@ Aligning generative diffusion and flow models with downstream reward functions (
 
 - **Optional T2I span-pooled GRPO**: `method:scope-t2i` (`arXiv:2610.22264`). +9.48% GeneVal / +7.62% T2I-CompBench vs GRPO. Code MAC-AutoML/SCOPE. Distinct from `method:scope-opsd`. Does not replace DiffusionOPSD / Self-OPD.
 - **Optional attention-routing diffusion RL**: `method:rpo` (`arXiv:2610.22282`). Nearly 4x vs Flow-GRPO-style. Distinct from skipped 2610.17767. Does not replace DiffusionART / MEND.
+- **Optional distributional reward FT regularizer**: `method:dfr` (`arXiv:2610.24897`). MMD / Frechet / DreamSim vs reverse-KL velocity penalty. SD3.5-M +29% diversity, 36-41x vs Flow-GRPO. Does not replace DiffusionOPSD, Self-OPD, or MEND.

@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "NVFP4 data-flow LoRA on Blackwell consumer GPUs (PACT; not Actor-then-Critic)"
+    reason: "This PACT is Actor-then-Critic token credit; NVFP4 LoRA is method:pact-nvfp4-lora"
+    use_instead: "method:pact-nvfp4-lora"
   - when: "multi-sample dense Pass@1 RLVR default"
     reason: "CISPO remains Pass@1; PACT is an actor-critic / credit-alignment recipe"
     use_instead: "method:cispo"

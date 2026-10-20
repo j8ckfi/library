@@ -13,6 +13,8 @@ out_of_scope:
   - "Speculative draft co-train inside long-context RL (Online Draft Co-Training / NeMo RL)"
   - "Input-heavy agentic / KV-compressed CED MoE serving (DeepSeek-V4.1-Flash)"
 redirects:
+  - when: "causal self-recursion MTP without auxiliary heads (ECHO)"
+    to: "method:echo-mtp"
   - when: "aligning text-to-image diffusion or flow models with rewards"
     to: "task:posttrain-diffusion"
   - when: "choosing the ~7B dense pretrain optimizer"
@@ -33,9 +35,10 @@ current_sota:
     value: "SWE-Verified 68.4 vs DiffusionGemma 18.7; system 5255 tok/s vs 1136 / 1197; Uno Qwen 1.6× vs base AR at max batch"
     notes: "Uno (2609.04010). Does not replace DiffusionOPSD/Self-OPD, Muon2, or CISPO."
 methods:
+  - method:echo-mtp
   - method:uno
   - method:online-draft-cotrain
-last_reviewed: "2026-09-14"
+last_reviewed: '2026-10-20'
 tags:
   - efficiency
   - inference
@@ -56,3 +59,4 @@ AR next-token prediction is sequential. Speculative decoding needs a separate dr
 ## SOTA Recommendation (as of 2026-09-08)
 - **Primary Method**: **Uno** (`method:uno`, `paper:uno` `arXiv:2609.04010`) Diffusion Distillation + $\Psi$-Spec. Code: ifm-ai/uno.
 - **Not This Task**: `method:diffusion-opsd` / `method:self-opd` remain image/flow post-train; `method:canvasanneal` is discrete-dLM curriculum RL on that image/flow task, not this AR serving hop; `method:muon2` remains the 7B optimizer; `method:cispo` remains Pass@1 RLVR.
+- **Optional backbone MTP self-recursion**: `method:echo-mtp` (`arXiv:2610.24766`). ECHO-1.5(3) matches ECHO-3 at half MTP overhead. Does not replace Uno.

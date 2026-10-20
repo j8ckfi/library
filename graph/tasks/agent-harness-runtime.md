@@ -16,6 +16,8 @@ out_of_scope:
   - "Recursive self-rewrite of a research-agent harness (AIDE2)"
   - "Harness curriculum as a non-stationary bandit over failure-pattern arms (ActiveSaddler)"
 redirects:
+  - when: "just-in-time rubric training harness co-evolving with the policy (HarnessRL)"
+    to: "method:harnessrl"
   - when: "alternating harness+policy optimization (Self-HPO)"
     to: "method:self-hpo"
   - when: "hypothesis-tree recursive scientific RSI (DiscoveryRSI)"
@@ -46,7 +48,7 @@ redirects:
     to: "method:activesaddler"
   - when: "recurrent textual harness for agentic continual learning (not the production kernel)"
     to: "method:reharness"
-last_reviewed: '2026-10-19'
+last_reviewed: '2026-10-20'
 current_sota:
   - method: method:omp2-harness
     as_of: "2026-09-02"
@@ -55,6 +57,7 @@ current_sota:
     value: "2 correct of 78 Pi examples (60 stateless, 17 stateful); journal covering message tree only ⇒ rewind/fork/resume lie"
     notes: "Self-reported blog architecture, not a SWE-bench number. Does not replace mini-SWE-agent, CCA, OpenHands, SAO, FoldGRPO, RLM, MAGIC, CISPO, Muon2, MCP, or ACE."
 methods:
+  - method:harnessrl
   - method:self-hpo
   - method:discoveryrsi
   - method:terminal-rsi
@@ -104,4 +107,4 @@ This is **not** the SWE-bench start/eval loop. Issue → patch / locked mini har
 - **Optional formal Harness RSI**: `method:harness-rsi` (`arXiv:2610.18813`). PAC admission bounds. Code zgcagi/Harness-RSI. Does not replace omp2 or RRSI.
 - **Optional alternating harness-policy RSI**: `method:self-hpo` (`arXiv:2610.22791`). Qwen3.5-35B-A3B 57.8→64.8. Does not replace omp2 or Harness-RSI.
 - **Optional scientific hypothesis RSI**: `method:discoveryrsi` (`arXiv:2610.23839`). DFM-Bench 4.86→5.39; code Gen-Verse/DiscoveryRSI. Does not replace omp2 or Terminal-RSI.
-
+- **Optional just-in-time rubric harness**: `method:harnessrl` (`arXiv:2610.26426`). Qwen3.5-4B Rubric-Mix-10k 64.5 / 49.8 OOD. Code Tongyi-ConvAI/Qwen-Character/HarnessRL. Does not replace omp2, Self-HPO, or CANOPY.

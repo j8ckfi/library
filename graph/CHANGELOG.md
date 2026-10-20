@@ -6,6 +6,105 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-10-20 — weekday SOTA sweep (Polar Switch, miniTE, SPOD, Arctic-SWE, TAR, ToolOPD, HarnessRL; secondaries T-MUON, AdamPM, NVFP4 recipe, PACT NVFP4 LoRA, Agentic RL Data Scaling, CD-OPD, LOOP, ECHO, FrameGRPO, EG-GRPO, DFR, Bridged Self-Distillation, ProbePO; notes OPDArena, What RL Brings, GRPO vs RFT, Off-Policy PG Anatomy)
+- Twenty active plug-ins and four paper-only notes. No current_sota retarget (Muon2 / CISPO / OPD / Open-MOPD / SAPO / SAO / CANOPY / SCALE / Quartet-II / AQLoRA-Q / Iris / Uno / OraRL / omp2 / RecreationWorld / Claude computer-use / Miles / mini-SWE-agent / DiffusionOPSD / Self-OPD / CodeMidas / BPCO).
+- Window: 2026-10-20 Librarian weekday sweep after merged PR 47 (watermark 2610.23839, 1514 nodes, b8430c0). arXiv cs.LG/cs.CL/cs.AI new listing Tue 2026-10-20 (2610.23857-2610.26863) plus HF Daily 2026-10-19 and 2026-10-20. New high id 2610.26863.
+- SKIP (already skipped 2026-10-19): LEV 2610.20951; Embeddings Are Overpriced 2610.22428.
+- SKIP (considered, not ingested): Muon EoS 2610.24305 (CIFAR-10); statistical Adam/Shampoo/Muon 2610.24839; DP-Muon 2610.24736; LIRQuant 2610.25675; 2-bit n-gram 2610.21810; protein LMs 2610.26651 / 2610.26747; CoworkEnv 2610.24960 (WIP env); TokenGate 2610.26754 (serving); Nash-MOPD 2610.26124; AsyncOPSD 2610.25880; RARE 2610.25434 (HarnessRL covers); LIFT 2610.24229; CSPO 2610.25092; Aperture 2610.25325; RIDGE 2610.25330; C-OPSD 2610.25842; DeGMatch 2610.24963; KronLSTM 2610.26834; RoAR-VAE 2610.26216; GCD SFT 2610.25497; DisaggKD 2610.17644; Halcyon T2I 2610.26863; BatchParScale 2610.25254; TamedFlow 2610.26025; Frechet Forcing 2610.25666; PEFT-MoE empirical 2610.26370; Cache2LoRA 2610.24107; UC-RAMP 2610.25717; WSR-Tune 2610.26443; Codpula 2610.25723; PRECOCIAL 2610.24970; safety mid-training 2610.26809; looped BPTT 2610.26030; internalizing CoT looped 2610.25998; curriculum implicit reasoning 2610.25612; data selection context extension 2610.24469; productive state-space 2610.25957; adaptive decoding RL 2610.25860; targeted CPT 2610.25836; RSRL 2610.25850; PGB 2610.25704; FRDA 2610.26685; Dynalize 2610.26496; visual OPSD 2610.26856; Fisher MOPD 2610.26525; APSD 2610.25973.
+
+
+### 2026-10-20 — ingest method:polar-switch (active on task:llm-pretraining-optimization; does not supersede method:muon2)
+- Added paper:polar-switch , method:polar-switch, recipe:polar-switch (`code_status: released`).
+- Status active (`sota_for: []`). 15.5-18.7% lower Polar Express runtime; code zhehangdu/polar-switch.
+
+### 2026-10-20 — ingest method:t-muon (active on task:llm-pretraining-optimization; does not supersede method:muon2)
+- Added paper:t-muon , method:t-muon, recipe:t-muon (`code_status: none`).
+- Status active (`sota_for: []`). head-wise identity t-Muon lowest FineWeb val PPL 51M-1.3B.
+
+### 2026-10-20 — ingest method:adampm (active on task:full-param-memory-efficient-pretrain; does not supersede method:scale / method:muon2)
+- Added paper:adampm , method:adampm, recipe:adampm (`code_status: released`).
+- Status active (`sota_for: []`). second-moment memory 1/s of Adam; code jixiaowei95/AdamPM.
+
+### 2026-10-20 — ingest method:minite (active on task:fp4-rl-train-rollout-alignment; does not supersede method:quartet-ii / method:trace / method:triage)
+- Added paper:minite , method:minite, recipe:minite (`code_status: none`).
+- Status active (`sota_for: []`). 33540 tok/s; 1.39x BF16 on Qwen3-30B-A3B NVFP4 RL.
+
+### 2026-10-20 — ingest method:nvfp4-pretrain-recipe (active on task:fp4-hardware-training; does not supersede method:quartet-ii)
+- Added paper:nvfp4-pretrain-recipe , method:nvfp4-pretrain-recipe, recipe:nvfp4-pretrain-recipe (`code_status: none`).
+- Status active (`sota_for: []`). stacked NVFP4 recipe vs NVIDIA 2025 / Quartet-II / TetraJet at 8B and 30B-A3B.
+
+### 2026-10-20 — ingest method:pact-nvfp4-lora (active on task:4bit-peft-quantization; does not supersede method:aqlora-q / method:pact)
+- Added paper:pact-nvfp4-lora , method:pact-nvfp4-lora, recipe:pact-nvfp4-lora (`code_status: none`).
+- Status active (`sota_for: []`). NVFP4 GEMMs ~6-7x BF16 on 16 GB RTX 5080; name collides with Actor-then-Critic PACT.
+
+### 2026-10-20 — ingest method:agentic-rl-data-scaling (active on task:coding-agent-rl-environment-construction; does not supersede method:codemidas / method:canopy)
+- Added paper:agentic-rl-data-scaling , method:agentic-rl-data-scaling, recipe:agentic-rl-data-scaling (`code_status: none`).
+- Status active (`sota_for: []`). D_E* ∝ C^0.34; D_T* ∝ C^0.27; D_τ* ∝ C^0.13; N* ∝ C^0.26.
+
+### 2026-10-20 — ingest method:tar-rlvr (active on task:math-code-rl-dense; does not supersede method:cispo / method:expdis)
+- Added paper:tar-rlvr , method:tar-rlvr, recipe:tar-rlvr (`code_status: released`).
+- Status active (`sota_for: []`). adaptive replay of undersampled correct RLVR modes; code wenzhilics/tar.
+
+### 2026-10-20 — ingest method:spod (active on task:student-distillation; does not supersede method:opd / method:canopy)
+- Added paper:spod , method:spod, recipe:spod (`code_status: released`).
+- Status active (`sota_for: []`). +15.2 pp vs OPD; ALFWorld 16.5→82.8 peak; code Jike338/SPOD.
+
+### 2026-10-20 — ingest method:toolopd (active on task:student-distillation; does not supersede method:opd / method:slca-grpo)
+- Added paper:toolopd , method:toolopd, recipe:toolopd (`code_status: released`).
+- Status active (`sota_for: []`). outcome-asymmetric action-token OPD; code MagicAgent-Search/ToolOPD.
+
+### 2026-10-20 — ingest method:cd-opd (active on task:student-distillation; does not supersede method:opd / method:branchopd)
+- Added paper:cd-opd , method:cd-opd, recipe:cd-opd (`code_status: none`).
+- Status active (`sota_for: []`). +1.32 to +7.05 pp; CFR -27.4% to -56.4%.
+
+### 2026-10-20 — ingest method:arctic-swe (active on task:agentic-async-rl; does not supersede method:sao / method:miles / method:mini-swe-agent)
+- Added paper:arctic-swe , method:arctic-swe, recipe:arctic-swe (`code_status: none`).
+- Status active (`sota_for: []`). Qwen3.5-4B SWE-bench Verified 62.0% raw / 65.0 curated.
+
+### 2026-10-20 — ingest method:harnessrl (active on task:agent-harness-runtime; does not supersede method:omp2-harness / method:canopy)
+- Added paper:harnessrl , method:harnessrl, recipe:harnessrl (`code_status: released`).
+- Status active (`sota_for: []`). Qwen3.5-4B Rubric-Mix-10k 64.5 / 49.8 OOD; code Tongyi-ConvAI/Qwen-Character/HarnessRL.
+
+### 2026-10-20 — ingest method:echo-mtp (active on task:diffusion-augmented-ar; does not supersede method:uno)
+- Added paper:echo-mtp , method:echo-mtp, recipe:echo-mtp (`code_status: none`).
+- Status active (`sota_for: []`). ECHO-1.5(3) matches ECHO-3 at half MTP overhead.
+
+### 2026-10-20 — ingest method:framegrpo (active on task:rl-video-mllm; does not supersede method:orarl)
+- Added paper:framegrpo , method:framegrpo, recipe:framegrpo (`code_status: none`).
+- Status active (`sota_for: []`). complementary frame-set GRPO plus gated temporal credit.
+
+### 2026-10-20 — ingest method:eg-grpo (active on task:web-search-agent-rl; does not supersede method:iris / method:gca)
+- Added paper:eg-grpo , method:eg-grpo, recipe:eg-grpo (`code_status: none`).
+- Status active (`sota_for: []`). evidence-claim step rewards mixed with GRPO.
+
+### 2026-10-20 — ingest method:loop-opd (active on task:student-distillation; does not supersede method:opd)
+- Added paper:loop-opd , method:loop-opd, recipe:loop-opd (`code_status: none`).
+- Status active (`sota_for: []`). Qwen3-4B-Instruct +7.37 / +9.10 / +6.34 pp at 15/20/25% prune.
+
+### 2026-10-20 — ingest method:dfr (active on task:posttrain-diffusion; does not supersede method:diffusion-opsd / method:self-opd / method:mend)
+- Added paper:dfr , method:dfr, recipe:dfr (`code_status: none`).
+- Status active (`sota_for: []`). up to +29% diversity; 36-41x vs Flow-GRPO on SD3.5-M.
+
+### 2026-10-20 — ingest method:bridged-self-distill (active on task:student-distillation; does not supersede method:opd / method:cross-tokenizer-opd)
+- Added paper:bridged-self-distill , method:bridged-self-distill, recipe:bridged-self-distill (`code_status: released`).
+- Status active (`sota_for: []`). trace-conditioned self-teacher without teacher logp; code TUMLegalTech/Bridged-Self-Distillation.
+
+### 2026-10-20 — ingest method:probe-po (active on task:math-code-rl-dense; does not supersede method:cispo / method:bpco)
+- Added paper:probe-po , method:probe-po, recipe:probe-po (`code_status: none`).
+- Status active (`sota_for: []`). 16/18 wins; 76% less time vs VinePPO.
+
+### 2026-10-20 — ingest paper:opdarena (note on task:student-distillation; does not retarget method:opd)
+- Added paper:opdarena (methods: [method:opd]). RLVR teachers retain prior skills; SFT teachers forget more; code StellarCurtain/OPDArena.
+
+### 2026-10-20 — ingest paper:what-rl-brings (note on task:math-code-rl-dense; does not retarget method:cispo)
+- Added paper:what-rl-brings (methods: [method:cispo]). ~4% greedy disagreements recover 90.5% of GRPO pass@1; code CyrusZhang04/WhatRLBrings.
+
+### 2026-10-20 — ingest paper:grpo-vs-rft (note on task:math-code-rl-dense; does not retarget method:cispo)
+- Added paper:grpo-vs-rft (methods: [method:cispo]). GRPO beats 27-run-tuned RFT on a procedural counting task.
+
+### 2026-10-20 — ingest paper:off-policy-pg-anatomy (note on task:math-code-rl-dense; does not retarget method:cispo)
+- Added paper:off-policy-pg-anatomy (methods: [method:cispo]). off-policy PG consistency via trajectory IS or KL plus optimal-soft-value baseline.
+
 ### 2026-10-19 — weekday SOTA sweep (GR-OPD, TreeOPSD, MoEvolve, Self-HPO; secondaries BMuon, CCR, SimOPD, OPMD, MultiAgent-OPD, GCA, DiscoveryRSI, Ori, LED, MetaCurate, OpenMobile-2, MLExpert, Sigma-Delta, Lean4AgenticRL, Schedule-Free Diffusion, ToPA, MPT)
 - Twenty-one active plug-ins, five paper-only notes, and a Part I paper on Looped Models Done Right. No current_sota retarget (Muon2 / CISPO / OPD / Open-MOPD / SAPO / SAO / CANOPY / SCALE / Iris / omp2 / RecreationWorld / Claude computer-use / Sparse-BitNet / Representation Guidance / vanilla LoRA+rsLoRA+LR sweep / VISTA / OLMo-3 / A2D / single-agent-plus-tools).
 - Window: 2026-10-19 Librarian weekday sweep after merged PR 46 (watermark 2610.22282, ~1445 nodes, 187c774). arXiv cs.LG/cs.CL new listing Mon 2026-10-19 plus HF Daily 2026-10-16 tail and 2026-10-19. New high id 2610.23839.

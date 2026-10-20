@@ -10,6 +10,21 @@ sota_for:
 supersedes:
   - method:dapo
 do_not_use_for:
+  - when: "adaptive replay for RLVR reasoning diversity (TAR)"
+    reason: "CISPO remains Pass@1; TAR replays undersampled correct modes"
+    use_instead: "method:tar-rlvr"
+  - when: "sparse prefix probes then redistributed GRPO credit (ProbePO)"
+    reason: "CISPO remains Pass@1; ProbePO is critic-free segment credit on a GRPO host"
+    use_instead: "method:probe-po"
+  - when: "what RL brings to reasoning (sparse decision replace)"
+    reason: "Gotcha: most GRPO pass@1 lives in ~4% of greedy tokens; does not retarget CISPO"
+    use_instead: "paper:what-rl-brings"
+  - when: "GRPO vs rejection-sampling FT controlled comparison"
+    reason: "Gotcha: GRPO still beats tuned RFT on a procedural task; does not retarget CISPO"
+    use_instead: "paper:grpo-vs-rft"
+  - when: "anatomy of off-policy PG (IS / KL / baselines)"
+    reason: "Gotcha on off-policy PG consistency; does not retarget CISPO"
+    use_instead: "paper:off-policy-pg-anatomy"
   - when: "single-rollout token credit via causal vs hindsight JSD (HP-RLVR)"
     reason: "CISPO remains Pass@1; HP-RLVR is G=1 hindsight credit"
     use_instead: "method:hp-rlvr"
@@ -84,6 +99,9 @@ do_not_use_for:
     use_instead: "method:rgpo"
 last_reviewed: "2026-10-09"
 papers:
+  - paper:what-rl-brings
+  - paper:grpo-vs-rft
+  - paper:off-policy-pg-anatomy
   - paper:hp-rlvr
   - paper:rlvr-momentum
   - paper:two-clocks-rlvr

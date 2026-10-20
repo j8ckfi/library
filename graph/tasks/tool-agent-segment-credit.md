@@ -12,6 +12,8 @@ out_of_scope:
   - "Which multi-turn call is trainable (Critical-State RL)"
   - "Single-turn math/code Pass@1 RLVR (CISPO)"
 redirects:
+  - when: "credit-aware tool-use OPD (ToolOPD), not tool vs summary split"
+    to: "method:toolopd"
   - when: "context folding of a long tool trajectory"
     to: "task:long-horizon-tool-agent"
   - when: "variable environment latency / async stragglers"
@@ -34,6 +36,7 @@ current_sota:
     value: "+2.53 pp / +1.36 pp / +9.15 pp"
     notes: "SLCA-GRPO (2609.29050). Method status active. Does not replace FoldGRPO, SAO, PACT, Critical-State RL, or CISPO."
 methods:
+  - method:toolopd
   - method:treehca
   - method:slca-grpo
   - method:foldgrpo
@@ -42,7 +45,7 @@ methods:
   - method:critical-state-rl
   - method:cispo
   - method:adastep
-last_reviewed: "2026-10-12"
+last_reviewed: '2026-10-20'
 tags:
   - post-training
   - agentic
@@ -65,3 +68,4 @@ Tool-calling rollouts mix structured tool invocations with a user-facing natural
 - **Optional per-state step-advantage shrinkage**: `method:adastep` (`arXiv:2610.03223`). Qwen3-4B vs GiGPO 93.01/86.58/88.76/80.27/48.70 vs 88.02/83.07/87.34/78.28/46.67. Mention on `task:outcome-only-long-horizon-agent-rl`. Does not replace SLCA-GRPO.
 - **Not This Task**: `method:foldgrpo` remains folding; `method:sao` remains async stragglers; `method:pact` remains Actor-then-Critic token credit; `method:critical-state-rl` remains which-turn trainability; `method:cispo` remains Pass@1.
 - **Related tree hindsight credit (not this structural split)**: `method:treehca` (`arXiv:2610.12828`) on `task:outcome-only-long-horizon-agent-rl`. Turn-level backup from reference-answer likelihood, not tool vs summary. Does not replace SLCA-GRPO.
+- **Related credit-aware tool OPD (not this GRPO split)**: `method:toolopd` (`arXiv:2610.25693`) on `task:student-distillation`. Does not replace SLCA-GRPO.

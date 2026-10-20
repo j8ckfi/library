@@ -15,6 +15,10 @@ out_of_scope:
   - "Data/env construction for coding-agent RL from source code (CodeMidas)"
   - "Multi-stage agent continual learning (ACLArena)"
 redirects:
+  - when: "success-preserving agentic OPD overshoot (SPOD), not AppWorld coverage"
+    to: "method:spod"
+  - when: "just-in-time rubric training harness (HarnessRL), not CANOPY coverage"
+    to: "method:harnessrl"
   - when: "tree-aware posterior self-distillation for long-horizon agent RL (TreeOPSD)"
     to: "method:treeopsd"
   - when: "Lean4 multi-level process rewards for SWE/terminal agent RL (Lean4AgenticRL)"
@@ -87,6 +91,8 @@ current_sota:
     value: "86.9 / 67.6"
     notes: "CANOPY (2609.01245). Sparse outcome reward, n=32, KL-anchored on-policy. Does not replace SAO, FoldGRPO, CISPO, mini-swe-agent, or omp2-harness. DRACO is the outcome-blind rubric sibling, not a supersession."
 methods:
+  - method:spod
+  - method:harnessrl
   - method:treeopsd
   - method:lean4-agentic-rl
   - method:sero
@@ -121,7 +127,7 @@ methods:
   - method:scad
   - method:metarubric
   - method:hierarchical-moe-routing-control
-last_reviewed: '2026-10-19'
+last_reviewed: '2026-10-20'
 tags:
   - post-training
   - agentic
@@ -176,4 +182,5 @@ Two siblings share this task and are not substitutes:
 - **Optional executable oracle continuations**: `method:sero` (`arXiv:2610.19397`). 1.5B GraphGPO ALFWorld 90.63/88.02→95.83/91.67. No public code. Does not replace CANOPY.
 - **Optional tree-aware posterior self-distill**: `method:treeopsd` (`arXiv:2610.23181`). Qwen3-30B-A3B Deep Research +4.97 vs GRPO. Does not replace CANOPY.
 - **Optional Lean4 process-reward agent RL**: `method:lean4-agentic-rl` (`arXiv:2610.22448`). LAR-27B TB2.1 77.3%. Does not replace CANOPY or Terminal-RSI.
-
+- **Related success-preserving agentic OPD (not this coverage default)**: `method:spod` (`arXiv:2610.25034`) on `task:student-distillation`. ALFWorld overshoot then erosion without SPOD. Does not replace CANOPY.
+- **Related JIT rubric harness (not this coverage default)**: `method:harnessrl` (`arXiv:2610.26426`) on `task:agent-harness-runtime`. Does not replace CANOPY or DRACO.

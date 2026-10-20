@@ -10,6 +10,8 @@ out_of_scope:
   - "Native FP4 hardware training from scratch (Quartet-II)"
   - "Quality LoRA on 24GB (vanilla LoRA + rsLoRA + LR sweep)"
 redirects:
+  - when: "Adam second-moment pooling (AdamPM)"
+    to: "method:adampm"
   - when: "drift-aware streaming k-PCA GaLore-family low-rank LLM training (Ori)"
     to: "method:ori"
   - when: "losslessly compressed GPU train tensors (LCT Huffman)"
@@ -42,6 +44,7 @@ current_sota:
     value: "Default SOTA for memory-efficient full-parameter training"
     notes: "SCALE (2506.16659, ICML 2026) not GaLore."
 methods:
+  - method:adampm
   - method:ori
   - method:lct
   - method:pmrc
@@ -53,7 +56,7 @@ methods:
   - method:scale
   - method:galore
   - method:taco
-last_reviewed: '2026-10-19'
+last_reviewed: '2026-10-20'
 tags:
   - efficiency
   - optimizer
@@ -73,4 +76,4 @@ tags:
 
 - **Optional lossless GPU train tensors**: `method:lct` (`arXiv:2610.22179`). NanoGPT −24.6% mem / +7.2% step-time; Qwen3-4B −23.8% peak. No public code. Does not replace SCALE.
 - **Optional streaming k-PCA low-rank**: `method:ori` (`arXiv:2610.22794`). Up to 69.3% gap cut vs prior GaLore-family on 1B LLaMA. No SCALE bake-off. Does not replace SCALE.
-
+- **Optional Adam second-moment pooling**: `method:adampm` (`arXiv:2610.24598`). Second-moment memory 1/s of Adam. Code jixiaowei95/AdamPM. No SCALE bake-off. Does not replace SCALE or Muon2.

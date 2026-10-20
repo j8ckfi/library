@@ -7,6 +7,12 @@ status: sota
 sota_for:
   - task:fp4-hardware-training
 do_not_use_for:
+  - when: "NVFP4 pretrain recipe ingredients at 8B / 30B-A3B"
+    reason: "Quartet-II remains native FP4 training SOTA; this card is a recipe ablation"
+    use_instead: "method:nvfp4-pretrain-recipe"
+  - when: "native NVFP4 RL execution alignment (miniTE)"
+    reason: "Quartet-II is pretrain; miniTE is NVFP4 RL execution alignment"
+    use_instead: "method:minite"
   - when: "FP4 RL train-side vs rollout-side quantization mismatch"
     reason: "Quartet-II is native FP4 hardware training from scratch; TRACE / TRIAGE own RL train–rollout alignment"
     use_instead: "task:fp4-rl-train-rollout-alignment"

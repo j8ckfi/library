@@ -12,6 +12,8 @@ out_of_scope:
   - "Frontier RL post-train engine (Miles)"
   - "W4A4 PTQ noise law (KBBQ)"
 redirects:
+  - when: "native NVFP4 RL execution alignment (miniTE)"
+    to: "method:minite"
   - when: "native FP4 forward/backward hardware training from scratch, not RL train–rollout mismatch"
     to: "task:fp4-hardware-training"
   - when: "single-turn dense math/code Pass@1 RLVR"
@@ -36,6 +38,7 @@ current_sota:
     value: "up to 2.3×"
     notes: "TRIAGE (2610.07043). Dual-active with TRACE. Method status active. No head-to-head vs TRACE."
 methods:
+  - method:minite
   - method:kv4-rl
   - method:trace
   - method:triage
@@ -43,7 +46,7 @@ methods:
   - method:mxfp4-mi355x
   - method:sapo
   - method:cispo
-last_reviewed: '2026-10-14'
+last_reviewed: '2026-10-20'
 tags:
   - post-training
   - quantization
@@ -69,3 +72,4 @@ This is **not** native FP4 hardware training from scratch.
 - **Primary (direction-aware NVFP4 mismatch, this task only)**: **TRIAGE** (`method:triage`, `paper:triage` `arXiv:2610.07043`). Status `active`. Dual-active with TRACE.
 - **Not This Task**: `method:quartet-ii` remains native FP4 hardware training; `method:cispo` / `method:sapo` remain the RL losses.
 - **Optional INT4 KV rollout cache (not this first hop)**: `method:kv4-rl` (`arXiv:2610.14448`). 1.80× rollout vs BF16 KV on Qwen3-8B-Base GRPO; naive INT4 −5.24pp MATH-500 even with TIS. No public code. Does not replace TRACE / TRIAGE.
+- **Optional native NVFP4 RL execution path**: `method:minite` (`arXiv:2610.23928`). Qwen3-30B-A3B 33540 tok/s, 1.39x BF16. Weight/format match is not enough. Dual-active with TRACE/TRIAGE. Does not replace Quartet-II.

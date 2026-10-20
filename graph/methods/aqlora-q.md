@@ -9,6 +9,10 @@ sota_for:
   - task:4bit-peft-quantization
 supersedes:
   - method:qlora
+do_not_use_for:
+  - when: "NVFP4 data-flow LoRA on Blackwell consumer GPUs (PACT; not Actor-then-Critic)"
+    reason: "AQLoRA-Q remains the 4-bit PEFT default; PACT is NVFP4 GEMM LoRA"
+    use_instead: "method:pact-nvfp4-lora"
 papers:
   - paper:aqlora
 recipes:

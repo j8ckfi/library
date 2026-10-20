@@ -11,6 +11,12 @@ supersedes:
   - method:muon
   - method:muon-scalable
 do_not_use_for:
+  - when: "fast Muon polar-factor polynomial circuits (Polar Switch)"
+    reason: "Muon2 remains the 7B default; Polar Switch is a faster polar-factor polynomial"
+    use_instead: "method:polar-switch"
+  - when: "t-SVD tensorized Muon for pretraining (T-MUON)"
+    reason: "Muon2 remains the 7B default; T-MUON groups related matrices into t-SVD tensors"
+    use_instead: "method:t-muon"
   - when: "Muon spectral budget for structured MLP prune (BMuon)"
     reason: "Muon2 remains the 7B default; BMuon budgets spectral geometry for compressibility"
     use_instead: "method:bmuon"

@@ -11,6 +11,8 @@ out_of_scope:
   - "Multi-teacher capability merging (Open-MOPD)"
   - "OPD used as a safety-alignment trainer (backdoor risk note)"
 redirects:
+  - when: "trace-bridged self-distillation when teacher logp is missing (not 1:1 coverage)"
+    to: "method:bridged-self-distill"
   - when: "credit alignment after chunk correspondence for cross-tokenizer OPD (CAST)"
     to: "method:cast"
   - when: "same-tokenizer single-teacher matching distillation"
@@ -27,12 +29,13 @@ current_sota:
     value: "strict 1:1 covers 85.57–96.98% of student tokens; k=16 retains ≥96% of full shared-vocab OPD"
     notes: "Cross-Tokenizer OPD (2610.08448). Method status active. Does not replace OPD on same-tokenizer student distillation."
 methods:
+  - method:bridged-self-distill
   - method:cast
   - method:cross-tokenizer-opd
   - method:opd
   - method:sparse-opd-supervision
   - method:np-opd
-last_reviewed: "2026-10-12"
+last_reviewed: '2026-10-20'
 tags:
   - post-training
   - distillation
@@ -56,3 +59,4 @@ This is **not** same-tokenizer OPD and not privileged-teacher OPSD.
 - **Primary (this task only)**: **Cross-Tokenizer OPD** (`method:cross-tokenizer-opd`, `paper:cross-tokenizer-opd` `arXiv:2610.08448`). Status `active`. Listed here as first hop; method `sota_for` stays empty.
 - **Optional chunk-credit plug-in (not this coverage first hop)**: `method:cast` (`arXiv:2610.13257`) reweights student tokens inside aligned chunks so weights sum to the chunk advantage. +2.45 Mistral-7B / +1.32 Llama-3.1-8B vs strongest evaluated baseline. No public code. Does not replace Cross-Tokenizer OPD coverage or same-tokenizer OPD.
 - **Not This Task**: `method:opd` remains same-tokenizer matching; `method:vista` remains privileged-teacher OPSD.
+- **Related missing-logp bridge (not this 1:1 coverage hop)**: `method:bridged-self-distill` (`arXiv:2610.26397`) on `task:student-distillation`. Does not replace Cross-Tokenizer OPD or CAST.

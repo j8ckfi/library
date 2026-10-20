@@ -12,6 +12,10 @@ current_sota:
     value: "~2x token efficiency vs AdamW"
     notes: "Muon2 (2604.09967) + KL-SOAP (2607.20548) if memory allows."
 redirects:
+  - when: "fast Muon polar-factor polynomial circuits (Polar Switch)"
+    to: "method:polar-switch"
+  - when: "t-SVD tensorized Muon for pretraining (T-MUON)"
+    to: "method:t-muon"
   - when: "Muon spectral budget for structured MLP prune (BMuon)"
     to: "method:bmuon"
   - when: "optimizer-stage mismatch cost when switching AdamW and Muon"
@@ -63,6 +67,8 @@ redirects:
   - when: "finite Newton-Schulz plus epsilon loses Muon spectral max-margin"
     to: "paper:muon-ns-bias"
 methods:
+  - method:polar-switch
+  - method:t-muon
   - method:bmuon
   - method:flashmask-3
   - method:cast-ssc
@@ -98,7 +104,7 @@ methods:
   - method:muonio
   - method:adam-beta-cubic
   - method:bulkboost
-last_reviewed: '2026-10-19'
+last_reviewed: '2026-10-20'
 tags:
   - pretraining
   - optimizer
@@ -137,3 +143,5 @@ Pretraining modern neural network models involves minimizing cross-entropy loss 
 
 - **Optional structured-prune Muon geometry**: `method:bmuon` (`arXiv:2610.23571`). Inter-block channel budget; 1B FineWeb MLP prune beats Muon. No public code. Does not replace Muon2.
 - **Gotcha (optimizer switch cost)**: `paper:optimizer-switch-cost` (`arXiv:2610.22650`). 1.2B Llama-3 AdamW↔Muon interpolations; little mismatch penalty. Does not retarget Muon2.
+- **Optional Polar Switch orthogonalizer**: `method:polar-switch` (`arXiv:2610.26742`). 15.5-18.7% lower runtime vs Polar Express. Code zhehangdu/polar-switch. Does not replace Muon2.
+- **Optional t-SVD Muon**: `method:t-muon` (`arXiv:2610.24938`). Head-wise identity t-Muon on 51M-1.3B FineWeb. No public code. Does not replace Muon2.

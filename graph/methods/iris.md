@@ -8,6 +8,9 @@ sota_for:
   - task:web-search-agent-rl
 supersedes: []
 do_not_use_for:
+  - when: "evidence-guided step credit for deep-search agents (EG-GRPO)"
+    reason: "Iris remains the search-agent climbing recipe; EG-GRPO is evidence-claim step credit"
+    use_instead: "method:eg-grpo"
   - when: "grounded credit assignment for search vs answer tokens (GCA)"
     reason: "Iris remains SFT-RL climbing; GCA is a Search-R1-style credit split"
     use_instead: "method:gca"

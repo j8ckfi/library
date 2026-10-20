@@ -5,6 +5,8 @@ title: "Native FP4 Hardware Training"
 domain: "compression"
 summary: "End-to-end 4-bit floating-point forward and backward pass training on modern GPU accelerators."
 redirects:
+  - when: "NVFP4 pretrain recipe ingredients at 8B / 30B-A3B (not Quartet-II default)"
+    to: "method:nvfp4-pretrain-recipe"
   - when: "dual-scale calibration-free W+A PTQ for AR LLMs (not native FP4 training)"
     to: "method:dualquant"
   - when: "calibration-free dLLM quantization (SoloQ; mask/step activation shift)"
@@ -27,6 +29,7 @@ current_sota:
     value: "Co-Default SOTA for microscaling FP4"
     notes: "MXFP4 (2605.09825)."
 methods:
+  - method:nvfp4-pretrain-recipe
   - method:mixed-precision-scaling
   - method:dualquant
   - method:soloq
@@ -37,7 +40,7 @@ methods:
   - method:kbbq
   - method:trace
   - method:triage
-last_reviewed: '2026-10-14'
+last_reviewed: '2026-10-20'
 tags:
   - compression
   - quantization
@@ -56,3 +59,4 @@ tags:
 - **Not this task (FP4 RL train–rollout mismatch)**: `task:fp4-rl-train-rollout-alignment` / `method:trace` (`arXiv:2610.07767`) + `method:triage` (`arXiv:2610.07043`). Dual-active. Does not replace Quartet-II.
 
 - **Optional mixed-precision scaling law (not this training default)**: `method:mixed-precision-scaling` (`arXiv:2610.17637`). Separates capacity vs optimization-error of forward/backward quantization. Fwd-only NVFP4 +0.94–1.22% vs bwd-only +0.32–0.72% on 430M Qwen3 at 12.8B tokens. No public code. Does not replace Quartet-II / MXFP4.
+- **Optional NVFP4 pretrain recipe ablation**: `method:nvfp4-pretrain-recipe` (`arXiv:2610.24343`, ICML 2026 AdaptFM). Selective high-precision layers; stacked recipe vs NVIDIA 2025 / Quartet-II / TetraJet. Does not replace Quartet-II.

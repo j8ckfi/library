@@ -8,6 +8,9 @@ sota_for:
   - task:posttrain-diffusion
 supersedes: []
 do_not_use_for:
+  - when: "distributional regularization for diffusion/flow reward FT (DFR)"
+    reason: "DiffusionOPSD remains on-policy self-distill; DFR adds distributional rewards to reverse-KL FT"
+    use_instead: "method:dfr"
   - when: "flow-model RL via proximal velocity matching (~100 updates vs Flow-GRPO ~4k)"
     reason: "DiffusionOPSD remains image-policy OPSD; MEND is flow RL by proximal velocity matching"
     use_instead: "method:mend"

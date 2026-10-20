@@ -15,6 +15,8 @@ out_of_scope:
   - "Category-aware SWE expert RL on already-executable tasks (Category-Aware SWE Experts)"
   - "Mechanism-first stateful tool envs from solved math dynamics (VHD-Play)"
 redirects:
+  - when: "compute-optimal agentic RL env/task/trajectory allocation (not the env factory)"
+    to: "method:agentic-rl-data-scaling"
   - when: "evolving SWE trajectory filters (MetaCurate), not env construction from source"
     to: "method:metacurate"
   - when: "scalable SWE issue synthesis from historical bug fixes (SWE-at-Scale)"
@@ -47,6 +49,7 @@ current_sota:
     value: "DeepSWE 10.0→21.7; ProgramBench AS 4.5→21.5; TB v2.1 +8.5pp (63.7→72.2)"
     notes: "CodeMidas (2609.22068). Active env factory. Method status active (not sota). Does not replace CANOPY / SAO / Miles / mini-SWE-agent."
 methods:
+  - method:agentic-rl-data-scaling
   - method:metacurate
   - method:swe-at-scale
   - method:reterm
@@ -60,7 +63,7 @@ methods:
   - method:miles
   - method:category-aware-swe-experts
   - method:vhd-play
-last_reviewed: '2026-10-19'
+last_reviewed: '2026-10-20'
 tags:
   - post-training
   - agentic
@@ -90,3 +93,4 @@ This is **not** the SWE loop, not AppWorld coverage, and not an async trainer.
 - **Optional recovery-fork terminal RL (not this env-factory first hop)**: `method:reterm` (`arXiv:2610.18484`). ReTerm-9B TB2.0 Pass@1 34.8 (+14.6); SWE-Verified 58.4%. Code twothsnd/ReTerm. Does not replace CodeMidas, T1, or TerminalHorizon.
 
 - **Optional issue synthesis from historical fixes**: `method:swe-at-scale` (`arXiv:2610.21359`). Code cslsolow/SWE-at-scale. Does not replace CodeMidas.
+- **Optional agentic RL data-axis allocation**: `method:agentic-rl-data-scaling` (`arXiv:2610.23946`, NeurIPS 2026). D_E* ∝ C^0.34, D_T* ∝ C^0.27, D_τ* ∝ C^0.13, N* ∝ C^0.26. Does not replace CodeMidas or CANOPY.

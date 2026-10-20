@@ -5,6 +5,18 @@ title: "Small Local Student Distillation from Strong Teacher"
 domain: "post-training"
 summary: "Distilling reasoning and conversational capabilities from multi-hundred-billion parameter frontier teachers into small local student models."
 redirects:
+  - when: "success-preserving agentic OPD overshoot (SPOD)"
+    to: "method:spod"
+  - when: "credit-aware tool-use OPD (ToolOPD)"
+    to: "method:toolopd"
+  - when: "contextual-digest takeover OPD (CD-OPD)"
+    to: "method:cd-opd"
+  - when: "recovery-aligned iterative layer prune via OPD (LOOP)"
+    to: "method:loop-opd"
+  - when: "trace-bridged self-distillation when teacher logp is missing"
+    to: "method:bridged-self-distill"
+  - when: "OPD learning vs forgetting / teacher-source retention (OPDArena)"
+    to: "paper:opdarena"
   - when: "group-relative sequence credit for OPD (GR-OPD)"
     to: "method:gr-opd"
   - when: "relational / similarity OPD (SimOPD)"
@@ -139,6 +151,11 @@ current_sota:
     value: "83.4% headroom recovery in a single deployable student"
     notes: "Open-MOPD (2608.19098) fixes multi-teacher imbalance with token-share balancing and gap-aware dynamic budgeting."
 methods:
+  - method:spod
+  - method:toolopd
+  - method:cd-opd
+  - method:loop-opd
+  - method:bridged-self-distill
   - method:gr-opd
   - method:simopd
   - method:opmd
@@ -216,7 +233,7 @@ methods:
   - method:lmopd
   - method:latent-mopd
   - method:rp-opd
-last_reviewed: '2026-10-19'
+last_reviewed: '2026-10-20'
 tags:
   - post-training
   - distillation
@@ -309,3 +326,9 @@ Training small local students (1B–8B) from large teacher models (70B–405B) w
 - **Optional mechanism-level OPD**: `method:opmd` (`arXiv:2610.14022`). Student-compatible intermediate computation; highest average in three teacher-student settings. HF 10-16 tail. Does not replace OPD, RIDE, or Latent-MOPD.
 - **Optional hierarchical team OPD**: `method:multiagent-opd` (`arXiv:2610.23234`). Leader-Searcher-Answerer 38.68% macro avg@4. Does not replace OPD or single-agent-plus-tools.
 - **Related MoE bidirectional OPD (not this dense default)**: `method:moevolve` (`arXiv:2610.23185`) on `task:math-code-rl-moe`.
+- **Optional success-preserving agentic OPD**: `method:spod` (`arXiv:2610.25034`). Masks conflicting teacher supervision on protected successes. Up to +15.2 pp; ALFWorld 16.5→82.8 peak. Code Jike338/SPOD. Does not replace OPD or CANOPY.
+- **Optional credit-aware tool-use OPD**: `method:toolopd` (`arXiv:2610.25693`). Outcome-asymmetric action-token OPD + GRPO. Code MagicAgent-Search/ToolOPD. Does not replace OPD or SLCA-GRPO.
+- **Optional contextual-digest takeover OPD**: `method:cd-opd` (`arXiv:2610.25359`). +1.32 to +7.05 pp; CFR -27.4% to -56.4%. Lengthening takeover does not monotonically reduce CFR. Does not replace OPD or BranchOPD.
+- **Optional iterative layer prune via OPD**: `method:loop-opd` (`arXiv:2610.25679`). Qwen3-4B-Instruct +7.37 / +9.10 / +6.34 pp at 15/20/25% prune vs strongest one-shot. Does not replace OPD.
+- **Optional trace-bridged self-distill**: `method:bridged-self-distill` (`arXiv:2610.26397`). Privileged self-teacher from an external trace; no teacher logp. Code TUMLegalTech/Bridged-Self-Distillation. Does not replace OPD or Cross-Tokenizer OPD.
+- **Gotcha (OPD teacher source / forgetting)**: `paper:opdarena` (`arXiv:2610.25651`). RLVR teachers retain prior skills; SFT teachers forget more. Code StellarCurtain/OPDArena. Does not retarget OPD.

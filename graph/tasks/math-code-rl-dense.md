@@ -19,6 +19,16 @@ out_of_scope:
   - "Cancellation-aware off-policy sequence masking (CARM)"
   - "MCMC projection sampling then ordinary SFT (Sampling SFT)"
 redirects:
+  - when: "adaptive replay for RLVR reasoning diversity (TAR)"
+    to: "method:tar-rlvr"
+  - when: "sparse prefix probes then redistributed GRPO credit (ProbePO)"
+    to: "method:probe-po"
+  - when: "what RL brings to reasoning (sparse decision replace)"
+    to: "paper:what-rl-brings"
+  - when: "GRPO vs rejection-sampling FT controlled comparison"
+    to: "paper:grpo-vs-rft"
+  - when: "anatomy of off-policy PG (IS / KL / baselines)"
+    to: "paper:off-policy-pg-anatomy"
   - when: "short-window RLVR via concurrent verifiable problems (CCR)"
     to: "method:ccr"
   - when: "embedding-space directional exploration / anchored noise (EDEN)"
@@ -115,6 +125,8 @@ current_sota:
     value: "Default SOTA for Dense RL"
     notes: "CISPO via MiniMax-M1 (2506.13585) + ScaleRL (2510.13786)."
 methods:
+  - method:tar-rlvr
+  - method:probe-po
   - method:ccr
   - method:eden
   - method:hp-rlvr
@@ -182,7 +194,7 @@ methods:
   - method:mesh-learning
   - method:opsft
   - method:rgpo
-last_reviewed: '2026-10-19'
+last_reviewed: '2026-10-20'
 tags:
   - post-training
   - reasoning
@@ -262,3 +274,8 @@ Training dense language models to generate long chains of thought (CoT) and veri
 
 - **Optional embedding-space exploration**: `method:eden` (`arXiv:2610.16105`). Pass@256 avg +6.67 vs GRPO; 7B AIME25 +13.33. No public code. Does not replace CISPO.
 - **Gotcha (score centering under regularized IS)**: `paper:score-centering-pg` (`arXiv:2610.22263`). Token-level IS plus group-mean baseline is biased without score centering when the ratio is clipped/masked. Does not retarget CISPO.
+- **Optional RLVR diversity replay**: `method:tar-rlvr` (`arXiv:2610.24236`). Adaptive replay of undersampled correct modes. Code wenzhilics/tar. Does not replace CISPO or ExpDis.
+- **Optional sparse-probe GRPO credit**: `method:probe-po` (`arXiv:2610.24515`). 16/18 wins; 76% less time vs VinePPO. Does not replace CISPO or BPCO.
+- **Gotcha (what RL brings)**: `paper:what-rl-brings` (`arXiv:2610.24663`). ~4% greedy-token disagreements recover 90.5% of GRPO pass@1. Code CyrusZhang04/WhatRLBrings. Does not retarget CISPO.
+- **Gotcha (GRPO vs RFT)**: `paper:grpo-vs-rft` (`arXiv:2610.25812`). GRPO beats 27-run-tuned RFT on a procedural counting task. Does not retarget CISPO.
+- **Gotcha (off-policy PG anatomy)**: `paper:off-policy-pg-anatomy` (`arXiv:2610.25725`). Consistency needs trajectory IS or KL plus a baseline equal to the optimal soft value. Use with `paper:score-centering-pg`. Does not retarget CISPO.

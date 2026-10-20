@@ -9,6 +9,24 @@ sota_for:
 supersedes:
   - method:on-policy-distillation
 do_not_use_for:
+  - when: "success-preserving agentic OPD overshoot (SPOD)"
+    reason: "OPD remains matching; SPOD masks teacher conflict on protected successes"
+    use_instead: "method:spod"
+  - when: "credit-aware tool-use OPD (ToolOPD)"
+    reason: "OPD remains uniform token matching; ToolOPD is outcome-asymmetric action credit"
+    use_instead: "method:toolopd"
+  - when: "contextual-digest takeover OPD (CD-OPD)"
+    reason: "OPD remains takeover matching; CD-OPD inserts a teacher digest then meta-reweights"
+    use_instead: "method:cd-opd"
+  - when: "recovery-aligned iterative layer prune via OPD (LOOP)"
+    reason: "OPD remains matching; LOOP iterates prune and recover"
+    use_instead: "method:loop-opd"
+  - when: "trace-bridged self-distillation when teacher logp is missing"
+    reason: "OPD needs teacher logp; BSD uses a same-model self-teacher over an external trace"
+    use_instead: "method:bridged-self-distill"
+  - when: "OPD learning vs forgetting / teacher-source retention (OPDArena)"
+    reason: "Gotcha: SFT teachers forget more under OPD than RLVR teachers; does not retarget matching"
+    use_instead: "paper:opdarena"
   - when: "group-relative sequence credit for OPD (GR-OPD)"
     reason: "OPD remains matching; GR-OPD aggregates token feedback into sequence credit"
     use_instead: "method:gr-opd"
@@ -101,6 +119,7 @@ do_not_use_for:
     use_instead: "method:rp-opd"
 last_reviewed: '2026-10-19'
 papers:
+  - paper:opdarena
   - paper:opd-teacher-advantage
   - paper:pa1-opd
   - paper:criticopd

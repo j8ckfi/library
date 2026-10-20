@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "compute-optimal agentic RL env/task/trajectory allocation"
+    reason: "CodeMidas constructs envs; this card allocates synthesis budget across axes"
+    use_instead: "method:agentic-rl-data-scaling"
   - when: "programmatic checker exists and sparse outcome RL is the protocol (AppWorld TGC)"
     reason: "CANOPY remains the outcome-only first hop; CodeMidas constructs coding RL environments from source code"
     use_instead: "method:canopy"

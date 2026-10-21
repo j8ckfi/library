@@ -15,6 +15,8 @@ out_of_scope:
 - Text-to-image / flow reward alignment (DiffusionOPSD / Self-OPD)
 - Lossless multi-token / diffusion-augmented AR serving (Uno)
 redirects:
+- when: "Large Flow Language Models (Lafa blockwise flow from AR init)"
+  to: "method:lafa"
 - when: 16x DLM-vs-AR pretrain compute gap under ELBO vs exact likelihood (discrete MDM/BD3LM/E2D2)
   to: paper:dlm-ar-compute-gap
 - when: AR→discrete-dLLM on-policy distillation (JustOPD), not continuous pretrain
@@ -39,6 +41,7 @@ current_sota:
     (design-space, not a 7B bake-off). Method sota_for stays empty. Does not replace
     A2D or CanvasAnneal.
 methods:
+- method:lafa
 - method:justopd
 - method:semicat
 - method:a2d

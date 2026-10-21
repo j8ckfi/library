@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+- when: "Large Flow Language Models (Lafa blockwise flow from AR init)"
+  reason: "SemiCat remains the experimental continuous-DLM hop; Lafa is blockwise flow from AR"
+  use_instead: "method:lafa"
 - when: recycle an AR post-training weight delta onto a converted discrete dLLM
   reason: A2D remains discrete-dLLM AR-delta recycle; SemiCat is continuous diffusion
     LM pretrain
@@ -22,7 +25,7 @@ assumptions:
 - 'Continuous diffusion LM pretrain. Paper: TinyGSM plus 1.7B likelihood evals. Evidence
   is experimental (design-space, not a 7B bake-off).'
 - No public code as of 2026-10-13.
-last_reviewed: '2026-10-13'
+last_reviewed: '2026-10-21'
 papers:
 - paper:dlm-ar-compute-gap
 - paper:semicat

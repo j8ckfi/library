@@ -11,6 +11,9 @@ supersedes:
   - method:dora
   - method:delora
 do_not_use_for:
+  - when: "MuPACE Muon for LoRA (meta-learned global step size)"
+    reason: "Quality default remains vanilla LoRA + rsLoRA + LR sweep; MuPACE paces Muon LoRA"
+    use_instead: "method:mupace"
   - when: "block-wise Toeplitz adaptation (ToPA)"
     reason: "Quality default remains vanilla LoRA + rsLoRA + LR sweep; ToPA is block-wise Toeplitz PEFT"
     use_instead: "method:topa"

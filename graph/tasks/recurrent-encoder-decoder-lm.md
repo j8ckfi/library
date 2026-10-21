@@ -15,6 +15,8 @@ out_of_scope:
   - "Compute-matched MoE looping of middle layers (SMELT)"
   - "Elastic mixed-depth looped LM training (ELR)"
 redirects:
+  - when: "PAR progress-aligned recurrence for state-tracking length generalization"
+    to: "method:par"
   - when: "Huginn-style dense fixed-point looped LMs (learned depth prior, terminal KV sharing, cheaper RL from saved states)"
     to: "method:looped-models-done-right"
   - when: "standard dense ~7B NTP from scratch"
@@ -41,6 +43,7 @@ current_sota:
     value: "none reported"
     notes: "RLT (2026-09-12). Experimental. Report develops encoder memory + all-token recurrence; does not report measured results. Conceptual sibling of DeepSeek-V4.1-Flash CED, not a replacement."
 methods:
+  - method:par
   - method:elr
   - method:looped-models-done-right
   - method:recurrent-looped-transformer

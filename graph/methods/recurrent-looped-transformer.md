@@ -7,6 +7,9 @@ status: experimental
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "PAR progress-aligned recurrence for state-tracking length generalization"
+    reason: "RLT remains the CED experimental hop; PAR is state-tracking length-gen"
+    use_instead: "method:par"
   - when: "Huginn-style dense fixed-point looped LMs with measured KV sharing / cheaper RL"
     reason: "RLT remains the CED-recurrence experimental hop with no measurements; Looped Models Done Right is Huginn-style with 100M–1.6B numbers"
     use_instead: "method:looped-models-done-right"
@@ -32,7 +35,7 @@ assumptions:
   - "Causal encoder builds global KV; recurrent decoder carries H_t=(s_t, C_t^D) across every prompt and response token with no boundary reset."
   - "Reference config 48 encoder + 48 decoder layers; compatible attention/FFN weights may be shared across stages."
   - "Report dated 2026-09-12. No measured efficiency, scaling, or RL results. GitHub has PDFs and a site, not a trainer."
-last_reviewed: "2026-10-06"
+last_reviewed: '2026-10-21'
 papers:
   - paper:looped-models-done-right
   - paper:recurrent-looped-transformer

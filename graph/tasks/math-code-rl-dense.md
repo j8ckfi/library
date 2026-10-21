@@ -19,6 +19,12 @@ out_of_scope:
   - "Cancellation-aware off-policy sequence masking (CARM)"
   - "MCMC projection sampling then ordinary SFT (Sampling SFT)"
 redirects:
+  - when: "activation-space steering exploration for RLVR (ASE)"
+    to: "method:ase"
+  - when: "sparse RL relaxation for LLM reasoning (SpaRLax / soft-CoT)"
+    to: "method:sparlax"
+  - when: "reward misspecification vs CoT monitorability"
+    to: "paper:reward-misspecification-cot"
   - when: "adaptive replay for RLVR reasoning diversity (TAR)"
     to: "method:tar-rlvr"
   - when: "sparse prefix probes then redistributed GRPO credit (ProbePO)"
@@ -125,6 +131,8 @@ current_sota:
     value: "Default SOTA for Dense RL"
     notes: "CISPO via MiniMax-M1 (2506.13585) + ScaleRL (2510.13786)."
 methods:
+  - method:ase
+  - method:sparlax
   - method:tar-rlvr
   - method:probe-po
   - method:ccr

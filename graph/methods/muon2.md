@@ -11,6 +11,12 @@ supersedes:
   - method:muon
   - method:muon-scalable
 do_not_use_for:
+  - when: "hybrid momentum methods (HyMUON linear-plus-EMA then Newton-Schulz)"
+    reason: "Muon2 remains the 7B default; HyMUON orthogonalizes hybrid momentum"
+    use_instead: "method:hymuon"
+  - when: "Muon constant step sizes on strongly convex quadratics (gain/length regimes)"
+    reason: "Gotcha on constant-step Muon regimes; does not retarget Muon2"
+    use_instead: "paper:muon-constant-step"
   - when: "fast Muon polar-factor polynomial circuits (Polar Switch)"
     reason: "Muon2 remains the 7B default; Polar Switch is a faster polar-factor polynomial"
     use_instead: "method:polar-switch"
@@ -53,8 +59,9 @@ do_not_use_for:
   - when: "finite Newton-Schulz plus epsilon loses spectral max-margin"
     reason: "Gotcha on practical Muon NS; does not retarget the 7B default"
     use_instead: "paper:muon-ns-bias"
-last_reviewed: '2026-10-19'
+last_reviewed: '2026-10-21'
 papers:
+  - paper:muon-constant-step
   - paper:muon-ns-bias
   - paper:cast-ssc
   - paper:massive-activation-lifecycle

@@ -12,6 +12,10 @@ current_sota:
     value: "~2x token efficiency vs AdamW"
     notes: "Muon2 (2604.09967) + KL-SOAP (2607.20548) if memory allows."
 redirects:
+  - when: "hybrid momentum methods (HyMUON linear-plus-EMA then Newton-Schulz)"
+    to: "method:hymuon"
+  - when: "Muon constant step sizes on strongly convex quadratics (gain/length regimes)"
+    to: "paper:muon-constant-step"
   - when: "fast Muon polar-factor polynomial circuits (Polar Switch)"
     to: "method:polar-switch"
   - when: "t-SVD tensorized Muon for pretraining (T-MUON)"
@@ -67,6 +71,7 @@ redirects:
   - when: "finite Newton-Schulz plus epsilon loses Muon spectral max-margin"
     to: "paper:muon-ns-bias"
 methods:
+  - method:hymuon
   - method:polar-switch
   - method:t-muon
   - method:bmuon

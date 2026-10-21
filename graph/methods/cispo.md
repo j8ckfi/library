@@ -10,6 +10,15 @@ sota_for:
 supersedes:
   - method:dapo
 do_not_use_for:
+  - when: "activation-space steering exploration for RLVR (ASE)"
+    reason: "CISPO remains Pass@1; ASE diversifies GRPO rollouts"
+    use_instead: "method:ase"
+  - when: "sparse RL relaxation for LLM reasoning (SpaRLax / soft-CoT)"
+    reason: "CISPO remains discrete-token Pass@1; SpaRLax is soft-CoT RL"
+    use_instead: "method:sparlax"
+  - when: "reward misspecification vs CoT monitorability"
+    reason: "Gotcha: misspecified rewards degrade CoT monitors; does not retarget CISPO"
+    use_instead: "paper:reward-misspecification-cot"
   - when: "adaptive replay for RLVR reasoning diversity (TAR)"
     reason: "CISPO remains Pass@1; TAR replays undersampled correct modes"
     use_instead: "method:tar-rlvr"
@@ -97,8 +106,9 @@ do_not_use_for:
   - when: "adaptive ground-truth rationale scaffolding for sparse-reward RLVR"
     reason: "CISPO remains Pass@1; RGPO scaffolds GT rationales"
     use_instead: "method:rgpo"
-last_reviewed: "2026-10-09"
+last_reviewed: '2026-10-21'
 papers:
+  - paper:reward-misspecification-cot
   - paper:what-rl-brings
   - paper:grpo-vs-rft
   - paper:off-policy-pg-anatomy

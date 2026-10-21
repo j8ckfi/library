@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+- when: "activation-space steering exploration for RLVR (ASE)"
+  reason: "EDEN perturbs embeddings; ASE steers activation-difference clusters"
+  use_instead: "method:ase"
 - when: 'single-turn dense math/code Pass@1 with CISPO as the loss'
   reason: 'CISPO remains Pass@1; EDEN is a rollout-source explorer on GRPO'
   use_instead: method:cispo
@@ -19,7 +22,7 @@ do_not_use_for:
 assumptions:
 - 'GRPO-family math RLVR with small groups that collapse. Paper: Qwen2.5-0.5B / Math-1.5B / Math-7B, 8x H100, verl.'
 - 'Code: none found as of 2026-10-16.'
-last_reviewed: '2026-10-16'
+last_reviewed: '2026-10-21'
 papers:
 - paper:eden
 recipes:

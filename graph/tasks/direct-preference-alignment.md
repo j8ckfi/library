@@ -19,7 +19,10 @@ methods:
   - method:dpo
   - method:plc-dpo
   - method:ddo
-last_reviewed: "2026-09-14"
+redirects:
+  - when: "DPO hyperparameter landscape and transfer across scale"
+    to: "paper:dpo-hp-landscape"
+last_reviewed: '2026-09-14'
 tags:
   - post-training
   - preference-alignment

@@ -8,6 +8,9 @@ sota_for:
   - task:linear-time-sequence-modeling
 supersedes: []
 do_not_use_for:
+  - when: "Kronecker delta rule linear attention (KronLSTM; not an LSTM)"
+    reason: "Mamba-2 remains the architecture default; KronLSTM is xLSTM-family linear attention"
+    use_instead: "method:kronlstm"
   - when: "checkpoint + recent-input buffer for hybrid SSM decode"
     reason: "Mamba-2 remains the architecture default; ReplaySSM is a serving buffer on Mamba-2 / Gated DeltaNet"
     use_instead: "method:replayssm"

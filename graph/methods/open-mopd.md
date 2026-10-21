@@ -8,6 +8,9 @@ sota_for:
   - task:student-distillation
 supersedes: []
 do_not_use_for:
+  - when: "capability-aware multi-teacher OPD (CA-MOPD)"
+    reason: "Open-MOPD remains the library multi-teacher bake-off; CA-MOPD paper Open-MOPD numbers are not 83.4%"
+    use_instead: "method:ca-mopd"
   - when: "cross-teacher guarding of domain-routed MOPD (Road MOPD)"
     reason: "Open-MOPD remains token-share / gap-aware budget; Road MOPD uses non-routed teachers as critics"
     use_instead: "method:road-mopd"
@@ -38,7 +41,7 @@ do_not_use_for:
   - when: "representation-level (hidden-state) multi-teacher OPD"
     reason: "Open-MOPD remains token-share / gap-aware budget; Latent-MOPD matches specialist hidden states"
     use_instead: "method:latent-mopd"
-last_reviewed: "2026-10-09"
+last_reviewed: '2026-10-21'
 papers:
   - paper:road-mopd
   - paper:delta-mopd

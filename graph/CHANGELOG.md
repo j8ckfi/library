@@ -6,6 +6,120 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-10-21 — weekday SOTA sweep (CA-MOPD, ASE, Ask-to-Distill, Projected Distillation, RSD, OPTD, AP-OPD, R2S, HyMUON, E8-QAT, MuPACE, RiseHarness, MaD-RSI, FALCA, Self-Credit, TrajEvolve, AtomSD, PAR, Lafa, DStill, SpaRLax, KronLSTM, D-PAL; notes harness elicitation/expansion, DPO HP landscape, reward misspecification CoT, native safety OPD, Muon constant step)
+- Twenty-three active plug-ins and five paper-only notes. No current_sota retarget (Muon2 / CISPO / OPD / Open-MOPD / SAPO / SAO / CANOPY / SCALE / Quartet-II / AQLoRA-Q / Iris / Uno / OraRL / omp2 / RecreationWorld / Claude computer-use / Miles / mini-SWE-agent / DiffusionOPSD / Self-OPD / CodeMidas / BPCO / GradCodeS / VISTA / OLMo-3 / Mamba-2 / lr-matters-lora / SemiCat).
+- Window: 2026-10-21 Librarian weekday sweep after merged PR 48 (watermark 2610.26863, ~1578 nodes, 3b3445b). arXiv cs.LG/cs.CL/cs.AI new listing Wed 2026-10-21 (2610.26864-2610.28632) plus HF Daily 2026-10-20 and 2026-10-21. New high id 2610.28632.
+- RE-INGEST: KronLSTM 2610.26834 was skipped 2026-10-20 as if it were an LSTM; it is xLSTM-family linear attention (code NX-AI/KronLSTM).
+- SKIP (considered, not ingested): Navalia 2610.26887 (env+post-train stack, not a new kernel); expert-rubrics 2610.26932 (non-verifiable rubric reward, DRACO/MetaRubric cover); ICLHerd 2610.27142 (ICL data selection); OptEP 2610.27123 (MoE prune reconstruction); physics-inspired optimizers 2610.27321 (beyond EoS, not 7B); SpecMRL 2610.26824 (HF; speculative MRL serving); LoRASpace 2610.27444 (multi-LoRA substrate; READ remains composition hop); KPHarness 2610.27417; DeCert 2610.27528 (generative RM certificates); Meta Expert 2610.27598 (cross-layer MoE sharing); SAPD collision 2610.27847 (new SAPD slug would collide with method:sapd); synthetic-data theory 2610.28036; RL-to-framework survey 2610.28027; gradient clipping heavy tails 2610.28107; TPO 2610.28229 (robust DPO; OLMo-3 stays); ChartEvo 2610.28282; dynamic expert skipping 2610.28369; Object-Oriented Harness 2610.28380; budget-aware multi-turn rewards 2610.28409; data-centric sub-4-bit PTQ 2610.28537; OptScientist 2610.28562. HF Daily after watermark not ingested: task-composition fragility 2610.27190; tool evolution data-lake 2610.27327; EMBER 2610.27334; more-memory worse-agents 2610.27406; MMEnterprise-Bench 2610.27911; Matrix-Game 2610.27999; Slot-JEPA 2610.28074; HRoPE 2610.28284; S-Agent 2.0 2610.28354; multimodal reranking 2610.28435; EvaOmni 2610.28444; DecisionPivot 2610.28522; OverSeer 2610.28554; Sage-A1.5 2610.28578; 4D point trajectories 2610.28594; evolving agent interfaces 2610.28601; SolarRenderer 2610.28630; Joints-Camera-Action 2610.28632.
+
+### 2026-10-21 — ingest method:ca-mopd (active on task:student-distillation; does not supersede method:open-mopd / method:opd)
+- Added paper:ca-mopd , method:ca-mopd, recipe:ca-mopd (`code_status: none`).
+- Status active (`sota_for: []`). 32.22 vs naive MOPD / paper Open-MOPD / merged init. Paper Open-MOPD is not the library 83.4% bake-off.
+
+### 2026-10-21 — ingest method:ase (active on task:math-code-rl-dense; does not supersede method:cispo / method:eden)
+- Added paper:ase , method:ase, recipe:ase (`code_status: none`).
+- Status active (`sota_for: []`). Qwen3-1.7B/8B Mean@8 +4.87 / +1.87 vs GRPO.
+
+### 2026-10-21 — ingest method:ask-to-distill (active on task:student-distillation; does not supersede method:opd)
+- Added paper:ask-to-distill , method:ask-to-distill, recipe:ask-to-distill (`code_status: released`).
+- Status active (`sota_for: []`). Synthesizes OPD prompt banks; code GasolSun36/Ask_to_Distill.
+
+### 2026-10-21 — ingest method:projected-distillation (active on task:student-distillation; does not supersede method:opd)
+- Added paper:projected-distillation , method:projected-distillation, recipe:projected-distillation (`code_status: none`).
+- Status active (`sota_for: []`). Best specialization-retention AUC on 8/9 cells vs GRPO and OPD.
+
+### 2026-10-21 — ingest method:rsd (active on task:privileged-teacher-opsd; does not supersede method:vista)
+- Added paper:rsd , method:rsd, recipe:rsd (`code_status: none`).
+- Status active (`sota_for: []`). Privileged retrospective self-distill without GT or verifier rewards; up to +59.7% relative vs base.
+
+### 2026-10-21 — ingest method:optd (active on task:student-distillation; does not supersede method:opd)
+- Added paper:optd , method:optd, recipe:optd (`code_status: none`).
+- Status active (`sota_for: []`). Layer-transition matching; ~90% vs ~75% OPD gap recovery.
+
+### 2026-10-21 — ingest method:ap-opd (active on task:student-distillation; does not supersede method:opd)
+- Added paper:ap-opd , method:ap-opd, recipe:ap-opd (`code_status: none`).
+- Status active (`sota_for: []`). Penalty-jump pullback for sampled-token OPD.
+
+### 2026-10-21 — ingest method:r2s (active on task:student-distillation; does not supersede method:opd)
+- Added paper:r2s , method:r2s, recipe:r2s (`code_status: none`).
+- Status active (`sota_for: []`). Reward-free teacher repair then OPD; +12.8 success, 12/12 cells. Project tree-shu-zhao.github.io/r2s.
+
+### 2026-10-21 — ingest method:hymuon (active on task:llm-pretraining-optimization; does not supersede method:muon2)
+- Added paper:hymuon , method:hymuon, recipe:hymuon (`code_status: none`).
+- Status active (`sota_for: []`). LLaMA-1.3B C4 2.777 vs Muon 2.903.
+
+### 2026-10-21 — ingest method:e8-qat (active on task:full-lowbit-finetune; does not supersede method:gradcodes)
+- Added paper:e8-qat , method:e8-qat, recipe:e8-qat (`code_status: released`).
+- Status active (`sota_for: []`). 2-bit E8 lattice QAT; code lxy2137/E8_QAT.
+
+### 2026-10-21 — ingest method:mupace (active on task:lora-quality-tuning; does not supersede method:lr-matters-lora)
+- Added paper:mupace , method:mupace, recipe:mupace (`code_status: none`).
+- Status active (`sota_for: []`). Meta-learned Muon LoRA step size; 64-78% vs shared default.
+
+### 2026-10-21 — ingest method:riseharness (active on task:agent-harness-runtime; does not supersede method:omp2-harness)
+- Added paper:riseharness , method:riseharness, recipe:riseharness (`code_status: none`).
+- Status active (`sota_for: []`). Frozen-weight terminal harness self-evolution.
+
+### 2026-10-21 — ingest method:mad-rsi (active on task:agent-harness-runtime; does not supersede method:omp2-harness)
+- Added paper:mad-rsi , method:mad-rsi, recipe:mad-rsi (`code_status: released`).
+- Status active (`sota_for: []`). Model-as-data harness RSI across heterogeneous LLMs; code cuiyu-ai/MaD-RSI.
+
+### 2026-10-21 — ingest method:falca (active on task:web-search-agent-rl; does not supersede method:iris)
+- Added paper:falca , method:falca, recipe:falca (`code_status: none`).
+- Status active (`sota_for: []`). Propose-falsify hierarchical credit for deep-search RL. Project douzj-llm.github.io/FALCA.
+
+### 2026-10-21 — ingest method:self-credit (active on task:outcome-only-long-horizon-agent-rl; does not supersede method:canopy)
+- Added paper:self-credit , method:self-credit, recipe:self-credit (`code_status: none`).
+- Status active (`sota_for: []`). Intra-group citation rescaling; BrowseComp-Plus +37.0 / +36.2 vs base.
+
+### 2026-10-21 — ingest method:trajevolve (active on task:outcome-only-long-horizon-agent-rl; does not supersede method:canopy)
+- Added paper:trajevolve , method:trajevolve, recipe:trajevolve (`code_status: released`).
+- Status active (`sota_for: []`). Hindsight credit / trajectory evolution; NeurIPS 2026; code wenyiwy99/TrajEvolve.
+
+### 2026-10-21 — ingest method:atomsd (active on task:outcome-only-long-horizon-agent-rl; does not supersede method:canopy)
+- Added paper:atomsd , method:atomsd, recipe:atomsd (`code_status: none`).
+- Status active (`sota_for: []`). Procedural-atom self-distillation for agents; +9.31 vs strongest baseline.
+
+### 2026-10-21 — ingest method:par (active on task:recurrent-encoder-decoder-lm; does not supersede method:recurrent-looped-transformer)
+- Added paper:par , method:par, recipe:par (`code_status: none`).
+- Status active (`sota_for: []`). Progress-aligned recurrence; swap-S5 95.5% at 16x vs RLT 55.7%.
+
+### 2026-10-21 — ingest method:lafa (active on task:continuous-diffusion-lm-pretrain; does not supersede method:semicat)
+- Added paper:lafa , method:lafa, recipe:lafa (`code_status: released`).
+- Status active (`sota_for: []`). Blockwise flow LM from AR init; 2.54x AR. Code lafa-gh/large-flow-lms.
+
+### 2026-10-21 — ingest method:dstill (active on task:diffusion-augmented-ar; does not supersede method:uno)
+- Added paper:dstill , method:dstill, recipe:dstill (`code_status: none`).
+- Status active (`sota_for: []`). Block-diffusion speculative drafting distillation; +28% acceptance vs DFlash; 6.45x AR.
+
+### 2026-10-21 — ingest method:sparlax (active on task:math-code-rl-dense; does not supersede method:cispo)
+- Added paper:sparlax , method:sparlax, recipe:sparlax (`code_status: none`).
+- Status active (`sota_for: []`). Soft-CoT sparse RL relaxation on nine benches.
+
+### 2026-10-21 — ingest method:kronlstm (active on task:linear-time-sequence-modeling; does not supersede method:mamba-2)
+- Added paper:kronlstm , method:kronlstm, recipe:kronlstm (`code_status: released`).
+- Status active (`sota_for: []`). Kronecker delta-rule linear attention; code NX-AI/KronLSTM.
+
+### 2026-10-21 — ingest method:d-pal (active on task:diffusion-augmented-ar; does not supersede method:uno)
+- Added paper:d-pal , method:d-pal, recipe:d-pal (`code_status: released`).
+- Status active (`sota_for: []`). Acceptance-weighted speculative decoding losses; 4.50 to 4.57 T=0. Code Lucas-TY/D-PAL-SpecForge.
+
+### 2026-10-21 — ingest paper:harness-elicitation-expansion (note on task:agent-harness-runtime; does not retarget method:omp2-harness)
+- Added paper:harness-elicitation-expansion (methods: [method:omp2-harness]). Pass@1 harness gains can reverse at larger attempt budgets.
+
+### 2026-10-21 — ingest paper:dpo-hp-landscape (note on task:direct-preference-alignment; does not retarget method:olmo-3)
+- Added paper:dpo-hp-landscape (methods: [method:olmo-3]). DPO LR/beta do not transfer across scale or datasets.
+
+### 2026-10-21 — ingest paper:reward-misspecification-cot (note on task:math-code-rl-dense; does not retarget method:cispo)
+- Added paper:reward-misspecification-cot (methods: [method:cispo]). Misspecified rewards degrade CoT monitorability; code Lorenayannnnn/reward-misspecification-degrades-cot-monitorability.
+
+### 2026-10-21 — ingest paper:native-safety-opd (note on task:student-distillation; does not retarget method:opd)
+- Added paper:native-safety-opd (methods: [method:opd]). Native safety can transfer small-to-large through OPD; pair with paper:opd-safety-backdoor.
+
+### 2026-10-21 — ingest paper:muon-constant-step (note on task:llm-pretraining-optimization; does not retarget method:muon2)
+- Added paper:muon-constant-step (methods: [method:muon2]). Constant-step Muon gain/length regimes on strongly convex quadratics.
+
+
 ### 2026-10-20 — weekday SOTA sweep (Polar Switch, miniTE, SPOD, Arctic-SWE, TAR, ToolOPD, HarnessRL; secondaries T-MUON, AdamPM, NVFP4 recipe, PACT NVFP4 LoRA, Agentic RL Data Scaling, CD-OPD, LOOP, ECHO, FrameGRPO, EG-GRPO, DFR, Bridged Self-Distillation, ProbePO; notes OPDArena, What RL Brings, GRPO vs RFT, Off-Policy PG Anatomy)
 - Twenty active plug-ins and four paper-only notes. No current_sota retarget (Muon2 / CISPO / OPD / Open-MOPD / SAPO / SAO / CANOPY / SCALE / Quartet-II / AQLoRA-Q / Iris / Uno / OraRL / omp2 / RecreationWorld / Claude computer-use / Miles / mini-SWE-agent / DiffusionOPSD / Self-OPD / CodeMidas / BPCO).
 - Window: 2026-10-20 Librarian weekday sweep after merged PR 47 (watermark 2610.23839, 1514 nodes, b8430c0). arXiv cs.LG/cs.CL/cs.AI new listing Tue 2026-10-20 (2610.23857-2610.26863) plus HF Daily 2026-10-19 and 2026-10-20. New high id 2610.26863.

@@ -8,6 +8,12 @@ sota_for:
   - task:diffusion-augmented-ar
 supersedes: []
 do_not_use_for:
+  - when: "DStill block-diffusion speculative drafting distillation"
+    reason: "Uno remains first hop; DStill distills multi-step block-diffusion drafts"
+    use_instead: "method:dstill"
+  - when: "acceptance-weighted speculative decoding losses (D-PAL)"
+    reason: "Uno remains serving; D-PAL is a drafter objective"
+    use_instead: "method:d-pal"
   - when: "causal self-recursion MTP without auxiliary heads (ECHO)"
     reason: "Uno remains diffusion-augmented AR serving; ECHO is backbone MTP self-recursion"
     use_instead: "method:echo-mtp"
@@ -27,7 +33,7 @@ assumptions:
   - "AR backbone exists (train from scratch or attach LoRA diffusion weights to an open-weight AR LLM). Paper 8B from-scratch + Qwen3-8B adapters."
   - "Lossless decode needs AR verification of diffusion drafts (Ψ-Spec). Linear B=4 for system throughput; tree (B,K,V)=(16,32,32) for batch-1. Tree verification wants FlashAttention-3."
   - "Diffusion Distillation on Qwen3-8B: OpenThoughts3-1.2M, LoRA rank 128 / α 2048, global batch 128, LR 1e-5, tv-gamma 1."
-last_reviewed: "2026-09-08"
+last_reviewed: '2026-10-21'
 papers:
   - paper:uno
 recipes:

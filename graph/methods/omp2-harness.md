@@ -8,6 +8,15 @@ sota_for:
   - task:agent-harness-runtime
 supersedes: []
 do_not_use_for:
+  - when: "harness self-evolution for long-horizon terminal agents (RiseHarness)"
+    reason: "omp2 remains the kernel; RiseHarness iteratively edits a frozen-weight terminal harness"
+    use_instead: "method:riseharness"
+  - when: "MaD-RSI model-as-data harness RSI across heterogeneous LLMs"
+    reason: "omp2 remains the kernel; MaD-RSI trains a shared harness across models"
+    use_instead: "method:mad-rsi"
+  - when: "harness optimization elicitation vs expansion"
+    reason: "Gotcha on harness-RSI gain type; does not retarget omp2"
+    use_instead: "paper:harness-elicitation-expansion"
   - when: "just-in-time rubric training harness co-evolving with the policy (HarnessRL)"
     reason: "omp2 remains the production kernel; HarnessRL co-evolves rubric prompt/guidance/criteria"
     use_instead: "method:harnessrl"
@@ -47,8 +56,9 @@ do_not_use_for:
 assumptions:
   - "You are implementing a harness kernel, not wrapping a 100-line ReAct loop."
   - "The four envelope tests must hold: multiplexed workspace, remote driver, spectator, untrusted factory."
-last_reviewed: '2026-10-19'
+last_reviewed: '2026-10-21'
 papers:
+  - paper:harness-elicitation-expansion
   - paper:harness-playbook
 recipes:
   - recipe:omp2-harness

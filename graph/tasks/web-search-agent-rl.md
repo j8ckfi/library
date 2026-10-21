@@ -13,6 +13,8 @@ out_of_scope:
   - "Single-turn dense math/code RLVR (CISPO)"
   - "Routing-harness RSI post-train (NeoHorse-1)"
 redirects:
+  - when: "FALCA deep-search agent RL (propose-falsify hierarchical credit)"
+    to: "method:falca"
   - when: "evidence-guided step credit for deep-search agents (EG-GRPO)"
     to: "method:eg-grpo"
   - when: "grounded credit assignment for search vs answer tokens (GCA)"
@@ -39,6 +41,7 @@ current_sota:
     value: "Iris-mini 82.2/84.8/86.9/52.3; Iris-pro 88.6/85.1/92.9/56.4"
     notes: "Iris (2609.04304). Strongest overall among reported open-source search agents in the 30-35B and ~400B ranges with CM. Does not replace CANOPY, SAO, mini-SWE-agent, FoldGRPO, or CISPO. DeepSearchQA mini loses to Aquila-mini 89.5. Frontier (Kimi-K3 91.2 BrowseComp) still ahead."
 methods:
+  - method:falca
   - method:eg-grpo
   - method:gca
   - method:mmsearch-opd

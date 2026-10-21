@@ -8,6 +8,9 @@ sota_for:
   - task:full-lowbit-finetune
 supersedes: []
 do_not_use_for:
+  - when: "E8-QAT 2-bit QAT with implicit lattice codebooks"
+    reason: "GradCodeS stays in quantized code space; E8-QAT is 2-bit lattice QAT"
+    use_instead: "method:e8-qat"
   - when: "ultra-low-bit QAT recovery via on-policy reverse-KL against a full-precision teacher"
     reason: "GradCodeS stays in quantized code space; OnlineQAT recovers W3/W2 via OPD"
     use_instead: "method:onlineqat"
@@ -24,7 +27,7 @@ assumptions:
   - "Targeted linear layers stay in NF4, INT4, or MXFP4 at every accepted checkpoint; embeddings and lm_head may stay unquantized (paper setting)."
   - "One backward pass per search step plus M forward evaluations of deployable candidates."
   - "Paper scale is Qwen3-0.6B and Llama-3.2-1B/3B-Instruct, three seeds."
-last_reviewed: "2026-10-09"
+last_reviewed: '2026-10-21'
 papers:
   - paper:gradcodes
 recipes:

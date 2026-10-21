@@ -12,6 +12,7 @@ current_sota:
     value: "Matches/exceeds DoRA"
     notes: "Vanilla LoRA + rsLoRA + LR sweep (2602.04998, 2601.22708) NOT DoRA."
 methods:
+  - method:mupace
   - method:topa
   - method:regra
   - method:dt-lora
@@ -27,6 +28,8 @@ methods:
   - method:read-lora
 last_reviewed: '2026-10-19'
 redirects:
+  - when: "MuPACE Muon for LoRA (meta-learned global step size)"
+    to: "method:mupace"
   - when: "block-wise Toeplitz adaptation (ToPA; not rsLoRA + LR sweep)"
     to: "method:topa"
   - when: "rank measures of fine-tuning updates need a noise baseline"

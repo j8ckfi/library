@@ -8,6 +8,9 @@ sota_for:
   - task:privileged-teacher-opsd
 supersedes: []
 do_not_use_for:
+  - when: "privileged retrospective distillation without GT or verifier rewards (RSD)"
+    reason: "VISTA remains gold-solution privileged OPSD; RSD uses hindsight without GT/verifier"
+    use_instead: "method:rsd"
   - when: "predicting privileged-information effectiveness for OPSD"
     reason: "VISTA remains the privileged-teacher first hop; this is a PI selection protocol"
     use_instead: "paper:privileged-pi-effectiveness"
@@ -47,7 +50,7 @@ do_not_use_for:
   - when: "privileged-context content (demo vs feedback vs rephrase) as OPSD drift, not a trainer"
     reason: "VISTA remains the trainer; Privileged Context as Drift is an evidence card"
     use_instead: "method:privileged-context-drift"
-last_reviewed: '2026-10-19'
+last_reviewed: '2026-10-21'
 papers:
   - paper:self-distillation-ood
   - paper:pr-opd

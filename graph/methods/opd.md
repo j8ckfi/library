@@ -9,6 +9,24 @@ sota_for:
 supersedes:
   - method:on-policy-distillation
 do_not_use_for:
+  - when: "synthesize data for OPD (Ask-to-Distill)"
+    reason: "OPD remains matching; Ask-to-Distill synthesizes the prompt bank"
+    use_instead: "method:ask-to-distill"
+  - when: "projected distillation of failed student attempts into close correct targets"
+    reason: "OPD remains matching on student rollouts; projected distillation edits failed attempts"
+    use_instead: "method:projected-distillation"
+  - when: "on-policy transition distillation (layer-to-layer logp increments)"
+    reason: "OPD remains final-layer matching; OPTD also matches transitions"
+    use_instead: "method:optd"
+  - when: "adaptive pullback at OPD penalty jumps (AP-OPD)"
+    reason: "OPD remains matching; AP-OPD rescales supervision after penalty jumps"
+    use_instead: "method:ap-opd"
+  - when: "reward-free teacher repair for agentic OPD (R2S)"
+    reason: "OPD remains matching; R2S repairs a myopic teacher scorer first"
+    use_instead: "method:r2s"
+  - when: "native safety reuse via OPD (small-to-large safety pretrain transfer)"
+    reason: "Gotcha/reuse path: native safety can travel through OPD; still not a matching default"
+    use_instead: "paper:native-safety-opd"
   - when: "success-preserving agentic OPD overshoot (SPOD)"
     reason: "OPD remains matching; SPOD masks teacher conflict on protected successes"
     use_instead: "method:spod"
@@ -117,8 +135,9 @@ do_not_use_for:
   - when: "rubric-privileged OPD warm start before rubric-based RL"
     reason: "OPD remains matching distillation; RP-OPD is a rubric-privileged warm start then rubric RL"
     use_instead: "method:rp-opd"
-last_reviewed: '2026-10-19'
+last_reviewed: '2026-10-21'
 papers:
+  - paper:native-safety-opd
   - paper:opdarena
   - paper:opd-teacher-advantage
   - paper:pa1-opd

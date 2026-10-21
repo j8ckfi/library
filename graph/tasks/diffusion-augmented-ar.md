@@ -13,6 +13,10 @@ out_of_scope:
   - "Speculative draft co-train inside long-context RL (Online Draft Co-Training / NeMo RL)"
   - "Input-heavy agentic / KV-compressed CED MoE serving (DeepSeek-V4.1-Flash)"
 redirects:
+  - when: "DStill block-diffusion speculative drafting distillation"
+    to: "method:dstill"
+  - when: "acceptance-weighted speculative decoding losses (D-PAL)"
+    to: "method:d-pal"
   - when: "causal self-recursion MTP without auxiliary heads (ECHO)"
     to: "method:echo-mtp"
   - when: "aligning text-to-image diffusion or flow models with rewards"
@@ -35,6 +39,8 @@ current_sota:
     value: "SWE-Verified 68.4 vs DiffusionGemma 18.7; system 5255 tok/s vs 1136 / 1197; Uno Qwen 1.6× vs base AR at max batch"
     notes: "Uno (2609.04010). Does not replace DiffusionOPSD/Self-OPD, Muon2, or CISPO."
 methods:
+  - method:dstill
+  - method:d-pal
   - method:echo-mtp
   - method:uno
   - method:online-draft-cotrain

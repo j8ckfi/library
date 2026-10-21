@@ -12,6 +12,9 @@ supersedes:
   - method:olmo-2-curriculum
   - method:tulu3-rlvr
 do_not_use_for:
+  - when: "DPO hyperparameter landscape and transfer across scale"
+    reason: "OLMo-3 remains Dolci; DPO HPs do not transfer across scale or datasets"
+    use_instead: "paper:dpo-hp-landscape"
   - when: "evolving SWE trajectory filters (MetaCurate)"
     reason: "OLMo-3 remains the open instruct stack; MetaCurate evolves SWE trajectory filters"
     use_instead: "method:metacurate"
@@ -25,6 +28,7 @@ do_not_use_for:
     reason: "OLMo-3 remains the open instruct stack; OnePO is RL-only domain adaptation"
     use_instead: "method:onepo"
 papers:
+  - paper:dpo-hp-landscape
   - paper:olmo-3
   - paper:metacurate
   - paper:posttrain-cue-routing
@@ -38,7 +42,7 @@ claims:
     date: "2026-08-26"
     verified: true
     notes: "Dolma-3 multi-trillion token open mix + Dolci curated SFT and verifiable reward alignment."
-last_reviewed: '2026-10-19'
+last_reviewed: '2026-10-21'
 tags:
   - pretraining
   - open-data

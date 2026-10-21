@@ -5,6 +5,20 @@ title: "Small Local Student Distillation from Strong Teacher"
 domain: "post-training"
 summary: "Distilling reasoning and conversational capabilities from multi-hundred-billion parameter frontier teachers into small local student models."
 redirects:
+  - when: "capability-aware multi-teacher OPD (CA-MOPD)"
+    to: "method:ca-mopd"
+  - when: "synthesize data for OPD (Ask-to-Distill)"
+    to: "method:ask-to-distill"
+  - when: "projected distillation of failed student attempts into close correct targets"
+    to: "method:projected-distillation"
+  - when: "on-policy transition distillation (layer-to-layer logp increments)"
+    to: "method:optd"
+  - when: "adaptive pullback at OPD penalty jumps (AP-OPD)"
+    to: "method:ap-opd"
+  - when: "reward-free teacher repair for agentic OPD (R2S)"
+    to: "method:r2s"
+  - when: "native safety reuse via OPD (small-to-large safety pretrain transfer)"
+    to: "paper:native-safety-opd"
   - when: "success-preserving agentic OPD overshoot (SPOD)"
     to: "method:spod"
   - when: "credit-aware tool-use OPD (ToolOPD)"
@@ -151,6 +165,12 @@ current_sota:
     value: "83.4% headroom recovery in a single deployable student"
     notes: "Open-MOPD (2608.19098) fixes multi-teacher imbalance with token-share balancing and gap-aware dynamic budgeting."
 methods:
+  - method:ca-mopd
+  - method:ask-to-distill
+  - method:projected-distillation
+  - method:optd
+  - method:ap-opd
+  - method:r2s
   - method:spod
   - method:toolopd
   - method:cd-opd

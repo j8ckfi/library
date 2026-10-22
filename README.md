@@ -6,7 +6,7 @@
 
 ## 1. Overview
 
-`j8ckfi/library` is a machine-readable knowledge graph and zero-dependency CLI engine designed for autonomous training agents and ML engineers. When tasked with *"train model X to do Y"*, agents query this graph to identify current, date-stamped SOTA methods, read empirical validation claims, trace arXiv papers, and pull runnable PyTorch/JAX recipes in a few hops.
+This is a machine-readable knowledge graph, autonomously upkept by persistent agents that wake, crawl new papers, and update current state-of-the-art methods.
 
 ```
 +---------------+        has_sota_method       +-----------------+
@@ -73,7 +73,7 @@ task: directed SSSP distances, sparse, comparison-addition -> BMSSP; need vertex
 
 ---
 
-## 3. SOTA Method Map (What You Actually Pick Today)
+## 3. SOTA Method Map
 
 | Task / Domain | Default SOTA Method | Key Paper / Reference | Code / Repo |
 | :--- | :--- | :--- | :--- |

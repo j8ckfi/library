@@ -5,6 +5,8 @@ title: "Mathematical and Code RL Reasoning (MoE Policies)"
 domain: "post-training"
 summary: "Reinforcement learning for large-scale sparse Mixture-of-Experts (MoE) reasoning models."
 redirects:
+  - when: "exact-KL prefix importance-ratio clipping (EPIC)"
+    to: "method:epic"
   - when: "MoE bidirectional high-k then distill-back OPD (MoEvolve)"
     to: "method:moevolve"
   - when: "hierarchical routing control for agentic RL on MoE (operation-type experts)"
@@ -25,6 +27,7 @@ current_sota:
     value: "Default SOTA for MoE/VL RL"
     notes: "SAPO (2511.20347); GSPO only if Qwen3.5-Omni Talker."
 methods:
+  - method:epic
   - method:moevolve
   - method:sapo
   - method:gspo
@@ -37,7 +40,7 @@ methods:
   - method:cis-rl
   - method:carm
   - method:hierarchical-moe-routing-control
-last_reviewed: '2026-10-19'
+last_reviewed: '2026-10-22'
 tags:
   - post-training
   - reasoning

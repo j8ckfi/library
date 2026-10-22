@@ -13,6 +13,8 @@ out_of_scope:
   - "Recurrent all-token CED LM pretrain (RLT; experimental)"
   - "Compute-matched looped MoE pretrain (SMELT)"
 redirects:
+  - when: "periodic 4-bit recurrent-state quantization (PACE)"
+    to: "method:pace"
   - when: "choosing the frontier MoE pretrain architecture template"
     to: "task:pretrain-moe-frontier"
   - when: "GitHub issue to patch / SWE harness rather than serving architecture"
@@ -35,6 +37,7 @@ current_sota:
     value: "TB2.1 90.6; DeepSWE 74.2; global KV 890 B/token (~1/4 of V4-Flash); persistent KV ~1/8 of V4-Flash"
     notes: "DeepSeek-V4.1-Flash CED (HF tech report, 2026-09-10). Vendor-reported. Does not replace DeepSeek-V4 / Kimi-K3 as the MoE pretrain co-default."
 methods:
+  - method:pace
   - method:replayssm
   - method:deepseek-v41-flash
   - method:deepseek-v4
@@ -42,7 +45,7 @@ methods:
   - method:recurrent-looped-transformer
   - method:mhc
   - method:mini-swe-agent
-last_reviewed: "2026-10-13"
+last_reviewed: '2026-10-22'
 tags:
   - systems
   - serving

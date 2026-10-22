@@ -15,6 +15,8 @@ out_of_scope:
   - "Category-aware SWE expert RL on already-executable tasks (Category-Aware SWE Experts)"
   - "Mechanism-first stateful tool envs from solved math dynamics (VHD-Play)"
 redirects:
+  - when: "stateful data-centric agentic RL / SQL env isolation (BIRD-RL)"
+    to: "method:bird-rl"
   - when: "compute-optimal agentic RL env/task/trajectory allocation (not the env factory)"
     to: "method:agentic-rl-data-scaling"
   - when: "evolving SWE trajectory filters (MetaCurate), not env construction from source"
@@ -49,6 +51,7 @@ current_sota:
     value: "DeepSWE 10.0→21.7; ProgramBench AS 4.5→21.5; TB v2.1 +8.5pp (63.7→72.2)"
     notes: "CodeMidas (2609.22068). Active env factory. Method status active (not sota). Does not replace CANOPY / SAO / Miles / mini-SWE-agent."
 methods:
+  - method:bird-rl
   - method:agentic-rl-data-scaling
   - method:metacurate
   - method:swe-at-scale
@@ -63,7 +66,7 @@ methods:
   - method:miles
   - method:category-aware-swe-experts
   - method:vhd-play
-last_reviewed: '2026-10-20'
+last_reviewed: '2026-10-22'
 tags:
   - post-training
   - agentic

@@ -8,6 +8,9 @@ sota_for:
   - task:posttrain-diffusion
 supersedes: []
 do_not_use_for:
+  - when: "likelihood-free RL fine-tune of diffusion/flow policies (DoobPO)"
+    reason: "DiffusionOPSD remains on-policy self-distill; DoobPO uses a Doob h-transform because action likelihoods are intractable"
+    use_instead: "method:doobpo"
   - when: "distributional regularization for diffusion/flow reward FT (DFR)"
     reason: "DiffusionOPSD remains on-policy self-distill; DFR adds distributional rewards to reverse-KL FT"
     use_instead: "method:dfr"

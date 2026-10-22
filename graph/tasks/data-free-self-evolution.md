@@ -11,6 +11,8 @@ out_of_scope:
   - "Unlabeled existing math problems (u-OPSD)"
   - "Test-time unlabeled adaptation (TTPO)"
 redirects:
+  - when: "zero-data long-context RL from self-proposed tasks (LongZero)"
+    to: "method:longzero"
   - when: "zero-natural-data self-play pretraining from random init (generator proposes UTM programs)"
     to: "task:zero-natural-data-self-play-pretrain"
   - when: "seed-grounded synthetic single-stage pretraining from Wikipedia/Wikibooks seeds"
@@ -27,13 +29,14 @@ current_sota:
     value: "Verifiable 54.38 / 58.55; unverifiable 20.81 / 23.41"
     notes: "J-Zero (2608.26582) vs R-Zero 49.64/54.99 and 12.66/15.54, G-Zero 47.41/53.07 and 10.89/15.31, base 44.91/50.67 and 9.58/13.23. Stated average gains +4.2 verifiable and +8.0 unverifiable."
 methods:
+  - method:longzero
   - method:j-zero
   - method:u-opsd
   - method:ttpo
   - method:cispo
   - method:self-play-pretraining
   - method:synth
-last_reviewed: "2026-10-03"
+last_reviewed: '2026-10-22'
 tags:
   - post-training
   - self-evolution

@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "stateful data-centric agentic RL / SQL env isolation (BIRD-RL)"
+    reason: "CodeMidas builds envs from source; BIRD-RL is SQL-state isolation plus curriculum"
+    use_instead: "method:bird-rl"
   - when: "compute-optimal agentic RL env/task/trajectory allocation"
     reason: "CodeMidas constructs envs; this card allocates synthesis budget across axes"
     use_instead: "method:agentic-rl-data-scaling"

@@ -8,6 +8,9 @@ sota_for:
   - task:agent-harness-runtime
 supersedes: []
 do_not_use_for:
+  - when: "harness evolution via successive scale racing (SSR)"
+    reason: "omp2 remains the production kernel; SSR searches evidence combinations as the evolution-task pool grows"
+    use_instead: "method:ssr"
   - when: "harness self-evolution for long-horizon terminal agents (RiseHarness)"
     reason: "omp2 remains the kernel; RiseHarness iteratively edits a frozen-weight terminal harness"
     use_instead: "method:riseharness"

@@ -13,6 +13,8 @@ out_of_scope:
   - "Speculative draft co-train inside long-context RL (Online Draft Co-Training / NeMo RL)"
   - "Input-heavy agentic / KV-compressed CED MoE serving (DeepSeek-V4.1-Flash)"
 redirects:
+  - when: "target regeneration shrinks draft-training objective gains"
+    to: "paper:target-regeneration"
   - when: "DStill block-diffusion speculative drafting distillation"
     to: "method:dstill"
   - when: "acceptance-weighted speculative decoding losses (D-PAL)"
@@ -44,7 +46,7 @@ methods:
   - method:echo-mtp
   - method:uno
   - method:online-draft-cotrain
-last_reviewed: '2026-10-20'
+last_reviewed: '2026-10-22'
 tags:
   - efficiency
   - inference

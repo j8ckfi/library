@@ -17,6 +17,8 @@ out_of_scope:
   - "Recursive self-rewrite of a research-agent harness (AIDE2)"
   - "Harness curriculum as a non-stationary bandit over failure-pattern arms (ActiveSaddler)"
 redirects:
+  - when: "harness scaling / train through a factorized harness space (Harness Scaling)"
+    to: "method:harness-scaling"
   - when: "alternating harness+policy optimization (Self-HPO), not routing-guided OPD"
     to: "method:self-hpo"
   - when: "build a SWE / issue-to-patch harness rather than post-train from routing traces"
@@ -49,6 +51,7 @@ current_sota:
     value: "4B 58.94→64.87; 9B 65.60→69.04"
     notes: "NeoHorse-1 (2609.08183). First hop for routing-harness RSI post-train only. Does not replace mini-SWE-agent, SAO, CANOPY, Iris, CISPO, or OPD."
 methods:
+  - method:harness-scaling
   - method:self-hpo
   - method:neohorse-1
   - method:mini-swe-agent
@@ -62,7 +65,7 @@ methods:
   - method:harness-zero
   - method:aide2
   - method:activesaddler
-last_reviewed: '2026-10-19'
+last_reviewed: '2026-10-22'
 tags:
   - post-training
   - agentic

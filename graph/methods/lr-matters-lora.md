@@ -11,6 +11,9 @@ supersedes:
   - method:dora
   - method:delora
 do_not_use_for:
+  - when: "norm-guided PEFT for reasoning-intensive tasks (NormTune)"
+    reason: "Quality default remains vanilla LoRA + rsLoRA + LR sweep; NormTune upweights under-adapted layers by update-norm"
+    use_instead: "method:normtune"
   - when: "MuPACE Muon for LoRA (meta-learned global step size)"
     reason: "Quality default remains vanilla LoRA + rsLoRA + LR sweep; MuPACE paces Muon LoRA"
     use_instead: "method:mupace"

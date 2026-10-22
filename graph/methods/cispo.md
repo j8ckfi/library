@@ -10,6 +10,24 @@ sota_for:
 supersedes:
   - method:dapo
 do_not_use_for:
+  - when: "retry-aware policy optimization for RLVR (ReAPO)"
+    reason: "CISPO remains Pass@1; ReAPO serializes failed GRPO attempts as SSP credit"
+    use_instead: "method:reapo"
+  - when: "sharpness-aware RLVR against distribution sharpening (Flat-RLVR)"
+    reason: "CISPO remains Pass@1; Flat-RLVR searches flat-reward regions on a GRPO host"
+    use_instead: "method:flat-rlvr"
+  - when: "exact-KL prefix importance-ratio clipping (EPIC)"
+    reason: "CISPO remains token-IS Pass@1; EPIC clips the prefix reverse-KL coordinate r-1-log r"
+    use_instead: "method:epic"
+  - when: "unsupervised post-training for CoT monitorability"
+    reason: "CISPO remains Pass@1; this stage maximizes mutual information between CoT and the output"
+    use_instead: "method:monitorability-trainable"
+  - when: "predicting detectable reward-hacking onset before an RL run (SimHack)"
+    reason: "Gotcha: onset is recipe-dependent; does not retarget CISPO"
+    use_instead: "paper:simhack"
+  - when: "on-policy verifier audit collapse as the policy masters one conjunct"
+    reason: "Gotcha: component-verifier AUC can invert as the policy improves; does not retarget CISPO"
+    use_instead: "paper:on-policy-audit-collapse"
   - when: "activation-space steering exploration for RLVR (ASE)"
     reason: "CISPO remains Pass@1; ASE diversifies GRPO rollouts"
     use_instead: "method:ase"
@@ -108,6 +126,8 @@ do_not_use_for:
     use_instead: "method:rgpo"
 last_reviewed: '2026-10-21'
 papers:
+  - paper:simhack
+  - paper:on-policy-audit-collapse
   - paper:reward-misspecification-cot
   - paper:what-rl-brings
   - paper:grpo-vs-rft

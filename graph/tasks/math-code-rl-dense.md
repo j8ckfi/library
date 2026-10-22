@@ -19,6 +19,18 @@ out_of_scope:
   - "Cancellation-aware off-policy sequence masking (CARM)"
   - "MCMC projection sampling then ordinary SFT (Sampling SFT)"
 redirects:
+  - when: "retry-aware policy optimization for RLVR (ReAPO)"
+    to: "method:reapo"
+  - when: "sharpness-aware RLVR against distribution sharpening (Flat-RLVR)"
+    to: "method:flat-rlvr"
+  - when: "exact-KL prefix importance-ratio clipping (EPIC)"
+    to: "method:epic"
+  - when: "unsupervised post-training for CoT monitorability"
+    to: "method:monitorability-trainable"
+  - when: "predicting detectable reward-hacking onset before an RL run (SimHack)"
+    to: "paper:simhack"
+  - when: "on-policy verifier audit collapse as the policy masters one conjunct"
+    to: "paper:on-policy-audit-collapse"
   - when: "activation-space steering exploration for RLVR (ASE)"
     to: "method:ase"
   - when: "sparse RL relaxation for LLM reasoning (SpaRLax / soft-CoT)"
@@ -131,6 +143,10 @@ current_sota:
     value: "Default SOTA for Dense RL"
     notes: "CISPO via MiniMax-M1 (2506.13585) + ScaleRL (2510.13786)."
 methods:
+  - method:reapo
+  - method:flat-rlvr
+  - method:epic
+  - method:monitorability-trainable
   - method:ase
   - method:sparlax
   - method:tar-rlvr
@@ -202,7 +218,7 @@ methods:
   - method:mesh-learning
   - method:opsft
   - method:rgpo
-last_reviewed: '2026-10-20'
+last_reviewed: '2026-10-22'
 tags:
   - post-training
   - reasoning

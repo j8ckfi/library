@@ -5,6 +5,8 @@ title: "Native FP4 Hardware Training"
 domain: "compression"
 summary: "End-to-end 4-bit floating-point forward and backward pass training on modern GPU accelerators."
 redirects:
+  - when: "2:4 semi-structured sparsity vs dropping to the next lower precision"
+    to: "paper:sparsity-24-vs-quant"
   - when: "NVFP4 pretrain recipe ingredients at 8B / 30B-A3B (not Quartet-II default)"
     to: "method:nvfp4-pretrain-recipe"
   - when: "dual-scale calibration-free W+A PTQ for AR LLMs (not native FP4 training)"
@@ -40,7 +42,7 @@ methods:
   - method:kbbq
   - method:trace
   - method:triage
-last_reviewed: '2026-10-20'
+last_reviewed: '2026-10-22'
 tags:
   - compression
   - quantization

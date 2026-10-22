@@ -8,6 +8,9 @@ sota_for:
   - task:privileged-teacher-opsd
 supersedes: []
 do_not_use_for:
+  - when: "bidirectional preference OPSD so the teacher learns how to teach (TeachBack)"
+    reason: "VISTA remains gold-solution privileged OPSD; TeachBack also reverse-prefers the student's problem-only behavior into the teacher"
+    use_instead: "method:teachback"
   - when: "privileged retrospective distillation without GT or verifier rewards (RSD)"
     reason: "VISTA remains gold-solution privileged OPSD; RSD uses hindsight without GT/verifier"
     use_instead: "method:rsd"

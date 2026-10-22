@@ -8,6 +8,10 @@ sota_for:
   - task:pretrain-moe-frontier
 supersedes:
   - method:deepseek-v3
+do_not_use_for:
+  - when: "training-free MoE expert prune by routing entropy (SPARE)"
+    reason: "DeepSeek-V4 remains the MoE pretrain template; SPARE allocates a prune budget from routing entropy"
+    use_instead: "method:spare-moe"
 papers:
   - paper:deepseek-v4
 recipes:

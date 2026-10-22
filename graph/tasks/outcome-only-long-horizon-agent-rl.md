@@ -15,6 +15,10 @@ out_of_scope:
   - "Data/env construction for coding-agent RL from source code (CodeMidas)"
   - "Multi-stage agent continual learning (ACLArena)"
 redirects:
+  - when: "conflict-aware joint RL and distillation (CORD)"
+    to: "method:cord"
+  - when: "effect-marginal policy optimization for long-horizon agents (EMPO)"
+    to: "method:empo"
   - when: "Self-Credit agentic RL credit assignment (intra-group citation rescaling)"
     to: "method:self-credit"
   - when: "TrajEvolve hindsight credit assignment / trajectory evolution"
@@ -97,6 +101,8 @@ current_sota:
     value: "86.9 / 67.6"
     notes: "CANOPY (2609.01245). Sparse outcome reward, n=32, KL-anchored on-policy. Does not replace SAO, FoldGRPO, CISPO, mini-swe-agent, or omp2-harness. DRACO is the outcome-blind rubric sibling, not a supersession."
 methods:
+  - method:cord
+  - method:empo
   - method:self-credit
   - method:trajevolve
   - method:atomsd
@@ -136,7 +142,7 @@ methods:
   - method:scad
   - method:metarubric
   - method:hierarchical-moe-routing-control
-last_reviewed: '2026-10-20'
+last_reviewed: '2026-10-22'
 tags:
   - post-training
   - agentic

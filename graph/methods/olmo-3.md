@@ -12,6 +12,9 @@ supersedes:
   - method:olmo-2-curriculum
   - method:tulu3-rlvr
 do_not_use_for:
+  - when: "preference-optimization vocabulary collapse from common-mode hidden offsets (ECHO)"
+    reason: "Gotcha on DPO-family ranking-vs-generation collapse; does not retarget OLMo-3"
+    use_instead: "paper:echo-vocab-collapse"
   - when: "DPO hyperparameter landscape and transfer across scale"
     reason: "OLMo-3 remains Dolci; DPO HPs do not transfer across scale or datasets"
     use_instead: "paper:dpo-hp-landscape"
@@ -28,6 +31,7 @@ do_not_use_for:
     reason: "OLMo-3 remains the open instruct stack; OnePO is RL-only domain adaptation"
     use_instead: "method:onepo"
 papers:
+  - paper:echo-vocab-collapse
   - paper:dpo-hp-landscape
   - paper:olmo-3
   - paper:metacurate

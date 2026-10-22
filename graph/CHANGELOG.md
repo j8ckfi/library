@@ -6,6 +6,126 @@ rewrite history. Format: [docs/ingestion-guide.md](../docs/ingestion-guide.md) �
 
 ---
 
+### 2026-10-22 — weekday SOTA sweep (ReAPO, CSD, TeachBack, Flat-RLVR, EPIC, CORD, SPARE, Right On Q, NormTune, Harness Scaling, BIRD-RL, EMPO, BRACE, LongZero, LAW, PACE, Uni-Mem, Monitorability Post-Training, SSR, DoobPO, FlashNext-RL, TraceForge; notes SimHack, Muon Hessian ortho, ECHO vocab collapse, data-LR schedules, LCCP scaling, target regeneration, 2:4 vs quant, truncated-backprop looped, on-policy audit collapse)
+- Twenty-two active plug-ins and nine paper-only notes. No current_sota retarget (Muon2 / CISPO / OPD / Open-MOPD / SAPO / SAO / CANOPY / SCALE / Quartet-II / AQLoRA-Q / Iris / Uno / OraRL / omp2 / RecreationWorld / Claude computer-use / Miles / mini-SWE-agent / DiffusionOPSD / Self-OPD / CodeMidas / BPCO / GradCodeS / VISTA / OLMo-3 / Mamba-2 / lr-matters-lora / SemiCat / Cross-Tokenizer OPD / J-Zero / NeoHorse-1 / ACE).
+- Window: 2026-10-22 Librarian weekday sweep after merged PR 49 (watermark 2610.28632, ~1652 nodes, 17cdd9a). arXiv cs.LG/cs.CL/cs.AI new listing Thu 2026-10-22 (2610.28636-2610.30132) plus HF Daily 2026-10-21 leftovers and 2026-10-22. New high id 2610.30132.
+- SKIP (considered, not ingested): KVLearn 2610.28637 (disaggregated KV retention serving, not a train kernel); Nested LADDER 2610.28773 (unstructured post-train prune, not GradCodeS/Quartet); RL-IF 2610.28883 (online-RL influence tracker, not MAGIC); Gaussian-prior RL FT geometry 2610.28864; GaP-MoE 2610.29355 (orthogonal expert-gradient MoE, not DeepSeek-V4); Stochastic DPO graph prune 2610.29538 (DPO speed, OLMo-3 stays); Explicit Feedback Contract harness 2610.28797 (contract, not omp2); ASTEROID 2610.30105 (privileged on-policy distill for POMDP robotics, not LLM OPD); remaining HF Daily 2026-10-21 items already SKIP in PR 49.
+
+### 2026-10-22 — ingest method:reapo (active on task:math-code-rl-dense; does not supersede method:cispo)
+- Added paper:reapo, method:reapo, recipe:reapo (`code_status: released`).
+- Status active (`sota_for: []`). Serializes failed GRPO attempts as SSP credit; Qwen3-0.6B reaches 2x-group / 2x-step GRPO peaks with 39% / 31% fewer tokens. Code Nghi-Dao/ReAPO.
+
+### 2026-10-22 — ingest method:csd (active on task:cross-tokenizer-opd; does not supersede method:cross-tokenizer-opd / method:opd)
+- Added paper:csd, method:csd, recipe:csd (`code_status: announced`).
+- Status active (`sota_for: []`). Common-support chunk continuations; Llama-3.1-8B up to +4.2 vs paper baselines (not the library 1:1 / k=16 bake-off). Host NVIDIA-NeMo/RL.
+
+### 2026-10-22 — ingest method:teachback (active on task:privileged-teacher-opsd; does not supersede method:vista)
+- Added paper:teachback, method:teachback, recipe:teachback (`code_status: none`).
+- Status active (`sota_for: []`). Bidirectional preference so the teacher learns how to teach; no public code.
+
+### 2026-10-22 — ingest method:flat-rlvr (active on task:math-code-rl-dense; does not supersede method:cispo)
+- Added paper:flat-rlvr, method:flat-rlvr, recipe:flat-rlvr (`code_status: none`).
+- Status active (`sota_for: []`). Sharpness-aware GRPO-host RLVR against distribution sharpening.
+
+### 2026-10-22 — ingest method:epic (active on task:math-code-rl-dense; does not supersede method:cispo / method:sapo)
+- Added paper:epic, method:epic, recipe:epic (`code_status: released`).
+- Status active (`sota_for: []`). Prefix reverse-KL coordinate clip r-1-log r. Code LiChengxi666/EPIC.
+
+### 2026-10-22 — ingest method:cord (active on task:student-distillation; does not supersede method:opd / method:canopy)
+- Added paper:cord, method:cord, recipe:cord (`code_status: released`).
+- Status active (`sota_for: []`). Conflict-aware RL+distill projection; ALFWorld +1.5 to +15.9 pp. Code LvAoAo/CORD-release.
+
+### 2026-10-22 — ingest method:spare-moe (active on task:pretrain-moe-frontier; does not supersede method:deepseek-v4)
+- Added paper:spare-moe, method:spare-moe, recipe:spare-moe (`code_status: none`).
+- Status active (`sota_for: []`). Training-free routing-entropy expert prune; Qwen3-30B-A3B 57.2% to 63.8%.
+
+### 2026-10-22 — ingest method:right-on-q (active on task:full-lowbit-finetune; does not supersede method:gradcodes / method:onlineqat)
+- Added paper:right-on-q, method:right-on-q, recipe:right-on-q (`code_status: none`).
+- Status active (`sota_for: []`). On-policy trajectory QAT; Qwen3-8B 2-bit average +10.26 vs fixed-response QAT.
+
+### 2026-10-22 — ingest method:normtune (active on task:lora-quality-tuning; does not supersede method:lr-matters-lora)
+- Added paper:normtune, method:normtune, recipe:normtune (`code_status: none`).
+- Status active (`sota_for: []`). Norm-guided PEFT scale; +24.24 / +11.33 / +16.21 vs LoRA / Bone / MoRA.
+
+### 2026-10-22 — ingest method:harness-scaling (active on task:agentic-rsi-routing-posttrain; does not supersede method:neohorse-1 / method:sao)
+- Added paper:harness-scaling, method:harness-scaling, recipe:harness-scaling (`code_status: none`).
+- Status active (`sota_for: []`). Factorial harness-space RL; transfers to unseen black-box harnesses.
+
+### 2026-10-22 — ingest method:bird-rl (active on task:agentic-async-rl; does not supersede method:sao / method:codemidas)
+- Added paper:bird-rl, method:bird-rl, recipe:bird-rl (`code_status: released`).
+- Status active (`sota_for: []`). Stateful SQL curriculum + replica reuse; 14B 48.00% vs Claude-Opus-4.6 Agent 48.20%. NeurIPS 2026. Code bird-bench/BIRD-RL.
+
+### 2026-10-22 — ingest method:empo (active on task:outcome-only-long-horizon-agent-rl; does not supersede method:canopy)
+- Added paper:empo, method:empo, recipe:empo (`code_status: none`).
+- Status active (`sota_for: []`). Effect-level IS coupling across textual realizations of the same executable action.
+
+### 2026-10-22 — ingest method:brace (active on task:agentic-async-rl; does not supersede method:sao)
+- Added paper:brace, method:brace, recipe:brace (`code_status: none`).
+- Status active (`sota_for: []`). Calibrated MCP rollout budgets from a correlated success bank.
+
+### 2026-10-22 — ingest method:longzero (active on task:data-free-self-evolution; does not supersede method:j-zero)
+- Added paper:longzero, method:longzero, recipe:longzero (`code_status: released`).
+- Status active (`sota_for: []`). Zero-data long-context RL on self-proposed verifiable tasks. Code zhennan1/LongZero.
+
+### 2026-10-22 — ingest method:law (active on task:continuous-diffusion-lm-pretrain; does not supersede method:semicat)
+- Added paper:law, method:law, recipe:law (`code_status: none`).
+- Status active (`sota_for: []`). Pure self-conditioning continuous DLM; Sudoku / Maze vs Loopholing Discrete Diffusion.
+
+### 2026-10-22 — ingest method:pace (active on task:linear-time-sequence-modeling; does not supersede method:mamba-2)
+- Added paper:pace, method:pace, recipe:pace (`code_status: none`).
+- Status active (`sota_for: []`). Periodic 4-bit recurrent-state quant; mixed 4/8-bit heads ~2/3 the memory of 8-bit DAMP.
+
+### 2026-10-22 — ingest method:uni-mem (active on task:agent-memory; does not supersede method:ace)
+- Added paper:uni-mem, method:uni-mem, recipe:uni-mem (`code_status: none`).
+- Status active (`sota_for: []`). Stage-Decoupled GRPO jointly trains memory construction and retrieval.
+
+### 2026-10-22 — ingest method:monitorability-trainable (active on task:math-code-rl-dense; does not supersede method:cispo)
+- Added paper:monitorability-trainable, method:monitorability-trainable, recipe:monitorability-trainable (`code_status: none`).
+- Status active (`sota_for: []`). Unsupervised CoT–output mutual-information stage after monitorability-degrading post-train.
+
+### 2026-10-22 — ingest method:ssr (active on task:agent-harness-runtime; does not supersede method:omp2-harness)
+- Added paper:ssr, method:ssr, recipe:ssr (`code_status: none`).
+- Status active (`sota_for: []`). Successive scale racing for harness-evolution evidence selection.
+
+### 2026-10-22 — ingest method:doobpo (active on task:posttrain-diffusion; does not supersede method:diffusion-opsd)
+- Added paper:doobpo, method:doobpo, recipe:doobpo (`code_status: none`).
+- Status active (`sota_for: []`). Likelihood-free Doob h-transform RL for diffusion/flow policies. NeurIPS 2026.
+
+### 2026-10-22 — ingest method:flashnext-rl (active on task:frontier-rl-posttrain-stack; does not supersede method:miles / method:sao)
+- Added paper:flashnext-rl, method:flashnext-rl, recipe:flashnext-rl (`code_status: none`).
+- Status active (`sota_for: []`). Qwen3.8-Flash-Next 8xB200 SWE RL systems; 395 to 4438 tok/s/GPU.
+
+### 2026-10-22 — ingest method:traceforge (active on task:student-distillation; does not supersede method:opd)
+- Added paper:traceforge, method:traceforge, recipe:traceforge (`code_status: none`).
+- Status active (`sota_for: []`). Family-native traces when the teacher withholds CoT; coding authenticity 0.68 vs real 0.66.
+
+### 2026-10-22 — ingest paper:simhack (note on task:math-code-rl-dense; does not retarget method:cispo)
+- Added paper:simhack. Pre-run reward-hacking onset predictor; median relative error 11.3%.
+
+### 2026-10-22 — ingest paper:muon-hessian-ortho (note on task:llm-pretraining-optimization; does not retarget method:muon2)
+- Added paper:muon-hessian-ortho. Init Hessian-structure explanation for Muon orthogonalization.
+
+### 2026-10-22 — ingest paper:echo-vocab-collapse (note on task:direct-preference-alignment; does not retarget method:olmo-3)
+- Added paper:echo-vocab-collapse. DPO-family common-mode hidden-offset vocab collapse. Distinct from method:echo-mtp.
+
+### 2026-10-22 — ingest paper:data-lr-schedules (note on task:llm-pretraining-optimization; does not retarget method:muon2)
+- Added paper:data-lr-schedules. PT-to-MT mix optimality depends on the LR schedule.
+
+### 2026-10-22 — ingest paper:lccp-scaling (note on task:llm-pretraining-optimization; does not retarget method:muon2)
+- Added paper:lccp-scaling. Additive LCCP scaling law; code thunlp/dont-stop-lccp.
+
+### 2026-10-22 — ingest paper:target-regeneration (note on task:diffusion-augmented-ar; does not retarget method:uno)
+- Added paper:target-regeneration. Draft-training objectives shrink after target regeneration. Code js-lee-AI/TargetRegeneration.
+
+### 2026-10-22 — ingest paper:sparsity-24-vs-quant (note on task:fp4-hardware-training; does not retarget method:quartet-ii)
+- Added paper:sparsity-24-vs-quant. Equal-bit 2:4 vs next-lower-precision; 2:4 is the worse next step. Code PuppyQ08/24_quant_compare.
+
+### 2026-10-22 — ingest paper:truncated-backprop-looped (note on task:recurrent-encoder-decoder-lm; does not retarget method:recurrent-looped-transformer / method:looped-models-done-right)
+- Added paper:truncated-backprop-looped. Last-k TBPTT gradient loss on looped LMs. Code Aur-Shalev-Merin/lost-gradient-looped-transformers.
+
+### 2026-10-22 — ingest paper:on-policy-audit-collapse (note on task:math-code-rl-dense; does not retarget method:cispo)
+- Added paper:on-policy-audit-collapse. Component-verifier AUC can invert as the policy masters one conjunct.
+
 ### 2026-10-21 — weekday SOTA sweep (CA-MOPD, ASE, Ask-to-Distill, Projected Distillation, RSD, OPTD, AP-OPD, R2S, HyMUON, E8-QAT, MuPACE, RiseHarness, MaD-RSI, FALCA, Self-Credit, TrajEvolve, AtomSD, PAR, Lafa, DStill, SpaRLax, KronLSTM, D-PAL; notes harness elicitation/expansion, DPO HP landscape, reward misspecification CoT, native safety OPD, Muon constant step)
 - Twenty-three active plug-ins and five paper-only notes. No current_sota retarget (Muon2 / CISPO / OPD / Open-MOPD / SAPO / SAO / CANOPY / SCALE / Quartet-II / AQLoRA-Q / Iris / Uno / OraRL / omp2 / RecreationWorld / Claude computer-use / Miles / mini-SWE-agent / DiffusionOPSD / Self-OPD / CodeMidas / BPCO / GradCodeS / VISTA / OLMo-3 / Mamba-2 / lr-matters-lora / SemiCat).
 - Window: 2026-10-21 Librarian weekday sweep after merged PR 48 (watermark 2610.26863, ~1578 nodes, 3b3445b). arXiv cs.LG/cs.CL/cs.AI new listing Wed 2026-10-21 (2610.26864-2610.28632) plus HF Daily 2026-10-20 and 2026-10-21. New high id 2610.28632.

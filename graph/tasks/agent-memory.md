@@ -11,6 +11,8 @@ out_of_scope:
   - "Dumped 10M-token prompt"
   - "System-One control plane for conversational memory ops (Jev-Mem)"
 redirects:
+  - when: "unified online RL of construction and retrieval for agent memory (Uni-Mem)"
+    to: "method:uni-mem"
   - when: "dumped corpus ≫ window"
     to: "task:long-context-prompt-offload"
   - when: "SWE issue-to-patch without a playbook"
@@ -23,7 +25,7 @@ redirects:
     to: "method:jitmem"
   - when: "recurrent textual harness that backward-revises retrieved reflections (not write-time playbook)"
     to: "method:reharness"
-last_reviewed: "2026-10-12"
+last_reviewed: '2026-10-22'
 current_sota:
   - method: method:ace
     as_of: "2025-10"
@@ -32,6 +34,7 @@ current_sota:
     value: "ACE 59.4 vs ReAct 42.4 (+17); vs GEPA latency −82%"
     notes: "Incremental bullets. Without feedback ACE/DC can degrade. Dynamic Cheatsheet collapse 18282 tok @66.7 → 122 tok @57.1."
 methods:
+  - method:uni-mem
   - method:reharness
   - method:ace
   - method:memgpt

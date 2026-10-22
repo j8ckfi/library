@@ -9,6 +9,9 @@ sota_for:
 supersedes:
   - method:gspo
 do_not_use_for:
+  - when: "exact-KL prefix importance-ratio clipping (EPIC)"
+    reason: "SAPO remains MoE/VL default; EPIC is prefix reverse-KL clipping"
+    use_instead: "method:epic"
   - when: "MoE bidirectional high-k then distill-back OPD (MoEvolve)"
     reason: "SAPO remains MoE RLVR; MoEvolve is high-k then distill-back OPD"
     use_instead: "method:moevolve"

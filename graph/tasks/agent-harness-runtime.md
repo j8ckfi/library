@@ -16,6 +16,8 @@ out_of_scope:
   - "Recursive self-rewrite of a research-agent harness (AIDE2)"
   - "Harness curriculum as a non-stationary bandit over failure-pattern arms (ActiveSaddler)"
 redirects:
+  - when: "harness evolution via successive scale racing (SSR)"
+    to: "method:ssr"
   - when: "harness self-evolution for long-horizon terminal agents (RiseHarness)"
     to: "method:riseharness"
   - when: "MaD-RSI model-as-data harness RSI across heterogeneous LLMs"
@@ -54,7 +56,7 @@ redirects:
     to: "method:activesaddler"
   - when: "recurrent textual harness for agentic continual learning (not the production kernel)"
     to: "method:reharness"
-last_reviewed: '2026-10-20'
+last_reviewed: '2026-10-22'
 current_sota:
   - method: method:omp2-harness
     as_of: "2026-09-02"
@@ -63,6 +65,7 @@ current_sota:
     value: "2 correct of 78 Pi examples (60 stateless, 17 stateful); journal covering message tree only ⇒ rewind/fork/resume lie"
     notes: "Self-reported blog architecture, not a SWE-bench number. Does not replace mini-SWE-agent, CCA, OpenHands, SAO, FoldGRPO, RLM, MAGIC, CISPO, Muon2, MCP, or ACE."
 methods:
+  - method:ssr
   - method:riseharness
   - method:mad-rsi
   - method:harnessrl

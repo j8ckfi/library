@@ -20,9 +20,11 @@ methods:
   - method:plc-dpo
   - method:ddo
 redirects:
+  - when: "preference-optimization vocabulary collapse from common-mode hidden offsets (ECHO)"
+    to: "paper:echo-vocab-collapse"
   - when: "DPO hyperparameter landscape and transfer across scale"
     to: "paper:dpo-hp-landscape"
-last_reviewed: '2026-09-14'
+last_reviewed: '2026-10-22'
 tags:
   - post-training
   - preference-alignment

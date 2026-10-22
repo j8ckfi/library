@@ -15,6 +15,8 @@ out_of_scope:
 - Text-to-image / flow reward alignment (DiffusionOPSD / Self-OPD)
 - Lossless multi-token / diffusion-augmented AR serving (Uno)
 redirects:
+- when: "pure self-conditioning continuous DLM (LAW)"
+  to: "method:law"
 - when: "Large Flow Language Models (Lafa blockwise flow from AR init)"
   to: "method:lafa"
 - when: 16x DLM-vs-AR pretrain compute gap under ELBO vs exact likelihood (discrete MDM/BD3LM/E2D2)
@@ -41,6 +43,7 @@ current_sota:
     (design-space, not a 7B bake-off). Method sota_for stays empty. Does not replace
     A2D or CanvasAnneal.
 methods:
+- method:law
 - method:lafa
 - method:justopd
 - method:semicat
@@ -49,7 +52,7 @@ methods:
 - method:diffusion-opsd
 - method:self-opd
 - method:uno
-last_reviewed: '2026-10-14'
+last_reviewed: '2026-10-22'
 tags:
 - diffusion
 - pretraining

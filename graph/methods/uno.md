@@ -8,6 +8,9 @@ sota_for:
   - task:diffusion-augmented-ar
 supersedes: []
 do_not_use_for:
+  - when: "target regeneration shrinks draft-training objective gains"
+    reason: "Gotcha: draft losses overstate gains on unre-generated corpus; does not retarget Uno"
+    use_instead: "paper:target-regeneration"
   - when: "DStill block-diffusion speculative drafting distillation"
     reason: "Uno remains first hop; DStill distills multi-step block-diffusion drafts"
     use_instead: "method:dstill"
@@ -35,6 +38,7 @@ assumptions:
   - "Diffusion Distillation on Qwen3-8B: OpenThoughts3-1.2M, LoRA rank 128 / α 2048, global batch 128, LR 1e-5, tv-gamma 1."
 last_reviewed: '2026-10-21'
 papers:
+  - paper:target-regeneration
   - paper:uno
 recipes:
   - recipe:uno

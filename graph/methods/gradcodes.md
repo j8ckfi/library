@@ -8,6 +8,9 @@ sota_for:
   - task:full-lowbit-finetune
 supersedes: []
 do_not_use_for:
+  - when: "QAT recovery via self-generated trajectories (Right On Q)"
+    reason: "GradCodeS remains deployed low-bit FT; Right On Q is on-policy trajectory QAT for long-horizon reasoning"
+    use_instead: "method:right-on-q"
   - when: "E8-QAT 2-bit QAT with implicit lattice codebooks"
     reason: "GradCodeS stays in quantized code space; E8-QAT is 2-bit lattice QAT"
     use_instead: "method:e8-qat"

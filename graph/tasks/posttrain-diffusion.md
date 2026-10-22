@@ -18,6 +18,7 @@ current_sota:
     value: "Outperforms Flow-GRPO, Flow-OPD, and DiffusionNFT without external task-specific teachers"
     notes: "Self-OPD (2608.26872) provides teacher-free per-step pull-push distillation for flow matching multi-objective alignment."
 methods:
+  - method:doobpo
   - method:dfr
   - method:schedule-free-diffusion
   - method:scope-t2i
@@ -33,6 +34,8 @@ methods:
   - method:rewardverse
   - method:a2d
 redirects:
+  - when: "likelihood-free RL fine-tune of diffusion/flow policies (DoobPO)"
+    to: "method:doobpo"
   - when: "distributional regularization for diffusion/flow reward FT (DFR)"
     to: "method:dfr"
   - when: "Schedule-Free / LR decay vs EMA (not reward alignment)"
@@ -57,7 +60,7 @@ redirects:
     to: "task:continuous-diffusion-lm-pretrain"
   - when: "dLLM RL that forks from high-entropy intermediate states (ForkGRPO)"
     to: "method:forkgrpo"
-last_reviewed: '2026-10-20'
+last_reviewed: '2026-10-22'
 tags:
   - diffusion
   - post-training

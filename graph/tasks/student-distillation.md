@@ -5,6 +5,12 @@ title: "Small Local Student Distillation from Strong Teacher"
 domain: "post-training"
 summary: "Distilling reasoning and conversational capabilities from multi-hundred-billion parameter frontier teachers into small local student models."
 redirects:
+  - when: "common-support distillation for cross-tokenizer knowledge transfer (CSD)"
+    to: "method:csd"
+  - when: "conflict-aware joint RL and distillation (CORD)"
+    to: "method:cord"
+  - when: "family-native reasoning traces when the teacher hides CoT (TraceForge)"
+    to: "method:traceforge"
   - when: "capability-aware multi-teacher OPD (CA-MOPD)"
     to: "method:ca-mopd"
   - when: "synthesize data for OPD (Ask-to-Distill)"
@@ -165,6 +171,9 @@ current_sota:
     value: "83.4% headroom recovery in a single deployable student"
     notes: "Open-MOPD (2608.19098) fixes multi-teacher imbalance with token-share balancing and gap-aware dynamic budgeting."
 methods:
+  - method:csd
+  - method:cord
+  - method:traceforge
   - method:ca-mopd
   - method:ask-to-distill
   - method:projected-distillation
@@ -253,7 +262,7 @@ methods:
   - method:lmopd
   - method:latent-mopd
   - method:rp-opd
-last_reviewed: '2026-10-20'
+last_reviewed: '2026-10-22'
 tags:
   - post-training
   - distillation

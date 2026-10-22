@@ -8,6 +8,9 @@ sota_for:
   - task:frontier-rl-posttrain-stack
 supersedes: []
 do_not_use_for:
+  - when: "Qwen3.8-Flash-Next long-horizon agentic RL systems (FlashNext-RL)"
+    reason: "Miles remains the production stack; FlashNext-RL is a model-specific prime-rl + vLLM recipe for Flash-Next on 8xB200"
+    use_instead: "method:flashnext-rl"
   - when: "scaled omni-modal RL playbook with router freeze and groupwise agentic grading"
     reason: "Miles remains the production engine; MiMo-V2.6 is a scaled-RL report"
     use_instead: "method:mimo-v26"

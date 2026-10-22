@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+- when: "pure self-conditioning continuous DLM (LAW)"
+  reason: "SemiCat remains the experimental continuous-DLM hop; LAW propagates expected embeddings with a single final decode"
+  use_instead: "method:law"
 - when: "Large Flow Language Models (Lafa blockwise flow from AR init)"
   reason: "SemiCat remains the experimental continuous-DLM hop; Lafa is blockwise flow from AR"
   use_instead: "method:lafa"

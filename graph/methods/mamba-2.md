@@ -8,6 +8,9 @@ sota_for:
   - task:linear-time-sequence-modeling
 supersedes: []
 do_not_use_for:
+  - when: "periodic 4-bit recurrent-state quantization (PACE)"
+    reason: "Mamba-2 remains the linear-time architecture hop; PACE is post-hoc 4-bit state storage with periodic rounding"
+    use_instead: "method:pace"
   - when: "Kronecker delta rule linear attention (KronLSTM; not an LSTM)"
     reason: "Mamba-2 remains the architecture default; KronLSTM is xLSTM-family linear attention"
     use_instead: "method:kronlstm"

@@ -7,6 +7,9 @@ status: sota
 sota_for:
   - task:fp4-hardware-training
 do_not_use_for:
+  - when: "2:4 semi-structured sparsity vs dropping to the next lower precision"
+    reason: "Gotcha: if a lower precision exists, 2:4 is the worse next step; does not retarget Quartet-II"
+    use_instead: "paper:sparsity-24-vs-quant"
   - when: "NVFP4 pretrain recipe ingredients at 8B / 30B-A3B"
     reason: "Quartet-II remains native FP4 training SOTA; this card is a recipe ablation"
     use_instead: "method:nvfp4-pretrain-recipe"
@@ -17,6 +20,7 @@ do_not_use_for:
     reason: "Quartet-II is native FP4 hardware training from scratch; TRACE / TRIAGE own RL train–rollout alignment"
     use_instead: "task:fp4-rl-train-rollout-alignment"
 papers:
+  - paper:sparsity-24-vs-quant
   - paper:quartet-ii
 recipes:
   - recipe:quartet-ii

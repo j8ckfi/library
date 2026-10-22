@@ -7,6 +7,9 @@ status: experimental
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "truncated-backprop gradient loss in looped transformers"
+    reason: "Gotcha on last-k TBPTT for looped LMs; does not retarget RLT"
+    use_instead: "paper:truncated-backprop-looped"
   - when: "PAR progress-aligned recurrence for state-tracking length generalization"
     reason: "RLT remains the CED experimental hop; PAR is state-tracking length-gen"
     use_instead: "method:par"
@@ -37,6 +40,7 @@ assumptions:
   - "Report dated 2026-09-12. No measured efficiency, scaling, or RL results. GitHub has PDFs and a site, not a trainer."
 last_reviewed: '2026-10-21'
 papers:
+  - paper:truncated-backprop-looped
   - paper:looped-models-done-right
   - paper:recurrent-looped-transformer
 recipes:

@@ -8,6 +8,12 @@ sota_for:
   - task:outcome-only-long-horizon-agent-rl
 supersedes: []
 do_not_use_for:
+  - when: "conflict-aware joint RL and distillation (CORD)"
+    reason: "CANOPY remains checker outcome-only; CORD is a joint RL+distill gradient projector"
+    use_instead: "method:cord"
+  - when: "effect-marginal policy optimization for long-horizon agents (EMPO)"
+    reason: "CANOPY remains checker coverage; EMPO couples updates across textual realizations of the same executable effect"
+    use_instead: "method:empo"
   - when: "Self-Credit agentic RL credit assignment (intra-group citation rescaling)"
     reason: "CANOPY remains coverage; Self-Credit densifies sparse outcome groups"
     use_instead: "method:self-credit"

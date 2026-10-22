@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "common-support distillation for cross-tokenizer knowledge transfer (CSD)"
+    reason: "Cross-Tokenizer OPD remains 1:1 plus top-k shared-vocab reverse-KL; CSD matches per-chunk continuations on the common support"
+    use_instead: "method:csd"
   - when: "same-tokenizer single-teacher matching distillation"
     reason: "Cross-tokenizer OPD is for disagreeing vocabs; OPD remains same-tokenizer matching"
     use_instead: "method:opd"

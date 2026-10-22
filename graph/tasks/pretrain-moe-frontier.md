@@ -13,6 +13,8 @@ out_of_scope:
   - "NVL72 fused dispatch megakernel (Mixture-of-Kittens)"
   - "Olympiad specialist post-train (Nemotron IMO Gold)"
 redirects:
+  - when: "training-free MoE expert prune by routing entropy (SPARE)"
+    to: "method:spare-moe"
   - when: "distributionally robust MoE load-balancing objective (DRMoET / FLAME-MoE)"
     to: "method:drmoet"
   - when: "dense-to-MoE upcycling via learned binary-mask experts over a frozen FFN"
@@ -45,6 +47,7 @@ current_sota:
     value: "Frontier Co-Default SOTA"
     notes: "Kimi-K3 (2607.24653) architecture co-default with DeepSeek-V4."
 methods:
+  - method:spare-moe
   - method:multimodal-data-mixtures
   - method:expertmuon-compass
   - method:deepseek-v4
@@ -66,7 +69,7 @@ methods:
   - method:recurrent-looped-transformer
   - method:drmoet
   - method:maskerade
-last_reviewed: '2026-10-14'
+last_reviewed: '2026-10-22'
 tags:
   - pretraining
   - moe

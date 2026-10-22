@@ -7,6 +7,9 @@ status: active
 sota_for: []
 supersedes: []
 do_not_use_for:
+  - when: "truncated-backprop gradient loss in looped transformers"
+    reason: "Gotcha on last-k TBPTT for looped LMs; does not retarget RLT"
+    use_instead: "paper:truncated-backprop-looped"
   - when: "compute-matched MoE looping of middle layers (FLOPs/params/KV matched)"
     reason: "SMELT loops MoE layers; this card is Huginn-style dense fixed-point looping"
     use_instead: "method:smelt"
@@ -24,6 +27,7 @@ assumptions:
   - "Code: ifm-ai/xllm-loop (`code_status: released`)."
 last_reviewed: '2026-10-19'
 papers:
+  - paper:truncated-backprop-looped
   - paper:looped-models-done-right-i
   - paper:looped-models-done-right
 recipes:

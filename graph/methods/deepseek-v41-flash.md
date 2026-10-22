@@ -8,6 +8,9 @@ sota_for:
   - task:input-heavy-agentic-moe-serving
 supersedes: []
 do_not_use_for:
+  - when: "periodic 4-bit recurrent-state quantization (PACE)"
+    reason: "V4.1-Flash is CED KV serving; PACE quantizes linear-attention recurrent state"
+    use_instead: "method:pace"
   - when: "choosing the frontier MoE pretrain architecture template"
     reason: "V4.1-Flash CED is an input-heavy serving family, not a silent replacement of the V4 MoE pretrain template"
     use_instead: "method:deepseek-v4"

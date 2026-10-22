@@ -7,6 +7,10 @@ status: sota
 sota_for:
   - task:data-free-self-evolution
 supersedes: []
+do_not_use_for:
+  - when: "zero-data long-context RL from self-proposed tasks (LongZero)"
+    reason: "J-Zero remains Challenger-Solver-Judge; LongZero is long-context RLVR on model-proposed verifiable tasks"
+    use_instead: "method:longzero"
 papers:
   - paper:j-zero
 recipes:

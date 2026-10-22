@@ -8,6 +8,9 @@ sota_for:
   - task:agentic-rsi-routing-posttrain
 supersedes: []
 do_not_use_for:
+  - when: "harness scaling / train through a factorized harness space (Harness Scaling)"
+    reason: "NeoHorse-1 remains routing-guided OPD; Harness Scaling RL-trains one policy across a factorial harness subset"
+    use_instead: "method:harness-scaling"
   - when: "build a SWE / issue-to-patch harness rather than post-train from routing traces"
     reason: "NeoHorse is a routing-harness post-train recipe, not the bash ReAct SWE loop"
     use_instead: "method:mini-swe-agent"

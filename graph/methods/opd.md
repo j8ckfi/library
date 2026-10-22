@@ -9,6 +9,15 @@ sota_for:
 supersedes:
   - method:on-policy-distillation
 do_not_use_for:
+  - when: "common-support distillation for cross-tokenizer knowledge transfer (CSD)"
+    reason: "OPD remains same-tokenizer matching; CSD is cross-tokenizer common-support"
+    use_instead: "method:csd"
+  - when: "conflict-aware joint RL and distillation (CORD)"
+    reason: "OPD remains matching; CORD projects conflicting RL and distillation gradients once per mini-batch"
+    use_instead: "method:cord"
+  - when: "family-native reasoning traces when the teacher hides CoT (TraceForge)"
+    reason: "OPD needs teacher logp or tokens; TraceForge regenerates a student-family trace from context plus the teacher's answer"
+    use_instead: "method:traceforge"
   - when: "synthesize data for OPD (Ask-to-Distill)"
     reason: "OPD remains matching; Ask-to-Distill synthesizes the prompt bank"
     use_instead: "method:ask-to-distill"

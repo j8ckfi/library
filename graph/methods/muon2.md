@@ -11,6 +11,15 @@ supersedes:
   - method:muon
   - method:muon-scalable
 do_not_use_for:
+  - when: "why Muon orthogonalization fits the neural Hessian (gradient self outer-product at init)"
+    reason: "Gotcha/explanation of Muon vs Hessian structure; does not retarget Muon2"
+    use_instead: "paper:muon-hessian-ortho"
+  - when: "joint data-mix and LR schedules for pretrain then mid-training"
+    reason: "Gotcha: PT-to-MT cut optimality depends on the LR schedule; does not retarget Muon2"
+    use_instead: "paper:data-lr-schedules"
+  - when: "long-context continual pretrain token-budget scaling (don't stop LCCP too early)"
+    reason: "Gotcha on LCCP token budgets; does not retarget Muon2"
+    use_instead: "paper:lccp-scaling"
   - when: "hybrid momentum methods (HyMUON linear-plus-EMA then Newton-Schulz)"
     reason: "Muon2 remains the 7B default; HyMUON orthogonalizes hybrid momentum"
     use_instead: "method:hymuon"
@@ -61,6 +70,9 @@ do_not_use_for:
     use_instead: "paper:muon-ns-bias"
 last_reviewed: '2026-10-21'
 papers:
+  - paper:muon-hessian-ortho
+  - paper:data-lr-schedules
+  - paper:lccp-scaling
   - paper:muon-constant-step
   - paper:muon-ns-bias
   - paper:cast-ssc

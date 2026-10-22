@@ -22,6 +22,14 @@ out_of_scope:
   - "Category-aware SWE expert RL (Category-Aware SWE Experts)"
   - "Structural tool vs summary credit under GRPO (SLCA-GRPO)"
 redirects:
+  - when: "harness scaling / train through a factorized harness space (Harness Scaling)"
+    to: "method:harness-scaling"
+  - when: "stateful data-centric agentic RL / SQL env isolation (BIRD-RL)"
+    to: "method:bird-rl"
+  - when: "calibrated MCP rollout budgets / Discord harness tests (BRACE)"
+    to: "method:brace"
+  - when: "Qwen3.8-Flash-Next long-horizon agentic RL systems (FlashNext-RL)"
+    to: "method:flashnext-rl"
   - when: "async SWE RL co-design baseline / overfit-on-small-pool (Arctic-SWE)"
     to: "method:arctic-swe"
   - when: "windowed interaction RL for autonomous MLE agents (MLExpert / WIRL)"
@@ -80,6 +88,10 @@ current_sota:
     value: "Default SOTA for agentic async RL"
     notes: "SAO (2607.07508) decouples environment tool execution from policy optimization with importance-corrected replay buffers."
 methods:
+  - method:harness-scaling
+  - method:bird-rl
+  - method:brace
+  - method:flashnext-rl
   - method:arctic-swe
   - method:mlexpert
   - method:mosaic
@@ -110,7 +122,7 @@ methods:
   - method:pact
   - method:slca-grpo
   - method:ftw
-last_reviewed: '2026-10-20'
+last_reviewed: '2026-10-22'
 tags:
   - post-training
   - agentic

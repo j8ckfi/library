@@ -10,6 +10,18 @@ supersedes:
   - method:grpo
   - method:dr-grpo
 do_not_use_for:
+  - when: "harness scaling / train through a factorized harness space (Harness Scaling)"
+    reason: "SAO remains async stragglers; Harness Scaling varies the execution harness"
+    use_instead: "method:harness-scaling"
+  - when: "stateful data-centric agentic RL / SQL env isolation (BIRD-RL)"
+    reason: "SAO remains async tool-latency; BIRD-RL is a four-stage curriculum plus trajectory-scoped DB replica reuse"
+    use_instead: "method:bird-rl"
+  - when: "calibrated MCP rollout budgets / Discord harness tests (BRACE)"
+    reason: "SAO remains async stragglers; BRACE allocates group rollouts from a correlated success bank"
+    use_instead: "method:brace"
+  - when: "Qwen3.8-Flash-Next long-horizon agentic RL systems (FlashNext-RL)"
+    reason: "SAO remains the async algorithm; FlashNext-RL is a Flash-Next systems recipe"
+    use_instead: "method:flashnext-rl"
   - when: "async SWE RL co-design baseline / overfit-on-small-pool (Arctic-SWE)"
     reason: "SAO remains the async algorithm; Arctic-SWE is a Prime-RL SWE co-design recipe"
     use_instead: "method:arctic-swe"

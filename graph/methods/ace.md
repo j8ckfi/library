@@ -8,6 +8,9 @@ sota_for:
   - task:agent-memory
 supersedes: []
 do_not_use_for:
+  - when: "unified online RL of construction and retrieval for agent memory (Uni-Mem)"
+    reason: "ACE remains write-time playbook; Uni-Mem jointly RL-trains construction and retrieval with Stage-Decoupled GRPO"
+    use_instead: "method:uni-mem"
   - when: "recursive summary as the only long-context strategy"
     reason: "RLM paper: compaction OOLONG-Pairs F1 0.1"
     use_instead: "method:rlm"

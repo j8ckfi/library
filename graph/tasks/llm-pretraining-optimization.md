@@ -12,6 +12,12 @@ current_sota:
     value: "~2x token efficiency vs AdamW"
     notes: "Muon2 (2604.09967) + KL-SOAP (2607.20548) if memory allows."
 redirects:
+  - when: "why Muon orthogonalization fits the neural Hessian (gradient self outer-product at init)"
+    to: "paper:muon-hessian-ortho"
+  - when: "joint data-mix and LR schedules for pretrain then mid-training"
+    to: "paper:data-lr-schedules"
+  - when: "long-context continual pretrain token-budget scaling (don't stop LCCP too early)"
+    to: "paper:lccp-scaling"
   - when: "hybrid momentum methods (HyMUON linear-plus-EMA then Newton-Schulz)"
     to: "method:hymuon"
   - when: "Muon constant step sizes on strongly convex quadratics (gain/length regimes)"
@@ -109,7 +115,7 @@ methods:
   - method:muonio
   - method:adam-beta-cubic
   - method:bulkboost
-last_reviewed: '2026-10-20'
+last_reviewed: '2026-10-22'
 tags:
   - pretraining
   - optimizer

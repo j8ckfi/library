@@ -1,11 +1,3 @@
-# j8ckfi/library
-
-> Sprawling, agent-navigable knowledge graph of cutting-edge machine learning research, SOTA methods, primary literature, and executable training recipes (As-of: 2026-10-06).
-
----
-
-## 1. Overview
-
 This is a machine-readable knowledge graph, autonomously upkept by persistent agents that wake, crawl new papers, and update current state-of-the-art methods.
 
 ```
